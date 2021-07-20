@@ -21,7 +21,7 @@ param keyVaultName string
 
 var roleDefinitionIds = {
   // See https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
-  // Or use command: az role definition list --name 'Key Vault Secrets Officer' --query [].name -o=tsv
+  // Or use command: az role definition list --name 'Key Vault Secrets User' --query [].name -o=tsv
   'Key Vault Secrets User': '4633458b-17de-408a-b874-0445c86b69e6'
 }
 

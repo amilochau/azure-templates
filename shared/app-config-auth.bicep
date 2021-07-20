@@ -21,7 +21,7 @@ param appConfigurationName string
 
 var roleDefinitionIds = {
   // See https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
-  // Or use command: az role definition list --name 'Key Vault Secrets Officer' --query [].name -o=tsv
+  // Or use command: az role definition list --name 'App Configuration Data Reader' --query [].name -o=tsv
   'App Configuration Data Reader': '516239f1-63e1-4d78-a4de-a74fb236a071'
 }
 
