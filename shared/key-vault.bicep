@@ -35,6 +35,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
     }
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
+    enablePurgeProtection: true
     enableRbacAuthorization: true
   }
 }
