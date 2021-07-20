@@ -121,7 +121,6 @@ module bus '../shared/service-bus.bicep' = if (useServiceBus) {
   name: serviceBusNamespaceName
   params: {
     serviceBusNamespaceName: serviceBusNamespaceName
-    isDevelopment: environmentName == 'Development'
     serviceBusQueues: serviceBusQueues
     serviceBusClients: serviceBusClients
   }

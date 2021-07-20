@@ -1,8 +1,10 @@
 // Deploy an Application Insights
 // Resources deployed from this template:
 //   - Application Insights
-// Optional parameters:
+// Required parameters:
 //   - `aiName`
+// Optional parameters:
+//   [None]
 // Outputs:
 //   - `id`
 //   - `apiVersion`

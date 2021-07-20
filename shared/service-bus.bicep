@@ -1,8 +1,12 @@
 // Deploy a Service Bus namespace with a queue
 // Resources deployed from this template:
 //   - Service Bus namespace
-// Optional parameters:
+// Required parameters:
 //   - `serviceBusNamespaceName`
+// Optional parameters:
+//   - `serviceBusQueues`
+//   - `serviceBusClients`
+//   - `serviceBusQueueProperties`
 // Outputs:
 //   - `id`
 //   - `apiVersion`
@@ -35,9 +39,6 @@ param serviceBusQueueProperties object = {
   enableExpress: false
 }
 
-@description('Is the current environment Development')
-param isDevelopment bool
-
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -53,22 +54,6 @@ resource bus 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   }
   properties: {
     zoneRedundant: false
-  }
-
-  // Default queue for Developers
-  resource queue_dev 'queues@2018-01-01-preview' = if (isDevelopment) {
-    name: 'developers'
-    properties: serviceBusQueueProperties
-  }
-
-  resource auth_dev 'AuthorizationRules@2017-04-01' = if (isDevelopment) {
-    name: 'developers'
-    properties: {
-      rights: [
-        'Listen'
-        'Send'
-      ]
-    }
   }
 }
 

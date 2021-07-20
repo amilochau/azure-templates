@@ -1,8 +1,10 @@
 // Get references from a shared Azure App Configuration
 // Resources deployed from this template:
 //   [None]
-// Optional parameters:
+// Required parameters:
 //   - `appConfigurationName`
+// Optional parameters:
+//   [None]
 // Outputs:
 //   - `id`
 //   - `apiVersion`
