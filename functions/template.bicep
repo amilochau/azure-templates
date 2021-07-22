@@ -16,7 +16,6 @@
 //   - `useApplicationInsights`
 //   - `useServiceBus`
 //   - `serviceBusQueues`
-//   - `serviceBusClients`
 //   - `useKeyVault`
 //   - `useAppConfiguration`
 // Outputs:
@@ -67,9 +66,6 @@ param useServiceBus bool = false
 
 @description('The Service Bus queues')
 param serviceBusQueues array = []
-
-@description('The Service Bus clients')
-param serviceBusClients array = []
 
 @description('Use a Key Vault')
 param useKeyVault bool = false
@@ -122,7 +118,6 @@ module bus '../shared/service-bus.bicep' = if (useServiceBus) {
   params: {
     serviceBusNamespaceName: serviceBusNamespaceName
     serviceBusQueues: serviceBusQueues
-    serviceBusClients: serviceBusClients
   }
 }
 

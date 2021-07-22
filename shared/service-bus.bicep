@@ -5,7 +5,6 @@
 //   - `serviceBusNamespaceName`
 // Optional parameters:
 //   - `serviceBusQueues`
-//   - `serviceBusClients`
 //   - `serviceBusQueueProperties`
 // Outputs:
 //   - `id`
@@ -20,9 +19,6 @@ param serviceBusNamespaceName string
 
 @description('The Service Bus queues')
 param serviceBusQueues array = []
-
-@description('The Service Bus clients')
-param serviceBusClients array = []
 
 @description('Service Bus queue properties')
 param serviceBusQueueProperties object = {
@@ -74,18 +70,6 @@ resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview'
   name: empty(serviceBusQueues) ? 'dummy' : queue
   parent: bus
   properties: serviceBusQueueProperties
-}]
-
-// Service Bus - Authorizations for clients
-resource auth_clients 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-01' = [for client in serviceBusClients: if (length(serviceBusClients) > 0) {
-  name: empty(serviceBusClients) ? 'dummy' : client
-  parent: bus
-  properties: {
-    rights: [
-      'Listen'
-      'Send'
-    ]
-  }
 }]
 
 // === OUTPUTS ===
