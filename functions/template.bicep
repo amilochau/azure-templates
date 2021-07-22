@@ -205,7 +205,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     properties: {
       'ServiceBusConnectionString': {
         value: useServiceBus ? bus.outputs.primaryConnectionString : ''
-        type: 'ServiceBus'
+        type: 'Custom'
       }
     }
   }
