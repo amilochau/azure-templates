@@ -17,6 +17,8 @@ on:
         required: false
         default: ''
 
+concurrency: release
+
 jobs:
   release:
     name: Create Release
