@@ -43,7 +43,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: false
-    allowSharedKeyAccess: false
+    allowSharedKeyAccess: true
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
