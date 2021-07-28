@@ -6,6 +6,7 @@
 //   - `storageAccountName`
 // Optional parameters:
 //   - `blobContainers`
+//      - `name`
 // Outputs:
 //   - `id`
 //   - `apiVersion`
@@ -47,6 +48,19 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
     }
+    encryption: {
+      services: {
+        file: {
+          keyType: 'Account'
+          enabled: true
+        }
+        blob: {
+          keyType: 'Account'
+          enabled: true
+        }
+      }
+      keySource: 'Microsoft.Storage'
+    }
   }
 
   resource stg_lifecycle 'managementPolicies@2021-04-01' = if (durationBeforeDeletion > 0) {
@@ -77,11 +91,21 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
   }
 
-  /*resource stg_blobServices 'blobServices@2021-04-01' = {
+  resource stg_blobServices 'blobServices@2021-04-01' = {
     name: 'default'
-
-    resource 
-  }*/
+    properties: {
+      deleteRetentionPolicy: {
+        enabled: false
+      }
+    }
+    
+    resource stg_containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
+      name: container.name
+      properties: {
+        publicAccess: 'None'
+      }
+    }]
+  }
 }
 
 // === OUTPUTS ===

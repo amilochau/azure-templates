@@ -20,6 +20,7 @@
 //   - `storageAccounts`:
 //      - `number`
 //      - `containers`
+//         - `name`
 //      - `readOnly`
 // Outputs:
 //   [None]
