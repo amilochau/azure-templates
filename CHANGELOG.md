@@ -6,4 +6,16 @@
 
 ## New features
 
-- Creates a first Bicep template to deploy an application with Azure Functions, Azure Service Bus, Azure Storage Accounts, Application Insights, Azure Key Vault and Azure App Configuration
+- The `functions` template now supports multiple containers with RBAC authorizations.
+
+## Breaking changes
+
+The `functions` template introduces many breaking changes in its parameters.
+
+### Migration guide
+
+These parameters have been updated:
+
+- `useServiceBus` is removed; Service Bus Namespace is created if at least one queue is defined in the `serviceBusQueues` parameter
+- `useAppConfiguration` is removed; an existing App Configuration is required, as it was planned with the required parameters `appConfigurationName` and `appConfigurationResourceGroup`
+- `storageAccounts` is added, as a list of Storage Accounts to create; each storage account can define the sub-properties `number` (*string*), `containers` (*array of strings*), `readOnly` (*bool*), `daysBeforeDeletion` (*int*)
