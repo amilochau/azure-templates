@@ -20,8 +20,8 @@
 //   - `storageAccounts`:
 //      - `number`
 //      - `containers`
-//         - `name`
 //      - `readOnly`
+//      - `daysBeforeDeletion`
 // Outputs:
 //   [None]
 
@@ -129,6 +129,7 @@ module extra_stg '../shared/storage-account.bicep' = [for account in storageAcco
   params: {
     storageAccountName: replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')
     blobContainers: account.containers
+    daysBeforeDeletion: account.daysBeforeDeletion
   }
 }]
 

@@ -21,8 +21,8 @@ param storageAccountName string
 @description('The blob containers')
 param blobContainers array = []
 
-@description('Duration before blobs deletion - 0 disable this feature')
-param durationBeforeDeletion int = 0
+@description('Duration before blobs deletion in days - 0 disable this feature')
+param daysBeforeDeletion int = 0
 
 // === VARIABLES ===
 
@@ -63,7 +63,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
   }
 
-  resource stg_lifecycle 'managementPolicies@2021-04-01' = if (durationBeforeDeletion > 0) {
+  resource stg_lifecycle 'managementPolicies@2021-04-01' = if (daysBeforeDeletion > 0) {
     name: 'default'
     properties: {
       policy: {
@@ -80,7 +80,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
               actions: {
                  baseBlob: {
                     delete: {
-                      daysAfterModificationGreaterThan: durationBeforeDeletion
+                      daysAfterModificationGreaterThan: daysBeforeDeletion
                     }
                  }
               }
@@ -100,7 +100,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
     
     resource stg_containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
-      name: container.name
+      name: container
       properties: {
         publicAccess: 'None'
       }

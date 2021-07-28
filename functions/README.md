@@ -14,5 +14,54 @@ You can safely use this template in an IaC automated process, such as a GitHub w
 
 ### Template parameters
 
-
-### Example workflow
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "organizationPrefix": {
+      "value": "abc"
+    },
+    "applicationName": {
+      "value": "appname"
+    },
+    "environmentName": {
+      "value": "Production"
+    },
+    "hostName": {
+      "value": "prd"
+    },
+    "appConfigurationName": {
+      "value": "abc-config"
+    },
+    "appConfigurationResourceGroup": {
+      "value": "abc-rg"
+    },
+    "useApplicationInsights": {
+      "value": true
+    },
+    "useKeyVault": {
+      "value": true
+    },
+    "serviceBusQueues": {
+      "value": [
+        "queue1",
+        "queue2"
+      ]
+    },
+    "storageAccounts": {
+      "value": [
+        {
+          "number": "1",
+          "containers": [
+            "container1",
+            "container2"
+          ],
+          "readOnly": true,
+          "daysBeforeDeletion": 365
+        }
+      ]
+    }
+  }
+}
+```
