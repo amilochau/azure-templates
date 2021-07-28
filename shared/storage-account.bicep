@@ -20,6 +20,9 @@ param storageAccountName string
 @description('The blob containers')
 param blobContainers array = []
 
+@description('Duration before blobs deletion - 0 disable this feature')
+param durationBeforeDeletion int = 0
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -45,6 +48,40 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       defaultAction: 'Allow'
     }
   }
+
+  resource stg_lifecycle 'managementPolicies@2021-04-01' = if (durationBeforeDeletion > 0) {
+    name: 'default'
+    properties: {
+      policy: {
+        rules: [
+          {
+            name: 'auto-deletion'
+            type: 'Lifecycle'
+            definition: {
+              filters: {
+                blobTypes: [
+                  'blockBlob'
+                ]
+              }
+              actions: {
+                 baseBlob: {
+                    delete: {
+                      daysAfterModificationGreaterThan: durationBeforeDeletion
+                    }
+                 }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+
+  /*resource stg_blobServices 'blobServices@2021-04-01' = {
+    name: 'default'
+
+    resource 
+  }*/
 }
 
 // === OUTPUTS ===

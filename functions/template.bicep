@@ -19,6 +19,8 @@
 //   - `serviceBusQueues`
 //   - `storageAccounts`:
 //      - `number`
+//      - `containers`
+//      - `readOnly`
 // Outputs:
 //   [None]
 
@@ -122,9 +124,10 @@ module extra_bus '../shared/service-bus.bicep' = if (createServiceBus) {
 
 // Storage Accounts
 module extra_stg '../shared/storage-account.bicep' = [for account in storageAccounts: if (length(storageAccounts) > 0) {
-  name: empty(account) ? 'dummy' : account
+  name: empty(account.number) ? 'dummy' : '${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}'
   params: {
     storageAccountName: replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')
+    blobContainers: account.containers
   }
 }]
 
@@ -230,5 +233,6 @@ module auth_fn_stg '../shared/storage-account-auth.bicep' = [for account in stor
   params: {
     principalId: fn.identity.principalId
     storageAccountName: replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')
+    readOnly: account.readOnly
   }
 }]
