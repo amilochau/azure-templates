@@ -20,7 +20,8 @@ The following templates are proposed for Infrastructure as Code, and can be free
 
 | Path | Usage | Readme |
 | ---- | ----- | ------ |
-| `amilochau/azure-templates/functions/functions.bicep@main` | Create infrastructure for an application running with Azure Functions, Storage, Service Bus, Application Insights, Key Vault and App Configuration | [README.md](./functions/README.md) |
+| `amilochau/azure-templates/functions/template.bicep@main` | Create infrastructure for an application running with Azure Functions, Storage, Service Bus, Application Insights, Key Vault and App Configuration | [README.md](./functions/README.md) |
+| `amilochau/azure-templates/app-config/template.bicep@main` | Create infrastructure for an App Configuration | [README.md](./app-config/README.md) |
 
 ### Run manually
 
