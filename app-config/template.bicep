@@ -9,7 +9,7 @@
 // === PARAMETERS ===
 
 @description('The App Configuration name')
-param appConfigurationName string
+param appConfigurationName string // @todo @next-major-version Use naming conventions instead of resource name as parameter
 
 // === VARIABLES ===
 

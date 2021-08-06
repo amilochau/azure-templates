@@ -47,6 +47,7 @@ param environmentName string
 
 @description('The host name of the deployment stage')
 @allowed([
+  'loc'
   'dev'
   'stg'
   'prd'
@@ -78,6 +79,7 @@ param storageAccounts array = []
 
 var location = resourceGroup().location
 
+var isLocal = hostName == 'loc'
 var createServiceBus = !empty(serviceBusQueues)
 
 var hostingPlanName = '${organizationPrefix}-sp-${applicationName}-${hostName}'
@@ -90,7 +92,7 @@ var functionsAppName = '${organizationPrefix}-fn-${applicationName}-${hostName}'
 // === RESOURCES ===
 
 // App Configuration
-module appConfig '../shared/app-config-existing.bicep' = {
+module appConfig '../shared/app-config-existing.bicep' = if (!isLocal) {
   name: appConfigurationName
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
@@ -134,7 +136,7 @@ module extra_stg '../shared/storage-account.bicep' = [for account in storageAcco
 }]
 
 // Dedicated Storage for Functions application
-module stg '../shared/storage-account.bicep' = {
+module stg '../shared/storage-account.bicep' = if (!isLocal) {
   name: storageAccountName
   params: {
     storageAccountName: storageAccountName
@@ -142,7 +144,7 @@ module stg '../shared/storage-account.bicep' = {
 }
 
 // App Service
-resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
+resource farm 'Microsoft.Web/serverfarms@2021-01-01' = if (!isLocal) {
   name: hostingPlanName
   location: location
   sku: {
@@ -156,7 +158,7 @@ resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
 }
 
 // Functions App
-resource fn 'Microsoft.Web/sites@2021-01-01' = {
+resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
   name: functionsAppName
   location: location
   kind: 'functionapp,linux'
@@ -212,7 +214,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
 }
 
 // Authorizations - Function to App Configuration
-module auth_fn_appConfig '../shared/app-config-auth.bicep' = {
+module auth_fn_appConfig '../shared/app-config-auth.bicep' = if (!isLocal) {
   name: 'auth-${fn.name}-${appConfigurationName}'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
@@ -222,7 +224,7 @@ module auth_fn_appConfig '../shared/app-config-auth.bicep' = {
 }
 
 // Authorizations - Function to Key Vault
-module auth_fn_kv '../shared/key-vault-auth.bicep' = if (useKeyVault) {
+module auth_fn_kv '../shared/key-vault-auth.bicep' = if (!isLocal && useKeyVault) {
   name: 'auth-${fn.name}-${keyVaultName}'
   params: {
     principalId: fn.identity.principalId
@@ -231,7 +233,7 @@ module auth_fn_kv '../shared/key-vault-auth.bicep' = if (useKeyVault) {
 }
 
 // Authorizations - Function to Storage Accounts
-module auth_fn_stg '../shared/storage-account-auth.bicep' = [for account in storageAccounts: if (length(storageAccounts) > 0) {
+module auth_fn_stg '../shared/storage-account-auth.bicep' = [for account in storageAccounts: if (!isLocal && length(storageAccounts) > 0) {
   name: empty(account) ? 'dummy' : 'auth-${fn.name}-${replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')}'
   params: {
     principalId: fn.identity.principalId
