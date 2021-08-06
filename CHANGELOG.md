@@ -6,4 +6,4 @@
 
 ## New features
 
-- Define the organization name as application settings (key is `ASPNETCORE_ORGANIZATION`) in Functions template
+- Support local host for Functions (no functions is created, no authorization is given)
