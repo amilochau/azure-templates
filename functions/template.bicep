@@ -46,14 +46,8 @@ param applicationName string
 param environmentName string
 
 @description('The host name of the deployment stage')
-@allowed([
-  'loc'
-  'dev'
-  'stg'
-  'prd'
-])
 @minLength(3)
-@maxLength(3)
+@maxLength(5)
 param hostName string
 
 @description('The App Configuration name')
@@ -79,7 +73,7 @@ param storageAccounts array = []
 
 var location = resourceGroup().location
 
-var isLocal = hostName == 'loc'
+var isLocal = hostName == 'local'
 var createServiceBus = !empty(serviceBusQueues)
 
 var hostingPlanName = '${organizationPrefix}-sp-${applicationName}-${hostName}'

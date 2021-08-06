@@ -4,6 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## New features
+## Bug fixes
 
-- Support local host for Functions (no functions is created, no authorization is given)
+- Fix local host name: it should be `local`, not `loc`
