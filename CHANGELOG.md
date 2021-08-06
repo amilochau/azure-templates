@@ -6,4 +6,4 @@
 
 ## New features
 
-- Creates a new `amilochau/azure-templates/app-config/template.bicep` template, to deploy an Azure App Configuration instance
+- Define the organization name as application settings (key is `ASPNETCORE_ORGANIZATION`) in Functions template

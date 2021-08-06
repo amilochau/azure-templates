@@ -30,7 +30,7 @@
 @description('The organization prefix')
 @minLength(3)
 @maxLength(3)
-param organizationPrefix string
+param organizationPrefix string // @todo @next-major-version To be renamed as organizationName
 
 @description('The application name')
 @minLength(3)
@@ -187,6 +187,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'APPINSIGHTS_INSTRUMENTATIONKEY': useApplicationInsights ? ai.outputs.InstrumentationKey : ''
       'APPLICATIONINSIGHTS_CONNECTION_STRING': useApplicationInsights ? ai.outputs.ConnectionString : ''
       'ASPNETCORE_APPCONFIG_ENDPOINT': appConfig.outputs.endpoint
+      'ASPNETCORE_ORGANIZATION': organizationPrefix
       'ASPNETCORE_APPLICATION': applicationName
       'ASPNETCORE_ENVIRONMENT': environmentName
       'ASPNETCORE_HOST': hostName
