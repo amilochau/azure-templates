@@ -20,8 +20,6 @@ param appConfigurationName string
 // === VARIABLES ===
 
 var roleDefinitionIds = {
-  // See https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
-  // Or use command: az role definition list --name 'App Configuration Data Reader' --query [].name -o=tsv
   'App Configuration Data Reader': '516239f1-63e1-4d78-a4de-a74fb236a071'
 }
 
@@ -37,7 +35,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   name: appConfigurationName
 }
 
-// Authorizations - Application to App Configuration
+// Authorizations - Principal to App Configuration
 resource auth_app_appConfig 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(resourceGroup().id, principalId, appConfig.id)
   scope: appConfig
