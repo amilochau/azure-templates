@@ -4,7 +4,7 @@
 // Required parameters:
 //   - `aiName`
 // Optional parameters:
-//   [None]
+//   - `disableLocalAuth`
 // Outputs:
 //   - `id`
 //   - `apiVersion`
@@ -16,6 +16,9 @@
 
 @description('Application Insights name')
 param aiName string
+
+@description('Disable non-AAD based authentication to publish metrics')
+param disableLocalAuth bool = false
 
 // === VARIABLES ===
 
@@ -30,7 +33,7 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   kind: 'web'
   properties: {
     Application_Type: 'web'
-    DisableLocalAuth: true
+    DisableLocalAuth: disableLocalAuth
   }
 }
 

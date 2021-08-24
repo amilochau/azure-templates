@@ -192,7 +192,8 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
       'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false'
-      // TODO 'WEBSITE_RUN_FROM_PACKAGE' : '1' // Not the right value with Linux!
+      // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
+      // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
     }
   }
 
