@@ -1,4 +1,4 @@
-// Deploy infrastructure for Azure monitoring
+// Deploy an Log Analytics Workspace
 // Resources deployed from this template:
 //   - Log Analytics Workspace
 // Required parameters:
@@ -6,10 +6,13 @@
 //   - `applicationName`
 //   - `environmentName`
 //   - `hostName`
-// Optional parameters:
 //   - `dailyCap`
-// Outputs:
+// Optional parameters:
 //   [None]
+// Outputs:
+//   - `id`
+//   - `apiVersion`
+//   - `name`
 
 // === PARAMETERS ===
 
@@ -36,21 +39,33 @@ param environmentName string
 @maxLength(5)
 param hostName string
 
-@description('The daily cap for Log Analytics data ingestion')
-param dailyCap string = '1'
+@description('Daily data ingestion cap, in GB/d')
+param dailyCap string
 
 // === VARIABLES ===
+
+var location = resourceGroup().location
+var workspaceName = '${organizationName}-ws-${applicationName}-${hostName}'
 
 // === RESOURCES ===
 
 // Log Analytics Workspace
-module workspace '../shared/resources/log-analytics-workspace.bicep' = {
-  name: 'Log Analytics Workspace'
-  params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
-    dailyCap: dailyCap
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
+  name: workspaceName
+  location: location
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+    workspaceCapping: {
+      dailyQuotaGb: json(dailyCap)
+    }
   }
 }
+
+// === OUTPUTS ===
+
+output id string = workspace.id
+output apiVersion string = workspace.apiVersion
+output name string = workspace.name
