@@ -23,19 +23,14 @@ param environmentName string
 @description('The host name of the deployment stage')
 param hostName string
 
-// === VARIABLES ===
-
-var location = resourceGroup().location
-
 // === RESOURCES ===
 
-resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
-  name: appConfigurationName
-  location: location
-  sku: {
-    name: 'free'
-  }
-  properties: {
-    disableLocalAuth: false
+module appConfig '../shared/resources/app-config.bicep' = {
+  name: 'Resource-AppConfiguration'
+  params: {
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
   }
 }

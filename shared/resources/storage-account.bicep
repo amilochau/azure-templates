@@ -9,7 +9,7 @@
 //   - `hostName`
 // Optional parameters:
 //   - `number`
-//   - `blobContainers`
+//   - `blobContainers`: []
 //      - `name`
 //   - `daysBeforeDeletion`
 // Outputs:

@@ -6,28 +6,10 @@
 
 ## Breaking changes
 
-- Parameters for the `functions` template have been moved:
-  - Application Insights now requires a Log Analytics workspace
-  - `useApplicationInsights` is removed, you should now define the `monitoring` parameter:
-
-  ```json
-  "monitoring": {
-    "value": {
-      "enableApplicationInsights": true,
-      "disableLocalAuth": true,
-      "dailyCap": "1",
-      "workspaceName": "",
-      "workspaceResourceGroup": ""
-    }
-  }
-  ```
-
+- Parameters for the `functions` template have been moved, see [this page](functions/README.md) to learn more
+- Parameters for the `app-config` template have been moved, see [this page](functions/README.md) to learn more
+- The formerly `app-config` template is now named `configuration`
 - The previous parameter `organizationPrefix` is now renamed `organizationName`
-- The `app-config` template now uses the following required parameters, instead of the old `appConfigurationName` parameter:
-  - `organizationName`
-  - `applicationName`
-  - `environmentName`
-  - `hostName`
 - Naming convention has been adapted; here is the new resource convention: `{org}-{app}-{host}-{resourceType}`
 
 ## New features
@@ -38,3 +20,5 @@
   - Support workspace reference
 - Log Analytics Workspace:
   - Introduce a new template for monitoring resources (see [here](monitoring/README.md))
+- Add tags (`organization`, `application`, `environment`, `host`) on each resource
+- Improve optional support for configuration, monitoring, secrets, storage and messaging features for `functions`
