@@ -16,9 +16,7 @@
 @description('App Configuration name')
 param appConfigurationName string
 
-// === VARIABLES ===
-
-// === RESOURCES ===
+// === EXISTING ===
 
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
   name: appConfigurationName

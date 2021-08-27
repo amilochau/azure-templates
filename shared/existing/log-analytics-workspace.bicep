@@ -15,8 +15,6 @@
 @description('Log Analytics Workspace name')
 param workspaceName string
 
-// === VARIABLES ===
-
 // === RESOURCES ===
 
 // Log Analytics Workspace
