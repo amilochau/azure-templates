@@ -43,6 +43,12 @@ var workspaceName = '${organizationName}-${applicationName}-${hostName}-ws'
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     sku: {
       name: 'PerGB2018'

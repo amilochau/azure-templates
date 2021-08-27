@@ -43,6 +43,12 @@ resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
     tier: 'Dynamic'
   }
   kind: 'functionapp'
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     reserved: true // Linux App Service
   }

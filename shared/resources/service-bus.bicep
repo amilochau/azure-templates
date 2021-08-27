@@ -62,6 +62,12 @@ resource bus 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   sku: {
     name: 'Basic'
   }
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     zoneRedundant: false
   }

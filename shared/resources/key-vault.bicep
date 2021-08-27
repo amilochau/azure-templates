@@ -40,6 +40,12 @@ var keyVaultName = '${organizationName}-${applicationName}-${hostName}-kv'
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   name: keyVaultName
   location: location
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     tenantId: tenantId
     sku: {
