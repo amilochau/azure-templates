@@ -14,7 +14,8 @@ Parameters for the `functions` template have been moved:
 "monitoring": {
   "value": {
     "enableApplicationInsights": true,
-    "disableLocalAuth": true
+    "disableLocalAuth": true,
+    "dailyCap": "1"
   }
 }
 ```
@@ -22,3 +23,4 @@ Parameters for the `functions` template have been moved:
 ## New features
 
 - Support AAD authentication for Application Insights
+- Support a daily cap for Application Insights

@@ -41,6 +41,7 @@ You can safely use this template in an IaC automated process, such as a GitHub w
       "value": {
         "enableApplicationInsights": true,
         "disableLocalAuth": true
+        "dailyCap": "1"
       }
     },
     "useKeyVault": {

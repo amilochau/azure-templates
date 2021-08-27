@@ -16,6 +16,8 @@
 // Optional parameters:
 //   - `monitoring`:
 //      - `enableApplicationInsights`
+//      - `disableLocalAuth`
+//      - `dailyCap`
 //   - `useKeyVault`
 //   - `serviceBusQueues`
 //   - `storageAccounts`:
@@ -62,6 +64,7 @@ param appConfigurationResourceGroup string
 param monitoring object = {
   enableApplicationInsights: false
   disableLocalAuth: false
+  dailyCap: '1'
 }
 
 @description('Use a Key Vault')
@@ -112,6 +115,7 @@ module ai '../shared/app-insights.bicep' = if (monitoring.enableApplicationInsig
   params: {
     aiName: aiName
     disableLocalAuth: monitoring.disableLocalAuth
+    dailyCap: monitoring.dailyCap
   }
 }
 
