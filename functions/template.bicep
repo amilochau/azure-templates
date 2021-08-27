@@ -95,7 +95,7 @@ var functionsAppName = '${organizationName}-fn-${applicationName}-${hostName}'
 // === EXISTING ===
 
 // App Configuration
-module appConfig '../shared/app-config-existing.bicep' = if (!isLocal) {
+module appConfig '../shared/existing/app-configuration.bicep' = if (!isLocal) {
   name: 'Existing-AppConfiguration'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
@@ -115,7 +115,7 @@ module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLoc
 // === RESOURCES ===
 
 // Key Vault
-module kv '../shared/key-vault.bicep' = if (useKeyVault) {
+module kv '../shared/resources/key-vault.bicep' = if (useKeyVault) {
   name: keyVaultName
   params: {
     keyVaultName: keyVaultName 
@@ -123,7 +123,7 @@ module kv '../shared/key-vault.bicep' = if (useKeyVault) {
 }
 
 // Application Insights
-module ai '../shared/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: aiName
   params: {
     aiName: aiName
@@ -134,7 +134,7 @@ module ai '../shared/app-insights.bicep' = if (monitoring.enableApplicationInsig
 }
 
 // Service Bus
-module extra_bus '../shared/service-bus.bicep' = if (createServiceBus) {
+module extra_bus '../shared/resources/service-bus.bicep' = if (createServiceBus) {
   name: serviceBusNamespaceName
   params: {
     serviceBusNamespaceName: serviceBusNamespaceName
@@ -143,7 +143,7 @@ module extra_bus '../shared/service-bus.bicep' = if (createServiceBus) {
 }
 
 // Storage Accounts
-module extra_stg '../shared/storage-account.bicep' = [for account in storageAccounts: if (length(storageAccounts) > 0) {
+module extra_stg '../shared/resources/storage-account.bicep' = [for account in storageAccounts: if (length(storageAccounts) > 0) {
   name: empty(account.number) ? 'dummy' : '${organizationName}-stg-${applicationName}-${account.number}-${hostName}'
   params: {
     storageAccountName: replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')
@@ -153,7 +153,7 @@ module extra_stg '../shared/storage-account.bicep' = [for account in storageAcco
 }]
 
 // Dedicated Storage for Functions application
-module stg '../shared/storage-account.bicep' = if (!isLocal) {
+module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
   name: storageAccountName
   params: {
     storageAccountName: storageAccountName
@@ -215,7 +215,8 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
       'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false'
-      // TODO 'WEBSITE_RUN_FROM_PACKAGE' : '1' // Not the right value with Linux!
+      // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
+      // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
     }
   }
 
@@ -230,8 +231,10 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
   }
 }
 
-// Authorizations - Function to App Configuration
-module auth_fn_appConfig '../shared/app-config-auth.bicep' = if (!isLocal) {
+// === AUTHORIZATIONS ===
+
+// Function to App Configuration
+module auth_fn_appConfig '../shared/authorizations/app-configuration-data-reader.bicep' = if (!isLocal) {
   name: 'auth-${fn.name}-${appConfigurationName}'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
@@ -240,8 +243,8 @@ module auth_fn_appConfig '../shared/app-config-auth.bicep' = if (!isLocal) {
   }
 }
 
-// Authorizations - Function to Key Vault
-module auth_fn_kv '../shared/key-vault-auth.bicep' = if (!isLocal && useKeyVault) {
+// Function to Key Vault
+module auth_fn_kv '../shared/authorizations/key-vault-secrets-user.bicep' = if (!isLocal && useKeyVault) {
   name: 'auth-${fn.name}-${keyVaultName}'
   params: {
     principalId: fn.identity.principalId
@@ -249,8 +252,17 @@ module auth_fn_kv '../shared/key-vault-auth.bicep' = if (!isLocal && useKeyVault
   }
 }
 
-// Authorizations - Function to Storage Accounts
-module auth_fn_stg '../shared/storage-account-auth.bicep' = [for account in storageAccounts: if (!isLocal && length(storageAccounts) > 0) {
+// Function to Application Insights
+module auth_fn_ai '../shared/authorizations/monitoring-metrics-publisher.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+  name: 'auth-${fn.name}-${aiName}'
+  params: {
+    principalId: fn.identity.principalId
+    applicationInsightsName: aiName
+  }
+}
+
+// Function to Storage Accounts
+module auth_fn_stg '../shared/authorizations/storage-blob-data.bicep' = [for account in storageAccounts: if (!isLocal && length(storageAccounts) > 0) {
   name: empty(account) ? 'dummy' : 'auth-${fn.name}-${replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')}'
   params: {
     principalId: fn.identity.principalId

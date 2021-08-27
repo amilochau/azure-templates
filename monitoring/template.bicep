@@ -39,8 +39,6 @@ param hostName string
 @description('The daily cap for Log Analytics data ingestion')
 param dailyCap string = '1'
 
-// === VARIABLES ===
-
 // === RESOURCES ===
 
 // Log Analytics Workspace
