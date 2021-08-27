@@ -2,7 +2,10 @@
 // Resources deployed from this template:
 //   - Service Bus namespace
 // Required parameters:
-//   - `serviceBusNamespaceName`
+//   - `organizationName`
+//   - `applicationName`
+//   - `environmentName`
+//   - `hostName`
 // Optional parameters:
 //   - `serviceBusQueues`
 //   - `serviceBusQueueProperties`
@@ -14,8 +17,18 @@
 
 // === PARAMETERS ===
 
-@description('Service Bus namespace name')
-param serviceBusNamespaceName string
+@description('The organization name')
+param organizationName string
+
+@description('The application name')
+param applicationName string
+
+@description('The environment name of the deployment stage')
+param environmentName string
+
+@description('The host name of the deployment stage')
+param hostName string
+
 
 @description('The Service Bus queues')
 param serviceBusQueues array = []
@@ -38,6 +51,7 @@ param serviceBusQueueProperties object = {
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var serviceBusNamespaceName = '${organizationName}-${applicationName}-${hostName}-bus'
 
 // === RESOURCES ===
 

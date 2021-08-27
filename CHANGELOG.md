@@ -23,6 +23,12 @@
   ```
 
 - The previous parameter `organizationPrefix` is now renamed `organizationName`
+- The `app-config` template now uses the following required parameters, instead of the old `appConfigurationName` parameter:
+  - `organizationName`
+  - `applicationName`
+  - `environmentName`
+  - `hostName`
+- Naming convention has been adapted; here is the new resource convention: `{org}-{app}-{host}-{resourceType}`
 
 ## New features
 

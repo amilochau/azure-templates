@@ -17,27 +17,17 @@
 // === PARAMETERS ===
 
 @description('The organization name')
-@minLength(3)
-@maxLength(3)
 param organizationName string
 
 @description('The application name')
-@minLength(3)
-@maxLength(12)
 param applicationName string
 
 @description('The environment name of the deployment stage')
-@allowed([
-  'Development'
-  'Staging'
-  'Production'
-])
 param environmentName string
 
 @description('The host name of the deployment stage')
-@minLength(3)
-@maxLength(5)
 param hostName string
+
 
 @description('Daily data ingestion cap, in GB/d')
 param dailyCap string
@@ -45,7 +35,7 @@ param dailyCap string
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var workspaceName = '${organizationName}-ws-${applicationName}-${hostName}'
+var workspaceName = '${organizationName}-${applicationName}-${hostName}-ws'
 
 // === RESOURCES ===
 

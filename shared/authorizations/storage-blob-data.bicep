@@ -46,7 +46,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 
 // === AUTHORIZATIONS ===
 
-// Principal to Key Vault
+// Principal to Storage account
 resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(resourceGroup().id, principalId, stg.id)
   scope: stg

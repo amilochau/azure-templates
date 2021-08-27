@@ -1,13 +1,17 @@
-// Deploy infrastructure for Azure App Configuration
+// Deploy a Server farm
 // Resources deployed from this template:
-//   - App Configuration
+//   - Server farm
 // Required parameters:
 //   - `organizationName`
 //   - `applicationName`
 //   - `environmentName`
 //   - `hostName`
-// Outputs:
+// Optional parameters:
 //   [None]
+// Outputs:
+//   - `id`
+//   - `apiVersion`
+//   - `name`
 
 // === PARAMETERS ===
 
@@ -26,16 +30,26 @@ param hostName string
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var hostingPlanName = '${organizationName}-${applicationName}-${hostName}-asp'
 
 // === RESOURCES ===
 
-resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
-  name: appConfigurationName
+// Server farm
+resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
+  name: hostingPlanName
   location: location
   sku: {
-    name: 'free'
+    name: 'Y1'
+    tier: 'Dynamic'
   }
+  kind: 'functionapp'
   properties: {
-    disableLocalAuth: false
+    reserved: true // Linux App Service
   }
 }
+
+// === OUTPUTS ===
+
+output id string = farm.id
+output apiVersion string = farm.apiVersion
+output name string = farm.name

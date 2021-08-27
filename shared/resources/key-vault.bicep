@@ -2,7 +2,10 @@
 // Resources deployed from this template:
 //   - Key Vault
 // Required parameters:
-//   - `keyVaultName`
+//   - `organizationName`
+//   - `applicationName`
+//   - `environmentName`
+//   - `hostName`
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -13,13 +16,23 @@
 
 // === PARAMETERS ===
 
-@description('Key Vault name')
-param keyVaultName string
+@description('The organization name')
+param organizationName string
+
+@description('The application name')
+param applicationName string
+
+@description('The environment name of the deployment stage')
+param environmentName string
+
+@description('The host name of the deployment stage')
+param hostName string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
+var keyVaultName = '${organizationName}-${applicationName}-${hostName}-kv'
 
 // === RESOURCES ===
 
