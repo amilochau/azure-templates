@@ -55,6 +55,7 @@ param environmentName string
 @maxLength(5)
 param hostName string
 
+
 @description('The App Configuration name')
 param appConfigurationName string
 
@@ -80,22 +81,13 @@ param storageAccounts array = []
 
 // === VARIABLES ===
 
-var location = resourceGroup().location
-
 var isLocal = hostName == 'local'
 var createServiceBus = !empty(serviceBusQueues)
-
-var hostingPlanName = '${organizationName}-sp-${applicationName}-${hostName}'
-var storageAccountName = replace('${organizationName}-stg-${applicationName}-${hostName}', '-','')
-var aiName = '${organizationName}-ai-${applicationName}-${hostName}'
-var serviceBusNamespaceName = '${organizationName}-bus-${applicationName}-${hostName}'
-var keyVaultName = '${organizationName}-kv-${applicationName}-${hostName}'
-var functionsAppName = '${organizationName}-fn-${applicationName}-${hostName}'
 
 // === EXISTING ===
 
 // App Configuration
-module appConfig '../shared/existing/app-configuration.bicep' = if (!isLocal) {
+module appConfig '../shared/existing/app-configuration.bicep' = {
   name: 'Existing-AppConfiguration'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
@@ -116,17 +108,23 @@ module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLoc
 
 // Key Vault
 module kv '../shared/resources/key-vault.bicep' = if (useKeyVault) {
-  name: keyVaultName
+  name: 'Resource-KeyVault'
   params: {
-    keyVaultName: keyVaultName 
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
   }
 }
 
 // Application Insights
 module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
-  name: aiName
+  name: 'Resource-ApplicationInsights'
   params: {
-    aiName: aiName
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
     workspaceId: workspace.outputs.id
@@ -135,18 +133,25 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 
 // Service Bus
 module extra_bus '../shared/resources/service-bus.bicep' = if (createServiceBus) {
-  name: serviceBusNamespaceName
+  name: 'Resource-ServiceBus'
   params: {
-    serviceBusNamespaceName: serviceBusNamespaceName
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
     serviceBusQueues: serviceBusQueues
   }
 }
 
 // Storage Accounts
 module extra_stg '../shared/resources/storage-account.bicep' = [for account in storageAccounts: if (length(storageAccounts) > 0) {
-  name: empty(account.number) ? 'dummy' : '${organizationName}-stg-${applicationName}-${account.number}-${hostName}'
+  name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
-    storageAccountName: replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
+    number: account.number
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
   }
@@ -154,119 +159,80 @@ module extra_stg '../shared/resources/storage-account.bicep' = [for account in s
 
 // Dedicated Storage for Functions application
 module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
-  name: storageAccountName
+  name: 'Resource-StorageAccount'
   params: {
-    storageAccountName: storageAccountName
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
   }
 }
 
-// App Service
-resource farm 'Microsoft.Web/serverfarms@2021-01-01' = if (!isLocal) {
-  name: hostingPlanName
-  location: location
-  sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
-  }
-  kind: 'functionapp'
-  properties: {
-    reserved: true // Linux App Service
+// Server farm
+module farm '../shared/resources/server-farm.bicep' = if (!isLocal) {
+  name: 'Resource-ServerFarm'
+  params: {
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
   }
 }
 
-// Functions App
-resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
-  name: functionsAppName
-  location: location
-  kind: 'functionapp,linux'
-  properties: {
-    serverFarmId: farm.id
-    reserved: true
-    httpsOnly: true
-    dailyMemoryTimeQuota: 10000
-  }
-  identity: {
-    type: 'SystemAssigned'
-  }
-
-  resource fn_config 'config@2021-01-01' = {
-    name: 'web'
-    properties: {
-      linuxFxVersion: 'DOTNET|3.1'
-      localMySqlEnabled: false
-      http20Enabled: true
-      minTlsVersion: '1.2'
-      ftpsState: 'Disabled'
-    }
-  }
-
-  resource fn_appsettings 'config@2021-01-01' = {
-    name: 'appsettings'
-    properties: {
-      'APPINSIGHTS_INSTRUMENTATIONKEY': monitoring.enableApplicationInsights ? ai.outputs.InstrumentationKey : ''
-      'APPLICATIONINSIGHTS_CONNECTION_STRING': monitoring.enableApplicationInsights ? ai.outputs.ConnectionString : ''
-      'ASPNETCORE_APPCONFIG_ENDPOINT': appConfig.outputs.endpoint
-      'ASPNETCORE_ORGANIZATION': organizationName
-      'ASPNETCORE_APPLICATION': applicationName
-      'ASPNETCORE_ENVIRONMENT': environmentName
-      'ASPNETCORE_HOST': hostName
-      'ASPNETCORE_KEYVAULT_VAULT' : useKeyVault ? kv.outputs.vaultUri : ''
-      'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${stg.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'
-      'FUNCTIONS_EXTENSION_VERSION': '~3'
-      'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
-      'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false'
-      // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
-      // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
-    }
-  }
-
-  resource fn_connectionstrings 'config@2021-01-01' = {
-    name: 'connectionstrings'
-    properties: {
-      'ServiceBusConnectionString': {
-        value: createServiceBus ? extra_bus.outputs.primaryConnectionString : ''
-        type: 'Custom'
-      }
-    }
+// Website (Functions)
+module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
+  name: 'Resource-WebsiteFunctions'
+  params: {
+    organizationName: organizationName
+    applicationName: applicationName
+    environmentName: environmentName
+    hostName: hostName
+    serverFarmId: farm.outputs.id
+    webJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${stg.outputs.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'
+    appConfigurationEndpoint: appConfig.outputs.endpoint
+    aiInstrumentationKey: ai.outputs.InstrumentationKey
+    aiConnectionString: ai.outputs.ConnectionString
+    serviceBusConnectionString: extra_bus.outputs.primaryConnectionString
+    kvVaultUri: kv.outputs.vaultUri
   }
 }
 
 // === AUTHORIZATIONS ===
 
-// Function to App Configuration
+// Functions to App Configuration
 module auth_fn_appConfig '../shared/authorizations/app-configuration-data-reader.bicep' = if (!isLocal) {
-  name: 'auth-${fn.name}-${appConfigurationName}'
+  name: 'Authorization-Functions-AppConfiguration'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
-    principalId: fn.identity.principalId
+    principalId: fn.outputs.principalId
     appConfigurationName: appConfigurationName
   }
 }
 
-// Function to Key Vault
+// Functions to Key Vault
 module auth_fn_kv '../shared/authorizations/key-vault-secrets-user.bicep' = if (!isLocal && useKeyVault) {
-  name: 'auth-${fn.name}-${keyVaultName}'
+  name: 'Authorization-Functions-KeyVault'
   params: {
-    principalId: fn.identity.principalId
-    keyVaultName: kv.name
+    principalId: fn.outputs.principalId
+    keyVaultName: kv.outputs.name
   }
 }
 
-// Function to Application Insights
+// Functions to Application Insights
 module auth_fn_ai '../shared/authorizations/monitoring-metrics-publisher.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
-  name: 'auth-${fn.name}-${aiName}'
+  name: 'Authorization-Functions-ApplicationInsights'
   params: {
-    principalId: fn.identity.principalId
-    applicationInsightsName: aiName
+    principalId: fn.outputs.principalId
+    applicationInsightsName: ai.outputs.name
   }
 }
 
-// Function to Storage Accounts
-module auth_fn_stg '../shared/authorizations/storage-blob-data.bicep' = [for account in storageAccounts: if (!isLocal && length(storageAccounts) > 0) {
-  name: empty(account) ? 'dummy' : 'auth-${fn.name}-${replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')}'
+// Functions to Storage Accounts
+module auth_fn_stg '../shared/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!isLocal && length(storageAccounts) > 0) {
+  name: empty(account) ? 'dummy' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
-    principalId: fn.identity.principalId
-    storageAccountName: replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')
+    principalId: fn.outputs.principalId
+    storageAccountName: replace('${extra_stg[index].outputs.name}', '-','')
     readOnly: account.readOnly
   }
 }]

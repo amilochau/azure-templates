@@ -2,7 +2,10 @@
 // Resources deployed from this template:
 //   - Application Insights
 // Required parameters:
-//   - `aiName`
+//   - `organizationName`
+//   - `applicationName`
+//   - `environmentName`
+//   - `hostName`
 //   - `disableLocalAuth`
 //   - `dailyCap`
 //   - `workspaceId`
@@ -17,8 +20,18 @@
 
 // === PARAMETERS ===
 
-@description('Application Insights name')
-param aiName string
+@description('The organization name')
+param organizationName string
+
+@description('The application name')
+param applicationName string
+
+@description('The environment name of the deployment stage')
+param environmentName string
+
+@description('The host name of the deployment stage')
+param hostName string
+
 
 @description('Disable non-AAD based authentication to publish metrics')
 param disableLocalAuth bool = false
@@ -32,6 +45,7 @@ param workspaceId string
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var aiName = '${organizationName}-${applicationName}-${hostName}-ai'
 
 // === RESOURCES ===
 

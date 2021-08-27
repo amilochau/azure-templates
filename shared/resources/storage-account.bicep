@@ -3,10 +3,15 @@
 //   - Storage Account
 //   - Blob containers
 // Required parameters:
-//   - `storageAccountName`
+//   - `organizationName`
+//   - `applicationName`
+//   - `environmentName`
+//   - `hostName`
 // Optional parameters:
+//   - `number`
 //   - `blobContainers`
 //      - `name`
+//   - `daysBeforeDeletion`
 // Outputs:
 //   - `id`
 //   - `apiVersion`
@@ -15,8 +20,21 @@
 
 // === PARAMETERS ===
 
-@description('The Storage Account name')
-param storageAccountName string
+@description('The organization name')
+param organizationName string
+
+@description('The application name')
+param applicationName string
+
+@description('The environment name of the deployment stage')
+param environmentName string
+
+@description('The host name of the deployment stage')
+param hostName string
+
+
+@description('The storage account number')
+param number string = ''
 
 @description('The blob containers')
 param blobContainers array = []
@@ -27,6 +45,9 @@ param daysBeforeDeletion int = 0
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var baseStorageAccountName = '${organizationName}-${applicationName}-${hostName}-sto'
+var fullStorageAccountName = empty(number) ? baseStorageAccountName : '${baseStorageAccountName}-${number}'
+var storageAccountName = replace(fullStorageAccountName, '-','')
 
 // === RESOURCES ===
 
