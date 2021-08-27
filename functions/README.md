@@ -40,7 +40,8 @@ You can safely use this template in an IaC automated process, such as a GitHub w
     "monitoring": {
       "value": {
         "enableApplicationInsights": true,
-        "disableLocalAuth": true
+        "disableLocalAuth": true,
+        "dailyCap": "1"
       }
     },
     "useKeyVault": {
