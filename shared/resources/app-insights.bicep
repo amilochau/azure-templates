@@ -54,6 +54,12 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: aiName
   location: location
   kind: 'web'
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     Application_Type: 'web'
     DisableLocalAuth: disableLocalAuth

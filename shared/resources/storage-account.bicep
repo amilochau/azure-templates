@@ -59,6 +59,12 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   sku: {
     name: 'Standard_LRS'
   }
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'

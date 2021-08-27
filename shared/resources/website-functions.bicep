@@ -67,6 +67,12 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   name: functionsAppName
   location: location
   kind: 'functionapp,linux'
+  tags:{
+    organization: organizationName
+    application: applicationName
+    environment: environmentName
+    host: hostName
+  }
   properties: {
     serverFarmId: serverFarmId
     reserved: true
