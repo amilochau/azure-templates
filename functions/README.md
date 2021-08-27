@@ -37,8 +37,11 @@ You can safely use this template in an IaC automated process, such as a GitHub w
     "appConfigurationResourceGroup": {
       "value": "abc-rg"
     },
-    "useApplicationInsights": {
-      "value": true
+    "monitoring": {
+      "value": {
+        "enableApplicationInsights": true,
+        "disableLocalAuth": true
+      }
     },
     "useKeyVault": {
       "value": true
