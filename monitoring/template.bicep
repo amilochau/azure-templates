@@ -44,7 +44,7 @@ param dailyCap string = '1'
 
 // Log Analytics Workspace
 module workspace '../shared/resources/log-analytics-workspace.bicep' = {
-  name: 'LogAnalyticsWorkspace'
+  name: 'Resource-LogAnalyticsWorkspace'
   params: {
     organizationName: organizationName
     applicationName: applicationName

@@ -31,12 +31,6 @@ You can safely use this template in an IaC automated process, such as a GitHub w
     "hostName": {
       "value": "prd"
     },
-    "appConfigurationName": {
-      "value": "abc-config"
-    },
-    "appConfigurationResourceGroup": {
-      "value": "abc-rg"
-    },
     "monitoring": {
       "value": {
         "enableApplicationInsights": true,
@@ -46,27 +40,42 @@ You can safely use this template in an IaC automated process, such as a GitHub w
         "workspaceResourceGroup": ""
       }
     },
-    "useKeyVault": {
-      "value": true
+    "configuration": {
+      "value": {
+        "enableAppConfiguration": true,
+        "appConfigurationName": "abc-config",
+        "appConfigurationResourceGroup": "abc-rg"
+      }
     },
-    "serviceBusQueues": {
-      "value": [
-        "queue1",
-        "queue2"
-      ]
+    "secrets": {
+      "value": {
+        "enableKeyVault": true
+      }
     },
-    "storageAccounts": {
-      "value": [
-        {
-          "number": "1",
-          "containers": [
-            "container1",
-            "container2"
-          ],
-          "readOnly": true,
-          "daysBeforeDeletion": 365
-        }
-      ]
+    "messaging": {
+      "value": {
+        "enableServiceBus": true,
+        "serviceBusQueues": [
+          "queue1",
+          "queue2"
+        ]
+      }
+    },
+    "storage": {
+      "value": {
+        "enableStorage": true,
+        "storageAccounts": [
+          {
+            "number": "1",
+            "containers": [
+              "container1",
+              "container2"
+            ],
+            "readOnly": true,
+            "daysBeforeDeletion": 365
+          }
+        ]
+      }
     }
   }
 }
