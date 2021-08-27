@@ -30,3 +30,4 @@ These commands can help you run the Bicep templates manually, thanks to `azure c
 - `az bicep build --file $templateFile`: builds a Bicep template into ARM template
 - `az group create --name $resourceGroupName --location $location`: creates or updates an Azure resource group
 - `az deployment group create --resource-group $resourceGroupName --template-file $templateFile --parameters $parametersFile --confirm-with-what-if`: creates a new infrastructure deployment into Azure, after an interactive 'what if' check
+- `az deployment group what-if --resource-group $resourceGroupName --template-file $templateFile --parameters $parametersFile`: executes a deployment What-If operation at resource group scope
