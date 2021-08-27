@@ -3,7 +3,6 @@
 //   - Log Analytics Workspace
 // Required parameters:
 //   - `workspaceName`
-//   - `dailyCap`
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -16,28 +15,13 @@
 @description('Log Analytics Workspace name')
 param workspaceName string
 
-@description('Daily data ingestion cap, in GB/d')
-param dailyCap string
-
 // === VARIABLES ===
-
-var location = resourceGroup().location
 
 // === RESOURCES ===
 
 // Log Analytics Workspace
-resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: workspaceName
-  location: location
-  properties: {
-    sku: {
-      name: 'PerGB2018'
-    }
-    retentionInDays: 30
-    workspaceCapping: {
-      dailyQuotaGb: json(dailyCap)
-    }
-  }
 }
 
 // === OUTPUTS ===

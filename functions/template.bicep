@@ -96,7 +96,7 @@ var functionsAppName = '${organizationName}-fn-${applicationName}-${hostName}'
 
 // App Configuration
 module appConfig '../shared/app-config-existing.bicep' = if (!isLocal) {
-  name: 'Existing App Configuration'
+  name: 'Existing-AppConfiguration'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
     appConfigurationName: appConfigurationName
@@ -105,11 +105,10 @@ module appConfig '../shared/app-config-existing.bicep' = if (!isLocal) {
 
 // Log Analytics Workspace
 module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
-  name: 'Existing Log Analytics Workspace'
+  name: 'Existing-LogAnalyticsWorkspace'
   scope: resourceGroup(monitoring.workspaceResourceGroup)
   params: {
     workspaceName: monitoring.workspaceName
-    dailyCap: monitoring.dailyCap
   }
 }
 
