@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`amilochau/azure-templates/functions/template.bicep` is a Bicep template developed to manage infrastructure for an application running with Azure Functions, Storage, Service Bus, Application Insights, Key Vault and App Configuration .
+`amilochau/azure-templates/functions/template.bicep` is a Bicep template developed to manage infrastructure for an application running with Azure Functions, Storage, Service Bus, Application Insights, Key Vault.
 
 ---
 
@@ -19,7 +19,7 @@ You can safely use this template in an IaC automated process, such as a GitHub w
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "organizationPrefix": {
+    "organizationName": {
       "value": "abc"
     },
     "applicationName": {
@@ -41,7 +41,9 @@ You can safely use this template in an IaC automated process, such as a GitHub w
       "value": {
         "enableApplicationInsights": true,
         "disableLocalAuth": true,
-        "dailyCap": "1"
+        "dailyCap": "1",
+        "workspaceName": "",
+        "workspaceResourceGroup": ""
       }
     },
     "useKeyVault": {

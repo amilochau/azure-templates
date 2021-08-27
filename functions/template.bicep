@@ -7,7 +7,7 @@
 //   - Service Bus namespace and queues
 //   - Storage accounts and containers
 // Required parameters:
-//   - `organizationPrefix`
+//   - `organizationName`
 //   - `applicationName`
 //   - `environmentName`
 //   - `hostName`
@@ -18,6 +18,8 @@
 //      - `enableApplicationInsights`
 //      - `disableLocalAuth`
 //      - `dailyCap`
+//      - `workspaceName`
+//      - `workspaceResourceGroup`
 //   - `useKeyVault`
 //   - `serviceBusQueues`
 //   - `storageAccounts`:
@@ -30,10 +32,10 @@
 
 // === PARAMETERS ===
 
-@description('The organization prefix')
+@description('The organization name')
 @minLength(3)
 @maxLength(3)
-param organizationPrefix string // @todo @next-major-version To be renamed as organizationName
+param organizationName string
 
 @description('The application name')
 @minLength(3)
@@ -83,23 +85,34 @@ var location = resourceGroup().location
 var isLocal = hostName == 'local'
 var createServiceBus = !empty(serviceBusQueues)
 
-var hostingPlanName = '${organizationPrefix}-sp-${applicationName}-${hostName}'
-var storageAccountName = replace('${organizationPrefix}-stg-${applicationName}-${hostName}', '-','')
-var aiName = '${organizationPrefix}-ai-${applicationName}-${hostName}'
-var serviceBusNamespaceName = '${organizationPrefix}-bus-${applicationName}-${hostName}'
-var keyVaultName = '${organizationPrefix}-kv-${applicationName}-${hostName}'
-var functionsAppName = '${organizationPrefix}-fn-${applicationName}-${hostName}'
+var hostingPlanName = '${organizationName}-sp-${applicationName}-${hostName}'
+var storageAccountName = replace('${organizationName}-stg-${applicationName}-${hostName}', '-','')
+var aiName = '${organizationName}-ai-${applicationName}-${hostName}'
+var serviceBusNamespaceName = '${organizationName}-bus-${applicationName}-${hostName}'
+var keyVaultName = '${organizationName}-kv-${applicationName}-${hostName}'
+var functionsAppName = '${organizationName}-fn-${applicationName}-${hostName}'
 
-// === RESOURCES ===
+// === EXISTING ===
 
 // App Configuration
 module appConfig '../shared/app-config-existing.bicep' = if (!isLocal) {
-  name: appConfigurationName
+  name: 'Existing-AppConfiguration'
   scope: resourceGroup(appConfigurationResourceGroup)
   params: {
     appConfigurationName: appConfigurationName
   }
 }
+
+// Log Analytics Workspace
+module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+  name: 'Existing-LogAnalyticsWorkspace'
+  scope: resourceGroup(monitoring.workspaceResourceGroup)
+  params: {
+    workspaceName: monitoring.workspaceName
+  }
+}
+
+// === RESOURCES ===
 
 // Key Vault
 module kv '../shared/key-vault.bicep' = if (useKeyVault) {
@@ -116,6 +129,7 @@ module ai '../shared/app-insights.bicep' = if (monitoring.enableApplicationInsig
     aiName: aiName
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
+    workspaceId: workspace.outputs.id
   }
 }
 
@@ -130,9 +144,9 @@ module extra_bus '../shared/service-bus.bicep' = if (createServiceBus) {
 
 // Storage Accounts
 module extra_stg '../shared/storage-account.bicep' = [for account in storageAccounts: if (length(storageAccounts) > 0) {
-  name: empty(account.number) ? 'dummy' : '${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}'
+  name: empty(account.number) ? 'dummy' : '${organizationName}-stg-${applicationName}-${account.number}-${hostName}'
   params: {
-    storageAccountName: replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')
+    storageAccountName: replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
   }
@@ -192,7 +206,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
       'APPINSIGHTS_INSTRUMENTATIONKEY': monitoring.enableApplicationInsights ? ai.outputs.InstrumentationKey : ''
       'APPLICATIONINSIGHTS_CONNECTION_STRING': monitoring.enableApplicationInsights ? ai.outputs.ConnectionString : ''
       'ASPNETCORE_APPCONFIG_ENDPOINT': appConfig.outputs.endpoint
-      'ASPNETCORE_ORGANIZATION': organizationPrefix
+      'ASPNETCORE_ORGANIZATION': organizationName
       'ASPNETCORE_APPLICATION': applicationName
       'ASPNETCORE_ENVIRONMENT': environmentName
       'ASPNETCORE_HOST': hostName
@@ -237,10 +251,10 @@ module auth_fn_kv '../shared/key-vault-auth.bicep' = if (!isLocal && useKeyVault
 
 // Authorizations - Function to Storage Accounts
 module auth_fn_stg '../shared/storage-account-auth.bicep' = [for account in storageAccounts: if (!isLocal && length(storageAccounts) > 0) {
-  name: empty(account) ? 'dummy' : 'auth-${fn.name}-${replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')}'
+  name: empty(account) ? 'dummy' : 'auth-${fn.name}-${replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')}'
   params: {
     principalId: fn.identity.principalId
-    storageAccountName: replace('${organizationPrefix}-stg-${applicationName}-${account.number}-${hostName}', '-','')
+    storageAccountName: replace('${organizationName}-stg-${applicationName}-${account.number}-${hostName}', '-','')
     readOnly: account.readOnly
   }
 }]
