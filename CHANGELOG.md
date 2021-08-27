@@ -4,6 +4,21 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## Bug fixes
+## Breaking changes
 
-- Fix local host name: it should be `local`, not `loc`
+Parameters for the `functions` template have been moved:
+
+- `useApplicationInsights` is removed, you should now define the `monitoring` parameter:
+
+```json
+"monitoring": {
+  "value": {
+    "enableApplicationInsights": true,
+    "disableLocalAuth": true
+  }
+}
+```
+
+## New features
+
+- Support AAD authentication for Application Insights

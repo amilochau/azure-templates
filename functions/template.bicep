@@ -14,7 +14,8 @@
 //   - `appConfigurationName`
 //   - `appConfigurationResourceGroup`
 // Optional parameters:
-//   - `useApplicationInsights`
+//   - `monitoring`:
+//      - `enableApplicationInsights`
 //   - `useKeyVault`
 //   - `serviceBusQueues`
 //   - `storageAccounts`:
@@ -57,8 +58,11 @@ param appConfigurationName string
 param appConfigurationResourceGroup string
 
 
-@description('Use Application Insights')
-param useApplicationInsights bool = false
+@description('The Monitoring settings')
+param monitoring object = {
+  enableApplicationInsights: false
+  disableLocalAuth: false
+}
 
 @description('Use a Key Vault')
 param useKeyVault bool = false
@@ -103,10 +107,11 @@ module kv '../shared/key-vault.bicep' = if (useKeyVault) {
 }
 
 // Application Insights
-module ai '../shared/app-insights.bicep' = if (useApplicationInsights) {
+module ai '../shared/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: aiName
   params: {
-    aiName: aiName 
+    aiName: aiName
+    disableLocalAuth: monitoring.disableLocalAuth
   }
 }
 
@@ -180,8 +185,8 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = if (!isLocal) {
   resource fn_appsettings 'config@2021-01-01' = {
     name: 'appsettings'
     properties: {
-      'APPINSIGHTS_INSTRUMENTATIONKEY': useApplicationInsights ? ai.outputs.InstrumentationKey : ''
-      'APPLICATIONINSIGHTS_CONNECTION_STRING': useApplicationInsights ? ai.outputs.ConnectionString : ''
+      'APPINSIGHTS_INSTRUMENTATIONKEY': monitoring.enableApplicationInsights ? ai.outputs.InstrumentationKey : ''
+      'APPLICATIONINSIGHTS_CONNECTION_STRING': monitoring.enableApplicationInsights ? ai.outputs.ConnectionString : ''
       'ASPNETCORE_APPCONFIG_ENDPOINT': appConfig.outputs.endpoint
       'ASPNETCORE_ORGANIZATION': organizationPrefix
       'ASPNETCORE_APPLICATION': applicationName
