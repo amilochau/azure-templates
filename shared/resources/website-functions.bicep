@@ -6,6 +6,8 @@
 //   - `applicationName`
 //   - `environmentName`
 //   - `hostName`
+//   - `linuxFxVersion`
+//   - `workerRuntime`
 //   - `serverFarmId`
 //   - `webJobsStorage`
 // Optional parameters:
@@ -33,6 +35,20 @@ param environmentName string
 @description('The host name of the deployment stage')
 param hostName string
 
+@description('The Linux App framework and version')
+@allowed([
+  'DOTNETCORE|3.1'
+  'DOTNET|5.0'
+  'DOTNET|6.0'
+])
+param linuxFxVersion string
+
+@description('The Functions worker runtime')
+@allowed([
+  'dotnet'
+  'dotnet-isolated'
+])
+param workerRuntime string
 
 @description('The server farm ID')
 param serverFarmId string
@@ -46,8 +62,9 @@ param appConfigurationEndpoint string = ''
 @description('The Application Insights instrumentation key')
 param aiInstrumentationKey string = ''
 
-@description('The Application Insights connection string')
-param aiConnectionString string = ''
+// TODO Not used anymore, keep it until stable major version
+// @description('The Application Insights connection string')
+// param aiConnectionString string = ''
 
 @description('The Service Bus connection string')
 param serviceBusConnectionString string = ''
@@ -86,7 +103,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   resource fn_config 'config@2021-01-01' = {
     name: 'web'
     properties: {
-      linuxFxVersion: 'DOTNET|3.1'
+      linuxFxVersion: linuxFxVersion
       localMySqlEnabled: false
       http20Enabled: true
       minTlsVersion: '1.2'
@@ -98,17 +115,18 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     name: 'appsettings'
     properties: {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
-      'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
+      // 'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString // TODO May not be necessary: https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#applicationinsights_connection_string
       'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
       'AZURE_FUNCTIONS_ORGANIZATION': organizationName
       'AZURE_FUNCTIONS_APPLICATION': applicationName
       'AZURE_FUNCTIONS_ENVIRONMENT': environmentName
       'AZURE_FUNCTIONS_HOST': hostName
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
-      'AzureWebJobsStorage': webJobsStorage
+      'AzureWebJobsStorage': webJobsStorage // Connection to technical storage account
+      'AzureWebJobsDisableHomepage': 'true' // Disable homepage
       'FUNCTIONS_EXTENSION_VERSION': '~3'
-      'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
-      'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false'
+      'FUNCTIONS_WORKER_RUNTIME': workerRuntime
+      // 'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false' // TODO Is this useful? May not be necessary
       // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
       // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
     }

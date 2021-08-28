@@ -31,6 +31,12 @@ You can safely use this template in an IaC automated process, such as a GitHub w
     "hostName": {
       "value": "prd"
     },
+    "application": {
+      "value": {
+        "linuxFxVersion": "DOTNET|5.0",
+        "workerRuntime": "dotnet-isolated"
+      }
+    },
     "monitoring": {
       "value": {
         "enableApplicationInsights": true,
