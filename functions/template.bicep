@@ -12,6 +12,9 @@
 //   - `environmentName`
 //   - `hostName`
 // Optional parameters:
+//   - `application`: {}
+//      - `linuxFxVersion`
+//      - `workerRuntime`
 //   - `monitoring`: {}
 //      - `enableApplicationInsights`
 //      - `disableLocalAuth`
@@ -58,6 +61,11 @@ param environmentName string
 @maxLength(5)
 param hostName string
 
+
+param application object = {
+  linuxFxVersion: 'DOTNET|5.0'
+  workerRuntime: 'dotnet-isolated'
+}
 
 @description('The Monitoring settings')
 param monitoring object = {
@@ -197,11 +205,13 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     applicationName: applicationName
     environmentName: environmentName
     hostName: hostName
+    linuxFxVersion: application.linuxFxVersion
+    workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id
     webJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${stg.outputs.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.InstrumentationKey
-    aiConnectionString: ai.outputs.ConnectionString
+    // aiConnectionString: ai.outputs.ConnectionString // TODO Not used anymore, keep it until stable major version
     serviceBusConnectionString: extra_bus.outputs.primaryConnectionString
     kvVaultUri: kv.outputs.vaultUri
   }
