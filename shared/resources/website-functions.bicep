@@ -99,12 +99,12 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     properties: {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
       'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
-      'ASPNETCORE_APPCONFIG_ENDPOINT': appConfigurationEndpoint
-      'ASPNETCORE_ORGANIZATION': organizationName
-      'ASPNETCORE_APPLICATION': applicationName
-      'ASPNETCORE_ENVIRONMENT': environmentName
-      'ASPNETCORE_HOST': hostName
-      'ASPNETCORE_KEYVAULT_VAULT' : kvVaultUri
+      'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
+      'AZURE_FUNCTIONS_ORGANIZATION': organizationName
+      'AZURE_FUNCTIONS_APPLICATION': applicationName
+      'AZURE_FUNCTIONS_ENVIRONMENT': environmentName
+      'AZURE_FUNCTIONS_HOST': hostName
+      'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
       'AzureWebJobsStorage': webJobsStorage
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': 'dotnet'
