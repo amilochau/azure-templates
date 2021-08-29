@@ -84,6 +84,9 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   name: functionsAppName
   location: location
   kind: 'functionapp,linux'
+  identity: {
+    type: 'SystemAssigned'
+  }
   tags:{
     organization: organizationName
     application: applicationName
@@ -95,9 +98,6 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     reserved: true
     httpsOnly: true
     dailyMemoryTimeQuota: 10000
-  }
-  identity: {
-    type: 'SystemAssigned'
   }
 
   resource fn_config 'config@2021-01-01' = {

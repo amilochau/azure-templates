@@ -1,4 +1,4 @@
-// Get references from a shared Azure App Configuration
+// Get references from an existing Azure App Configuration
 // Resources deployed from this template:
 //   [None]
 // Required parameters:

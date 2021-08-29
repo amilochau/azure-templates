@@ -62,6 +62,7 @@ param environmentName string
 param hostName string
 
 
+@description('The application settings')
 param application object = {
   linuxFxVersion: 'DOTNET|5.0'
   workerRuntime: 'dotnet-isolated'
