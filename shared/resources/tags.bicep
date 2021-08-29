@@ -1,13 +1,17 @@
-// Deploy infrastructure for Azure App Configuration
+// Deploy a list of Tags
 // Resources deployed from this template:
-//   - App Configuration
+//   - Tags
 // Required parameters:
 //   - `organizationName`
 //   - `applicationName`
 //   - `environmentName`
 //   - `hostName`
-// Outputs:
+// Optional parameters:
 //   [None]
+// Outputs:
+//   - `id`
+//   - `apiVersion`
+//   - `name`
 
 // === PARAMETERS ===
 
@@ -25,17 +29,21 @@ param hostName string
 
 // === RESOURCES ===
 
-// Tags
-module tags '../shared/resources/tags.bicep' = {
-  name: 'Resource-Tags'
-  params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+// Key Vault
+resource tags 'Microsoft.Resources/tags@2021-04-01' = {
+  name: 'default'
+  properties: {
+    tags: {
+      organization: organizationName
+      application: applicationName
+      environment: environmentName
+      host: hostName
+    }
   }
 }
 
-module appConfig '../shared/resources/app-config.bicep' = {
-  name: 'Resource-AppConfiguration'
-}
+// === OUTPUTS ===
+
+output id string = tags.id
+output apiVersion string = tags.apiVersion
+output name string = tags.name

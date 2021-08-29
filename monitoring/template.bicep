@@ -42,14 +42,21 @@ param dailyCap string = '1'
 
 // === RESOURCES ===
 
-// Log Analytics Workspace
-module workspace '../shared/resources/log-analytics-workspace.bicep' = {
-  name: 'Resource-LogAnalyticsWorkspace'
+// Tags
+module tags '../shared/resources/tags.bicep' = {
+  name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     environmentName: environmentName
     hostName: hostName
+  }
+}
+
+// Log Analytics Workspace
+module workspace '../shared/resources/log-analytics-workspace.bicep' = {
+  name: 'Resource-LogAnalyticsWorkspace'
+  params: {
     dailyCap: dailyCap
   }
 }

@@ -2,10 +2,7 @@
 // Resources deployed from this template:
 //   - Key Vault
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   [None]
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -14,25 +11,12 @@
 //   - `name`
 //   - `vaultUri`
 
-// === PARAMETERS ===
-
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
-
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var tags = resourceGroup().tags
 var tenantId = subscription().tenantId
-var keyVaultName = '${organizationName}-${applicationName}-${hostName}-kv'
+var keyVaultName = '${tags.organization}-${tags.application}-${tags.host}-kv'
 
 // === RESOURCES ===
 
@@ -40,12 +24,7 @@ var keyVaultName = '${organizationName}-${applicationName}-${hostName}-kv'
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   name: keyVaultName
   location: location
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: resourceGroup().tags
   properties: {
     tenantId: tenantId
     sku: {

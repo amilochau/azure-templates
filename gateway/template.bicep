@@ -58,14 +58,21 @@ module workspace '../shared/existing/log-analytics-workspace.bicep' = if (monito
 
 // === RESOURCES ===
 
-// Application Insights
-module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
-  name: 'Resource-ApplicationInsights'
+// Tags
+module tags '../shared/resources/tags.bicep' = {
+  name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     environmentName: environmentName
     hostName: hostName
+  }
+}
+
+// Application Insights
+module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+  name: 'Resource-ApplicationInsights'
+  params: {
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
     workspaceId: workspace.outputs.id
@@ -76,10 +83,6 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 module apim '../shared/resources/api-management.bicep' = {
   name: 'Resource-ApiManagement'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
     publisherEmail: api.publisherEmail
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id

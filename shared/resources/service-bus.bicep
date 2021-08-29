@@ -2,10 +2,7 @@
 // Resources deployed from this template:
 //   - Service Bus namespace
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   [None]
 // Optional parameters:
 //   - `serviceBusQueues`
 //   - `serviceBusQueueProperties`
@@ -16,19 +13,6 @@
 //   - `primaryConnectionString`
 
 // === PARAMETERS ===
-
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
-
 
 @description('The Service Bus queues')
 param serviceBusQueues array = []
@@ -51,7 +35,8 @@ param serviceBusQueueProperties object = {
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var serviceBusNamespaceName = '${organizationName}-${applicationName}-${hostName}-bus'
+var tags = resourceGroup().tags
+var serviceBusNamespaceName = '${tags.organization}-${tags.application}-${tags.host}-bus'
 
 // === RESOURCES ===
 
@@ -62,12 +47,7 @@ resource bus 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   sku: {
     name: 'Basic'
   }
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: resourceGroup().tags
   properties: {
     zoneRedundant: false
   }

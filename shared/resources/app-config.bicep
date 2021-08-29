@@ -2,10 +2,7 @@
 // Resources deployed from this template:
 //   - App Configuration
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   [None]
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -13,24 +10,11 @@
 //   - `apiVersion`
 //   - `name`
 
-// === PARAMETERS ===
-
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
-
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var appConfigurationName = '${organizationName}-${applicationName}-${hostName}-cfg'
+var tags = resourceGroup().tags
+var appConfigurationName = '${tags.organization}-${tags.application}-${tags.host}-cfg'
 
 // === RESOURCES ===
 
@@ -41,12 +25,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   sku: {
     name: 'free'
   }
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: resourceGroup().tags
   properties: {
     disableLocalAuth: false
   }

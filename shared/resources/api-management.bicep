@@ -2,10 +2,6 @@
 // Resources deployed from this template:
 //   - API Management
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
 //   - `publisherEmail`
 //   - `publisherName`
 // Optional parameters:
@@ -16,19 +12,6 @@
 //   - `name`
 
 // === PARAMETERS ===
-
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
-
 
 @description('The API publisher email')
 @minLength(1)
@@ -47,7 +30,8 @@ param appInsightsInstrumentationKey string
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var apimName = '${organizationName}-${applicationName}-${hostName}-apim'
+var tags = resourceGroup().tags
+var apimName = '${tags.organization}-${tags.application}-${tags.host}-apim'
 
 // === RESOURCES ===
 
@@ -62,12 +46,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   identity: {
     type: 'SystemAssigned'
   }
-  tags: {
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: tags
   properties: {
     publisherEmail: publisherEmail
     publisherName: publisherName

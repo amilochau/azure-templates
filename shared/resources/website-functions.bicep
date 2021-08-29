@@ -2,10 +2,6 @@
 // Resources deployed from this template:
 //   - Website (Functions)
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
 //   - `linuxFxVersion`
 //   - `workerRuntime`
 //   - `serverFarmId`
@@ -22,18 +18,6 @@
 //   - `principalId`
 
 // === PARAMETERS ===
-
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
 
 @description('The Linux App framework and version')
 @allowed([
@@ -75,7 +59,8 @@ param kvVaultUri string = ''
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var functionsAppName = '${organizationName}-${applicationName}-${hostName}-fn'
+var tags = resourceGroup().tags
+var functionsAppName = '${tags.organization}-${tags.application}-${tags.host}-fn'
 
 // === RESOURCES ===
 
@@ -87,12 +72,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: resourceGroup().tags
   properties: {
     serverFarmId: serverFarmId
     reserved: true
@@ -117,10 +97,10 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
       // 'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString // TODO May not be necessary: https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#applicationinsights_connection_string
       'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
-      'AZURE_FUNCTIONS_ORGANIZATION': organizationName
-      'AZURE_FUNCTIONS_APPLICATION': applicationName
-      'AZURE_FUNCTIONS_ENVIRONMENT': environmentName
-      'AZURE_FUNCTIONS_HOST': hostName
+      'AZURE_FUNCTIONS_ORGANIZATION': tags.organization
+      'AZURE_FUNCTIONS_APPLICATION': tags.application
+      'AZURE_FUNCTIONS_ENVIRONMENT': tags.environment
+      'AZURE_FUNCTIONS_HOST': tags.host
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
       'AzureWebJobsStorage': webJobsStorage // Connection to technical storage account
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage

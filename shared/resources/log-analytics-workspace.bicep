@@ -2,10 +2,6 @@
 // Resources deployed from this template:
 //   - Log Analytics Workspace
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
 //   - `dailyCap`
 // Optional parameters:
 //   [None]
@@ -16,26 +12,14 @@
 
 // === PARAMETERS ===
 
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
-
-
 @description('Daily data ingestion cap, in GB/d')
 param dailyCap string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var workspaceName = '${organizationName}-${applicationName}-${hostName}-ws'
+var tags = resourceGroup().tags
+var workspaceName = '${tags.organization}-${tags.application}-${tags.host}-ws'
 
 // === RESOURCES ===
 
@@ -43,12 +27,7 @@ var workspaceName = '${organizationName}-${applicationName}-${hostName}-ws'
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: resourceGroup().tags
   properties: {
     sku: {
       name: 'PerGB2018'
