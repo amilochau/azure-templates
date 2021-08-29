@@ -2,10 +2,7 @@
 // Resources deployed from this template:
 //   - Server farm
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   - `referential`
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -15,22 +12,13 @@
 
 // === PARAMETERS ===
 
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
+@description('The referential, from the tags.bicep module')
+param referential object
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var hostingPlanName = '${organizationName}-${applicationName}-${hostName}-asp'
+var hostingPlanName = '${referential.organization}-${referential.application}-${referential.host}-asp'
 
 // === RESOURCES ===
 
@@ -43,12 +31,7 @@ resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
     tier: 'Dynamic'
   }
   kind: 'functionapp'
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: referential
   properties: {
     reserved: true // Linux App Service
   }

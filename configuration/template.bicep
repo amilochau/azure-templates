@@ -25,12 +25,22 @@ param hostName string
 
 // === RESOURCES ===
 
-module appConfig '../shared/resources/app-config.bicep' = {
-  name: 'Resource-AppConfiguration'
+// Tags
+module tags '../shared/resources/tags.bicep' = {
+  name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     environmentName: environmentName
     hostName: hostName
+  }
+}
+
+module appConfig '../shared/resources/app-config.bicep' = {
+  name: 'Resource-AppConfiguration'
+  params: {
+    referential: {
+      referential: tags.outputs.referential
+    }
   }
 }

@@ -125,9 +125,9 @@ module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLoc
 
 // === RESOURCES ===
 
-// Key Vault
-module kv '../shared/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
-  name: 'Resource-KeyVault'
+// Tags
+module tags '../shared/resources/tags.bicep' = {
+  name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
@@ -136,14 +136,21 @@ module kv '../shared/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
   }
 }
 
+// Key Vault
+module kv '../shared/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
+  name: 'Resource-KeyVault'
+  params: {
+    referential: {
+      referential: tags.outputs.referential
+    }
+  }
+}
+
 // Application Insights
 module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+    referential: tags.outputs.referential
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
     workspaceId: workspace.outputs.id
@@ -154,10 +161,7 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
   name: 'Resource-ServiceBus'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+    referential: tags.outputs.referential
     serviceBusQueues: messaging.serviceBusQueues
   }
 }
@@ -166,10 +170,7 @@ module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableS
 module extra_stg '../shared/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
   name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+    referential: tags.outputs.referential
     number: account.number
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
@@ -180,10 +181,9 @@ module extra_stg '../shared/resources/storage-account.bicep' = [for account in s
 module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
   name: 'Resource-StorageAccount'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+    referential: {
+      referential: tags.outputs.referential
+    }
   }
 }
 
@@ -191,10 +191,9 @@ module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
 module farm '../shared/resources/server-farm.bicep' = if (!isLocal) {
   name: 'Resource-ServerFarm'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+    referential: {
+      referential: tags.outputs.referential
+    }
   }
 }
 
@@ -202,10 +201,7 @@ module farm '../shared/resources/server-farm.bicep' = if (!isLocal) {
 module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
   name: 'Resource-WebsiteFunctions'
   params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    environmentName: environmentName
-    hostName: hostName
+    referential: tags.outputs.referential
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id

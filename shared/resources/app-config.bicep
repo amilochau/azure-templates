@@ -2,10 +2,7 @@
 // Resources deployed from this template:
 //   - App Configuration
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   - `referential`
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -15,22 +12,13 @@
 
 // === PARAMETERS ===
 
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
+@description('The referential, from the tags.bicep module')
+param referential object
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var appConfigurationName = '${organizationName}-${applicationName}-${hostName}-cfg'
+var appConfigurationName = '${referential.organization}-${referential.application}-${referential.host}-cfg'
 
 // === RESOURCES ===
 
@@ -41,12 +29,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   sku: {
     name: 'free'
   }
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: referential
   properties: {
     disableLocalAuth: false
   }

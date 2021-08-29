@@ -3,10 +3,7 @@
 //   - Storage Account
 //   - Blob containers
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   - `referential`
 // Optional parameters:
 //   - `number`
 //   - `blobContainers`: []
@@ -20,18 +17,8 @@
 
 // === PARAMETERS ===
 
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
-
+@description('The referential, from the tags.bicep module')
+param referential object
 
 @description('The storage account number')
 param number string = ''
@@ -45,7 +32,7 @@ param daysBeforeDeletion int = 0
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var baseStorageAccountName = '${organizationName}-${applicationName}-${hostName}-sto'
+var baseStorageAccountName = '${referential.organization}-${referential.application}-${referential.host}-sto'
 var fullStorageAccountName = empty(number) ? baseStorageAccountName : '${baseStorageAccountName}-${number}'
 var storageAccountName = replace(fullStorageAccountName, '-','')
 
@@ -59,12 +46,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   sku: {
     name: 'Standard_LRS'
   }
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: referential
   properties: {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'

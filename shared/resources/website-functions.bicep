@@ -2,10 +2,7 @@
 // Resources deployed from this template:
 //   - Website (Functions)
 // Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
+//   - `referential`
 //   - `linuxFxVersion`
 //   - `workerRuntime`
 //   - `serverFarmId`
@@ -23,17 +20,8 @@
 
 // === PARAMETERS ===
 
-@description('The organization name')
-param organizationName string
-
-@description('The application name')
-param applicationName string
-
-@description('The environment name of the deployment stage')
-param environmentName string
-
-@description('The host name of the deployment stage')
-param hostName string
+@description('The referential, from the tags.bicep module')
+param referential object
 
 @description('The Linux App framework and version')
 @allowed([
@@ -75,7 +63,7 @@ param kvVaultUri string = ''
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var functionsAppName = '${organizationName}-${applicationName}-${hostName}-fn'
+var functionsAppName = '${referential.organization}-${referential.application}-${referential.host}-fn'
 
 // === RESOURCES ===
 
@@ -87,12 +75,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  tags:{
-    organization: organizationName
-    application: applicationName
-    environment: environmentName
-    host: hostName
-  }
+  tags: referential
   properties: {
     serverFarmId: serverFarmId
     reserved: true
@@ -117,10 +100,10 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
       // 'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString // TODO May not be necessary: https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#applicationinsights_connection_string
       'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
-      'AZURE_FUNCTIONS_ORGANIZATION': organizationName
-      'AZURE_FUNCTIONS_APPLICATION': applicationName
-      'AZURE_FUNCTIONS_ENVIRONMENT': environmentName
-      'AZURE_FUNCTIONS_HOST': hostName
+      'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
+      'AZURE_FUNCTIONS_APPLICATION': referential.application
+      'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
+      'AZURE_FUNCTIONS_HOST': referential.host
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
       'AzureWebJobsStorage': webJobsStorage // Connection to technical storage account
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage
