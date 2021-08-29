@@ -57,7 +57,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   location: location
   sku: {
     name: 'Consumption'
-    capacity: 1
+    capacity: 0 // Needs to be at 0 for Consumption plan
   }
   identity: {
     type: 'SystemAssigned'
