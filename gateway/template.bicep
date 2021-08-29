@@ -82,6 +82,7 @@ module apim '../shared/resources/api-management.bicep' = {
     hostName: hostName
     publisherEmail: api.publisherEmail
     publisherName: api.publisherName
-    appInsightsName: ai.outputs.name
+    appInsightsId: ai.outputs.id
+    appInsightsInstrumentationKey: ai.outputs.InstrumentationKey
   }
 }

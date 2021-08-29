@@ -38,22 +38,16 @@ param publisherEmail string
 @minLength(1)
 param publisherName string
 
-@description('The Application Insights name')
-param appInsightsName string
+@description('The Application Insights ID')
+param appInsightsId string
+
+@description('The Application Insights instrumentation key')
+param appInsightsInstrumentationKey string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var apimName = '${organizationName}-${applicationName}-${hostName}-apim'
-
-// === EXISTING ===
-
-module ai '../existing/app-insights.bicep' = {
-  name: 'Existing-ApplicationInsights'
-  params: {
-    appInsightsName: appInsightsName
-  }
-}
 
 // === RESOURCES ===
 
@@ -83,18 +77,18 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   resource logger 'loggers@2021-01-01-preview' = {
-    name: appInsightsName
+    name: 'logger-to-applicationInsights'
     properties: {
       loggerType: 'applicationInsights'
-      resourceId: ai.outputs.id
+      resourceId: appInsightsId
       credentials: {
-        'instrumentationKey': ai.outputs.InstrumentationKey
+        'instrumentationKey': appInsightsInstrumentationKey
       }
     }
   }
 
   resource diagnostic 'diagnostics@2021-01-01-preview' = {
-    name: 'applicationinsights'
+    name: 'diagnostic-from-applicationInsights'
     properties: {
       loggerId: logger.id
       alwaysLog: 'allErrors'
