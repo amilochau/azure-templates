@@ -31,10 +31,10 @@ You can safely use this template in an IaC automated process, such as a GitHub w
     "hostName": {
       "value": "prd"
     },
-    "application": {
+    "api": {
       "value": {
-        "linuxFxVersion": "DOTNET|5.0",
-        "workerRuntime": "dotnet-isolated"
+        "publisherEmail": "john@example.com",
+        "publisherName": "John"
       }
     },
     "monitoring": {
@@ -44,43 +44,6 @@ You can safely use this template in an IaC automated process, such as a GitHub w
         "dailyCap": "1",
         "workspaceName": "",
         "workspaceResourceGroup": ""
-      }
-    },
-    "configuration": {
-      "value": {
-        "enableAppConfiguration": true,
-        "appConfigurationName": "abc-config",
-        "appConfigurationResourceGroup": "abc-rg"
-      }
-    },
-    "secrets": {
-      "value": {
-        "enableKeyVault": true
-      }
-    },
-    "messaging": {
-      "value": {
-        "enableServiceBus": true,
-        "serviceBusQueues": [
-          "queue1",
-          "queue2"
-        ]
-      }
-    },
-    "storage": {
-      "value": {
-        "enableStorage": true,
-        "storageAccounts": [
-          {
-            "number": "1",
-            "containers": [
-              "container1",
-              "container2"
-            ],
-            "readOnly": true,
-            "daysBeforeDeletion": 365
-          }
-        ]
       }
     }
   }

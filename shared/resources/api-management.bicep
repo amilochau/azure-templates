@@ -31,9 +31,11 @@ param hostName string
 
 
 @description('The API publisher email')
+@minLength(1)
 param publisherEmail string
 
 @description('The API publisher name')
+@minLength(1)
 param publisherName string
 
 @description('The Application Insights name')
