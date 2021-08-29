@@ -2,6 +2,7 @@
 // Resources deployed from this template:
 //   - Website (Functions)
 // Required parameters:
+//   - `referential`
 //   - `linuxFxVersion`
 //   - `workerRuntime`
 //   - `serverFarmId`
@@ -18,6 +19,9 @@
 //   - `principalId`
 
 // === PARAMETERS ===
+
+@description('The referential, from the tags.bicep module')
+param referential object
 
 @description('The Linux App framework and version')
 @allowed([
@@ -59,8 +63,7 @@ param kvVaultUri string = ''
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
-var functionsAppName = '${tags.organization}-${tags.application}-${tags.host}-fn'
+var functionsAppName = '${referential.organization}-${referential.application}-${referential.host}-fn'
 
 // === RESOURCES ===
 
@@ -72,7 +75,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  tags: resourceGroup().tags
+  tags: referential
   properties: {
     serverFarmId: serverFarmId
     reserved: true
@@ -97,10 +100,10 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
       // 'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString // TODO May not be necessary: https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#applicationinsights_connection_string
       'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
-      'AZURE_FUNCTIONS_ORGANIZATION': tags.organization
-      'AZURE_FUNCTIONS_APPLICATION': tags.application
-      'AZURE_FUNCTIONS_ENVIRONMENT': tags.environment
-      'AZURE_FUNCTIONS_HOST': tags.host
+      'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
+      'AZURE_FUNCTIONS_APPLICATION': referential.application
+      'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
+      'AZURE_FUNCTIONS_HOST': referential.host
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
       'AzureWebJobsStorage': webJobsStorage // Connection to technical storage account
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage

@@ -38,4 +38,9 @@ module tags '../shared/resources/tags.bicep' = {
 
 module appConfig '../shared/resources/app-config.bicep' = {
   name: 'Resource-AppConfiguration'
+  params: {
+    referential: {
+      referential: tags.outputs.referential
+    }
+  }
 }

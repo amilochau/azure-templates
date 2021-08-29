@@ -2,7 +2,7 @@
 // Resources deployed from this template:
 //   - Service Bus namespace
 // Required parameters:
-//   [None]
+//   - `referential`
 // Optional parameters:
 //   - `serviceBusQueues`
 //   - `serviceBusQueueProperties`
@@ -13,6 +13,9 @@
 //   - `primaryConnectionString`
 
 // === PARAMETERS ===
+
+@description('The referential, from the tags.bicep module')
+param referential object
 
 @description('The Service Bus queues')
 param serviceBusQueues array = []
@@ -35,8 +38,7 @@ param serviceBusQueueProperties object = {
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
-var serviceBusNamespaceName = '${tags.organization}-${tags.application}-${tags.host}-bus'
+var serviceBusNamespaceName = '${referential.organization}-${referential.application}-${referential.host}-bus'
 
 // === RESOURCES ===
 
@@ -47,7 +49,7 @@ resource bus 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   sku: {
     name: 'Basic'
   }
-  tags: resourceGroup().tags
+  tags: referential
   properties: {
     zoneRedundant: false
   }

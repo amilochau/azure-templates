@@ -139,12 +139,18 @@ module tags '../shared/resources/tags.bicep' = {
 // Key Vault
 module kv '../shared/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
   name: 'Resource-KeyVault'
+  params: {
+    referential: {
+      referential: tags.outputs.referential
+    }
+  }
 }
 
 // Application Insights
 module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
+    referential: tags.outputs.referential
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
     workspaceId: workspace.outputs.id
@@ -155,6 +161,7 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
   name: 'Resource-ServiceBus'
   params: {
+    referential: tags.outputs.referential
     serviceBusQueues: messaging.serviceBusQueues
   }
 }
@@ -163,6 +170,7 @@ module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableS
 module extra_stg '../shared/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
   name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
+    referential: tags.outputs.referential
     number: account.number
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
@@ -172,17 +180,28 @@ module extra_stg '../shared/resources/storage-account.bicep' = [for account in s
 // Dedicated Storage for Functions application
 module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
   name: 'Resource-StorageAccount'
+  params: {
+    referential: {
+      referential: tags.outputs.referential
+    }
+  }
 }
 
 // Server farm
 module farm '../shared/resources/server-farm.bicep' = if (!isLocal) {
   name: 'Resource-ServerFarm'
+  params: {
+    referential: {
+      referential: tags.outputs.referential
+    }
+  }
 }
 
 // Website (Functions)
 module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
   name: 'Resource-WebsiteFunctions'
   params: {
+    referential: tags.outputs.referential
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id

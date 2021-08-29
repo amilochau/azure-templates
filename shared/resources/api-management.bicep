@@ -2,6 +2,7 @@
 // Resources deployed from this template:
 //   - API Management
 // Required parameters:
+//   - `referential`
 //   - `publisherEmail`
 //   - `publisherName`
 // Optional parameters:
@@ -12,6 +13,9 @@
 //   - `name`
 
 // === PARAMETERS ===
+
+@description('The referential, from the tags.bicep module')
+param referential object
 
 @description('The API publisher email')
 @minLength(1)
@@ -30,8 +34,7 @@ param appInsightsInstrumentationKey string
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
-var apimName = '${tags.organization}-${tags.application}-${tags.host}-apim'
+var apimName = '${referential.organization}-${referential.application}-${referential.host}-apim'
 
 // === RESOURCES ===
 
@@ -46,7 +49,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   identity: {
     type: 'SystemAssigned'
   }
-  tags: tags
+  tags: referential
   properties: {
     publisherEmail: publisherEmail
     publisherName: publisherName

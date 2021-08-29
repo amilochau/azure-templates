@@ -2,7 +2,7 @@
 // Resources deployed from this template:
 //   - Server farm
 // Required parameters:
-//   [None]
+//   - `referential`
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -10,11 +10,15 @@
 //   - `apiVersion`
 //   - `name`
 
+// === PARAMETERS ===
+
+@description('The referential, from the tags.bicep module')
+param referential object
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
-var hostingPlanName = '${tags.organization}-${tags.application}-${tags.host}-asp'
+var hostingPlanName = '${referential.organization}-${referential.application}-${referential.host}-asp'
 
 // === RESOURCES ===
 
@@ -27,7 +31,7 @@ resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
     tier: 'Dynamic'
   }
   kind: 'functionapp'
-  tags: resourceGroup().tags
+  tags: referential
   properties: {
     reserved: true // Linux App Service
   }

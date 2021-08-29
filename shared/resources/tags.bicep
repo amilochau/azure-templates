@@ -12,6 +12,7 @@
 //   - `id`
 //   - `apiVersion`
 //   - `name`
+//   - `referential`
 
 // === PARAMETERS ===
 
@@ -27,18 +28,22 @@ param environmentName string
 @description('The host name of the deployment stage')
 param hostName string
 
+// === VARIABLES ===
+
+var referential = {
+  organization: organizationName
+  application: applicationName
+  environment: environmentName
+  host: hostName
+}
+
 // === RESOURCES ===
 
 // Key Vault
 resource tags 'Microsoft.Resources/tags@2021-04-01' = {
   name: 'default'
   properties: {
-    tags: {
-      organization: organizationName
-      application: applicationName
-      environment: environmentName
-      host: hostName
-    }
+    tags: referential
   }
 }
 
@@ -47,3 +52,4 @@ resource tags 'Microsoft.Resources/tags@2021-04-01' = {
 output id string = tags.id
 output apiVersion string = tags.apiVersion
 output name string = tags.name
+output referential object = referential

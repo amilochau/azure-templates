@@ -2,6 +2,7 @@
 // Resources deployed from this template:
 //   - Log Analytics Workspace
 // Required parameters:
+//   - `referential`
 //   - `dailyCap`
 // Optional parameters:
 //   [None]
@@ -12,14 +13,16 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('Daily data ingestion cap, in GB/d')
 param dailyCap string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
-var workspaceName = '${tags.organization}-${tags.application}-${tags.host}-ws'
+var workspaceName = '${referential.organization}-${referential.application}-${referential.host}-ws'
 
 // === RESOURCES ===
 
@@ -27,7 +30,7 @@ var workspaceName = '${tags.organization}-${tags.application}-${tags.host}-ws'
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
-  tags: resourceGroup().tags
+  tags: referential
   properties: {
     sku: {
       name: 'PerGB2018'

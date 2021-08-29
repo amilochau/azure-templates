@@ -73,6 +73,7 @@ module tags '../shared/resources/tags.bicep' = {
 module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
+    referential: tags.outputs.referential
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
     workspaceId: workspace.outputs.id
@@ -83,6 +84,7 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 module apim '../shared/resources/api-management.bicep' = {
   name: 'Resource-ApiManagement'
   params: {
+    referential: tags.outputs.referential
     publisherEmail: api.publisherEmail
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id

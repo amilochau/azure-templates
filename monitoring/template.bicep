@@ -57,6 +57,7 @@ module tags '../shared/resources/tags.bicep' = {
 module workspace '../shared/resources/log-analytics-workspace.bicep' = {
   name: 'Resource-LogAnalyticsWorkspace'
   params: {
+    referential: tags.outputs.referential
     dailyCap: dailyCap
   }
 }

@@ -2,7 +2,7 @@
 // Resources deployed from this template:
 //   - Key Vault
 // Required parameters:
-//   [None]
+//   - `referential`
 // Optional parameters:
 //   [None]
 // Outputs:
@@ -11,12 +11,16 @@
 //   - `name`
 //   - `vaultUri`
 
+// === PARAMETERS ===
+
+@description('The referential, from the tags.bicep module')
+param referential object
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
 var tenantId = subscription().tenantId
-var keyVaultName = '${tags.organization}-${tags.application}-${tags.host}-kv'
+var keyVaultName = '${referential.organization}-${referential.application}-${referential.host}-kv'
 
 // === RESOURCES ===
 
@@ -24,7 +28,7 @@ var keyVaultName = '${tags.organization}-${tags.application}-${tags.host}-kv'
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   name: keyVaultName
   location: location
-  tags: resourceGroup().tags
+  tags: referential
   properties: {
     tenantId: tenantId
     sku: {

@@ -2,6 +2,7 @@
 // Resources deployed from this template:
 //   - Application Insights
 // Required parameters:
+//   - `referential`
 //   - `disableLocalAuth`
 //   - `dailyCap`
 //   - `workspaceId`
@@ -16,6 +17,9 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('Disable non-AAD based authentication to publish metrics')
 param disableLocalAuth bool = false
 
@@ -28,8 +32,7 @@ param workspaceId string
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var tags = resourceGroup().tags
-var aiName = '${tags.organization}-${tags.application}-${tags.host}-ai'
+var aiName = '${referential.organization}-${referential.application}-${referential.host}-ai'
 
 // === RESOURCES ===
 
@@ -38,7 +41,7 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: aiName
   location: location
   kind: 'web'
-  tags: resourceGroup().tags
+  tags: referential
   properties: {
     Application_Type: 'web'
     DisableLocalAuth: disableLocalAuth
