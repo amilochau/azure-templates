@@ -77,7 +77,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   resource logger 'loggers@2021-01-01-preview' = {
-    name: 'logger-to-applicationInsights'
+    name: 'logger-applicationinsights'
     properties: {
       loggerType: 'applicationInsights'
       resourceId: appInsightsId
@@ -88,7 +88,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   resource diagnostic 'diagnostics@2021-01-01-preview' = {
-    name: 'diagnostic-from-applicationInsights'
+    name: 'applicationinsights'
     properties: {
       loggerId: logger.id
       alwaysLog: 'allErrors'
