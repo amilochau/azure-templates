@@ -24,3 +24,7 @@
 - Add tags (`organization`, `application`, `environment`, `host`) on each resource
 - Improve optional support for configuration, monitoring, secrets, storage and messaging features for `functions`
 - The `functions` template now supportes `dotnet-isolated` worker runtime
+- New templates are proposed:
+  - `configuration` let you deploy an App Configuration resource
+  - `monitoring` let you deploy a Log Analytics Workspace
+  - `gateway` let you deploy an API Management
