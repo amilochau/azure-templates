@@ -39,7 +39,7 @@ param serviceBusQueueProperties object = {
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var serviceBusNamespaceName = '${referential.organization}-${referential.application}-${referential.host}-bus'
+var serviceBusNamespaceName = '${referential.organization}-${referential.application}-${referential.host}-sbn'
 
 // === RESOURCES ===
 
