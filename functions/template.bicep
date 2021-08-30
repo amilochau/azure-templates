@@ -209,7 +209,8 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.InstrumentationKey
     // aiConnectionString: ai.outputs.ConnectionString // TODO Not used anymore, keep it until stable major version
-    serviceBusConnectionString: extra_bus.outputs.primaryConnectionString
+    // serviceBusConnectionString: extra_bus.outputs.primaryConnectionString // TODO Not used anymore, keep it until stable major version
+    serviceBusNamespaceName: extra_bus.outputs.name
     kvVaultUri: kv.outputs.vaultUri
   }
 }
@@ -244,8 +245,17 @@ module auth_fn_ai '../shared/authorizations/monitoring-metrics-publisher.bicep' 
   }
 }
 
-// Functions to Storage Accounts
-module auth_fn_stg '../shared/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (!isLocal && storage.enableStorage) {
+// Functions to extra Service Bus
+module auth_fn_extra_bus '../shared/authorizations/service-bus-data-owner.bicep' = if (!isLocal && messaging.enableServiceBus) {
+  name: 'Authorization-Functions-ServiceBus'
+  params: {
+    principalId: fn.outputs.principalId
+    serviceBusNamespaceName: extra_bus.outputs.name
+  }
+}
+
+// Functions to extra Storage Accounts
+module auth_fn_extra_stg '../shared/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (!isLocal && storage.enableStorage) {
   name: empty(account) ? 'dummy' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
     principalId: fn.outputs.principalId

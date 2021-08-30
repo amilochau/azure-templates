@@ -13,7 +13,6 @@
 //   - `apiVersion`
 //   - `name`
 //   - `InstrumentationKey`
-//   - `ConnectionString`
 
 // === PARAMETERS ===
 
@@ -63,4 +62,3 @@ output id string = ai.id
 output apiVersion string = ai.apiVersion
 output name string = ai.name
 output InstrumentationKey string = ai.properties.InstrumentationKey
-output ConnectionString string = ai.properties.ConnectionString

@@ -1,6 +1,7 @@
 // Deploy a Service Bus namespace with a queue
 // Resources deployed from this template:
-//   - Service Bus namespace
+//   - Service Bus Namespace
+//   - Service Bus Queues
 // Required parameters:
 //   - `referential`
 // Optional parameters:
@@ -42,8 +43,8 @@ var serviceBusNamespaceName = '${referential.organization}-${referential.applica
 
 // === RESOURCES ===
 
-// Service Bus
-resource bus 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
+// Service Bus Namespace
+resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   name: serviceBusNamespaceName
   location: location
   sku: {
@@ -58,7 +59,7 @@ resource bus 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
 // Service Bus - Authorization for owner application
 resource auth_owner 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-01' = {
   name: 'owner-app'
-  parent: bus
+  parent: sbn
   properties: {
     rights: [
       'Listen'
@@ -70,13 +71,13 @@ resource auth_owner 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-
 // Service Bus - Queues for owner application
 resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
   name: empty(serviceBusQueues) ? 'dummy' : queue
-  parent: bus
+  parent: sbn
   properties: serviceBusQueueProperties
 }]
 
 // === OUTPUTS ===
 
-output id string = bus.id
-output apiVersion string = bus.apiVersion
-output name string = bus.name
+output id string = sbn.id
+output apiVersion string = sbn.apiVersion
+output name string = sbn.name
 output primaryConnectionString string = listKeys(auth_owner.id, auth_owner.apiVersion).primaryConnectionString

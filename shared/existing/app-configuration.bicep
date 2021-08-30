@@ -18,6 +18,7 @@ param appConfigurationName string
 
 // === EXISTING ===
 
+// App Configuration
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
   name: appConfigurationName
 }

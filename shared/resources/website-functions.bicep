@@ -10,8 +10,8 @@
 // Optional parameters:
 //   - `appConfigurationEndpoint`
 //   - `aiInstrumentationKey`
-//   - `aiConnectionString`
-//   - `serviceBusConnectionString`
+//   - `serviceBusNamespaceName`
+//   - `kvVaultUri`
 // Outputs:
 //   - `id`
 //   - `apiVersion`
@@ -54,8 +54,12 @@ param aiInstrumentationKey string = ''
 // @description('The Application Insights connection string')
 // param aiConnectionString string = ''
 
-@description('The Service Bus connection string')
-param serviceBusConnectionString string = ''
+// TODO Not used anymore, keep it until stable major version
+// @description('The Service Bus connection string')
+// param serviceBusConnectionString string = ''
+
+@description('The Service Bus Namespace name')
+param serviceBusNamespaceName string = ''
 
 @description('The Key Vaylt vault URI')
 param kvVaultUri string = ''
@@ -112,9 +116,11 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       // 'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false' // TODO Is this useful? May not be necessary
       // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
       // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
+      'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
     }
   }
 
+  /* TODO Replaced by AzureWebJobsServiceBus__fullyQualifiedNamespace, keep it until the next major update
   resource fn_connectionstrings 'config@2021-01-01' = {
     name: 'connectionstrings'
     properties: {
@@ -124,6 +130,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       }
     }
   }
+  */
 }
 
 // === OUTPUTS ===
