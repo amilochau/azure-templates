@@ -87,18 +87,18 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   properties: {
     serverFarmId: serverFarmId
     reserved: true
-    httpsOnly: true
+    // TODO Enable again httpsOnly: true
     dailyMemoryTimeQuota: 10000
   }
 
   resource fn_config 'config@2021-01-01' = {
     name: 'web'
     properties: {
-      linuxFxVersion: linuxFxVersion
+      // TODO Enable again linuxFxVersion: linuxFxVersion
       localMySqlEnabled: false
       http20Enabled: true
       minTlsVersion: '1.2'
-      ftpsState: 'Disabled'
+      // TODO Enable again ftpsState: 'Disabled'
     }
   }
 
@@ -107,21 +107,20 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     properties: {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
       // 'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString // TODO May not be necessary: https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#applicationinsights_connection_string
-      'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
+      // TODO Enable again 'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
       'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
       'AZURE_FUNCTIONS_APPLICATION': referential.application
       'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
       'AZURE_FUNCTIONS_HOST': referential.host
-      'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
-      'AzureWebJobsDisableHomepage': 'true' // Disable homepage
+      // TODO Enable again 'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
+      // TODO Enable again 'AzureWebJobsDisableHomepage': 'true' // Disable homepage
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': workerRuntime
-      'WEBSITE_ENABLE_SYNC_UPDATE_SITE': 'false'
       // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
       // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
-      'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
+      // TODO Enable again 'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
       'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${webJobsStorageAccountKey}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
-      'AzureWebJobsStorage__accountName': webJobsStorageAccountName
+      // TODO Enable again 'AzureWebJobsStorage__accountName': webJobsStorageAccountName
     }
   }
 
