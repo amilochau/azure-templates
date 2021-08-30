@@ -199,7 +199,7 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id
-    // webJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${stg.outputs.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'// TODO Not used anymore, keep it until stable major version
+    webJobsStorageAccountKey: stg.outputs.accountKey
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.InstrumentationKey
