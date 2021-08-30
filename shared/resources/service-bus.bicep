@@ -6,12 +6,10 @@
 //   - `referential`
 // Optional parameters:
 //   - `serviceBusQueues`
-//   - `serviceBusQueueProperties`
 // Outputs:
 //   - `id`
 //   - `apiVersion`
 //   - `name`
-//   - `primaryConnectionString`
 
 // === PARAMETERS ===
 
@@ -20,21 +18,6 @@ param referential object
 
 @description('The Service Bus queues')
 param serviceBusQueues array = []
-
-@description('Service Bus queue properties')
-param serviceBusQueueProperties object = {
-  lockDuration: 'PT30S'
-  maxSizeInMegabytes: 1024
-  requiresDuplicateDetection: false
-  requiresSession: false
-  defaultMessageTimeToLive: 'P14D'
-  deadLetteringOnMessageExpiration: false
-  enableBatchedOperations: true
-  duplicateDetectionHistoryTimeWindow: 'PT10M'
-  maxDeliveryCount: 10
-  enablePartitioning: false
-  enableExpress: false
-}
 
 // === VARIABLES ===
 
@@ -57,7 +40,8 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
 }
 
 // Service Bus - Authorization for owner application
-resource auth_owner 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-01' = {
+// TODO Not used anymore, keep it until stable major version
+/*resource auth_owner 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-01' = {
   name: 'owner-app'
   parent: sbn
   properties: {
@@ -66,13 +50,25 @@ resource auth_owner 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-
       'Send'
     ]
   }
-}
+}*/
 
-// Service Bus - Queues for owner application
+// Service Bus Queues
 resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
   name: empty(serviceBusQueues) ? 'dummy' : queue
   parent: sbn
-  properties: serviceBusQueueProperties
+  properties: {
+    lockDuration: 'PT30S'
+    maxSizeInMegabytes: 1024
+    requiresDuplicateDetection: false
+    requiresSession: false
+    defaultMessageTimeToLive: 'P14D'
+    deadLetteringOnMessageExpiration: false
+    enableBatchedOperations: true
+    duplicateDetectionHistoryTimeWindow: 'PT10M'
+    maxDeliveryCount: 10
+    enablePartitioning: false
+    enableExpress: false
+  }
 }]
 
 // === OUTPUTS ===
@@ -80,4 +76,4 @@ resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview'
 output id string = sbn.id
 output apiVersion string = sbn.apiVersion
 output name string = sbn.name
-output primaryConnectionString string = listKeys(auth_owner.id, auth_owner.apiVersion).primaryConnectionString
+//output primaryConnectionString string = listKeys(auth_owner.id, auth_owner.apiVersion).primaryConnectionString // TODO Not used anymore, keep it until stable major version

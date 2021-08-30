@@ -31,3 +31,4 @@
   - `configuration` let you deploy an App Configuration resource
   - `monitoring` let you deploy a Log Analytics Workspace
   - `gateway` let you deploy an API Management
+- Azure Functions now uses Managed Identity for its technical Storage Account

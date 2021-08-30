@@ -6,7 +6,7 @@
 //   - `linuxFxVersion`
 //   - `workerRuntime`
 //   - `serverFarmId`
-//   - `webJobsStorage`
+//   - `webJobsStorageAccountName`
 // Optional parameters:
 //   - `appConfigurationEndpoint`
 //   - `aiInstrumentationKey`
@@ -41,8 +41,8 @@ param workerRuntime string
 @description('The server farm ID')
 param serverFarmId string
 
-@description('The Azure WebJobs storage')
-param webJobsStorage string
+@description('The Azure WebJobs Storage Account name')
+param webJobsStorageAccountName string
 
 @description('The App Configuration endpoint')
 param appConfigurationEndpoint string = ''
@@ -109,7 +109,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
       'AZURE_FUNCTIONS_HOST': referential.host
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
-      'AzureWebJobsStorage': webJobsStorage // Connection to technical storage account
+      // 'AzureWebJobsStorage': webJobsStorage // Connection to technical storage account // TODO Replaced by AzureWebJobsStorage__accountName, keep it until stable major version
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': workerRuntime
@@ -117,6 +117,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
       // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
       'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
+      'AzureWebJobsStorage__accountName': webJobsStorageAccountName
     }
   }
 

@@ -3,9 +3,9 @@
 //   - Functions with its dedicated Service Plan and storage account
 //   - Application Insights
 //   - Key Vault
-//   - Authorizations
 //   - Service Bus namespace and queues
 //   - Storage accounts and containers
+//   - Authorizations
 // Required parameters:
 //   - `organizationName`
 //   - `applicationName`
@@ -156,7 +156,7 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 }
 
 // Service Bus
-module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
+module extra_sbn '../shared/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
@@ -175,7 +175,7 @@ module extra_stg '../shared/resources/storage-account.bicep' = [for account in s
   }
 }]
 
-// Dedicated Storage for Functions application
+// Dedicated Storage Account for Functions application
 module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
   name: 'Resource-StorageAccount'
   params: {
@@ -199,12 +199,13 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id
-    webJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${stg.outputs.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'
+    // webJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${stg.outputs.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'// TODO Not used anymore, keep it until stable major version
+    webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.InstrumentationKey
     // aiConnectionString: ai.outputs.ConnectionString // TODO Not used anymore, keep it until stable major version
-    // serviceBusConnectionString: extra_bus.outputs.primaryConnectionString // TODO Not used anymore, keep it until stable major version
-    serviceBusNamespaceName: extra_bus.outputs.name
+    // serviceBusConnectionString: extra_sbn.outputs.primaryConnectionString // TODO Not used anymore, keep it until stable major version
+    serviceBusNamespaceName: extra_sbn.outputs.name
     kvVaultUri: kv.outputs.vaultUri
   }
 }
@@ -240,11 +241,11 @@ module auth_fn_ai '../shared/authorizations/monitoring-metrics-publisher.bicep' 
 }
 
 // Functions to extra Service Bus
-module auth_fn_extra_bus '../shared/authorizations/service-bus-data-owner.bicep' = if (!isLocal && messaging.enableServiceBus) {
+module auth_fn_extra_sbn '../shared/authorizations/service-bus-data-owner.bicep' = if (!isLocal && messaging.enableServiceBus) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
     principalId: fn.outputs.principalId
-    serviceBusNamespaceName: extra_bus.outputs.name
+    serviceBusNamespaceName: extra_sbn.outputs.name
   }
 }
 
@@ -253,7 +254,16 @@ module auth_fn_extra_stg '../shared/authorizations/storage-blob-data.bicep' = [f
   name: empty(account) ? 'dummy' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
     principalId: fn.outputs.principalId
-    storageAccountName: replace('${extra_stg[index].outputs.name}', '-','')
+    storageAccountName: extra_stg[index].outputs.name
     readOnly: account.readOnly
   }
 }]
+
+// Functions to dedicated Storage Account
+module auth_fn_stg  '../shared/authorizations/storage-blob-data.bicep' = if (!isLocal) {
+  name: 'Authorization-Functions-StorageAccount'
+  params: {
+    principalId: fn.outputs.principalId
+    storageAccountName: stg.outputs.name
+  }
+}
