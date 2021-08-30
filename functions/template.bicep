@@ -140,9 +140,7 @@ module tags '../shared/resources/tags.bicep' = {
 module kv '../shared/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
   }
 }
 
@@ -181,9 +179,7 @@ module extra_stg '../shared/resources/storage-account.bicep' = [for account in s
 module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
   name: 'Resource-StorageAccount'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
   }
 }
 
@@ -191,9 +187,7 @@ module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
 module farm '../shared/resources/server-farm.bicep' = if (!isLocal) {
   name: 'Resource-ServerFarm'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
   }
 }
 
