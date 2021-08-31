@@ -202,7 +202,6 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.InstrumentationKey
-    // aiConnectionString: ai.outputs.ConnectionString // TODO Not used anymore, keep it until stable major version
     // serviceBusConnectionString: extra_sbn.outputs.primaryConnectionString // TODO Not used anymore, keep it until stable major version
     serviceBusNamespaceName: extra_sbn.outputs.name
     kvVaultUri: kv.outputs.vaultUri

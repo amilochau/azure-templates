@@ -51,10 +51,6 @@ param appConfigurationEndpoint string = ''
 param aiInstrumentationKey string = ''
 
 // TODO Not used anymore, keep it until stable major version
-// @description('The Application Insights connection string')
-// param aiConnectionString string = ''
-
-// TODO Not used anymore, keep it until stable major version
 // @description('The Service Bus connection string')
 // param serviceBusConnectionString string = ''
 
@@ -90,18 +86,18 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   properties: {
     serverFarmId: serverFarmId
     reserved: true
-    // TODO Enable again httpsOnly: true
+    httpsOnly: true
     dailyMemoryTimeQuota: 10000
   }
 
   resource fn_config 'config@2021-01-01' = {
     name: 'web'
     properties: {
-      // TODO Enable again linuxFxVersion: linuxFxVersion
+      linuxFxVersion: linuxFxVersion
       localMySqlEnabled: false
       http20Enabled: true
       minTlsVersion: '1.2'
-      // TODO Enable again ftpsState: 'Disabled'
+      ftpsState: 'Disabled'
     }
   }
 
@@ -109,21 +105,19 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     name: 'appsettings'
     properties: {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
-      // 'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString // TODO May not be necessary: https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#applicationinsights_connection_string
-      // TODO Enable again 'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
+      'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
       'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
       'AZURE_FUNCTIONS_APPLICATION': referential.application
       'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
       'AZURE_FUNCTIONS_HOST': referential.host
-      // TODO Enable again 'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
-      // TODO Enable again 'AzureWebJobsDisableHomepage': 'true' // Disable homepage
+      'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
+      'AzureWebJobsDisableHomepage': 'true' // Disable homepage
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': workerRuntime
       // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
-      // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
-      // TODO Enable again 'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
+      'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
       'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
-      // TODO Enable again 'AzureWebJobsStorage__accountName': webJobsStorageAccountName
+      'AzureWebJobsStorage__accountName': webJobsStorageAccountName
     }
   }
 
