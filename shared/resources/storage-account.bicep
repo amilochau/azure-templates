@@ -13,7 +13,6 @@
 //   - `id`
 //   - `apiVersion`
 //   - `name`
-//   - `accountKey`
 
 // === PARAMETERS ===
 
@@ -122,4 +121,3 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 output id string = stg.id
 output apiVersion string = stg.apiVersion
 output name string = stg.name
-output accountKey string = listKeys(stg.id, stg.apiVersion).keys[0].value

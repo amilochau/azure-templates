@@ -199,7 +199,6 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id
-    webJobsStorageAccountKey: stg.outputs.accountKey
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.InstrumentationKey

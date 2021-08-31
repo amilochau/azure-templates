@@ -7,7 +7,6 @@
 //   - `workerRuntime`
 //   - `serverFarmId`
 //   - `webJobsStorageAccountName`
-//   - `webJobsStorageAccountKey`
 // Optional parameters:
 //   - `appConfigurationEndpoint`
 //   - `aiInstrumentationKey`
@@ -45,9 +44,6 @@ param serverFarmId string
 @description('The Azure WebJobs Storage Account name')
 param webJobsStorageAccountName string
 
-@description('The Azure WebJobs Storage Account key')
-param webJobsStorageAccountKey string
-
 @description('The App Configuration endpoint')
 param appConfigurationEndpoint string = ''
 
@@ -72,6 +68,13 @@ param kvVaultUri string = ''
 
 var location = resourceGroup().location
 var functionsAppName = '${referential.organization}-${referential.application}-${referential.host}-fn'
+
+// === EXISTING ===
+
+// Storage Account
+resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
+  name: webJobsStorageAccountName
+}
 
 // === RESOURCES ===
 
@@ -119,7 +122,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       // 'SCALE_CONTROLLER_LOGGING_ENABLED': 'AppInsights:Verbose' // To log scale controller logics https://docs.microsoft.com/en-us/azure/azure-functions/configure-monitoring?tabs=v2#configure-scale-controller-logs
       // 'WEBSITE_RUN_FROM_PACKAGE' : '1' // For Windows
       // TODO Enable again 'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceName
-      'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${webJobsStorageAccountKey}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
+      'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
       // TODO Enable again 'AzureWebJobsStorage__accountName': webJobsStorageAccountName
     }
   }
