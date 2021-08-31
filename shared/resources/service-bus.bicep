@@ -77,3 +77,4 @@ output id string = sbn.id
 output apiVersion string = sbn.apiVersion
 output name string = sbn.name
 //output primaryConnectionString string = listKeys(auth_owner.id, auth_owner.apiVersion).primaryConnectionString // TODO Not used anymore, keep it until stable major version
+output endpoint string = sbn.properties.serviceBusEndpoint

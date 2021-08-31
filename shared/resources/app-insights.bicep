@@ -12,7 +12,7 @@
 //   - `id`
 //   - `apiVersion`
 //   - `name`
-//   - `InstrumentationKey`
+//   - `instrumentationKey`
 
 // === PARAMETERS ===
 
@@ -61,4 +61,4 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
 output id string = ai.id
 output apiVersion string = ai.apiVersion
 output name string = ai.name
-output InstrumentationKey string = ai.properties.InstrumentationKey
+output instrumentationKey string = ai.properties.InstrumentationKey
