@@ -24,10 +24,11 @@
   - Introduce a new template for monitoring resources (see [here](monitoring/README.md))
 - Service Bus:
   - Support Managed Identity connection from Azure Functions
-- Add tags (`organization`, `application`, `environment`, `host`) on each resource and on current resource group
+- Functions application:
+  - Support `dotnet-isolated` worker runtime
+  - Support a daily memory time quota
+- Add tags (`organization`, `application`, `environment`, `host`, `deploymentDate`) on each resource and on current resource group
 - Improve optional support for configuration, monitoring, secrets, storage and messaging features for `functions`
-- The `functions` template now supports `dotnet-isolated` worker runtime
-- The `functions` template now supports a daily memory time quota
 - New templates are proposed:
   - `configuration` let you deploy an App Configuration resource
   - `monitoring` let you deploy a Log Analytics Workspace

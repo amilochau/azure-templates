@@ -30,6 +30,9 @@ param environmentName string
 @description('The host name of the deployment stage')
 param hostName string
 
+@description('The current date')
+param dateUtcNow string = utcNow('yyyy-MM-dd HH:mm:ss')
+
 // === VARIABLES ===
 
 var referential = {
@@ -37,6 +40,7 @@ var referential = {
   application: applicationName
   environment: environmentName
   host: hostName
+  deploymentDate: dateUtcNow
 }
 
 // === RESOURCES ===
