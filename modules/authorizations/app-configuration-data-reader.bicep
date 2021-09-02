@@ -41,7 +41,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
 
 // Principal to App Configuration
 resource auth_app_appConfig 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-  name: guid(resourceGroup().id, principalId, appConfig.id)
+  name: guid(principalId, appConfig.id, roleAppConfigurationDataReader.id)
   scope: appConfig
   properties: {
     roleDefinitionId: roleAppConfigurationDataReader.id

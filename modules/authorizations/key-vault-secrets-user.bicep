@@ -41,7 +41,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 
 // Principal to Key Vault
 resource auth_app_kv 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-  name: guid(resourceGroup().id, principalId, kv.id)
+  name: guid(principalId, kv.id, roleKeyVaultSecretsUser.id)
   scope: kv
   properties: {
     roleDefinitionId: roleKeyVaultSecretsUser.id

@@ -43,7 +43,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' existing = {
 
 // Principal to Storage account
 resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-  name: guid(resourceGroup().id, principalId, sbn.id)
+  name: guid(principalId, sbn.id, roleServiceBusDataOwner.id)
   scope: sbn
   properties: {
     roleDefinitionId: roleServiceBusDataOwner.id
