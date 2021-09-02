@@ -28,7 +28,7 @@ param hostName string
 // === RESOURCES ===
 
 // Tags
-module tags '../shared/resources/tags.bicep' = {
+module tags '../modules/resources/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -38,7 +38,7 @@ module tags '../shared/resources/tags.bicep' = {
   }
 }
 
-module appConfig '../shared/resources/app-config.bicep' = {
+module appConfig '../modules/resources/app-config.bicep' = {
   name: 'Resource-AppConfiguration'
   params: {
     referential: {
