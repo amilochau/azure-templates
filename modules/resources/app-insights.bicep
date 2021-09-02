@@ -1,19 +1,20 @@
-// Deploy an Application Insights
-// Resources deployed from this template:
-//   - Application Insights
-// Required parameters:
-//   - `referential`
-//   - `disableLocalAuth`
-//   - `dailyCap`
-//   - `workspaceId`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `InstrumentationKey`
-//   - `ConnectionString`
+/*
+  Deploy an Application Insights
+  Resources deployed from this template:
+    - Application Insights
+  Required parameters:
+    - `referential`
+    - `disableLocalAuth`
+    - `dailyCap`
+    - `workspaceId`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `instrumentationKey`
+*/
 
 // === PARAMETERS ===
 
@@ -62,5 +63,4 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
 output id string = ai.id
 output apiVersion string = ai.apiVersion
 output name string = ai.name
-output InstrumentationKey string = ai.properties.InstrumentationKey
-output ConnectionString string = ai.properties.ConnectionString
+output instrumentationKey string = ai.properties.InstrumentationKey

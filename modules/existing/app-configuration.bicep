@@ -1,15 +1,17 @@
-// Get references from an existing Azure App Configuration
-// Resources deployed from this template:
-//   [None]
-// Required parameters:
-//   - `appConfigurationName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `endpoint`
+/*
+  Get references from an existing Azure App Configuration
+  Resources deployed from this template:
+    [None]
+  Required parameters:
+    - `appConfigurationName`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `endpoint`
+*/
 
 // === PARAMETERS ===
 
@@ -18,6 +20,7 @@ param appConfigurationName string
 
 // === EXISTING ===
 
+// App Configuration
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
   name: appConfigurationName
 }

@@ -1,15 +1,17 @@
-// Deploy infrastructure for Azure monitoring
-// Resources deployed from this template:
-//   - Log Analytics Workspace
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   - `dailyCap`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for Azure monitoring
+  Resources deployed from this template:
+    - Log Analytics Workspace
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    - `dailyCap`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 
@@ -43,7 +45,7 @@ param dailyCap string = '1'
 // === RESOURCES ===
 
 // Tags
-module tags '../shared/resources/tags.bicep' = {
+module tags '../modules/resources/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -54,7 +56,7 @@ module tags '../shared/resources/tags.bicep' = {
 }
 
 // Log Analytics Workspace
-module workspace '../shared/resources/log-analytics-workspace.bicep' = {
+module workspace '../modules/resources/log-analytics-workspace.bicep' = {
   name: 'Resource-LogAnalyticsWorkspace'
   params: {
     referential: tags.outputs.referential

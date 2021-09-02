@@ -1,16 +1,18 @@
-// Deploy an API Management
-// Resources deployed from this template:
-//   - API Management
-// Required parameters:
-//   - `referential`
-//   - `publisherEmail`
-//   - `publisherName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
+/*
+  Deploy an API Management
+  Resources deployed from this template:
+    - API Management
+  Required parameters:
+    - `referential`
+    - `publisherEmail`
+    - `publisherName`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 
@@ -53,7 +55,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   properties: {
     publisherEmail: publisherEmail
     publisherName: publisherName
-    customProperties:{
+    customProperties: {
       'Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2': 'true'
     }
   }

@@ -1,19 +1,20 @@
-// Deploy a Storage Account with blob containers
-// Resources deployed from this template:
-//   - Storage Account
-//   - Blob containers
-// Required parameters:
-//   - `referential`
-// Optional parameters:
-//   - `number`
-//   - `blobContainers`: []
-//      - `name`
-//   - `daysBeforeDeletion`
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `accountKey`
+/*
+  Deploy a Storage Account with blob containers
+  Resources deployed from this template:
+    - Storage Account
+    - Blob containers
+  Required parameters:
+    - `referential`
+  Optional parameters:
+    - `number`
+    - `blobContainers`: []
+       - `name`
+    - `daysBeforeDeletion`
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 
@@ -122,4 +123,3 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 output id string = stg.id
 output apiVersion string = stg.apiVersion
 output name string = stg.name
-output accountKey string = listKeys(stg.id, stg.apiVersion).keys[0].value

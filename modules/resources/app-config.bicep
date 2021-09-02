@@ -1,14 +1,16 @@
-// Deploy an App Configuration
-// Resources deployed from this template:
-//   - App Configuration
-// Required parameters:
-//   - `referential`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
+/*
+  Deploy an App Configuration
+  Resources deployed from this template:
+    - App Configuration
+  Required parameters:
+    - `referential`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 

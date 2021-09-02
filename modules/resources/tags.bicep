@@ -1,18 +1,20 @@
-// Deploy a list of Tags
-// Resources deployed from this template:
-//   - Tags
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `referential`
+/*
+  Deploy a list of Tags
+  Resources deployed from this template:
+    - Tags
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `referential`
+*/
 
 // === PARAMETERS ===
 

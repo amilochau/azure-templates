@@ -1,24 +1,26 @@
-// Deploy infrastructure for API Management
-// Resources deployed from this template:
-//   - API Management
-//   - Application Insights
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   - `api`: {}
-//      - `publisherEmail`
-//      - `publisherName`
-//   - `monitoring`: {}
-//      - `enableApplicationInsights`
-//      - `disableLocalAuth`
-//      - `dailyCap`
-//      - `workspaceName`
-//      - `workspaceResourceGroup`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for API Management
+  Resources deployed from this template:
+    - API Management
+    - Application Insights
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    - `api`: {}
+      - `publisherEmail`
+      - `publisherName`
+    - `monitoring`: {}
+      - `enableApplicationInsights`
+      - `disableLocalAuth`
+      - `dailyCap`
+      - `workspaceName`
+      - `workspaceResourceGroup`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 
@@ -48,7 +50,7 @@ param monitoring object = {
 // === EXISTING ===
 
 // Log Analytics Workspace
-module workspace '../shared/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
+module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
   scope: resourceGroup(monitoring.workspaceResourceGroup)
   params: {
@@ -59,7 +61,7 @@ module workspace '../shared/existing/log-analytics-workspace.bicep' = if (monito
 // === RESOURCES ===
 
 // Tags
-module tags '../shared/resources/tags.bicep' = {
+module tags '../modules/resources/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -70,7 +72,7 @@ module tags '../shared/resources/tags.bicep' = {
 }
 
 // Application Insights
-module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
@@ -81,13 +83,13 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 }
 
 // API Management
-module apim '../shared/resources/api-management.bicep' = {
+module apim '../modules/resources/api-management.bicep' = {
   name: 'Resource-ApiManagement'
   params: {
     referential: tags.outputs.referential
     publisherEmail: api.publisherEmail
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id
-    appInsightsInstrumentationKey: ai.outputs.InstrumentationKey
+    appInsightsInstrumentationKey: ai.outputs.instrumentationKey
   }
 }

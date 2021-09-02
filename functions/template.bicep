@@ -1,40 +1,42 @@
-// Deploy infrastructure for Azure Functions application
-// Resources deployed from this template:
-//   - Functions with its dedicated Service Plan and storage account
-//   - Application Insights
-//   - Key Vault
-//   - Authorizations
-//   - Service Bus namespace and queues
-//   - Storage accounts and containers
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   - `application`: {}
-//      - `linuxFxVersion`
-//      - `workerRuntime`
-//   - `monitoring`: {}
-//      - `enableApplicationInsights`
-//      - `disableLocalAuth`
-//      - `dailyCap`
-//      - `workspaceName`
-//      - `workspaceResourceGroup`
-//   - configuration: {}
-//      - `enableAppConfiguration`
-//      - `appConfigurationName`
-//      - `appConfigurationResourceGroup`
-//   - secrets: {}
-//      - `enableKeyVault`
-//   - `serviceBusQueues`
-//   - `storageAccounts`: []
-//      - `number`
-//      - `containers`
-//      - `readOnly`
-//      - `daysBeforeDeletion`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for Azure Functions application
+  Resources deployed from this template:
+    - Functions with its dedicated Service Plan and storage account
+    - Application Insights
+    - Key Vault
+    - Service Bus namespace and queues
+    - Storage accounts and containers
+    - Authorizations
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    - `application`: {}
+      - `linuxFxVersion`
+      - `workerRuntime`
+    - `monitoring`: {}
+      - `enableApplicationInsights`
+      - `disableLocalAuth`
+      - `dailyCap`
+      - `workspaceName`
+      - `workspaceResourceGroup`
+    - configuration: {}
+      - `enableAppConfiguration`
+      - `appConfigurationName`
+      - `appConfigurationResourceGroup`
+    - secrets: {}
+      - `enableKeyVault`
+    - `serviceBusQueues`
+    - `storageAccounts`: []
+      - `number`
+      - `containers`
+      - `readOnly`
+      - `daysBeforeDeletion`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 
@@ -106,7 +108,7 @@ var isLocal = hostName == 'local'
 // === EXISTING ===
 
 // App Configuration
-module appConfig '../shared/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
+module appConfig '../modules/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Existing-AppConfiguration'
   scope: resourceGroup(configuration.appConfigurationResourceGroup)
   params: {
@@ -115,7 +117,7 @@ module appConfig '../shared/existing/app-configuration.bicep' = if (configuratio
 }
 
 // Log Analytics Workspace
-module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+module workspace '../modules/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
   scope: resourceGroup(monitoring.workspaceResourceGroup)
   params: {
@@ -126,7 +128,7 @@ module workspace '../shared/existing/log-analytics-workspace.bicep' = if (!isLoc
 // === RESOURCES ===
 
 // Tags
-module tags '../shared/resources/tags.bicep' = {
+module tags '../modules/resources/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -137,17 +139,15 @@ module tags '../shared/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../shared/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
+module kv '../modules/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
   }
 }
 
 // Application Insights
-module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
@@ -158,7 +158,7 @@ module ai '../shared/resources/app-insights.bicep' = if (monitoring.enableApplic
 }
 
 // Service Bus
-module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
+module extra_sbn '../modules/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
@@ -167,7 +167,7 @@ module extra_bus '../shared/resources/service-bus.bicep' = if (messaging.enableS
 }
 
 // Storage Accounts
-module extra_stg '../shared/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
+module extra_stg '../modules/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
   name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
     referential: tags.outputs.referential
@@ -177,39 +177,34 @@ module extra_stg '../shared/resources/storage-account.bicep' = [for account in s
   }
 }]
 
-// Dedicated Storage for Functions application
-module stg '../shared/resources/storage-account.bicep' = if (!isLocal) {
+// Dedicated Storage Account for Functions application
+module stg '../modules/resources/storage-account.bicep' = if (!isLocal) {
   name: 'Resource-StorageAccount'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
   }
 }
 
 // Server farm
-module farm '../shared/resources/server-farm.bicep' = if (!isLocal) {
+module farm '../modules/resources/server-farm.bicep' = if (!isLocal) {
   name: 'Resource-ServerFarm'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
   }
 }
 
 // Website (Functions)
-module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
+module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
   name: 'Resource-WebsiteFunctions'
   params: {
     referential: tags.outputs.referential
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id
-    webJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${stg.outputs.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.outputs.accountKey}'
+    webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
-    aiInstrumentationKey: ai.outputs.InstrumentationKey
-    // aiConnectionString: ai.outputs.ConnectionString // TODO Not used anymore, keep it until stable major version
-    serviceBusConnectionString: extra_bus.outputs.primaryConnectionString
+    aiInstrumentationKey: ai.outputs.instrumentationKey
+    serviceBusNamespaceName: extra_sbn.outputs.name
     kvVaultUri: kv.outputs.vaultUri
   }
 }
@@ -217,7 +212,7 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
 // === AUTHORIZATIONS ===
 
 // Functions to App Configuration
-module auth_fn_appConfig '../shared/authorizations/app-configuration-data-reader.bicep' = if (!isLocal && configuration.enableAppConfiguration) {
+module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!isLocal && configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
   scope: resourceGroup(configuration.appConfigurationResourceGroup)
   params: {
@@ -227,7 +222,7 @@ module auth_fn_appConfig '../shared/authorizations/app-configuration-data-reader
 }
 
 // Functions to Key Vault
-module auth_fn_kv '../shared/authorizations/key-vault-secrets-user.bicep' = if (!isLocal && secrets.enableKeyVault) {
+module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!isLocal && secrets.enableKeyVault) {
   name: 'Authorization-Functions-KeyVault'
   params: {
     principalId: fn.outputs.principalId
@@ -236,7 +231,7 @@ module auth_fn_kv '../shared/authorizations/key-vault-secrets-user.bicep' = if (
 }
 
 // Functions to Application Insights
-module auth_fn_ai '../shared/authorizations/monitoring-metrics-publisher.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
     principalId: fn.outputs.principalId
@@ -244,12 +239,30 @@ module auth_fn_ai '../shared/authorizations/monitoring-metrics-publisher.bicep' 
   }
 }
 
-// Functions to Storage Accounts
-module auth_fn_stg '../shared/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (!isLocal && storage.enableStorage) {
+// Functions to extra Service Bus
+module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (!isLocal && messaging.enableServiceBus) {
+  name: 'Authorization-Functions-ServiceBus'
+  params: {
+    principalId: fn.outputs.principalId
+    serviceBusNamespaceName: extra_sbn.outputs.name
+  }
+}
+
+// Functions to extra Storage Accounts
+module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (!isLocal && storage.enableStorage) {
   name: empty(account) ? 'dummy' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
     principalId: fn.outputs.principalId
-    storageAccountName: replace('${extra_stg[index].outputs.name}', '-','')
+    storageAccountName: extra_stg[index].outputs.name
     readOnly: account.readOnly
   }
 }]
+
+// Functions to dedicated Storage Account
+module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = if (!isLocal) {
+  name: 'Authorization-Functions-StorageAccount'
+  params: {
+    principalId: fn.outputs.principalId
+    storageAccountName: stg.outputs.name
+  }
+}

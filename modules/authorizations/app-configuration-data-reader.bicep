@@ -1,13 +1,15 @@
-// Deploy authorizations for a shared Azure App Configuration
-// Resources deployed from this template:
-//   - Authorizations
-// Required parameters:
-//   - `principalId`
-//   - `appConfigurationName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   [None]
+/*
+  Deploy authorizations for a shared Azure App Configuration
+  Resources deployed from this template:
+    - Authorizations
+  Required parameters:
+    - `principalId`
+    - `appConfigurationName`
+  Optional parameters:
+    [None]
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 

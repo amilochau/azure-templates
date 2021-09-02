@@ -12,6 +12,7 @@
 - The previous parameter `organizationPrefix` is now renamed `organizationName`
 - Naming convention has been adapted; here is the new resource convention: `{org}-{app}-{host}-{resourceType}`
 - Azure Functions settings for organization, application, environment, host, App Configuration and Key Vault now use the `AZURE_FUNCTIONS_` prefix
+- Azure Functions now uses Managed Identity for Service Bus triggers; please use the new `AzureWebJobsServiceBus` reference in the code, instead of the old `ServiceBusConnectionString` (see [this page](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference#configure-an-identity-based-connection))
 
 ## New features
 
@@ -21,10 +22,14 @@
   - Support workspace reference
 - Log Analytics Workspace:
   - Introduce a new template for monitoring resources (see [here](monitoring/README.md))
-- Add tags (`organization`, `application`, `environment`, `host`) on each resource
+- Service Bus:
+  - Support Managed Identity connection from Azure Functions
+- Add tags (`organization`, `application`, `environment`, `host`) on each resource and on current resource group
 - Improve optional support for configuration, monitoring, secrets, storage and messaging features for `functions`
 - The `functions` template now supportes `dotnet-isolated` worker runtime
 - New templates are proposed:
   - `configuration` let you deploy an App Configuration resource
   - `monitoring` let you deploy a Log Analytics Workspace
   - `gateway` let you deploy an API Management
+- Azure Functions now uses Managed Identity for its technical Storage Account
+- Add minimum TLS version for website SCM

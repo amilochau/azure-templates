@@ -1,15 +1,17 @@
-// Deploy a Key Vault
-// Resources deployed from this template:
-//   - Key Vault
-// Required parameters:
-//   - `referential`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `vaultUri`
+/*
+  Deploy a Key Vault
+  Resources deployed from this template:
+    - Key Vault
+  Required parameters:
+    - `referential`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `vaultUri`
+*/
 
 // === PARAMETERS ===
 
