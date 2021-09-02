@@ -31,7 +31,7 @@ param environmentName string
 param hostName string
 
 @description('The current date')
-param dateUtcNow string = utcNow()
+param dateUtcNow string = utcNow('yyyy-MM-dd HH:mm:ss')
 
 // === VARIABLES ===
 
