@@ -10,7 +10,7 @@
 // Optional parameters:
 //   - `appConfigurationEndpoint`
 //   - `aiInstrumentationKey`
-//   - `serviceBusNamespaceEndpoint`
+//   - `serviceBusNamespaceName`
 //   - `kvVaultUri`
 // Outputs:
 //   - `id`
@@ -50,8 +50,8 @@ param appConfigurationEndpoint string = ''
 @description('The Application Insights instrumentation key')
 param aiInstrumentationKey string = ''
 
-@description('The Service Bus Namespace endpoint')
-param serviceBusNamespaceEndpoint string = ''
+@description('The Service Bus Namespace name')
+param serviceBusNamespaceName string = ''
 
 @description('The Key Vaylt vault URI')
 param kvVaultUri string = ''
@@ -111,7 +111,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage
       'FUNCTIONS_EXTENSION_VERSION': '~3'
       'FUNCTIONS_WORKER_RUNTIME': workerRuntime
-      'AzureWebJobsServiceBus__fullyQualifiedNamespace': serviceBusNamespaceEndpoint
+      'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
       'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
       'AzureWebJobsStorage__accountName': webJobsStorageAccountName
     }

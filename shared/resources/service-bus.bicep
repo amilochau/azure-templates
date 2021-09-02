@@ -10,7 +10,6 @@
 //   - `id`
 //   - `apiVersion`
 //   - `name`
-//   - `endpoint`
 
 // === PARAMETERS ===
 
@@ -64,4 +63,3 @@ resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview'
 output id string = sbn.id
 output apiVersion string = sbn.apiVersion
 output name string = sbn.name
-output endpoint string = sbn.properties.serviceBusEndpoint

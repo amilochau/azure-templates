@@ -202,7 +202,7 @@ module fn '../shared/resources/website-functions.bicep' = if (!isLocal) {
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.instrumentationKey
-    serviceBusNamespaceEndpoint: extra_sbn.outputs.endpoint
+    serviceBusNamespaceName: extra_sbn.outputs.name
     kvVaultUri: kv.outputs.vaultUri
   }
 }
