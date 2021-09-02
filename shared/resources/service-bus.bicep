@@ -10,6 +10,7 @@
 //   - `id`
 //   - `apiVersion`
 //   - `name`
+//   - `endpoint`
 
 // === PARAMETERS ===
 
@@ -39,19 +40,6 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   }
 }
 
-// Service Bus - Authorization for owner application
-// TODO Not used anymore, keep it until stable major version
-/*resource auth_owner 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2017-04-01' = {
-  name: 'owner-app'
-  parent: sbn
-  properties: {
-    rights: [
-      'Listen'
-      'Send'
-    ]
-  }
-}*/
-
 // Service Bus Queues
 resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
   name: empty(serviceBusQueues) ? 'dummy' : queue
@@ -76,5 +64,4 @@ resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview'
 output id string = sbn.id
 output apiVersion string = sbn.apiVersion
 output name string = sbn.name
-//output primaryConnectionString string = listKeys(auth_owner.id, auth_owner.apiVersion).primaryConnectionString // TODO Not used anymore, keep it until stable major version
 output endpoint string = sbn.properties.serviceBusEndpoint

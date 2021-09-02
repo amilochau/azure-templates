@@ -53,7 +53,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   properties: {
     publisherEmail: publisherEmail
     publisherName: publisherName
-    customProperties:{
+    customProperties: {
       'Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2': 'true'
     }
   }

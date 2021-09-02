@@ -50,10 +50,6 @@ param appConfigurationEndpoint string = ''
 @description('The Application Insights instrumentation key')
 param aiInstrumentationKey string = ''
 
-// TODO Not used anymore, keep it until stable major version
-// @description('The Service Bus connection string')
-// param serviceBusConnectionString string = ''
-
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string = ''
 
@@ -120,18 +116,6 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'AzureWebJobsStorage__accountName': webJobsStorageAccountName
     }
   }
-
-  /* TODO Replaced by AzureWebJobsServiceBus__fullyQualifiedNamespace, keep it until the next major update
-  resource fn_connectionstrings 'config@2021-01-01' = {
-    name: 'connectionstrings'
-    properties: {
-      'ServiceBusConnectionString': {
-        value: serviceBusConnectionString
-        type: 'Custom'
-      }
-    }
-  }
-  */
 }
 
 // === OUTPUTS ===
