@@ -13,6 +13,7 @@
     - `aiInstrumentationKey`
     - `serviceBusNamespaceName`
     - `kvVaultUri`
+    - `dailyMemoryTimeQuota`
   Outputs:
     - `id`
     - `apiVersion`
@@ -55,8 +56,11 @@ param aiInstrumentationKey string = ''
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string = ''
 
-@description('The Key Vaylt vault URI')
+@description('The Key Vault vault URI')
 param kvVaultUri string = ''
+
+@description('Daily memory time quota, in GB.s/d')
+param dailyMemoryTimeQuota string = '10000'
 
 // === VARIABLES ===
 
@@ -85,7 +89,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     serverFarmId: serverFarmId
     reserved: true
     httpsOnly: true
-    dailyMemoryTimeQuota: 10000
+    dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
   }
 
   resource fn_config 'config@2021-01-01' = {
