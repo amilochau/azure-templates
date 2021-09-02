@@ -16,6 +16,7 @@
     - `application`: {}
       - `linuxFxVersion`
       - `workerRuntime`
+      - `dailyMemoryTimeQuota`
     - `monitoring`: {}
       - `enableApplicationInsights`
       - `disableLocalAuth`
@@ -206,6 +207,7 @@ module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
     aiInstrumentationKey: ai.outputs.instrumentationKey
     serviceBusNamespaceName: extra_sbn.outputs.name
     kvVaultUri: kv.outputs.vaultUri
+    dailyMemoryTimeQuota: application.dailyMemoryTimeQuota
   }
 }
 

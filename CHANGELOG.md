@@ -26,7 +26,8 @@
   - Support Managed Identity connection from Azure Functions
 - Add tags (`organization`, `application`, `environment`, `host`) on each resource and on current resource group
 - Improve optional support for configuration, monitoring, secrets, storage and messaging features for `functions`
-- The `functions` template now supportes `dotnet-isolated` worker runtime
+- The `functions` template now supports `dotnet-isolated` worker runtime
+- The `functions` template now supports a daily memory time quota
 - New templates are proposed:
   - `configuration` let you deploy an App Configuration resource
   - `monitoring` let you deploy a Log Analytics Workspace

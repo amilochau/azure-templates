@@ -34,7 +34,8 @@ You can safely use this template in an IaC automated process, such as a GitHub w
     "application": {
       "value": {
         "linuxFxVersion": "DOTNET|5.0",
-        "workerRuntime": "dotnet-isolated"
+        "workerRuntime": "dotnet-isolated",
+        "dailyMemoryTimeQuota": "10000"
       }
     },
     "monitoring": {
