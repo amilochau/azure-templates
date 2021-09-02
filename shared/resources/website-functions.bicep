@@ -1,22 +1,24 @@
-// Deploy a Website (Functions)
-// Resources deployed from this template:
-//   - Website (Functions)
-// Required parameters:
-//   - `referential`
-//   - `linuxFxVersion`
-//   - `workerRuntime`
-//   - `serverFarmId`
-//   - `webJobsStorageAccountName`
-// Optional parameters:
-//   - `appConfigurationEndpoint`
-//   - `aiInstrumentationKey`
-//   - `serviceBusNamespaceName`
-//   - `kvVaultUri`
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `principalId`
+/*
+  Deploy a Website (Functions)
+  Resources deployed from this template:
+    - Website (Functions)
+  Required parameters:
+    - `referential`
+    - `linuxFxVersion`
+    - `workerRuntime`
+    - `serverFarmId`
+    - `webJobsStorageAccountName`
+  Optional parameters:
+    - `appConfigurationEndpoint`
+    - `aiInstrumentationKey`
+    - `serviceBusNamespaceName`
+    - `kvVaultUri`
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `principalId`
+*/
 
 // === PARAMETERS ===
 

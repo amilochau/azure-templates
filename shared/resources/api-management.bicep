@@ -1,16 +1,18 @@
-// Deploy an API Management
-// Resources deployed from this template:
-//   - API Management
-// Required parameters:
-//   - `referential`
-//   - `publisherEmail`
-//   - `publisherName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
+/*
+  Deploy an API Management
+  Resources deployed from this template:
+    - API Management
+  Required parameters:
+    - `referential`
+    - `publisherEmail`
+    - `publisherName`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 

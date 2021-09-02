@@ -1,40 +1,42 @@
-// Deploy infrastructure for Azure Functions application
-// Resources deployed from this template:
-//   - Functions with its dedicated Service Plan and storage account
-//   - Application Insights
-//   - Key Vault
-//   - Service Bus namespace and queues
-//   - Storage accounts and containers
-//   - Authorizations
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   - `application`: {}
-//      - `linuxFxVersion`
-//      - `workerRuntime`
-//   - `monitoring`: {}
-//      - `enableApplicationInsights`
-//      - `disableLocalAuth`
-//      - `dailyCap`
-//      - `workspaceName`
-//      - `workspaceResourceGroup`
-//   - configuration: {}
-//      - `enableAppConfiguration`
-//      - `appConfigurationName`
-//      - `appConfigurationResourceGroup`
-//   - secrets: {}
-//      - `enableKeyVault`
-//   - `serviceBusQueues`
-//   - `storageAccounts`: []
-//      - `number`
-//      - `containers`
-//      - `readOnly`
-//      - `daysBeforeDeletion`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for Azure Functions application
+  Resources deployed from this template:
+    - Functions with its dedicated Service Plan and storage account
+    - Application Insights
+    - Key Vault
+    - Service Bus namespace and queues
+    - Storage accounts and containers
+    - Authorizations
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    - `application`: {}
+      - `linuxFxVersion`
+      - `workerRuntime`
+    - `monitoring`: {}
+      - `enableApplicationInsights`
+      - `disableLocalAuth`
+      - `dailyCap`
+      - `workspaceName`
+      - `workspaceResourceGroup`
+    - configuration: {}
+      - `enableAppConfiguration`
+      - `appConfigurationName`
+      - `appConfigurationResourceGroup`
+    - secrets: {}
+      - `enableKeyVault`
+    - `serviceBusQueues`
+    - `storageAccounts`: []
+      - `number`
+      - `containers`
+      - `readOnly`
+      - `daysBeforeDeletion`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 

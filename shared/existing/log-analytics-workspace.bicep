@@ -1,14 +1,16 @@
-// Deploy an Log Analytics Workspace
-// Resources deployed from this template:
-//   - Log Analytics Workspace
-// Required parameters:
-//   - `workspaceName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
+/*
+  Deploy an Log Analytics Workspace
+  Resources deployed from this template:
+    - Log Analytics Workspace
+  Required parameters:
+    - `workspaceName`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 

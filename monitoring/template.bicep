@@ -1,15 +1,17 @@
-// Deploy infrastructure for Azure monitoring
-// Resources deployed from this template:
-//   - Log Analytics Workspace
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   - `dailyCap`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for Azure monitoring
+  Resources deployed from this template:
+    - Log Analytics Workspace
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    - `dailyCap`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 

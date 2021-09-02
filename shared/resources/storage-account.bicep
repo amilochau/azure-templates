@@ -1,18 +1,20 @@
-// Deploy a Storage Account with blob containers
-// Resources deployed from this template:
-//   - Storage Account
-//   - Blob containers
-// Required parameters:
-//   - `referential`
-// Optional parameters:
-//   - `number`
-//   - `blobContainers`: []
-//      - `name`
-//   - `daysBeforeDeletion`
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
+/*
+  Deploy a Storage Account with blob containers
+  Resources deployed from this template:
+    - Storage Account
+    - Blob containers
+  Required parameters:
+    - `referential`
+  Optional parameters:
+    - `number`
+    - `blobContainers`: []
+       - `name`
+    - `daysBeforeDeletion`
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 

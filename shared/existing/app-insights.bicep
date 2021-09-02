@@ -1,16 +1,18 @@
-// Get references from an existing Application Insights
-// Resources deployed from this template:
-//   [None]
-// Required parameters:
-//   - `appInsightsName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
-//   - `InstrumentationKey`
-
+/*
+  Get references from an existing Application Insights
+  Resources deployed from this template:
+    [None]
+  Required parameters:
+    - `appInsightsName`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `InstrumentationKey`
+*/
+ 
 // === PARAMETERS ===
 
 @description('The Application Insights name')

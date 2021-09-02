@@ -1,14 +1,16 @@
-// Deploy a Server farm
-// Resources deployed from this template:
-//   - Server farm
-// Required parameters:
-//   - `referential`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   - `id`
-//   - `apiVersion`
-//   - `name`
+/*
+  Deploy a Server farm
+  Resources deployed from this template:
+    - Server farm
+  Required parameters:
+    - `referential`
+  Optional parameters:
+    [None]
+  Outputs:
+    - `id`
+    - `apiVersion`
+    - `name`
+*/
 
 // === PARAMETERS ===
 

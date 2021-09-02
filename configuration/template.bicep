@@ -1,13 +1,15 @@
-// Deploy infrastructure for Azure App Configuration
-// Resources deployed from this template:
-//   - App Configuration
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for Azure App Configuration
+  Resources deployed from this template:
+    - App Configuration
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 

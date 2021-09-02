@@ -1,24 +1,26 @@
-// Deploy infrastructure for API Management
-// Resources deployed from this template:
-//   - API Management
-//   - Application Insights
-// Required parameters:
-//   - `organizationName`
-//   - `applicationName`
-//   - `environmentName`
-//   - `hostName`
-// Optional parameters:
-//   - `api`: {}
-//      - `publisherEmail`
-//      - `publisherName`
-//   - `monitoring`: {}
-//      - `enableApplicationInsights`
-//      - `disableLocalAuth`
-//      - `dailyCap`
-//      - `workspaceName`
-//      - `workspaceResourceGroup`
-// Outputs:
-//   [None]
+/*
+  Deploy infrastructure for API Management
+  Resources deployed from this template:
+    - API Management
+    - Application Insights
+  Required parameters:
+    - `organizationName`
+    - `applicationName`
+    - `environmentName`
+    - `hostName`
+  Optional parameters:
+    - `api`: {}
+      - `publisherEmail`
+      - `publisherName`
+    - `monitoring`: {}
+      - `enableApplicationInsights`
+      - `disableLocalAuth`
+      - `dailyCap`
+      - `workspaceName`
+      - `workspaceResourceGroup`
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 

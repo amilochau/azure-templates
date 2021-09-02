@@ -1,13 +1,15 @@
-// Deploy authorizations for an Application Insights
-// Resources deployed from this template:
-//   - Authorizations
-// Required parameters:
-//   - `principalId`
-//   - `applicationInsightsName`
-// Optional parameters:
-//   [None]
-// Outputs:
-//   [None]
+/*
+  Deploy authorizations for an Application Insights
+  Resources deployed from this template:
+    - Authorizations
+  Required parameters:
+    - `principalId`
+    - `applicationInsightsName`
+  Optional parameters:
+    [None]
+  Outputs:
+    [None]
+*/
 
 // === PARAMETERS ===
 
