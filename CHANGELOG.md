@@ -13,6 +13,7 @@
 - Naming convention has been adapted; here is the new resource convention: `{org}-{app}-{host}-{resourceType}`
 - Azure Functions settings for organization, application, environment, host, App Configuration and Key Vault now use the `AZURE_FUNCTIONS_` prefix
 - Azure Functions now uses Managed Identity for Service Bus triggers; please use the new `AzureWebJobsServiceBus` reference in the code, instead of the old `ServiceBusConnectionString` (see [this page](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference#configure-an-identity-based-connection))
+- Authorization names have been changed to be unique (see the [fixes section](#fixes)); previously deployed authorizations must be removed before using this new version of templates
 
 ## New features
 
@@ -35,3 +36,7 @@
   - `gateway` let you deploy an API Management
 - Azure Functions now uses Managed Identity for its technical Storage Account
 - Add minimum TLS version for website SCM
+
+## Fixes
+
+- Fix authorization names to be unique

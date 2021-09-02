@@ -69,6 +69,7 @@ param hostName string
 param application object = {
   linuxFxVersion: 'DOTNET|5.0'
   workerRuntime: 'dotnet-isolated'
+  dailyMemoryTimeQuota: '10000'
 }
 
 @description('The Monitoring settings')

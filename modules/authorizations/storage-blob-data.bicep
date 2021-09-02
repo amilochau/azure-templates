@@ -31,6 +31,8 @@ var roleDefinitionIds = {
   'Storage Blob Data Reader': '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
 }
 
+var roleDefinitionId = readOnly ? roleStorageBlobDataReader.id : roleStorageBlobDataContributor.id
+
 // === EXISTING ===
 
 // Roles
@@ -50,10 +52,10 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 
 // Principal to Storage account
 resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-  name: guid(resourceGroup().id, principalId, stg.id)
+  name: guid(principalId, stg.id, roleDefinitionId)
   scope: stg
   properties: {
-    roleDefinitionId: readOnly ? roleStorageBlobDataReader.id : roleStorageBlobDataContributor.id
+    roleDefinitionId: roleDefinitionId
     principalId: principalId
   }
 }

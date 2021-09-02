@@ -41,7 +41,7 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' existing = {
 
 // Principal to Application Insights
 resource auth_app_kv 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-  name: guid(resourceGroup().id, principalId, ai.id)
+  name: guid(principalId, ai.id, roleMonitoringMetricsPublisher.id)
   scope: ai
   properties: {
     roleDefinitionId: roleMonitoringMetricsPublisher.id
