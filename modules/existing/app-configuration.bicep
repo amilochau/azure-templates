@@ -4,6 +4,7 @@
     [None]
   Required parameters:
     - `appConfigurationName`
+    - `appConfigurationResourceGroup`
   Optional parameters:
     [None]
   Outputs:

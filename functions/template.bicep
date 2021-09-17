@@ -121,9 +121,9 @@ module appConfig '../modules/existing/app-configuration.bicep' = if (configurati
 // Log Analytics Workspace
 module workspace '../modules/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
-  scope: resourceGroup(monitoring.workspaceResourceGroup)
   params: {
     workspaceName: monitoring.workspaceName
+    workspaceResourceGroup: monitoring.workspaceResourceGroup
   }
 }
 
