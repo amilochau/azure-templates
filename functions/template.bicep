@@ -217,7 +217,7 @@ module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!isLocal && configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(configuration.appConfigurationResourceGroup)
+  scope: resourceGroup(configuration.enabled ? configuration.appConfigurationResourceGroup : '')
   params: {
     principalId: fn.outputs.principalId
     appConfigurationName: configuration.appConfigurationName
