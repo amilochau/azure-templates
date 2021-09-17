@@ -18,10 +18,14 @@
 @description('App Configuration name')
 param appConfigurationName string
 
+@description('App Configuration resource group')
+param appConfigurationResourceGroup string
+
 // === EXISTING ===
 
 // App Configuration
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
+  scope: resourceGroup(appConfigurationResourceGroup)
   name: appConfigurationName
 }
 

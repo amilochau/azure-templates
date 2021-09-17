@@ -112,9 +112,9 @@ var isLocal = hostName == 'local'
 // App Configuration
 module appConfig '../modules/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Existing-AppConfiguration'
-  scope: resourceGroup(configuration.appConfigurationResourceGroup)
   params: {
     appConfigurationName: configuration.appConfigurationName
+    appConfigurationResourceGroup: configuration.appConfigurationResourceGroup
   }
 }
 
