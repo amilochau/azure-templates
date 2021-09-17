@@ -6,4 +6,4 @@
 
 ## Fixes
 
-- Fix public templates parameters validation
+- Fix `functions` template when Service Bus is disabled

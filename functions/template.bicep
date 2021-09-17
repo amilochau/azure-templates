@@ -206,7 +206,7 @@ module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.instrumentationKey
-    serviceBusNamespaceName: extra_sbn.outputs.name
+    serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
     dailyMemoryTimeQuota: application.dailyMemoryTimeQuota
   }
@@ -247,7 +247,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
   name: 'Authorization-Functions-ServiceBus'
   params: {
     principalId: fn.outputs.principalId
-    serviceBusNamespaceName: extra_sbn.outputs.name
+    serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
   }
 }
 
