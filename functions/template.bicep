@@ -119,7 +119,7 @@ module appConfig '../modules/existing/app-configuration.bicep' = if (configurati
 }
 
 // Log Analytics Workspace
-module workspace '../modules/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
   scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
   params: {
@@ -155,7 +155,7 @@ module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableAppli
     referential: tags.outputs.referential
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
-    workspaceId: workspace.outputs.id
+    workspaceId: monitoring.enableApplicationInsights ? workspace.outputs.id : ''
   }
 }
 
