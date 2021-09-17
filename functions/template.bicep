@@ -112,18 +112,18 @@ var isLocal = hostName == 'local'
 // App Configuration
 module appConfig '../modules/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Existing-AppConfiguration'
+  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
   params: {
     appConfigurationName: configuration.appConfigurationName
-    appConfigurationResourceGroup: configuration.appConfigurationResourceGroup
   }
 }
 
 // Log Analytics Workspace
 module workspace '../modules/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
+  scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
   params: {
     workspaceName: monitoring.workspaceName
-    workspaceResourceGroup: monitoring.workspaceResourceGroup
   }
 }
 
@@ -217,7 +217,7 @@ module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!isLocal && configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(configuration.enabled ? configuration.appConfigurationResourceGroup : '')
+  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
   params: {
     principalId: fn.outputs.principalId
     appConfigurationName: configuration.appConfigurationName

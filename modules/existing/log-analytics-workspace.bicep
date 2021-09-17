@@ -4,7 +4,6 @@
     - Log Analytics Workspace
   Required parameters:
     - `workspaceName`
-    - `workspaceResourceGroup`
   Optional parameters:
     [None]
   Outputs:
@@ -18,14 +17,10 @@
 @description('Log Analytics Workspace name')
 param workspaceName string
 
-@description('Log Analytics Workspace resource group')
-param workspaceResourceGroup string
-
 // === RESOURCES ===
 
 // Log Analytics Workspace
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
-  scope: resourceGroup(workspaceResourceGroup)
   name: workspaceName
 }
 
