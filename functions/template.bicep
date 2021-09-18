@@ -112,16 +112,16 @@ var isLocal = hostName == 'local'
 // App Configuration
 module appConfig '../modules/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Existing-AppConfiguration'
-  scope: resourceGroup(configuration.appConfigurationResourceGroup)
+  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
   params: {
     appConfigurationName: configuration.appConfigurationName
   }
 }
 
 // Log Analytics Workspace
-module workspace '../modules/existing/log-analytics-workspace.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
-  scope: resourceGroup(monitoring.workspaceResourceGroup)
+  scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
   params: {
     workspaceName: monitoring.workspaceName
   }
@@ -155,7 +155,7 @@ module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableAppli
     referential: tags.outputs.referential
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
-    workspaceId: workspace.outputs.id
+    workspaceId: monitoring.enableApplicationInsights ? workspace.outputs.id : ''
   }
 }
 
@@ -206,7 +206,7 @@ module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: appConfig.outputs.endpoint
     aiInstrumentationKey: ai.outputs.instrumentationKey
-    serviceBusNamespaceName: extra_sbn.outputs.name
+    serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
     dailyMemoryTimeQuota: application.dailyMemoryTimeQuota
   }
@@ -217,7 +217,7 @@ module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!isLocal && configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(configuration.appConfigurationResourceGroup)
+  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
   params: {
     principalId: fn.outputs.principalId
     appConfigurationName: configuration.appConfigurationName
@@ -247,7 +247,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
   name: 'Authorization-Functions-ServiceBus'
   params: {
     principalId: fn.outputs.principalId
-    serviceBusNamespaceName: extra_sbn.outputs.name
+    serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
   }
 }
 

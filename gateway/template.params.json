@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "organizationName": {
+        "value": "abc"
+      },
+      "applicationName": {
+        "value": "appname"
+      },
+      "environmentName": {
+        "value": "Production"
+      },
+      "hostName": {
+        "value": "prd"
+      },
+      "api": {
+        "value": {
+          "publisherEmail": "john@example.com",
+          "publisherName": "John"
+        }
+      },
+      "monitoring": {
+        "value": {
+          "enableApplicationInsights": true,
+          "disableLocalAuth": true,
+          "dailyCap": "1",
+          "workspaceName": "",
+          "workspaceResourceGroup": ""
+        }
+      }
+    }
+  }
