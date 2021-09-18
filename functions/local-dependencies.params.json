@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "organizationName": {
+        "value": "abc"
+      },
+      "applicationName": {
+        "value": "appname"
+      },
+      "environmentName": {
+        "value": "Production"
+      },
+      "hostName": {
+        "value": "prd"
+      },
+      "secrets": {
+        "value": {
+          "enableKeyVault": true
+        }
+      },
+      "messaging": {
+        "value": {
+          "enableServiceBus": true,
+          "serviceBusQueues": [
+            "queue1",
+            "queue2"
+          ]
+        }
+      },
+      "storage": {
+        "value": {
+          "enableStorage": true,
+          "storageAccounts": [
+            {
+              "number": "1",
+              "containers": [
+                "container1",
+                "container2"
+              ],
+              "readOnly": true,
+              "daysBeforeDeletion": 365
+            }
+          ]
+        }
+      }
+    }
+  }

@@ -14,26 +14,8 @@ You can safely use this template in an IaC automated process, such as a GitHub w
 
 ### Template parameters
 
-```json
-{
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "organizationName": {
-      "value": "abc"
-    },
-    "applicationName": {
-      "value": "appname"
-    },
-    "environmentName": {
-      "value": "Production"
-    },
-    "hostName": {
-      "value": "prd"
-    },
-    "dailyCap": {
-      "value": "1"
-    }
-  }
-}
-```
+The following template parameters files are proposed as examples:
+
+| Parameters file | Bicep template | Description |
+| --------------- | -------------- | ----------- |
+| [`template.params.json`](./template.params.json) | [`template.bicep`](./template.bicep) | Full example |
