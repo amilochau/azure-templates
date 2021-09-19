@@ -124,7 +124,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     resource stg_containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
       name: container
       properties: {
-        publicAccess: 'None'
+        publicAccess: allowBlobPublicAccess ? 'Blob' : 'None'
       }
     }]
   }
