@@ -62,7 +62,8 @@
                 "container2"
               ],
               "readOnly": true,
-              "daysBeforeDeletion": 365
+              "daysBeforeDeletion": 365,
+              "allowBlobPublicAccess": false
             }
           ]
         }

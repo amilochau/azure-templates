@@ -18,6 +18,7 @@
       - `containers`
       - `readOnly`
       - `daysBeforeDeletion`
+      - `allowBlobPublicAccess`
   Outputs:
     [None]
 */
@@ -103,5 +104,6 @@ module extra_stg '../modules/resources/storage-account.bicep' = [for account in 
     number: account.number
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
+    allowBlobPublicAccess: account.allowBlobPublicAccess
   }
 }]

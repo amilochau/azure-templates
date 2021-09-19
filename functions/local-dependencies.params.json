@@ -40,6 +40,7 @@
               ],
               "readOnly": true,
               "daysBeforeDeletion": 365
+              "allowBlobPublicAccess": false
             }
           ]
         }

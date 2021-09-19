@@ -10,6 +10,7 @@
     - `blobContainers`: []
        - `name`
     - `daysBeforeDeletion`
+    - `allowBlobPublicAccess`
   Outputs:
     - `id`
     - `apiVersion`
@@ -29,6 +30,9 @@ param blobContainers array = []
 
 @description('Duration before blobs deletion in days - 0 disable this feature')
 param daysBeforeDeletion int = 0
+
+@description('Allow blob public access')
+param allowBlobPublicAccess bool = false
 
 // === VARIABLES ===
 
@@ -52,7 +56,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: false
+    allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: true
     networkAcls: {
       bypass: 'AzureServices'

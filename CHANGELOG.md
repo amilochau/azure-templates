@@ -4,6 +4,7 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## Fixes
+## Breaking changes
 
-- The Functions application is now `Storage Blob Data Owner` to let it set blob metadata, if the `readonly` flag is set to `false`
+- The `functions` templates now require new parameters for extra storage accounts:
+  - `allowBlobPublicAccess` (boolean)
