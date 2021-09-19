@@ -34,6 +34,7 @@
           "storageAccounts": [
             {
               "number": "1",
+              "comment": "Storage for files",
               "containers": [
                 "container1",
                 "container2"
