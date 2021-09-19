@@ -32,6 +32,7 @@
     - `serviceBusQueues`
     - `storageAccounts`: []
       - `number`
+      - `comment`
       - `containers`
       - `readOnly`
       - `daysBeforeDeletion`
@@ -174,6 +175,7 @@ module extra_stg '../modules/resources/storage-account.bicep' = [for account in 
   name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
     referential: tags.outputs.referential
+    comment: account.comment
     number: account.number
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
@@ -186,6 +188,7 @@ module stg '../modules/resources/storage-account.bicep' = if (!isLocal) {
   name: 'Resource-StorageAccount'
   params: {
     referential: tags.outputs.referential
+    comment: 'Technical storage for Functions application'
   }
 }
 

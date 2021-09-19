@@ -5,6 +5,7 @@
     - Blob containers
   Required parameters:
     - `referential`
+    - `comment`
   Optional parameters:
     - `number`
     - `blobContainers`: []
@@ -21,6 +22,9 @@
 
 @description('The referential, from the tags.bicep module')
 param referential object
+
+@description('The storage account comment')
+param comment string
 
 @description('The storage account number')
 param number string = ''
@@ -40,6 +44,10 @@ var location = resourceGroup().location
 var baseStorageAccountName = '${referential.organization}-${referential.application}-${referential.host}-sto'
 var fullStorageAccountName = empty(number) ? baseStorageAccountName : '${baseStorageAccountName}-${number}'
 var storageAccountName = replace(fullStorageAccountName, '-','')
+var commentTag = {
+  comment: comment
+}
+var tags = union(referential, commentTag)
 
 // === RESOURCES ===
 
@@ -51,7 +59,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   sku: {
     name: 'Standard_LRS'
   }
-  tags: referential
+  tags: tags
   properties: {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'
