@@ -5,11 +5,13 @@
     - Blob containers
   Required parameters:
     - `referential`
+    - `comment`
   Optional parameters:
     - `number`
     - `blobContainers`: []
        - `name`
     - `daysBeforeDeletion`
+    - `allowBlobPublicAccess`
   Outputs:
     - `id`
     - `apiVersion`
@@ -21,6 +23,9 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The storage account comment')
+param comment string
+
 @description('The storage account number')
 param number string = ''
 
@@ -30,12 +35,19 @@ param blobContainers array = []
 @description('Duration before blobs deletion in days - 0 disable this feature')
 param daysBeforeDeletion int = 0
 
+@description('Allow blob public access')
+param allowBlobPublicAccess bool = false
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var baseStorageAccountName = '${referential.organization}-${referential.application}-${referential.host}-sto'
 var fullStorageAccountName = empty(number) ? baseStorageAccountName : '${baseStorageAccountName}-${number}'
 var storageAccountName = replace(fullStorageAccountName, '-','')
+var commentTag = {
+  comment: comment
+}
+var tags = union(referential, commentTag)
 
 // === RESOURCES ===
 
@@ -47,12 +59,12 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   sku: {
     name: 'Standard_LRS'
   }
-  tags: referential
+  tags: tags
   properties: {
     accessTier: 'Hot'
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: false
+    allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: true
     networkAcls: {
       bypass: 'AzureServices'
@@ -112,7 +124,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     resource stg_containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
       name: container
       properties: {
-        publicAccess: 'None'
+        publicAccess: allowBlobPublicAccess ? 'Blob' : 'None'
       }
     }]
   }

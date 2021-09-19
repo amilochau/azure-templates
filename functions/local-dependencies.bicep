@@ -15,9 +15,11 @@
     - `serviceBusQueues`
     - `storageAccounts`: []
       - `number`
+      - `comment`
       - `containers`
       - `readOnly`
       - `daysBeforeDeletion`
+      - `allowBlobPublicAccess`
   Outputs:
     [None]
 */
@@ -100,8 +102,10 @@ module extra_stg '../modules/resources/storage-account.bicep' = [for account in 
   name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
     referential: tags.outputs.referential
+    comment: account.comment
     number: account.number
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
+    allowBlobPublicAccess: account.allowBlobPublicAccess
   }
 }]

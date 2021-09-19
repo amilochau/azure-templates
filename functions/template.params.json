@@ -57,12 +57,14 @@
           "storageAccounts": [
             {
               "number": "1",
+              "comment": "Storage for files",
               "containers": [
                 "container1",
                 "container2"
               ],
               "readOnly": true,
-              "daysBeforeDeletion": 365
+              "daysBeforeDeletion": 365,
+              "allowBlobPublicAccess": false
             }
           ]
         }
