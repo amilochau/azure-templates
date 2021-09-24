@@ -2,9 +2,9 @@
 
 ## Introduction
 
-`amilochau/azure-templates/functions/template.bicep` is a Bicep template developed to manage infrastructure for an application running with Azure Functions, Storage, Service Bus, Application Insights, Key Vault.
+`amilochau/azure-templates/functions/template.bicep` is a Bicep template developed to manage infrastructure for an application running with Azure Functions, Storage, CDN, Service Bus, Application Insights, Key Vault.
 
-`amilochau/azure-templates/functions/local-dependencies.bicep` is a Bicep template developed to manage infrastructure for a local application using Storage, Service Bus, Key Vault.
+`amilochau/azure-templates/functions/local-dependencies.bicep` is a Bicep template developed to manage infrastructure for a local application using Storage, CDN, Service Bus, Key Vault.
 
 ---
 
