@@ -5,7 +5,7 @@
     - Application Insights
     - Key Vault
     - Service Bus namespace and queues
-    - Storage accounts and containers
+    - Storage accounts, storage containers and CDN
     - Authorizations
   Required parameters:
     - `organizationName`

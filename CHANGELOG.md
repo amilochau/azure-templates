@@ -4,8 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## Breaking changes
+## New features
 
-- The `functions` templates now require new parameters for extra storage accounts:
-  - `comment` (string) to add a description on the purpose of the storage account
-  - `allowBlobPublicAccess` (boolean) to allow public access for blobs
+- The `functions` templates now deploy a CDN profile & endpoint in front of public blob storage endpoints

@@ -3,6 +3,7 @@
   Resources deployed from this template:
     - Storage Account
     - Blob containers
+    - CDN
   Required parameters:
     - `referential`
     - `comment`
@@ -127,6 +128,18 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
         publicAccess: allowBlobPublicAccess ? 'Blob' : 'None'
       }
     }]
+  }
+}
+
+// CDN
+module cdn 'cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
+  name: 'Resource-CDN-${number}'
+  params: {
+    referential: referential
+    storageAccountHostName: replace(replace(stg.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
+    storageAccountComment: comment
+    storageAccountNumber: number
+    cdnCacheExpirationInDays: 360
   }
 }
 

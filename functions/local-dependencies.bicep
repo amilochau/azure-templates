@@ -3,7 +3,7 @@
   Resources deployed from this template:
     - Key Vault
     - Service Bus namespace and queues
-    - Storage accounts and containers
+    - Storage accounts, storage containers and CDN
   Required parameters:
     - `organizationName`
     - `applicationName`
