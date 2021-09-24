@@ -6,7 +6,9 @@
   Required parameters:
     - `referential`
     - `storageAccountHostName`
+    - `storageAccountComment`
   Optional parameters:
+    - `storageAccountNumber`
     - `cdnCacheExpirationInDays`
   Optional parameters:
     [None]
@@ -24,6 +26,12 @@ param referential object
 @description('The storage account host name')
 param storageAccountHostName string
 
+@description('The storage account comment')
+param storageAccountComment string
+
+@description('The storage account number')
+param storageAccountNumber string = ''
+
 @description('The CDN cache expiration in days')
 @minValue(1)
 @maxValue(360)
@@ -32,22 +40,28 @@ param cdnCacheExpirationInDays int = 360
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var cdnProfileName = '${referential.organization}-${referential.application}-${referential.host}-cdnprofile'
-var cdnEndpointName = '${referential.organization}-${referential.application}-${referential.host}-cdnedp'
+var baseCdnProfileName = '${referential.organization}-${referential.application}-${referential.host}-cdnprofile'
+var baseCdnEndpointName = '${referential.organization}-${referential.application}-${referential.host}-cdnedp'
+var fullCdnProfileName = empty(storageAccountNumber) ? baseCdnProfileName : '${baseCdnProfileName}-${storageAccountNumber}'
+var fullCdnEndpointName = empty(storageAccountNumber) ? baseCdnEndpointName : '${baseCdnEndpointName}-${storageAccountNumber}'
+var commentTag = {
+  comment: storageAccountComment
+}
+var tags = union(referential, commentTag)
 
 // === RESOURCES ===
 
 // Key Vault
 resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
-  name: cdnProfileName
+  name: fullCdnProfileName
   location: location
-  tags: referential
+  tags: tags
   sku: {
     name: 'Standard_Microsoft'
   }
 
   resource endpoint 'endpoints@2020-09-01' = {
-    name: cdnEndpointName
+    name: fullCdnEndpointName
     location: location
     tags: referential
     properties: {

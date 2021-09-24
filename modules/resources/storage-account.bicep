@@ -137,6 +137,8 @@ module cdn 'cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
   params: {
     referential: referential
     storageAccountHostName: replace(replace(stg.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
+    storageAccountComment: comment
+    storageAccountNumber: number
     cdnCacheExpirationInDays: 360
   }
 }
