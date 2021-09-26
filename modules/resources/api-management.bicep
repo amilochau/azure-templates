@@ -37,6 +37,7 @@ param appInsightsInstrumentationKey string
 
 var location = resourceGroup().location
 var apimName = '${referential.organization}-${referential.application}-${referential.host}-apim'
+var apimLoggerKeyName = '${referential.organization}-${referential.application}-${referential.host}-apim-loggerkey'
 
 // === RESOURCES ===
 
@@ -60,13 +61,26 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     }
   }
 
+  resource loggerKey 'namedValues@2021-01-01-preview' = {
+    name: apimLoggerKeyName
+    properties: {
+      displayName: apimLoggerKeyName
+      value: appInsightsInstrumentationKey
+      secret: true
+    }
+  }
+
   resource logger 'loggers@2021-01-01-preview' = {
     name: 'logger-applicationinsights'
+    dependsOn: [
+      loggerKey
+    ]
     properties: {
       loggerType: 'applicationInsights'
+      description: 'API Management logger'
       resourceId: appInsightsId
       credentials: {
-        'instrumentationKey': appInsightsInstrumentationKey
+        'instrumentationKey': '{{${apimLoggerKeyName}}}'
       }
     }
   }
