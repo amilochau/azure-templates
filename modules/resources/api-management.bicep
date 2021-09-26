@@ -64,7 +64,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   resource loggerKey 'namedValues@2021-01-01-preview' = {
     name: apimLoggerKeyName
     properties: {
-      displayName: 'Instrumentation key for API Management logger'
+      displayName: apimLoggerKeyName
       value: appInsightsInstrumentationKey
       secret: true
     }
