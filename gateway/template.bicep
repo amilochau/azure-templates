@@ -64,7 +64,7 @@ param monitoring object = {
 module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
   params: {
-    workspaceName: monitoring.workspaceNameKs
+    workspaceName: monitoring.workspaceName
   }
 }
 
