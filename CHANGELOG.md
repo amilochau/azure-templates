@@ -6,4 +6,4 @@
 
 ## New features
 
-- The `functions` templates now deploy a CDN profile & endpoint in front of public blob storage endpoints
+- The `gateway` templates now deploys global policies for APIs (.NET Core headers are removed)

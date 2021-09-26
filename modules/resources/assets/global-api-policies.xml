@@ -1,0 +1,12 @@
+<policies>
+    <inbound>
+    </inbound>
+    <backend>
+        <forward-request />
+    </backend>
+    <outbound>
+        <set-header name="server" exists-action="delete" />
+        <set-header name="x-powered-by" exists-action="delete" />
+    </outbound>
+    <on-error />
+</policies>
