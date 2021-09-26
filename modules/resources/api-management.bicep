@@ -82,6 +82,14 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
       }
     }
   }
+
+  resource policies 'policies@2021-01-01-preview' = {
+    name: 'policy'
+    properties: {
+      format: 'xml'
+      value: loadTextContent('./assets/global-api-policies.xml')
+    }
+  }
 }
 
 // === OUTPUTS ===
