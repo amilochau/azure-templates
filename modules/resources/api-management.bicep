@@ -72,12 +72,15 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
 
   resource logger 'loggers@2021-01-01-preview' = {
     name: 'logger-applicationinsights'
+    dependsOn: [
+      loggerProperty
+    ]
     properties: {
       loggerType: 'applicationInsights'
       description: 'API Management logger'
       resourceId: appInsightsId
       credentials: {
-        'instrumentationKey': '{{${loggerProperty.name}}}'
+        'instrumentationKey': '{{${apimLoggerInstrumentationKeyName}}}'
       }
     }
   }
