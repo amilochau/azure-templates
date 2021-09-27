@@ -33,13 +33,32 @@ param appInsightsId string
 @description('The Application Insights instrumentation key')
 param appInsightsInstrumentationKey string
 
+@description('The Key Vault name')
+param kvName string
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var apimName = '${referential.organization}-${referential.application}-${referential.host}-apim'
 var apimLoggerKeyName = '${referential.organization}-${referential.application}-${referential.host}-apim-loggerkey'
 
+// === EXISTING ===
+
+// Key Vault
+resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = {
+  name: kvName
+}
+
 // === RESOURCES ===
+
+// Application Insights key into Key Vault
+resource loggerKeySecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+  name: apimLoggerKeyName
+  parent: kv
+  properties: {
+    value: appInsightsInstrumentationKey
+  }
+}
 
 // API Management
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
@@ -61,15 +80,19 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     }
   }
 
+  // Named value to store the Application Insights key
   resource loggerKey 'namedValues@2021-01-01-preview' = {
     name: apimLoggerKeyName
     properties: {
       displayName: apimLoggerKeyName
-      value: appInsightsInstrumentationKey
+      keyVault: {
+        secretIdentifier: loggerKeySecret.properties.secretUri
+      }
       secret: true
     }
   }
 
+  // Logger
   resource logger 'loggers@2021-01-01-preview' = {
     name: 'logger-applicationinsights'
     dependsOn: [
@@ -85,6 +108,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     }
   }
 
+  // Diagnostic
   resource diagnostic 'diagnostics@2021-01-01-preview' = {
     name: 'applicationinsights'
     properties: {
@@ -97,11 +121,12 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     }
   }
 
-  resource policies 'policies@2021-01-01-preview' = {
+  // Policy
+  resource policy 'policies@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: loadTextContent('./assets/global-api-policies.xml')
+      value: loadTextContent('./assets/global-api-policy.xml')
     }
   }
 }

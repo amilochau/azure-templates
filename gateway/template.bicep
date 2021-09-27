@@ -82,6 +82,14 @@ module tags '../modules/resources/tags.bicep' = {
   }
 }
 
+// Key Vault
+module kv '../modules/resources/key-vault.bicep' = {
+  name: 'Resource-KeyVault'
+  params: {
+    referential: tags.outputs.referential
+  }
+}
+
 // Application Insights
 module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
