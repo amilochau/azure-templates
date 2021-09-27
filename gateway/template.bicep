@@ -111,6 +111,6 @@ module apim '../modules/resources/api-management.bicep' = {
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
-    kvName: kv.name
+    kvName: kv.outputs.name
   }
 }
