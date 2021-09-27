@@ -3,6 +3,7 @@
   Resources deployed from this template:
     - API Management
     - Application Insights
+    - Key Vault
   Required parameters:
     - `organizationName`
     - `applicationName`
@@ -110,5 +111,6 @@ module apim '../modules/resources/api-management.bicep' = {
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
+    kvName: kv.name
   }
 }

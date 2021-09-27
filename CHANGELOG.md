@@ -7,6 +7,7 @@
 ## New features
 
 - The `gateway` template now deploys global policies for APIs (.NET Core headers are removed)
+- The `gateway` template now deploys a dedicated Key Vault to store secret named values for API Management
 
 ## Bug fixes
 
