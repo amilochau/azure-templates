@@ -83,6 +83,9 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   // Named value to store the Application Insights key
   resource loggerKey 'namedValues@2021-01-01-preview' = {
     name: apimLoggerKeyName
+    dependsOn: [
+      auth_apim_kv
+    ]
     properties: {
       displayName: apimLoggerKeyName
       keyVault: {
@@ -128,6 +131,17 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
       format: 'xml'
       value: loadTextContent('./assets/global-api-policy.xml')
     }
+  }
+}
+
+// === AUTHORIZATIONS ===
+
+// API Management to Key Vault
+module auth_apim_kv '../authorizations/key-vault-secrets-user.bicep' = {
+  name: 'Authorization-ApiManagement-KeyVault'
+  params: {
+    principalId: apim.name
+    keyVaultName: kv.name
   }
 }
 

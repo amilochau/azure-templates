@@ -4,6 +4,7 @@
     - API Management
     - Application Insights
     - Key Vault
+    - Authorizations
   Required parameters:
     - `organizationName`
     - `applicationName`
