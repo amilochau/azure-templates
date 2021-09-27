@@ -92,6 +92,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
   }
 
+  // Web Configuration
   resource fn_config 'config@2021-01-01' = {
     name: 'web'
     properties: {
@@ -104,6 +105,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     }
   }
 
+  // App Configuration
   resource fn_appsettings 'config@2021-01-01' = {
     name: 'appsettings'
     properties: {

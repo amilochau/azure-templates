@@ -3,6 +3,8 @@
   Resources deployed from this template:
     - API Management
     - Application Insights
+    - Key Vault
+    - Authorizations
   Required parameters:
     - `organizationName`
     - `applicationName`
@@ -82,6 +84,14 @@ module tags '../modules/resources/tags.bicep' = {
   }
 }
 
+// Key Vault
+module kv '../modules/resources/key-vault.bicep' = {
+  name: 'Resource-KeyVault'
+  params: {
+    referential: tags.outputs.referential
+  }
+}
+
 // Application Insights
 module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
@@ -102,5 +112,6 @@ module apim '../modules/resources/api-management.bicep' = {
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
+    kvName: kv.outputs.name
   }
 }
