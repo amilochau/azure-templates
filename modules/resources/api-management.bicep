@@ -140,7 +140,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
 module auth_apim_kv '../authorizations/key-vault-secrets-user.bicep' = {
   name: 'Authorization-ApiManagement-KeyVault'
   params: {
-    principalId: apim.name
+    principalId: apim.identity.principalId
     keyVaultName: kv.name
   }
 }
