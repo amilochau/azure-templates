@@ -7,6 +7,7 @@
     <outbound>
         <set-header name="server" exists-action="delete" />
         <set-header name="x-powered-by" exists-action="delete" />
+        <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
     </outbound>
     <on-error />
 </policies>

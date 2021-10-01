@@ -1,17 +1,24 @@
 /*
   Deploy an API Management
   Resources deployed from this template:
-    - API Management
+    - API Management services and products
   Required parameters:
     - `referential`
     - `publisherEmail`
     - `publisherName`
+    - `appInsightsId`
+    - `appInsightsInstrumentationKey`
   Optional parameters:
-    [None]
+    - `products`: []
+      - `productName`
+      - `productDescription`
+      - `subscriptionRequired`
+      - `approvalRequired`
   Outputs:
     - `id`
     - `apiVersion`
     - `name`
+    - `principalId`
 */
 
 // === PARAMETERS ===
@@ -19,11 +26,11 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The API publisher email')
+@description('The API Management publisher email')
 @minLength(1)
 param publisherEmail string
 
-@description('The API publisher name')
+@description('The API Management publisher name')
 @minLength(1)
 param publisherName string
 
@@ -33,8 +40,8 @@ param appInsightsId string
 @description('The Application Insights instrumentation key')
 param appInsightsInstrumentationKey string
 
-@description('The Key Vault name')
-param kvName string
+@description('The API Management products')
+param products array = []
 
 // === VARIABLES ===
 
@@ -42,25 +49,9 @@ var location = resourceGroup().location
 var apimName = '${referential.organization}-${referential.application}-${referential.host}-apim'
 var apimLoggerKeyName = '${referential.organization}-${referential.application}-${referential.host}-apim-loggerkey'
 
-// === EXISTING ===
-
-// Key Vault
-resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = {
-  name: kvName
-}
-
 // === RESOURCES ===
 
-// Application Insights key into Key Vault
-resource loggerKeySecret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: apimLoggerKeyName
-  parent: kv
-  properties: {
-    value: appInsightsInstrumentationKey
-  }
-}
-
-// API Management
+// API Management services
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   name: apimName
   location: location
@@ -83,14 +74,9 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   // Named value to store the Application Insights key
   resource loggerKey 'namedValues@2021-01-01-preview' = {
     name: apimLoggerKeyName
-    dependsOn: [
-      auth_apim_kv
-    ]
     properties: {
       displayName: apimLoggerKeyName
-      keyVault: {
-        secretIdentifier: loggerKeySecret.properties.secretUri
-      }
+      value: appInsightsInstrumentationKey
       secret: true
     }
   }
@@ -98,15 +84,12 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   // Logger
   resource logger 'loggers@2021-01-01-preview' = {
     name: 'logger-applicationinsights'
-    dependsOn: [
-      loggerKey
-    ]
     properties: {
       loggerType: 'applicationInsights'
       description: 'API Management logger'
       resourceId: appInsightsId
       credentials: {
-        'instrumentationKey': '{{${apimLoggerKeyName}}}'
+        'instrumentationKey': '{{${loggerKey.name}}}'
       }
     }
   }
@@ -129,20 +112,21 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: loadTextContent('./assets/global-api-policy.xml')
+      value: loadTextContent('./../assets/global-api-policy.xml')
     }
   }
-}
 
-// === AUTHORIZATIONS ===
-
-// API Management to Key Vault
-module auth_apim_kv '../authorizations/key-vault-secrets-user.bicep' = {
-  name: 'Authorization-ApiManagement-KeyVault'
-  params: {
-    principalId: apim.identity.principalId
-    keyVaultName: kv.name
-  }
+  // Products
+  resource apim_products 'products@2021-01-01-preview' = [for product in products: {
+    name: product.productName
+    properties: {
+      displayName: product.productName
+      description: product.productDescription
+      subscriptionRequired: product.subscriptionRequired
+      approvalRequired: product.approvalRequired
+      state: 'published'
+    }
+  }]
 }
 
 // === OUTPUTS ===
@@ -150,3 +134,4 @@ module auth_apim_kv '../authorizations/key-vault-secrets-user.bicep' = {
 output id string = apim.id
 output apiVersion string = apim.apiVersion
 output name string = apim.name
+output principalId string = apim.identity.principalId

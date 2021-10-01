@@ -1,7 +1,7 @@
 /*
-  Deploy a Website (Functions)
+  Deploy a Functions application
   Resources deployed from this template:
-    - Website (Functions)
+    - Functions application
   Required parameters:
     - `referential`
     - `linuxFxVersion`
@@ -76,7 +76,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 
 // === RESOURCES ===
 
-// Website (Functions)
+// Functions application
 resource fn 'Microsoft.Web/sites@2021-01-01' = {
   name: functionsAppName
   location: location

@@ -51,7 +51,11 @@ param hostName string
 
 
 @description('The API settings')
-param api object = {}
+param api object = {
+  publisherEmail: ''
+  publisherName: ''
+  products: []
+}
 
 @description('The Monitoring settings')
 param monitoring object = {
@@ -85,7 +89,7 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault.bicep' = {
+module kv '../modules/resources/key-vault/vault.bicep' = {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
@@ -103,15 +107,26 @@ module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableAppli
   }
 }
 
-// API Management
-module apim '../modules/resources/api-management.bicep' = {
-  name: 'Resource-ApiManagement'
+// API Management instance
+module apim '../modules/resources/api-management/services.bicep' = {
+  name: 'Resource-ApiManagementServices'
   params: {
     referential: tags.outputs.referential
     publisherEmail: api.publisherEmail
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
-    kvName: kv.outputs.name
+    products: api.products
+  }
+}
+
+// === AUTHORIZATIONS ===
+
+// API Management to Key Vault
+module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
+  name: 'Authorization-ApiManagement-KeyVault'
+  params: {
+    principalId: apim.outputs.principalId
+    keyVaultName: kv.outputs.name
   }
 }

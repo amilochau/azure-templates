@@ -81,7 +81,7 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
+module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
