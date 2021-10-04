@@ -4,13 +4,16 @@
     - API Management backend
   Required parameters:
     - `apiManagementName`
-    - `backendId`
+    - `resourceId`
     - `backendName`
     - `backendUrl`
   Optional parameters:
     - `credentials`
   Outputs:
-    [None]
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `backendId`
 */
 
 // === PARAMETERS ===
@@ -18,8 +21,8 @@
 @description('The API Management name')
 param apiManagementName string
 
-@description('The backend ID')
-param backendId string
+@description('The resource ID')
+param resourceId string
 
 @description('The backend name')
 param backendName string
@@ -40,13 +43,20 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
 // === RESOURCES ===
 
 // API Management backend
-resource apim_backend 'Microsoft.ApiManagement/service/backends@2021-01-01-preview' = {
+resource backend 'Microsoft.ApiManagement/service/backends@2021-01-01-preview' = {
   name: backendName
   parent: apim
   properties: {
     protocol: 'http'
     url: backendUrl
-    resourceId: backendId
+    resourceId: resourceId
     credentials: credentials
   }
 }
+
+// === OUTPUTS ===
+
+output id string = backend.id
+output apiVersion string = backend.apiVersion
+output name string = backend.name
+output backendId string = backend.name

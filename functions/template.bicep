@@ -255,6 +255,7 @@ module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (!i
   params: {
     referential: tags.outputs.referential
     apiManagementName: api.apiManagementName
+    backendId: apim_backend.outputs.backendId
     apiName: api.apiName
     apiVersion: api.apiVersion
     apiOpenApiLink: api.apiOpenApiLink

@@ -5,13 +5,16 @@
   Required parameters:
     - `referential`
     - `apiManagementName`
+    - `backendId`
     - `apiName`
     - `apiOpenApiLink`
   Optional parameters:
     - `apiVersion`
     - `subscriptionRequired`
   Outputs:
-    [None]
+    - `id`
+    - `apiVersion`
+    - `name`
 */
 
 // === PARAMETERS ===
@@ -21,6 +24,9 @@ param referential object
 
 @description('The API Management name')
 param apiManagementName string
+
+@description('The API Management backend ID')
+param backendId string
 
 @description('The API name')
 param apiName string
@@ -52,7 +58,7 @@ resource apim_apiversionset 'Microsoft.ApiManagement/service/apiVersionSets@2021
 }
 
 // API Management API
-resource apim_api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
+resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   name: '${apiManagementName}/${apimApiName}'
   properties: {
     displayName: apimApiName
@@ -70,4 +76,18 @@ resource apim_api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     format: 'openapi+json'
     value: loadTextContent('./../assets/swagger.json')
   }
+
+  resource policy 'policies@2021-01-01-preview' = {
+    name: 'policy'
+    properties: {
+      format: 'xml'
+      value: replace(loadTextContent('./../assets/local-api-policy.xml'), '%BACKEND_ID%', backendId)
+    }
+  }
 }
+
+// === OUTPUTS ===
+
+output id string = api.id
+output apiVersion string = api.apiVersion
+output name string = api.name

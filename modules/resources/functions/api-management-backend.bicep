@@ -12,7 +12,10 @@
   Optional parameters:
     [None]
   Outputs:
-    [None]
+    - `id`
+    - `apiVersion`
+    - `name`
+    - `backendId`
 */
 
 // === PARAMETERS ===
@@ -73,7 +76,7 @@ module apim_backend '../api-management/backend.bicep' = {
   params: {
     backendUrl: 'https://${fn.properties.defaultHostName}/'
     apiManagementName: apiManagementName
-    backendId: '${environment().resourceManager}${fn.id}'
+    resourceId: '${environment().resourceManager}${fn.id}'
     backendName: functionsAppName
     credentials: {
       header: {
@@ -84,3 +87,10 @@ module apim_backend '../api-management/backend.bicep' = {
     }
   }
 }
+
+// === OUTPUTS ===
+
+output id string = apim_backend.outputs.id
+output apiVersion string = apim_backend.outputs.apiVersion
+output name string = apim_backend.outputs.name
+output backendId string = apim_backend.outputs.backendId
