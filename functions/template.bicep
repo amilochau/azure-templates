@@ -114,10 +114,6 @@ param storage object = {
   storageAccounts: []
 }
 
-// === VARIABLES ===
-
-var isLocal = hostName == 'local'
-
 // === EXISTING ===
 
 // App Configuration
@@ -192,7 +188,7 @@ module extra_stg '../modules/resources/storage-account.bicep' = [for account in 
 }]
 
 // Dedicated Storage Account for Functions application
-module stg '../modules/resources/storage-account.bicep' = if (!isLocal) {
+module stg '../modules/resources/storage-account.bicep' = {
   name: 'Resource-StorageAccount'
   params: {
     referential: tags.outputs.referential
@@ -201,7 +197,7 @@ module stg '../modules/resources/storage-account.bicep' = if (!isLocal) {
 }
 
 // Server farm
-module farm '../modules/resources/server-farm.bicep' = if (!isLocal) {
+module farm '../modules/resources/server-farm.bicep' = {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
@@ -209,7 +205,7 @@ module farm '../modules/resources/server-farm.bicep' = if (!isLocal) {
 }
 
 // Functions application
-module fn '../modules/resources/functions/application.bicep' = if (!isLocal) {
+module fn '../modules/resources/functions/application.bicep' = {
   name: 'Resource-FunctionsApplication'
   params: {
     referential: tags.outputs.referential
@@ -226,7 +222,7 @@ module fn '../modules/resources/functions/application.bicep' = if (!isLocal) {
 }
 
 // API Management backend
-module apim_backend '../modules/resources/functions/api-management-backend.bicep' = if (!isLocal && api.enableApiManagement) {
+module apim_backend '../modules/resources/functions/api-management-backend.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementBackend'
   params: {
     referential: tags.outputs.referential
@@ -238,7 +234,7 @@ module apim_backend '../modules/resources/functions/api-management-backend.bicep
 }
 
 // API Management API registration with OpenAPI
-module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (!isLocal && api.enableApiManagement) {
+module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementApi'
   scope: resourceGroup(api.apiManagementResourceGroup)
   params: {
@@ -254,7 +250,7 @@ module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (!i
 // === AUTHORIZATIONS ===
 
 // Functions to App Configuration
-module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!isLocal && configuration.enableAppConfiguration) {
+module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
   scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
   params: {
@@ -264,7 +260,7 @@ module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reade
 }
 
 // Functions to Key Vault
-module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!isLocal && secrets.enableKeyVault) {
+module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (secrets.enableKeyVault) {
   name: 'Authorization-Functions-KeyVault'
   params: {
     principalId: fn.outputs.principalId
@@ -273,7 +269,7 @@ module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if 
 }
 
 // Functions to Application Insights
-module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (!isLocal && monitoring.enableApplicationInsights) {
+module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
     principalId: fn.outputs.principalId
@@ -282,7 +278,7 @@ module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep'
 }
 
 // Functions to extra Service Bus
-module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (!isLocal && messaging.enableServiceBus) {
+module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (messaging.enableServiceBus) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
     principalId: fn.outputs.principalId
@@ -291,7 +287,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
 }
 
 // Functions to extra Storage Accounts
-module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (!isLocal && storage.enableStorage) {
+module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (storage.enableStorage) {
   name: empty(account) ? 'dummy' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
     principalId: fn.outputs.principalId
@@ -301,7 +297,7 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
 }]
 
 // Functions to dedicated Storage Account
-module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = if (!isLocal) {
+module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
   name: 'Authorization-Functions-StorageAccount'
   params: {
     principalId: fn.outputs.principalId
