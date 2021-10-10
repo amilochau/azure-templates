@@ -8,9 +8,6 @@
       "applicationName": {
         "value": "appname"
       },
-      "environmentName": {
-        "value": "Development"
-      },
       "hostName": {
         "value": "local"
       },
