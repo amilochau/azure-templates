@@ -258,7 +258,6 @@ module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (!i
     backendId: apim_backend.outputs.backendId
     apiName: api.apiName
     apiVersion: api.apiVersion
-    apiOpenApiLink: api.apiOpenApiLink
     subscriptionRequired: api.subscriptionRequired
   }
 }

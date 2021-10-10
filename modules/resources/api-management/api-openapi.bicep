@@ -7,7 +7,6 @@
     - `apiManagementName`
     - `backendId`
     - `apiName`
-    - `apiOpenApiLink`
   Optional parameters:
     - `apiVersion`
     - `subscriptionRequired`
@@ -30,9 +29,6 @@ param backendId string
 
 @description('The API name')
 param apiName string
-
-@description('The OpenAPI link for the API')
-param apiOpenApiLink string
 
 @description('The API version')
 param apiVersion string = 'v1'
@@ -72,9 +68,6 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     apiRevision: '1'
     apiVersionSetId: apim_apiversionset.id
     subscriptionRequired: subscriptionRequired
-
-    format: 'openapi+json'
-    value: loadTextContent('./../assets/swagger.json')
   }
 
   resource policy 'policies@2021-01-01-preview' = {
