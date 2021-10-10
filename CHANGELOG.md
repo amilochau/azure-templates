@@ -4,6 +4,10 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
+## Breaking changes
+
+- The `gateway` template now requires a new array property: `api.products`
+
 ## New features
 
 - The `gateway` template now deploys global policies for APIs (.NET Core headers are removed)

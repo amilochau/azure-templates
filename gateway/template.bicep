@@ -14,6 +14,11 @@
     - `api`: {}
       - `publisherEmail`
       - `publisherName`
+      - `products`: []
+        - `productName`
+        - `productDescription`
+        - `subscriptionRequired`
+        - `approvalRequired`
     - `monitoring`: {}
       - `enableApplicationInsights`
       - `disableLocalAuth`
