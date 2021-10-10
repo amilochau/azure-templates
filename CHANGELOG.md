@@ -6,7 +6,12 @@
 
 ## Breaking changes
 
-- The `gateway` template now requires a new array property: `api.products`
+- All templates:
+  - The global parameter `environmentName` is now removed; environment name is computed from the `hostName` global parameter
+- `gateway` template:
+  - Now requires a new array property: `api.products`
+- `functions` template:
+  - Drops support for local conditional deployment from the `functions/template.bicep` template
 
 ## New features
 
