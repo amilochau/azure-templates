@@ -5,7 +5,6 @@
   Required parameters:
     - `organizationName`
     - `applicationName`
-    - `environmentName`
     - `hostName`
   Optional parameters:
     - `dailyCap`
@@ -25,14 +24,6 @@ param organizationName string
 @maxLength(12)
 param applicationName string
 
-@description('The environment name of the deployment stage')
-@allowed([
-  'Development'
-  'Staging'
-  'Production'
-])
-param environmentName string
-
 @description('The host name of the deployment stage')
 @minLength(3)
 @maxLength(5)
@@ -50,7 +41,6 @@ module tags '../modules/resources/tags.bicep' = {
   params: {
     organizationName: organizationName
     applicationName: applicationName
-    environmentName: environmentName
     hostName: hostName
   }
 }

@@ -5,7 +5,6 @@
   Required parameters:
     - `organizationName`
     - `applicationName`
-    - `environmentName`
     - `hostName`
   Optional parameters:
     [None]
@@ -24,9 +23,6 @@ param organizationName string
 @description('The application name')
 param applicationName string
 
-@description('The environment name of the deployment stage')
-param environmentName string
-
 @description('The host name of the deployment stage')
 param hostName string
 
@@ -34,6 +30,8 @@ param hostName string
 param dateUtcNow string = utcNow('yyyy-MM-dd HH:mm:ss')
 
 // === VARIABLES ===
+
+var environmentName = startsWith(hostName, 'prd') ? 'Production' : startsWith(hostName, 'stg') ? 'Staging' : 'Development'
 
 var referential = {
   organization: organizationName
