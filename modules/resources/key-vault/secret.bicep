@@ -4,6 +4,7 @@
     - Key Vault
   Required parameters:
     - `keyVaultName`
+    - `secretName`
     - `secretValue`
   Optional parameters:
     [None]
@@ -19,6 +20,9 @@
 @description('The Key Vault name')
 param keyVaultName string
 
+@description('The secret name')
+param secretName string
+
 @description('The secret value')
 @secure()
 param secretValue string
@@ -33,7 +37,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 // === RESOURCES ===
 
 resource kv_secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-  name: 'apimFunctionsKeyName'
+  name: secretName
   parent: kv
   properties: {
     value: secretValue

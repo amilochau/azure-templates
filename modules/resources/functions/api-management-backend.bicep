@@ -54,6 +54,7 @@ module fn_key_kv './../key-vault/secret.bicep' = {
   scope: resourceGroup(apiManagementResourceGroup)
   params: {
     keyVaultName: apiManagementKeyVaultName
+    secretName: apimFunctionsKeyName
     secretValue: listkeys('${fn.id}/host/default', fn.apiVersion).functionKeys.default
   }
 }
