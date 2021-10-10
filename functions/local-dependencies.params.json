@@ -9,10 +9,10 @@
         "value": "appname"
       },
       "environmentName": {
-        "value": "Production"
+        "value": "Development"
       },
       "hostName": {
-        "value": "prd"
+        "value": "local"
       },
       "secrets": {
         "value": {

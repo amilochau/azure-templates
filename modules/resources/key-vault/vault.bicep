@@ -1,7 +1,7 @@
 /*
-  Deploy a Key Vault
+  Deploy a Key Vault vault
   Resources deployed from this template:
-    - Key Vault
+    - Key Vault vault
   Required parameters:
     - `referential`
   Optional parameters:

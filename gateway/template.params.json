@@ -9,15 +9,23 @@
         "value": "appname"
       },
       "environmentName": {
-        "value": "Production"
+        "value": "Development"
       },
       "hostName": {
-        "value": "prd"
+        "value": "dev"
       },
       "api": {
         "value": {
           "publisherEmail": "john@example.com",
-          "publisherName": "John"
+          "publisherName": "John",
+          "products": [
+            {
+              "productName": "Product 1",
+              "productDescription": "APIs for Product 1",
+              "subscriptionRequired": true,
+              "approvalRequired": true
+            }
+          ]
         }
       },
       "monitoring": {

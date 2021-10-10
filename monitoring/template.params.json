@@ -9,10 +9,10 @@
         "value": "appname"
       },
       "environmentName": {
-        "value": "Production"
+        "value": "Development"
       },
       "hostName": {
-        "value": "prd"
+        "value": "dev"
       },
       "dailyCap": {
         "value": "1"

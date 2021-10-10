@@ -17,6 +17,14 @@
       - `linuxFxVersion`
       - `workerRuntime`
       - `dailyMemoryTimeQuota`
+    - `api`: {}
+      - `enableApiManagement`
+      - `apiManagementName`
+      - `apiManagementResourceGroup`
+      - `apiManagementKeyVaultName`
+      - `apiName`
+      - `apiVersion`
+      - `subscriptionRequired`
     - `monitoring`: {}
       - `enableApplicationInsights`
       - `disableLocalAuth`
@@ -74,32 +82,42 @@ param application object = {
   dailyMemoryTimeQuota: '10000'
 }
 
-@description('The Monitoring settings')
+@description('The API settings')
+param api object = {
+  enableApiManagement: false
+  apiManagementName: ''
+  apiManagementResourceGroup: ''
+  apiManagementKeyVaultName: ''
+  apiName: ''
+  subscriptionRequired: true
+}
+
+@description('The monitoring settings')
 param monitoring object = {
   enableApplicationInsights: false
   disableLocalAuth: false
   dailyCap: '1'
 }
 
-@description('The Configuration settings')
+@description('The configuration settings')
 param configuration object = {
   enableAppConfiguration: false
   appConfigurationName: ''
   appConfigurationResourceGroup: ''
 }
 
-@description('The Secrets settings')
+@description('The secrets settings')
 param secrets object = {
   enableKeyVault: false
 }
 
-@description('The Messaging secrets')
+@description('The messaging secrets')
 param messaging object = {
   enableServiceBus: false
   serviceBusQueues: []
 }
 
-@description('The Storage secrets')
+@description('The storage secrets')
 param storage object = {
   enableStorage: false
   storageAccounts: []
@@ -143,7 +161,7 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault.bicep' = if (secrets.enableKeyVault) {
+module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
@@ -200,20 +218,46 @@ module farm '../modules/resources/server-farm.bicep' = if (!isLocal) {
   }
 }
 
-// Website (Functions)
-module fn '../modules/resources/website-functions.bicep' = if (!isLocal) {
-  name: 'Resource-WebsiteFunctions'
+// Functions application
+module fn '../modules/resources/functions/application.bicep' = if (!isLocal) {
+  name: 'Resource-FunctionsApplication'
   params: {
     referential: tags.outputs.referential
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
     serverFarmId: farm.outputs.id
     webJobsStorageAccountName: stg.outputs.name
-    appConfigurationEndpoint: appConfig.outputs.endpoint
+    appConfigurationEndpoint: ''
     aiInstrumentationKey: ai.outputs.instrumentationKey
     serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
     dailyMemoryTimeQuota: application.dailyMemoryTimeQuota
+  }
+}
+
+// API Management backend
+module apim_backend '../modules/resources/functions/api-management-backend.bicep' = if (!isLocal && api.enableApiManagement) {
+  name: 'Resource-ApiManagementBackend'
+  params: {
+    referential: tags.outputs.referential
+    apiManagementName: api.apiManagementName
+    apiManagementResourceGroup: api.apiManagementResourceGroup
+    apiManagementKeyVaultName: api.apiManagementKeyVaultName
+    functionsAppName: fn.outputs.name
+  }
+}
+
+// API Management API registration with OpenAPI
+module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (!isLocal && api.enableApiManagement) {
+  name: 'Resource-ApiManagementApi'
+  scope: resourceGroup(api.apiManagementResourceGroup)
+  params: {
+    referential: tags.outputs.referential
+    apiManagementName: api.apiManagementName
+    backendId: apim_backend.outputs.backendId
+    apiName: api.apiName
+    apiVersion: api.apiVersion
+    subscriptionRequired: api.subscriptionRequired
   }
 }
 
