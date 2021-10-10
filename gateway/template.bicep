@@ -22,8 +22,6 @@
       - `enableApplicationInsights`
       - `disableLocalAuth`
       - `dailyCap`
-      - `workspaceName`
-      - `workspaceResourceGroup`
   Outputs:
     [None]
 */
@@ -60,17 +58,6 @@ param monitoring object = {
   dailyCap: '1'
 }
 
-// === EXISTING ===
-
-// Log Analytics Workspace
-module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
-  name: 'Existing-LogAnalyticsWorkspace'
-  scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
-  params: {
-    workspaceName: monitoring.workspaceName
-  }
-}
-
 // === RESOURCES ===
 
 // Tags
@@ -82,6 +69,19 @@ module tags '../modules/resources/tags.bicep' = {
     hostName: hostName
   }
 }
+
+// === EXISTING ===
+
+// Log Analytics Workspace
+module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
+  name: 'Existing-LogAnalyticsWorkspace'
+  params: {
+    workspaceName: tags.outputs.logAnalyticsWorkspaceName
+    workspaceResourceGroupName: tags.outputs.logAnalyticsWorkspaceResourceGroupName
+  }
+}
+
+// === RESOURCES ===
 
 // Key Vault
 module kv '../modules/resources/key-vault/vault.bicep' = {

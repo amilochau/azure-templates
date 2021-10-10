@@ -4,6 +4,7 @@
     - Log Analytics Workspace
   Required parameters:
     - `referential`
+    - `workspaceName`
     - `dailyCap`
   Optional parameters:
     [None]
@@ -18,13 +19,15 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The Log Analytics workspace name')
+param workspaceName string
+
 @description('Daily data ingestion cap, in GB/d')
 param dailyCap string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var workspaceName = '${referential.organization}-${referential.application}-${referential.host}-ws'
 
 // === RESOURCES ===
 

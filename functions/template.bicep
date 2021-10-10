@@ -28,8 +28,6 @@
       - `enableApplicationInsights`
       - `disableLocalAuth`
       - `dailyCap`
-      - `workspaceName`
-      - `workspaceResourceGroup`
     - configuration: {}
       - `enableAppConfiguration`
       - `appConfigurationName`
@@ -114,6 +112,18 @@ param storage object = {
   storageAccounts: []
 }
 
+// === RESOURCES ===
+
+// Tags
+module tags '../modules/resources/tags.bicep' = {
+  name: 'Resource-Tags'
+  params: {
+    organizationName: organizationName
+    applicationName: applicationName
+    hostName: hostName
+  }
+}
+
 // === EXISTING ===
 
 // App Configuration
@@ -128,23 +138,13 @@ module appConfig '../modules/existing/app-configuration.bicep' = if (configurati
 // Log Analytics Workspace
 module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Existing-LogAnalyticsWorkspace'
-  scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
   params: {
-    workspaceName: monitoring.workspaceName
+    workspaceName: tags.outputs.logAnalyticsWorkspaceName
+    workspaceResourceGroupName: tags.outputs.logAnalyticsWorkspaceResourceGroupName
   }
 }
 
 // === RESOURCES ===
-
-// Tags
-module tags '../modules/resources/tags.bicep' = {
-  name: 'Resource-Tags'
-  params: {
-    organizationName: organizationName
-    applicationName: applicationName
-    hostName: hostName
-  }
-}
 
 // Key Vault
 module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {

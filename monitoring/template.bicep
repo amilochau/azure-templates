@@ -50,6 +50,7 @@ module workspace '../modules/resources/log-analytics-workspace.bicep' = {
   name: 'Resource-LogAnalyticsWorkspace'
   params: {
     referential: tags.outputs.referential
+    workspaceName: tags.outputs.logAnalyticsWorkspaceName
     dailyCap: dailyCap
   }
 }

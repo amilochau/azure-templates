@@ -22,9 +22,7 @@
         "value": {
           "enableApplicationInsights": true,
           "disableLocalAuth": true,
-          "dailyCap": "1",
-          "workspaceName": "",
-          "workspaceResourceGroup": ""
+          "dailyCap": "1"
         }
       },
       "api": {
