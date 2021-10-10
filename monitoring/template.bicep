@@ -38,6 +38,7 @@ param environmentName string
 @maxLength(5)
 param hostName string
 
+
 @description('The daily cap for Log Analytics data ingestion')
 param dailyCap string = '1'
 
