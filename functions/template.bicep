@@ -24,7 +24,6 @@
       - `apiManagementKeyVaultName`
       - `apiName`
       - `apiVersion`
-      - `apiOpenApiLink`
       - `subscriptionRequired`
     - `monitoring`: {}
       - `enableApplicationInsights`

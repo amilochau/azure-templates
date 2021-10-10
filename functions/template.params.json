@@ -9,10 +9,10 @@
         "value": "appname"
       },
       "environmentName": {
-        "value": "Production"
+        "value": "Development"
       },
       "hostName": {
-        "value": "prd"
+        "value": "dev"
       },
       "application": {
         "value": {
@@ -28,6 +28,17 @@
           "dailyCap": "1",
           "workspaceName": "",
           "workspaceResourceGroup": ""
+        }
+      },
+      "api": {
+        "value": {
+          "enableApiManagement": true,
+          "apiManagementName": "",
+          "apiManagementResourceGroup": "",
+          "apiManagementKeyVaultName": "",
+          "apiName": "API",
+          "apiVersion": "v1",
+          "subscriptionRequired": true
         }
       },
       "configuration": {
