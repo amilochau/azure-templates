@@ -27,10 +27,14 @@ param applicationName string
 @maxLength(5)
 param hostName string
 
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -39,10 +43,10 @@ module tags '../modules/resources/tags.bicep' = {
   }
 }
 
-module appConfig '../modules/resources/app-config.bicep' = {
+module appConfig '../modules/configuration/app-config.bicep' = {
   name: 'Resource-AppConfiguration'
   params: {
     referential: tags.outputs.referential
-    appConfigurationName: tags.outputs.appConfigurationName
+    conventions: conventions
   }
 }

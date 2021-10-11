@@ -21,15 +21,13 @@ param appConfigurationName string
 
 // === VARIABLES ===
 
-var roleDefinitionIds = {
-  'App Configuration Data Reader': '516239f1-63e1-4d78-a4de-a74fb236a071'
-}
+var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 
 // === EXISTING ===
 
 // Role
 resource roleAppConfigurationDataReader 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: roleDefinitionIds['App Configuration Data Reader']
+  name: buildInRoles['App Configuration Data Reader']
 }
 
 // App Configuration

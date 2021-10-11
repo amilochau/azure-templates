@@ -57,8 +57,3 @@ output id string = tags.id
 output apiVersion string = tags.apiVersion
 output name string = tags.name
 output referential object = referential
-
-output logAnalyticsWorkspaceName string = '${referential.organization}-monitoring-${referential.host}-ws'
-output logAnalyticsWorkspaceResourceGroupName string = '${referential.organization}-monitoring-${referential.host}-rg'
-output appConfigurationName string = '${referential.organization}-config-shd-cfg'
-output appConfigurationResourceGroupName string = '${referential.organization}-config-shd-rg'

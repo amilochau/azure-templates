@@ -33,10 +33,14 @@ param hostName string
 @description('The daily cap for Log Analytics data ingestion')
 param dailyCap string = '1'
 
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -46,11 +50,11 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Log Analytics Workspace
-module workspace '../modules/resources/log-analytics-workspace.bicep' = {
+module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
   name: 'Resource-LogAnalyticsWorkspace'
   params: {
     referential: tags.outputs.referential
-    workspaceName: tags.outputs.logAnalyticsWorkspaceName
+    conventions: conventions
     dailyCap: dailyCap
   }
 }

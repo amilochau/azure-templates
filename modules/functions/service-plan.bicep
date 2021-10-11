@@ -4,6 +4,7 @@
     - Server farm
   Required parameters:
     - `referential`
+    - `conventions`
   Optional parameters:
     [None]
   Outputs:
@@ -17,16 +18,18 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var hostingPlanName = '${referential.organization}-${referential.application}-${referential.host}-asp'
 
 // === RESOURCES ===
 
-// Server farm
+// Service Plan
 resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
-  name: hostingPlanName
+  name: conventions.naming.servicePlan.name
   location: location
   sku: {
     name: 'Y1'

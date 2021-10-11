@@ -4,6 +4,7 @@
     - API Management services and products
   Required parameters:
     - `referential`
+    - `conventions`
     - `publisherEmail`
     - `publisherName`
     - `appInsightsId`
@@ -26,6 +27,9 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
 @description('The API Management publisher email')
 param publisherEmail string
 
@@ -44,14 +48,13 @@ param products array = []
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var apimName = '${referential.organization}-${referential.application}-${referential.host}-apim'
-var apimLoggerKeyName = '${referential.organization}-${referential.application}-${referential.host}-apim-loggerkey'
+var apimLoggerKeyName = '${conventions.naming.apiManagement.name}-loggerkey'
 
 // === RESOURCES ===
 
 // API Management services
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
-  name: apimName
+  name: conventions.naming.apiManagement.name
   location: location
   sku: {
     name: 'Consumption'
@@ -110,7 +113,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: loadTextContent('./../assets/global-api-policy.xml')
+      value: loadTextContent('./global-api-policy.xml')
     }
   }
 

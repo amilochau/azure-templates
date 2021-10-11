@@ -4,6 +4,7 @@
     - Key Vault vault
   Required parameters:
     - `referential`
+    - `conventions`
   Optional parameters:
     [None]
   Outputs:
@@ -18,17 +19,19 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
-var keyVaultName = '${referential.organization}-${referential.application}-${referential.host}-kv'
 
 // === RESOURCES ===
 
 // Key Vault
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
-  name: keyVaultName
+  name: conventions.naming.keyVault.name
   location: location
   tags: referential
   properties: {

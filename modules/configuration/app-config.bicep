@@ -4,7 +4,7 @@
     - App Configuration
   Required parameters:
     - `referential`
-    - `appConfigurationName`
+    - `conventions`
   Optional parameters:
     [None]
   Outputs:
@@ -18,8 +18,8 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The App Configuration name')
-param appConfigurationName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 // === VARIABLES ===
 
@@ -29,7 +29,7 @@ var location = resourceGroup().location
 
 // App Configuration
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
-  name: appConfigurationName
+  name: conventions.naming.appConfiguration.name
   location: location
   sku: {
     name: 'free'
@@ -37,6 +37,10 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   tags: referential
   properties: {
     disableLocalAuth: false
+    /* Two limitations to put this 'disableLocalAuth' settings to 'true':
+      1/ ARM template won't work well: https://docs.microsoft.com/en-us/azure/azure-app-configuration/howto-disable-access-key-authentication?tabs=portal#arm-template-access
+      2/ Configuration keys deployment won't work well from GitHub Actions: https://github.com/marketplace/actions/azure-app-configuration-sync#connection-string
+    */
   }
 }
 

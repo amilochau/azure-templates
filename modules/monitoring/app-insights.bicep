@@ -4,10 +4,9 @@
     - Application Insights
   Required parameters:
     - `referential`
+    - `conventions`
     - `disableLocalAuth`
     - `dailyCap`
-    - `workspaceName`
-    - `workspaceResourceGroupName`
   Optional parameters:
     [None]
   Outputs:
@@ -22,34 +21,30 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
 @description('Disable non-AAD based authentication to publish metrics')
 param disableLocalAuth bool = false
 
 @description('Daily data ingestion cap, in GB/d')
-param dailyCap string
-
-@description('The Log Analytics workspace name')
-param workspaceName string
-
-@description('The Log Analytics workspace resource group name')
-param workspaceResourceGroupName string
+param dailyCap string = '1'
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var aiName = '${referential.organization}-${referential.application}-${referential.host}-ai'
 
 // === RESOURCES ===
 
 // Log Analytics Workspace
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
-  scope: resourceGroup(workspaceResourceGroupName)
-  name: workspaceName
+  scope: resourceGroup(conventions.global.logAnalyticsWorkspace.resourceGroupName)
+  name: conventions.global.logAnalyticsWorkspace.name
 }
 
 // Application Insights
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
-  name: aiName
+  name: conventions.naming.applicationInsights.name
   location: location
   kind: 'web'
   tags: referential

@@ -1,0 +1,42 @@
+{
+  "global": {
+    "appConfigurationName": "%ORGANIZATION%-config-shd-cfg",
+    "appConfigurationResourceGroupName": "%ORGANIZATION%-config-shd-rg",
+    "logAnalyticsName": "%ORGANIZATION%-monitoring-%HOST%-ws",
+    "logAnalyticsResourceGroupName": "%ORGANIZATION%-monitoring-%HOST%-rg",
+    "apiManagementName": "%ORGANIZATION%-gateway-%HOST%-apim",
+    "apiManagementKeyVaultName": "%ORGANIZATION%-gateway-%HOST%-kv",
+    "apiManagementResourceGroupName": "%ORGANIZATION%-gateway-%HOST%-rg"
+  },
+  "naming": {
+    "appConfiguration": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-cfg"
+    },
+    "logAnalyticsWorkspace": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-ws"
+    },
+    "apiManagement": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-apim",
+      "apiName": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimapi",
+      "apiVersionSetName": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimversionset"
+    },
+    "applicationInsights": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-ai"
+    },
+    "cdnProfile": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdnprofile"
+    },
+    "cdnEndpoint": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdnedp"
+    },
+    "servicePlan": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-asp"
+    },
+    "storageAccount": {
+      "name": "%ORGANIZATION%%APPLICATION%%HOST%sto"
+    },
+    "keyVault": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-kv"
+    }
+  }
+}

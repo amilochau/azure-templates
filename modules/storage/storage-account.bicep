@@ -6,6 +6,7 @@
     - CDN
   Required parameters:
     - `referential`
+    - `conventions`
     - `comment`
   Optional parameters:
     - `number`
@@ -23,6 +24,9 @@
 
 @description('The referential, from the tags.bicep module')
 param referential object
+
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The storage account comment')
 param comment string
@@ -42,9 +46,7 @@ param allowBlobPublicAccess bool = false
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var baseStorageAccountName = '${referential.organization}-${referential.application}-${referential.host}-sto'
-var fullStorageAccountName = empty(number) ? baseStorageAccountName : '${baseStorageAccountName}-${number}'
-var storageAccountName = replace(fullStorageAccountName, '-','')
+var storageAccountName = empty(number) ? conventions.naming.storageAccount.name : '${conventions.naming.storageAccount.name}${number}'
 var commentTag = {
   comment: comment
 }
@@ -132,10 +134,11 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 // CDN
-module cdn 'cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
+module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
   name: 'Resource-CDN-${number}'
   params: {
     referential: referential
+    conventions: conventions
     storageAccountHostName: replace(replace(stg.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
     storageAccountComment: comment
     storageAccountNumber: number

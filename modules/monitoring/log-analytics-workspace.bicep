@@ -4,7 +4,7 @@
     - Log Analytics Workspace
   Required parameters:
     - `referential`
-    - `workspaceName`
+    - `conventions`
     - `dailyCap`
   Optional parameters:
     [None]
@@ -19,8 +19,8 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The Log Analytics workspace name')
-param workspaceName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('Daily data ingestion cap, in GB/d')
 param dailyCap string
@@ -33,7 +33,7 @@ var location = resourceGroup().location
 
 // Log Analytics Workspace
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
-  name: workspaceName
+  name: conventions.naming.logAnalyticsWorkspace.name
   location: location
   tags: referential
   properties: {

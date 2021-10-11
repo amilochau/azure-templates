@@ -18,28 +18,27 @@
       - `dailyMemoryTimeQuota`
     - `api`: {}
       - `enableApiManagement`
-      - `apiManagementName`
-      - `apiManagementResourceGroup`
-      - `apiManagementKeyVaultName`
-      - `apiName`
       - `apiVersion`
       - `subscriptionRequired`
     - `monitoring`: {}
       - `enableApplicationInsights`
-      - `disableLocalAuth`
       - `dailyCap`
     - configuration: {}
       - `enableAppConfiguration`
     - secrets: {}
       - `enableKeyVault`
-    - `serviceBusQueues`
-    - `storageAccounts`: []
-      - `number`
-      - `comment`
-      - `containers`
-      - `readOnly`
-      - `daysBeforeDeletion`
-      - `allowBlobPublicAccess`
+    - `messaging`: {}
+      - `enableServiceBus`
+      - `serviceBusQueues`: []
+    - `storage`
+      - `enableStorage`
+      - `storageAccounts`: []
+        - `number`
+        - `comment`
+        - `containers`
+        - `readOnly`
+        - `daysBeforeDeletion`
+        - `allowBlobPublicAccess`
   Outputs:
     [None]
 */
@@ -72,17 +71,12 @@ param application object = {
 @description('The API settings')
 param api object = {
   enableApiManagement: false
-  apiManagementName: ''
-  apiManagementResourceGroup: ''
-  apiManagementKeyVaultName: ''
-  apiName: ''
   subscriptionRequired: true
 }
 
 @description('The monitoring settings')
 param monitoring object = {
   enableApplicationInsights: false
-  disableLocalAuth: false
   dailyCap: '1'
 }
 
@@ -108,10 +102,14 @@ param storage object = {
   storageAccounts: []
 }
 
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -121,27 +119,27 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {
+module kv '../modules/configuration/key-vault.bicep' = if (secrets.enableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Application Insights
-module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
-    disableLocalAuth: monitoring.disableLocalAuth
+    conventions: conventions
+    disableLocalAuth: false
     dailyCap: monitoring.dailyCap
-    workspaceName: tags.outputs.logAnalyticsWorkspaceName
-    workspaceResourceGroupName: tags.outputs.logAnalyticsWorkspaceResourceGroupName
   }
 }
 
 // Service Bus
-module extra_sbn '../modules/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
+module extra_sbn '../modules/communication/service-bus.bicep' = if (messaging.enableServiceBus) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
@@ -150,10 +148,11 @@ module extra_sbn '../modules/resources/service-bus.bicep' = if (messaging.enable
 }
 
 // Storage Accounts
-module extra_stg '../modules/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
+module extra_stg '../modules/storage/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
   name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     comment: account.comment
     number: account.number
     blobContainers: account.containers
@@ -163,30 +162,32 @@ module extra_stg '../modules/resources/storage-account.bicep' = [for account in 
 }]
 
 // Dedicated Storage Account for Functions application
-module stg '../modules/resources/storage-account.bicep' = {
+module stg '../modules/storage/storage-account.bicep' = {
   name: 'Resource-StorageAccount'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     comment: 'Technical storage for Functions application'
   }
 }
 
-// Server farm
-module farm '../modules/resources/server-farm.bicep' = {
+// Service Plan
+module asp '../modules/functions/service-plan.bicep' = {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Functions application
-module fn '../modules/resources/functions/application.bicep' = {
+module fn '../modules/functions/application.bicep' = {
   name: 'Resource-FunctionsApplication'
   params: {
     referential: tags.outputs.referential
     linuxFxVersion: application.linuxFxVersion
     workerRuntime: application.workerRuntime
-    serverFarmId: farm.outputs.id
+    serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: ''
     aiInstrumentationKey: ai.outputs.instrumentationKey
@@ -197,26 +198,22 @@ module fn '../modules/resources/functions/application.bicep' = {
 }
 
 // API Management backend
-module apim_backend '../modules/resources/functions/api-management-backend.bicep' = if (api.enableApiManagement) {
+module apim_backend '../modules/functions/api-management-backend.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementBackend'
   params: {
-    referential: tags.outputs.referential
-    apiManagementName: api.apiManagementName
-    apiManagementResourceGroup: api.apiManagementResourceGroup
-    apiManagementKeyVaultName: api.apiManagementKeyVaultName
+    conventions: conventions
     functionsAppName: fn.outputs.name
   }
 }
 
 // API Management API registration with OpenAPI
-module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
+module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementApi'
   scope: resourceGroup(api.apiManagementResourceGroup)
   params: {
     referential: tags.outputs.referential
-    apiManagementName: api.apiManagementName
+    conventions: conventions
     backendId: apim_backend.outputs.backendId
-    apiName: api.apiName
     apiVersion: api.apiVersion
     subscriptionRequired: api.subscriptionRequired
   }
@@ -227,10 +224,10 @@ module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (ap
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(configuration.enableAppConfiguration ? tags.outputs.appConfigurationResourceGroupName : '')
+  scope: resourceGroup(configuration.enableAppConfiguration ? conventions.global.appConfiguration.resourceGroupName : '')
   params: {
     principalId: fn.outputs.principalId
-    appConfigurationName: tags.outputs.appConfigurationName
+    appConfigurationName: conventions.global.appConfiguration.name
   }
 }
 

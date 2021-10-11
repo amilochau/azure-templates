@@ -5,6 +5,7 @@
     - CDN endpoint
   Required parameters:
     - `referential`
+    - `conventions`
     - `storageAccountHostName`
     - `storageAccountComment`
   Optional parameters:
@@ -23,6 +24,9 @@
 @description('The referential from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
 @description('The storage account host name')
 param storageAccountHostName string
 
@@ -40,10 +44,8 @@ param cdnCacheExpirationInDays int = 360
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var baseCdnProfileName = '${referential.organization}-${referential.application}-${referential.host}-cdnprofile'
-var baseCdnEndpointName = '${referential.organization}-${referential.application}-${referential.host}-cdnedp'
-var fullCdnProfileName = empty(storageAccountNumber) ? baseCdnProfileName : '${baseCdnProfileName}-${storageAccountNumber}'
-var fullCdnEndpointName = empty(storageAccountNumber) ? baseCdnEndpointName : '${baseCdnEndpointName}-${storageAccountNumber}'
+var cdnProfileName = empty(storageAccountNumber) ? conventions.naming.cdnProfile.name : '${conventions.naming.cdnProfile.name}-${storageAccountNumber}'
+var cdnEndpointName = empty(storageAccountNumber) ? conventions.naming.cdnEndpoint.name : '${conventions.naming.cdnEndpoint.name}-${storageAccountNumber}'
 var commentTag = {
   comment: storageAccountComment
 }
@@ -51,17 +53,18 @@ var tags = union(referential, commentTag)
 
 // === RESOURCES ===
 
-// Key Vault
+// CDN Profile
 resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
-  name: fullCdnProfileName
+  name: cdnProfileName
   location: location
   tags: tags
   sku: {
     name: 'Standard_Microsoft'
   }
 
+  // CDN Endpoint
   resource endpoint 'endpoints@2020-09-01' = {
-    name: fullCdnEndpointName
+    name: cdnEndpointName
     location: location
     tags: referential
     properties: {
@@ -70,49 +73,7 @@ resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
       isCompressionEnabled: true
       originHostHeader: storageAccountHostName
       queryStringCachingBehavior: 'IgnoreQueryString'
-      contentTypesToCompress: [
-        'application/eot'
-        'application/font'
-        'application/font-sfnt'
-        'application/javascript'
-        'application/json'
-        'application/opentype'
-        'application/otf'
-        'application/pkcs7-mime'
-        'application/truetype'
-        'application/ttf'
-        'application/vnd.ms-fontobject'
-        'application/xhtml+xml'
-        'application/xml'
-        'application/xml+rss'
-        'application/x-font-opentype'
-        'application/x-font-truetype'
-        'application/x-font-ttf'
-        'application/x-httpd-cgi'
-        'application/x-javascript'
-        'application/x-mpegurl'
-        'application/x-opentype'
-        'application/x-otf'
-        'application/x-perl'
-        'application/x-ttf'
-        'font/eot'
-        'font/ttf'
-        'font/otf'
-        'font/opentype'
-        'image/svg+xml'
-        'text/css'
-        'text/csv'
-        'text/html'
-        'text/javascript'
-        'text/js'
-        'text/plain'
-        'text/richtext'
-        'text/tab-separated-values'
-        'text/xml'
-        'text/x-script'
-        'text/x-component'
-        'text/x-java-source'
-      ]
+      contentTypesToCompress: json(loadTextContent('./content-types.json'))
       origins: [
         {
           name: replace(storageAccountHostName, '.', '-')

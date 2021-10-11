@@ -21,17 +21,12 @@
       "monitoring": {
         "value": {
           "enableApplicationInsights": true,
-          "disableLocalAuth": true,
           "dailyCap": "1"
         }
       },
       "api": {
         "value": {
           "enableApiManagement": true,
-          "apiManagementName": "",
-          "apiManagementResourceGroup": "",
-          "apiManagementKeyVaultName": "",
-          "apiName": "API",
           "apiVersion": "v1",
           "subscriptionRequired": true
         }

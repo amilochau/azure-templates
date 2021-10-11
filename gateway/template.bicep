@@ -54,14 +54,17 @@ param api object = {
 @description('The Monitoring settings')
 param monitoring object = {
   enableApplicationInsights: false
-  disableLocalAuth: false
   dailyCap: '1'
 }
+
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -71,30 +74,31 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault/vault.bicep' = {
+module kv '../modules/configuration/key-vault.bicep' = {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Application Insights
-module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
-    disableLocalAuth: monitoring.disableLocalAuth
+    conventions: conventions
+    disableLocalAuth: false
     dailyCap: monitoring.dailyCap
-    workspaceName: tags.outputs.logAnalyticsWorkspaceName
-    workspaceResourceGroupName: tags.outputs.logAnalyticsWorkspaceResourceGroupName
   }
 }
 
 // API Management instance
-module apim '../modules/resources/api-management/services.bicep' = {
+module apim '../modules/api-management/services.bicep' = {
   name: 'Resource-ApiManagementServices'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     publisherEmail: api.publisherEmail
     publisherName: api.publisherName
     appInsightsId: ai.outputs.id

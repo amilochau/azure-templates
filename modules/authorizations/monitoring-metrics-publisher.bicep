@@ -21,15 +21,13 @@ param applicationInsightsName string
 
 // === VARIABLES ===
 
-var roleDefinitionIds = {
-  'Monitoring Metrics Publisher': '3913510d-42f4-4e42-8a64-420c390055eb'
-}
+var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 
 // === EXISTING ===
 
 // Role
 resource roleMonitoringMetricsPublisher 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: roleDefinitionIds['Monitoring Metrics Publisher']
+  name: buildInRoles['Monitoring Metrics Publisher']
 }
 
 // Application Insights

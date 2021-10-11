@@ -4,9 +4,8 @@
     - API Management children objects
   Required parameters:
     - `referential`
-    - `apiManagementName`
+    - `conventions`
     - `backendId`
-    - `apiName`
   Optional parameters:
     - `apiVersion`
     - `subscriptionRequired`
@@ -21,14 +20,11 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The API Management name')
-param apiManagementName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The API Management backend ID')
 param backendId string
-
-@description('The API name')
-param apiName string
 
 @description('The API version')
 param apiVersion string = 'v1'
@@ -36,29 +32,33 @@ param apiVersion string = 'v1'
 @description('Whether a subscription is required')
 param subscriptionRequired bool = true
 
-// === VARIABLES ===
+// === EXISTING ===
 
-var apimApiVersionSetName = '${referential.organization}-${referential.application}-${referential.host}-apimversionset'
-var apimApiName = '${referential.organization}-${referential.application}-${referential.host}-apimapi'
+// API Management
+resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
+  name: conventions.global.apiManagement.name
+}
 
 // === RESOURCES ===
 
 // API Managment API version set
 resource apim_apiversionset 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-01-preview' = {
-  name: '${apiManagementName}/${apimApiVersionSetName}'
+  name: conventions.naming.apiManagement.apiVersionSetName
+  parent: apim
   properties: {
     displayName: referential.application
     versioningScheme: 'Segment'
-    description: 'API version set for the "${apiName}" application'
+    description: 'API version set for the "${referential.application}" application'
   }
 }
 
 // API Management API
 resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
-  name: '${apiManagementName}/${apimApiName}'
+  name: conventions.naming.apiManagement.apiName
+  parent: apim
   properties: {
-    displayName: apimApiName
-    description: 'API for the "${apiName}" application'
+    displayName: conventions.naming.apiManagement.apiName
+    description: 'API for the "${referential.application}" application'
     path: referential.application
     protocols: [
       'https'
@@ -74,7 +74,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: replace(loadTextContent('./../assets/local-api-policy.xml'), '%BACKEND_ID%', backendId)
+      value: replace(loadTextContent('./local-api-policy.xml'), '%BACKEND_ID%', backendId)
     }
   }
 }

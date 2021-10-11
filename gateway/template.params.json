@@ -28,7 +28,6 @@
       "monitoring": {
         "value": {
           "enableApplicationInsights": true,
-          "disableLocalAuth": true,
           "dailyCap": "1"
         }
       }

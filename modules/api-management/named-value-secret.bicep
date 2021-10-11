@@ -3,7 +3,7 @@
   Resources deployed from this template:
     - API Management named value
   Required parameters:
-    - `apiManagementName`
+    - `conventions`
     - `secretKey`
     - `secretUri`
   Optional parameters:
@@ -16,8 +16,8 @@
 
 // === PARAMETERS ===
 
-@description('The API Management name')
-param apiManagementName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The secret key')
 param secretKey string
@@ -29,7 +29,7 @@ param secretUri string
 
 // API Management
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: apiManagementName
+  name: conventions.global.apiManagement.name
 }
 
 // === RESOURCES ===

@@ -1,13 +1,9 @@
 /*
   Reference a Functions application as a dedicated backend into API Management
   Resources deployed from this template:
-    - Functions key
     - API Management backend
   Required parameters:
-    - `referential`
-    - `apiManagementName`
-    - `apiManagementResourceGroup`
-    - `apiManagementKeyVaultName`
+    - `conventions`
     - `functionsAppName`
   Optional parameters:
     [None]
@@ -20,24 +16,15 @@
 
 // === PARAMETERS ===
 
-@description('The referential, from the tags.bicep module')
-param referential object
-
-@description('The API Management name')
-param apiManagementName string
-
-@description('The API Management resource group')
-param apiManagementResourceGroup string
-
-@description('The API Management key vaultname')
-param apiManagementKeyVaultName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The Functions application name')
 param functionsAppName string
 
 // === VARIABLES ===
 
-var apimFunctionsKeyName = '${referential.organization}-${referential.application}-${referential.host}-apim-functionskey'
+var apimFunctionsKeyName = '${conventions.naming.apiManagement.name}-functionskey'
 
 // === EXISTING ===
 
@@ -49,11 +36,11 @@ resource fn 'Microsoft.Web/sites@2021-01-01' existing = {
 // === RESOURCES ===
 
 // Key Vault secret to store Functions key
-module fn_key_kv './../key-vault/secret.bicep' = {
+module fn_key_kv '../configuration/secret.bicep' = {
   name: 'Resource-FunctionsKeySecret'
-  scope: resourceGroup(apiManagementResourceGroup)
+  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
   params: {
-    keyVaultName: apiManagementKeyVaultName
+    keyVaultName: conventions.global.apiManagement.keyVaultName
     secretName: apimFunctionsKeyName
     secretValue: listkeys('${fn.id}/host/default', fn.apiVersion).functionKeys.default
   }
@@ -62,9 +49,9 @@ module fn_key_kv './../key-vault/secret.bicep' = {
 // Named value to store the Functions Key
 module fn_key_apim '../api-management/named-value-secret.bicep' = {
   name: 'Resource-FunctionsKeyNamedValue'
-  scope: resourceGroup(apiManagementResourceGroup)
+  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
   params: {
-    apiManagementName: apiManagementName
+    conventions: conventions
     secretKey: apimFunctionsKeyName
     secretUri: fn_key_kv.outputs.secretUri
   }
@@ -73,10 +60,10 @@ module fn_key_apim '../api-management/named-value-secret.bicep' = {
 // API Management backend
 module apim_backend '../api-management/backend.bicep' = {
   name: 'Resource-FunctionsBackend'
-  scope: resourceGroup(apiManagementResourceGroup)
+  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
   params: {
     backendUrl: 'https://${fn.properties.defaultHostName}/'
-    apiManagementName: apiManagementName
+    conventions: conventions
     resourceId: '${environment().resourceManager}${fn.id}'
     backendName: functionsAppName
     credentials: {
