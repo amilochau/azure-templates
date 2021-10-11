@@ -70,19 +70,6 @@ module tags '../modules/resources/tags.bicep' = {
   }
 }
 
-// === EXISTING ===
-
-// Log Analytics Workspace
-module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
-  name: 'Existing-LogAnalyticsWorkspace'
-  params: {
-    workspaceName: tags.outputs.logAnalyticsWorkspaceName
-    workspaceResourceGroupName: tags.outputs.logAnalyticsWorkspaceResourceGroupName
-  }
-}
-
-// === RESOURCES ===
-
 // Key Vault
 module kv '../modules/resources/key-vault/vault.bicep' = {
   name: 'Resource-KeyVault'
@@ -98,7 +85,8 @@ module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableAppli
     referential: tags.outputs.referential
     disableLocalAuth: monitoring.disableLocalAuth
     dailyCap: monitoring.dailyCap
-    workspaceId: workspace.outputs.id
+    workspaceName: tags.outputs.logAnalyticsWorkspaceName
+    workspaceResourceGroupName: tags.outputs.logAnalyticsWorkspaceResourceGroupName
   }
 }
 

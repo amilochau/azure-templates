@@ -6,7 +6,8 @@
     - `referential`
     - `disableLocalAuth`
     - `dailyCap`
-    - `workspaceId`
+    - `workspaceName`
+    - `workspaceResourceGroupName`
   Optional parameters:
     [None]
   Outputs:
@@ -27,8 +28,11 @@ param disableLocalAuth bool = false
 @description('Daily data ingestion cap, in GB/d')
 param dailyCap string
 
-@description('Workspace ID')
-param workspaceId string
+@description('The Log Analytics workspace name')
+param workspaceName string
+
+@description('The Log Analytics workspace resource group name')
+param workspaceResourceGroupName string
 
 // === VARIABLES ===
 
@@ -36,6 +40,12 @@ var location = resourceGroup().location
 var aiName = '${referential.organization}-${referential.application}-${referential.host}-ai'
 
 // === RESOURCES ===
+
+// Log Analytics Workspace
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  scope: resourceGroup(workspaceResourceGroupName)
+  name: workspaceName
+}
 
 // Application Insights
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
@@ -46,7 +56,7 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   properties: {
     Application_Type: 'web'
     DisableLocalAuth: disableLocalAuth
-    WorkspaceResourceId: workspaceId
+    WorkspaceResourceId: workspace.id
   }
 
   resource featuresCapabilities 'pricingPlans@2017-10-01' = {
