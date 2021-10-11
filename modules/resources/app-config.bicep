@@ -4,6 +4,7 @@
     - App Configuration
   Required parameters:
     - `referential`
+    - `appConfigurationName`
   Optional parameters:
     [None]
   Outputs:
@@ -17,10 +18,12 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The App Configuration name')
+param appConfigurationName string
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var appConfigurationName = '${referential.organization}-${referential.application}-${referential.host}-cfg'
 
 // === RESOURCES ===
 

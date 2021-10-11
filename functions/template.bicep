@@ -30,8 +30,6 @@
       - `dailyCap`
     - configuration: {}
       - `enableAppConfiguration`
-      - `appConfigurationName`
-      - `appConfigurationResourceGroup`
     - secrets: {}
       - `enableKeyVault`
     - `serviceBusQueues`
@@ -91,8 +89,6 @@ param monitoring object = {
 @description('The configuration settings')
 param configuration object = {
   enableAppConfiguration: false
-  appConfigurationName: ''
-  appConfigurationResourceGroup: ''
 }
 
 @description('The secrets settings')
@@ -123,19 +119,6 @@ module tags '../modules/resources/tags.bicep' = {
     hostName: hostName
   }
 }
-
-// === EXISTING ===
-
-// App Configuration
-module appConfig '../modules/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
-  name: 'Existing-AppConfiguration'
-  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
-  params: {
-    appConfigurationName: configuration.appConfigurationName
-  }
-}
-
-// === RESOURCES ===
 
 // Key Vault
 module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {
@@ -244,10 +227,10 @@ module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (ap
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (configuration.enableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
+  scope: resourceGroup(configuration.enableAppConfiguration ? tags.outputs.appConfigurationResourceGroupName : '')
   params: {
     principalId: fn.outputs.principalId
-    appConfigurationName: configuration.appConfigurationName
+    appConfigurationName: tags.outputs.appConfigurationName
   }
 }
 

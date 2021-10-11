@@ -43,5 +43,6 @@ module appConfig '../modules/resources/app-config.bicep' = {
   name: 'Resource-AppConfiguration'
   params: {
     referential: tags.outputs.referential
+    appConfigurationName: tags.outputs.appConfigurationName
   }
 }
