@@ -26,3 +26,4 @@
 ## Bug fixes
 
 - The `gateway` template do not create a new named value for loggers at each deployment anymore
+- The `configuration` template now works with defined referential
