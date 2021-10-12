@@ -67,6 +67,7 @@ param applicationType string
 @description('The API settings')
 param api object = {
   enableApiManagement: false
+  apiVersion: 'v1'
   subscriptionRequired: true
 }
 
@@ -195,7 +196,7 @@ module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableAp
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    backendId: apim_backend.outputs.backendId
+    backendId: api.enableApiManagement ? apim_backend.outputs.backendId : ''
     apiVersion: api.apiVersion
     subscriptionRequired: api.subscriptionRequired
   }
