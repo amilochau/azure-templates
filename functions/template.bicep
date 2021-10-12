@@ -51,18 +51,18 @@ param applicationName string
 param hostName string
 
 
+@description('The application type')
+@allowed([
+  'isolatedDotnet5'
+])
+param applicationType string
+
 @description('The pricing plan')
 @allowed([
   'Free'    // The cheapest plan, can create some small fees
   'Basic'   // Basic use with default limitations
 ])
 param pricingPlan string = 'Free'
-
-@description('The application type')
-@allowed([
-  'isolatedDotnet5'
-])
-param applicationType string
 
 @description('The API settings')
 param api object = {
