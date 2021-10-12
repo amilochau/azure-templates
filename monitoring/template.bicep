@@ -39,7 +39,7 @@ param pricingPlan string = 'Free'
 
 // === VARIABLES ===
 
-var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
 // === RESOURCES ===
 
