@@ -191,7 +191,7 @@ module apim_backend '../modules/functions/api-management-backend.bicep' = if (ap
 // API Management API registration with OpenAPI
 module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementApi'
-  scope: resourceGroup(api.apiManagementResourceGroup)
+  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
     referential: tags.outputs.referential
     conventions: conventions
@@ -206,7 +206,7 @@ module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableAp
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!disableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(!disableAppConfiguration ? conventions.global.appConfiguration.resourceGroupName : '')
+  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
   params: {
     principalId: fn.outputs.principalId
     appConfigurationName: conventions.global.appConfiguration.name
