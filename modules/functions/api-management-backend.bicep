@@ -38,9 +38,9 @@ resource fn 'Microsoft.Web/sites@2021-01-01' existing = {
 // Key Vault secret to store Functions key
 module fn_key_kv '../configuration/secret.bicep' = {
   name: 'Resource-FunctionsKeySecret'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
-    keyVaultName: conventions.global.apiManagement.keyVaultName
+    keyVaultName: conventions.global.apiManagementKeyVaultName
     secretName: apimFunctionsKeyName
     secretValue: listkeys('${fn.id}/host/default', fn.apiVersion).functionKeys.default
   }
@@ -49,7 +49,7 @@ module fn_key_kv '../configuration/secret.bicep' = {
 // Named value to store the Functions Key
 module fn_key_apim '../api-management/named-value-secret.bicep' = {
   name: 'Resource-FunctionsKeyNamedValue'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
     conventions: conventions
     secretKey: apimFunctionsKeyName
@@ -60,7 +60,7 @@ module fn_key_apim '../api-management/named-value-secret.bicep' = {
 // API Management backend
 module apim_backend '../api-management/backend.bicep' = {
   name: 'Resource-FunctionsBackend'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
     backendUrl: 'https://${fn.properties.defaultHostName}/'
     conventions: conventions

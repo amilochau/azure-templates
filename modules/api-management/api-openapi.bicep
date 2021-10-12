@@ -36,7 +36,7 @@ param subscriptionRequired bool = true
 
 // API Management
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: conventions.global.apiManagement.name
+  name: conventions.global.apiManagemenName
 }
 
 // === RESOURCES ===

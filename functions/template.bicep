@@ -209,7 +209,7 @@ module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reade
   scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
   params: {
     principalId: fn.outputs.principalId
-    appConfigurationName: conventions.global.appConfiguration.name
+    appConfigurationName: conventions.global.appConfigurationName
   }
 }
 
