@@ -206,7 +206,7 @@ module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableAp
 // Functions to App Configuration
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!disableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
+  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
   params: {
     principalId: fn.outputs.principalId
     appConfigurationName: conventions.global.appConfiguration.name
