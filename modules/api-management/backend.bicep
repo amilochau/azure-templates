@@ -3,7 +3,7 @@
   Resources deployed from this template:
     - API Management backend
   Required parameters:
-    - `apiManagementName`
+    - `conventions`
     - `resourceId`
     - `backendName`
     - `backendUrl`
@@ -18,8 +18,8 @@
 
 // === PARAMETERS ===
 
-@description('The API Management name')
-param apiManagementName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The resource ID')
 param resourceId string
@@ -37,7 +37,7 @@ param credentials object = {}
 
 // API Management
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: apiManagementName
+  name: conventions.global.apiManagementName
 }
 
 // === RESOURCES ===

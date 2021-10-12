@@ -21,15 +21,13 @@ param keyVaultName string
 
 // === VARIABLES ===
 
-var roleDefinitionIds = {
-  'Key Vault Secrets User': '4633458b-17de-408a-b874-0445c86b69e6'
-}
+var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 
 // === EXISTING ===
 
 // Role
 resource roleKeyVaultSecretsUser 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: roleDefinitionIds['Key Vault Secrets User']
+  name: buildInRoles['Key Vault Secrets User']
 }
 
 // Key Vault

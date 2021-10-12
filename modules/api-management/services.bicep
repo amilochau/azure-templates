@@ -4,16 +4,18 @@
     - API Management services and products
   Required parameters:
     - `referential`
-    - `publisherEmail`
-    - `publisherName`
+    - `conventions`
     - `appInsightsId`
     - `appInsightsInstrumentationKey`
-  Optional parameters:
+    - `publisherEmail`
+    - `publisherName`
     - `products`: []
       - `productName`
       - `productDescription`
       - `subscriptionRequired`
       - `approvalRequired`
+  Optional parameters:
+    [None]
   Outputs:
     - `id`
     - `apiVersion`
@@ -26,11 +28,8 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The API Management publisher email')
-param publisherEmail string
-
-@description('The API Management publisher name')
-param publisherName string
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The Application Insights ID')
 param appInsightsId string
@@ -38,20 +37,25 @@ param appInsightsId string
 @description('The Application Insights instrumentation key')
 param appInsightsInstrumentationKey string
 
+@description('The API Management publisher email')
+param publisherEmail string
+
+@description('The API Management publisher name')
+param publisherName string
+
 @description('The API Management products')
-param products array = []
+param products array
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var apimName = '${referential.organization}-${referential.application}-${referential.host}-apim'
-var apimLoggerKeyName = '${referential.organization}-${referential.application}-${referential.host}-apim-loggerkey'
+var apimLoggerKeyName = '${conventions.naming.apiManagement.name}-loggerkey'
 
 // === RESOURCES ===
 
 // API Management services
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
-  name: apimName
+  name: conventions.naming.apiManagement.name
   location: location
   sku: {
     name: 'Consumption'
@@ -110,7 +114,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: loadTextContent('./../assets/global-api-policy.xml')
+      value: loadTextContent('./global-api-policy.xml')
     }
   }
 

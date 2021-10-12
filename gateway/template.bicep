@@ -9,21 +9,16 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+    - `apiPublisherName`
+    - `apiPublisherEmail`
   Optional parameters:
-    - `api`: {}
-      - `publisherEmail`
-      - `publisherName`
-      - `products`: []
-        - `productName`
-        - `productDescription`
-        - `subscriptionRequired`
-        - `approvalRequired`
-    - `monitoring`: {}
-      - `enableApplicationInsights`
-      - `disableLocalAuth`
-      - `dailyCap`
-      - `workspaceName`
-      - `workspaceResourceGroup`
+    - `pricingPlan`
+    - `apiProducts`: []
+      - `productName`
+      - `productDescription`
+      - `subscriptionRequired`
+      - `approvalRequired`
+    - `disableApplicationInsights`
   Outputs:
     [None]
 */
@@ -46,35 +41,33 @@ param applicationName string
 param hostName string
 
 
-@description('The API settings')
-param api object = {
-  publisherEmail: ''
-  publisherName: ''
-  products: []
-}
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
 
-@description('The Monitoring settings')
-param monitoring object = {
-  enableApplicationInsights: false
-  disableLocalAuth: false
-  dailyCap: '1'
-}
+@description('The API publisher name')
+param apiPublisherName string
 
-// === EXISTING ===
+@description('The API publisher email')
+param apiPublisherEmail string
 
-// Log Analytics Workspace
-module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
-  name: 'Existing-LogAnalyticsWorkspace'
-  scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
-  params: {
-    workspaceName: monitoring.workspaceName
-  }
-}
+@description('The API products')
+param apiProducts array = []
+
+@description('Whether to disable the Application Insights')
+param disableApplicationInsights bool = false
+
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -84,34 +77,36 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault/vault.bicep' = {
+module kv '../modules/configuration/key-vault.bicep' = {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Application Insights
-module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
-    disableLocalAuth: monitoring.disableLocalAuth
-    dailyCap: monitoring.dailyCap
-    workspaceId: workspace.outputs.id
+    conventions: conventions
+    disableLocalAuth: false
+    pricingPlan: pricingPlan
   }
 }
 
 // API Management instance
-module apim '../modules/resources/api-management/services.bicep' = {
+module apim '../modules/api-management/services.bicep' = {
   name: 'Resource-ApiManagementServices'
   params: {
     referential: tags.outputs.referential
-    publisherEmail: api.publisherEmail
-    publisherName: api.publisherName
+    conventions: conventions
+    publisherEmail: apiPublisherEmail
+    publisherName: apiPublisherName
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
-    products: api.products
+    products: apiProducts
   }
 }
 

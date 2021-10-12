@@ -26,21 +26,17 @@ param readOnly bool = false
 
 // === VARIABLES ===
 
-var roleDefinitionIds = {
-  'Storage Blob Data Owner': 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
-  'Storage Blob Data Reader': '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
-}
-
+var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 var roleDefinitionId = readOnly ? roleStorageBlobDataReader.id : roleStorageBlobDataOwner.id
 
 // === EXISTING ===
 
 // Roles
 resource roleStorageBlobDataOwner 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: roleDefinitionIds['Storage Blob Data Owner']
+  name: buildInRoles['Storage Blob Data Owner']
 }
 resource roleStorageBlobDataReader 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: roleDefinitionIds['Storage Blob Data Reader']
+  name: buildInRoles['Storage Blob Data Reader']
 }
 
 // Storage account

@@ -6,6 +6,8 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+  Optional parameters:
+    - `pricingPlan`
   Outputs:
     [None]
 */
@@ -27,10 +29,22 @@ param applicationName string
 @maxLength(5)
 param hostName string
 
+
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
+
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -39,11 +53,11 @@ module tags '../modules/resources/tags.bicep' = {
   }
 }
 
-module appConfig '../modules/resources/app-config.bicep' = {
+module appConfig '../modules/configuration/app-config.bicep' = {
   name: 'Resource-AppConfiguration'
   params: {
-    referential: {
-      referential: tags.outputs.referential
-    }
+    referential: tags.outputs.referential
+    conventions: conventions
+    pricingPlan: pricingPlan
   }
 }

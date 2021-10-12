@@ -4,8 +4,8 @@
     - Functions application
   Required parameters:
     - `referential`
-    - `linuxFxVersion`
-    - `workerRuntime`
+    - `pricingPlan`
+    - `applicationType`
     - `serverFarmId`
     - `webJobsStorageAccountName`
   Optional parameters:
@@ -13,7 +13,6 @@
     - `aiInstrumentationKey`
     - `serviceBusNamespaceName`
     - `kvVaultUri`
-    - `dailyMemoryTimeQuota`
   Outputs:
     - `id`
     - `apiVersion`
@@ -26,20 +25,18 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The Linux App framework and version')
+@description('The pricing plan')
 @allowed([
-  'DOTNETCORE|3.1'
-  'DOTNET|5.0'
-  'DOTNET|6.0'
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
 ])
-param linuxFxVersion string
+param pricingPlan string
 
-@description('The Functions worker runtime')
+@description('The application type')
 @allowed([
-  'dotnet'
-  'dotnet-isolated'
+  'isolatedDotnet5'
 ])
-param workerRuntime string
+param applicationType string
 
 @description('The server farm ID')
 param serverFarmId string
@@ -59,13 +56,14 @@ param serviceBusNamespaceName string = ''
 @description('The Key Vault vault URI')
 param kvVaultUri string = ''
 
-@description('Daily memory time quota, in GB.s/d')
-param dailyMemoryTimeQuota string = '10000'
-
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var functionsAppName = '${referential.organization}-${referential.application}-${referential.host}-fn'
+var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
+var linuxFxVersion = applicationType == 'isolatedDotnet5' ? 'DOTNET|5.0' : 'ERROR'
+var workerRuntime = applicationType == 'isolatedDotnet5' ? 'dotnet-isolated' : 'ERROR'
+var extensionVersion = applicationType == 'isolatedDotnet5' ? '~3' : 'ERROR'
 
 // === EXISTING ===
 
@@ -117,7 +115,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'AZURE_FUNCTIONS_HOST': referential.host
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage
-      'FUNCTIONS_EXTENSION_VERSION': '~3'
+      'FUNCTIONS_EXTENSION_VERSION': extensionVersion
       'FUNCTIONS_WORKER_RUNTIME': workerRuntime
       'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
       'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed

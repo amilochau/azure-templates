@@ -11,8 +11,8 @@
       "hostName": {
         "value": "dev"
       },
-      "dailyCap": {
-        "value": "1"
+      "pricingPlan": {
+        "value": "Free"
       }
     }
   }

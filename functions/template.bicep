@@ -11,36 +11,21 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+    - `applicationType`
   Optional parameters:
-    - `application`: {}
-      - `linuxFxVersion`
-      - `workerRuntime`
-      - `dailyMemoryTimeQuota`
+    - `pricingPlan`
     - `api`: {}
       - `enableApiManagement`
-      - `apiManagementName`
-      - `apiManagementResourceGroup`
-      - `apiManagementKeyVaultName`
-      - `apiName`
       - `apiVersion`
       - `subscriptionRequired`
-    - `monitoring`: {}
-      - `enableApplicationInsights`
-      - `disableLocalAuth`
-      - `dailyCap`
-      - `workspaceName`
-      - `workspaceResourceGroup`
-    - configuration: {}
-      - `enableAppConfiguration`
-      - `appConfigurationName`
-      - `appConfigurationResourceGroup`
-    - secrets: {}
-      - `enableKeyVault`
-    - `serviceBusQueues`
+    - `disableApplicationInsights`
+    - `disableAppConfiguration`
+    - `disableKeyVault`
+    - `serviceBusQueues`: []
     - `storageAccounts`: []
       - `number`
       - `comment`
-      - `containers`
+      - `containers`: []
       - `readOnly`
       - `daysBeforeDeletion`
       - `allowBlobPublicAccess`
@@ -66,78 +51,49 @@ param applicationName string
 param hostName string
 
 
-@description('The application settings')
-param application object = {
-  linuxFxVersion: 'DOTNET|5.0'
-  workerRuntime: 'dotnet-isolated'
-  dailyMemoryTimeQuota: '10000'
-}
+@description('The application type')
+@allowed([
+  'isolatedDotnet5'
+])
+param applicationType string
+
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
 
 @description('The API settings')
 param api object = {
   enableApiManagement: false
-  apiManagementName: ''
-  apiManagementResourceGroup: ''
-  apiManagementKeyVaultName: ''
-  apiName: ''
+  apiVersion: 'v1'
   subscriptionRequired: true
 }
 
-@description('The monitoring settings')
-param monitoring object = {
-  enableApplicationInsights: false
-  disableLocalAuth: false
-  dailyCap: '1'
-}
+@description('Whether to disable the Application Insights')
+param disableApplicationInsights bool = false
 
-@description('The configuration settings')
-param configuration object = {
-  enableAppConfiguration: false
-  appConfigurationName: ''
-  appConfigurationResourceGroup: ''
-}
+@description('Whether to disable the App Configuration')
+param disableAppConfiguration bool = false
 
-@description('The secrets settings')
-param secrets object = {
-  enableKeyVault: false
-}
+@description('Whether to disable the Key Vault')
+param disableKeyVault bool = false
 
-@description('The messaging secrets')
-param messaging object = {
-  enableServiceBus: false
-  serviceBusQueues: []
-}
+@description('The service bus queues')
+param serviceBusQueues array = []
 
-@description('The storage secrets')
-param storage object = {
-  enableStorage: false
-  storageAccounts: []
-}
+@description('The storage accounts')
+param storageAccounts array = []
 
-// === EXISTING ===
+// === VARIABLES ===
 
-// App Configuration
-module appConfig '../modules/existing/app-configuration.bicep' = if (configuration.enableAppConfiguration) {
-  name: 'Existing-AppConfiguration'
-  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
-  params: {
-    appConfigurationName: configuration.appConfigurationName
-  }
-}
-
-// Log Analytics Workspace
-module workspace '../modules/existing/log-analytics-workspace.bicep' = if (monitoring.enableApplicationInsights) {
-  name: 'Existing-LogAnalyticsWorkspace'
-  scope: resourceGroup(monitoring.enableApplicationInsights ? monitoring.workspaceResourceGroup : '')
-  params: {
-    workspaceName: monitoring.workspaceName
-  }
-}
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -147,38 +103,40 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {
+module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Application Insights
-module ai '../modules/resources/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
-    disableLocalAuth: monitoring.disableLocalAuth
-    dailyCap: monitoring.dailyCap
-    workspaceId: monitoring.enableApplicationInsights ? workspace.outputs.id : ''
+    conventions: conventions
+    disableLocalAuth: false
+    pricingPlan: pricingPlan
   }
 }
 
 // Service Bus
-module extra_sbn '../modules/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
+module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
-    serviceBusQueues: messaging.serviceBusQueues
+    serviceBusQueues: serviceBusQueues
   }
 }
 
 // Storage Accounts
-module extra_stg '../modules/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
-  name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
+module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
+  name: empty(account.number) ? 'empty' : 'Resource-StorageAccount-${account.number}'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     comment: account.comment
     number: account.number
     blobContainers: account.containers
@@ -188,60 +146,57 @@ module extra_stg '../modules/resources/storage-account.bicep' = [for account in 
 }]
 
 // Dedicated Storage Account for Functions application
-module stg '../modules/resources/storage-account.bicep' = {
+module stg '../modules/storage/storage-account.bicep' = {
   name: 'Resource-StorageAccount'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     comment: 'Technical storage for Functions application'
   }
 }
 
-// Server farm
-module farm '../modules/resources/server-farm.bicep' = {
+// Service Plan
+module asp '../modules/functions/service-plan.bicep' = {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Functions application
-module fn '../modules/resources/functions/application.bicep' = {
+module fn '../modules/functions/application.bicep' = {
   name: 'Resource-FunctionsApplication'
   params: {
     referential: tags.outputs.referential
-    linuxFxVersion: application.linuxFxVersion
-    workerRuntime: application.workerRuntime
-    serverFarmId: farm.outputs.id
+    pricingPlan: pricingPlan
+    applicationType: applicationType
+    serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: ''
-    aiInstrumentationKey: ai.outputs.instrumentationKey
-    serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
-    kvVaultUri: kv.outputs.vaultUri
-    dailyMemoryTimeQuota: application.dailyMemoryTimeQuota
+    aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
+    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
   }
 }
 
 // API Management backend
-module apim_backend '../modules/resources/functions/api-management-backend.bicep' = if (api.enableApiManagement) {
+module apim_backend '../modules/functions/api-management-backend.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementBackend'
   params: {
-    referential: tags.outputs.referential
-    apiManagementName: api.apiManagementName
-    apiManagementResourceGroup: api.apiManagementResourceGroup
-    apiManagementKeyVaultName: api.apiManagementKeyVaultName
+    conventions: conventions
     functionsAppName: fn.outputs.name
   }
 }
 
 // API Management API registration with OpenAPI
-module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
+module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
   name: 'Resource-ApiManagementApi'
-  scope: resourceGroup(api.apiManagementResourceGroup)
+  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
     referential: tags.outputs.referential
-    apiManagementName: api.apiManagementName
-    backendId: apim_backend.outputs.backendId
-    apiName: api.apiName
+    conventions: conventions
+    backendId: api.enableApiManagement ? apim_backend.outputs.backendId : ''
     apiVersion: api.apiVersion
     subscriptionRequired: api.subscriptionRequired
   }
@@ -250,17 +205,17 @@ module apim_api '../modules/resources/api-management/api-openapi.bicep' = if (ap
 // === AUTHORIZATIONS ===
 
 // Functions to App Configuration
-module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (configuration.enableAppConfiguration) {
+module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!disableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(configuration.enableAppConfiguration ? configuration.appConfigurationResourceGroup : '')
+  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
   params: {
     principalId: fn.outputs.principalId
-    appConfigurationName: configuration.appConfigurationName
+    appConfigurationName: conventions.global.appConfigurationName
   }
 }
 
 // Functions to Key Vault
-module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (secrets.enableKeyVault) {
+module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!disableKeyVault) {
   name: 'Authorization-Functions-KeyVault'
   params: {
     principalId: fn.outputs.principalId
@@ -269,7 +224,7 @@ module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if 
 }
 
 // Functions to Application Insights
-module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (monitoring.enableApplicationInsights) {
+module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (!disableApplicationInsights) {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
     principalId: fn.outputs.principalId
@@ -278,17 +233,17 @@ module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep'
 }
 
 // Functions to extra Service Bus
-module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (messaging.enableServiceBus) {
+module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
     principalId: fn.outputs.principalId
-    serviceBusNamespaceName: messaging.enableServiceBus ? extra_sbn.outputs.name : ''
+    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
   }
 }
 
 // Functions to extra Storage Accounts
-module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storage.storageAccounts: if (storage.enableStorage) {
-  name: empty(account) ? 'dummy' : 'Authorization-Functions-StorageAccount${account.number}'
+module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
+  name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
     principalId: fn.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name

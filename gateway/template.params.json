@@ -11,28 +11,24 @@
       "hostName": {
         "value": "dev"
       },
-      "api": {
-        "value": {
-          "publisherEmail": "john@example.com",
-          "publisherName": "John",
-          "products": [
-            {
-              "productName": "Product 1",
-              "productDescription": "APIs for Product 1",
-              "subscriptionRequired": true,
-              "approvalRequired": true
-            }
-          ]
-        }
+      "apiPublisherName": {
+        "value": "John"
       },
-      "monitoring": {
-        "value": {
-          "enableApplicationInsights": true,
-          "disableLocalAuth": true,
-          "dailyCap": "1",
-          "workspaceName": "",
-          "workspaceResourceGroup": ""
-        }
+      "apiPublisherEmail": {
+        "value": "john@example.com"
+      },
+      "apiProducts": {
+        "value": [
+          {
+            "productName": "Product 1",
+            "productDescription": "APIs for Product 1",
+            "subscriptionRequired": true,
+            "approvalRequired": true
+          }
+        ]
+      },
+      "disableApplicationInsights": {
+        "value": true
       }
     }
   }

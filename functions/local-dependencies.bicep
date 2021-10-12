@@ -9,9 +9,8 @@
     - `applicationName`
     - `hostName`
   Optional parameters:
-    - secrets: {}
-      - `enableKeyVault`
-    - `serviceBusQueues`
+    - `disableKeyVault`
+    - `serviceBusQueues`: []
     - `storageAccounts`: []
       - `number`
       - `comment`
@@ -41,27 +40,23 @@ param applicationName string
 param hostName string
 
 
-@description('The Secrets settings')
-param secrets object = {
-  enableKeyVault: false
-}
+@description('Whether to disable the Key Vault')
+param disableKeyVault bool = false
 
-@description('The Messaging secrets')
-param messaging object = {
-  enableServiceBus: false
-  serviceBusQueues: []
-}
+@description('The service bus queues')
+param serviceBusQueues array = []
 
-@description('The Storage secrets')
-param storage object = {
-  enableStorage: false
-  storageAccounts: []
-}
+@description('The storage accounts')
+param storageAccounts array = []
+
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -71,27 +66,29 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Key Vault
-module kv '../modules/resources/key-vault/vault.bicep' = if (secrets.enableKeyVault) {
+module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
   }
 }
 
 // Service Bus
-module extra_sbn '../modules/resources/service-bus.bicep' = if (messaging.enableServiceBus) {
+module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
-    serviceBusQueues: messaging.serviceBusQueues
+    serviceBusQueues: serviceBusQueues
   }
 }
 
 // Storage Accounts
-module extra_stg '../modules/resources/storage-account.bicep' = [for account in storage.storageAccounts: if (storage.enableStorage) {
-  name: empty(account.number) ? 'dummy' : 'Resource-StorageAccount-${account.number}'
+module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
+  name: empty(account.number) ? 'empty' : 'Resource-StorageAccount-${account.number}'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     comment: account.comment
     number: account.number
     blobContainers: account.containers

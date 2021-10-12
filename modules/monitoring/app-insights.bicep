@@ -4,9 +4,9 @@
     - Application Insights
   Required parameters:
     - `referential`
+    - `conventions`
+    - `pricingPlan`
     - `disableLocalAuth`
-    - `dailyCap`
-    - `workspaceId`
   Optional parameters:
     [None]
   Outputs:
@@ -21,32 +21,42 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string
+
 @description('Disable non-AAD based authentication to publish metrics')
 param disableLocalAuth bool = false
-
-@description('Daily data ingestion cap, in GB/d')
-param dailyCap string
-
-@description('Workspace ID')
-param workspaceId string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var aiName = '${referential.organization}-${referential.application}-${referential.host}-ai'
+var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '1000' : 'ERROR' // in GB/d
 
 // === RESOURCES ===
 
+// Log Analytics Workspace
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  scope: resourceGroup(conventions.global.logAnalyticsWorkspaceResourceGroupName)
+  name: conventions.global.logAnalyticsWorkspaceName
+}
+
 // Application Insights
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
-  name: aiName
+  name: conventions.naming.applicationInsights.name
   location: location
   kind: 'web'
   tags: referential
   properties: {
     Application_Type: 'web'
     DisableLocalAuth: disableLocalAuth
-    WorkspaceResourceId: workspaceId
+    WorkspaceResourceId: workspace.id
   }
 
   resource featuresCapabilities 'pricingPlans@2017-10-01' = {

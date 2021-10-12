@@ -7,7 +7,7 @@
     - `applicationName`
     - `hostName`
   Optional parameters:
-    - `dailyCap`
+    - `pricingPlan`
   Outputs:
     [None]
 */
@@ -30,13 +30,21 @@ param applicationName string
 param hostName string
 
 
-@description('The daily cap for Log Analytics data ingestion')
-param dailyCap string = '1'
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
+
+// === VARIABLES ===
+
+var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
 // === RESOURCES ===
 
 // Tags
-module tags '../modules/resources/tags.bicep' = {
+module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
@@ -46,10 +54,11 @@ module tags '../modules/resources/tags.bicep' = {
 }
 
 // Log Analytics Workspace
-module workspace '../modules/resources/log-analytics-workspace.bicep' = {
+module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
   name: 'Resource-LogAnalyticsWorkspace'
   params: {
     referential: tags.outputs.referential
-    dailyCap: dailyCap
+    conventions: conventions
+    pricingPlan: pricingPlan
   }
 }

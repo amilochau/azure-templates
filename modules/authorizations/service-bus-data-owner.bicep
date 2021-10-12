@@ -23,15 +23,13 @@ param serviceBusNamespaceName string
 
 // === VARIABLES ===
 
-var roleDefinitionIds = {
-  'Service Bus Data Owner': '090c5cfd-751d-490a-894a-3ce6f1109419'
-}
+var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 
 // === EXISTING ===
 
 // Roles
 resource roleServiceBusDataOwner 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
-  name: roleDefinitionIds['Service Bus Data Owner']
+  name: buildInRoles['Service Bus Data Owner']
 }
 
 // Service Bus Namespace
