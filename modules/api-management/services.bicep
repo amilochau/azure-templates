@@ -5,16 +5,17 @@
   Required parameters:
     - `referential`
     - `conventions`
-    - `publisherEmail`
-    - `publisherName`
     - `appInsightsId`
     - `appInsightsInstrumentationKey`
-  Optional parameters:
+    - `publisherEmail`
+    - `publisherName`
     - `products`: []
       - `productName`
       - `productDescription`
       - `subscriptionRequired`
       - `approvalRequired`
+  Optional parameters:
+    [None]
   Outputs:
     - `id`
     - `apiVersion`
@@ -30,20 +31,20 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The API Management publisher email')
-param publisherEmail string
-
-@description('The API Management publisher name')
-param publisherName string
-
 @description('The Application Insights ID')
 param appInsightsId string
 
 @description('The Application Insights instrumentation key')
 param appInsightsInstrumentationKey string
 
+@description('The API Management publisher email')
+param publisherEmail string
+
+@description('The API Management publisher name')
+param publisherName string
+
 @description('The API Management products')
-param products array = []
+param products array
 
 // === VARIABLES ===
 

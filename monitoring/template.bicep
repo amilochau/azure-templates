@@ -7,7 +7,7 @@
     - `applicationName`
     - `hostName`
   Optional parameters:
-    - `dailyCap`
+    - `pricingPlan`
   Outputs:
     [None]
 */
@@ -30,8 +30,12 @@ param applicationName string
 param hostName string
 
 
-@description('The daily cap for Log Analytics data ingestion')
-param dailyCap string = '1'
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
 
 // === VARIABLES ===
 
@@ -55,6 +59,6 @@ module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    dailyCap: dailyCap
+    pricingPlan: pricingPlan
   }
 }

@@ -5,7 +5,7 @@
   Required parameters:
     - `referential`
     - `conventions`
-    - `dailyCap`
+    - `pricingPlan`
   Optional parameters:
     [None]
   Outputs:
@@ -22,12 +22,17 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('Daily data ingestion cap, in GB/d')
-param dailyCap string
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '1000' : 'ERROR' // in GB/d
 
 // === RESOURCES ===
 

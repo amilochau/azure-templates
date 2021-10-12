@@ -11,18 +11,11 @@
       "hostName": {
         "value": "dev"
       },
-      "application": {
-        "value": {
-          "linuxFxVersion": "DOTNET|5.0",
-          "workerRuntime": "dotnet-isolated",
-          "dailyMemoryTimeQuota": "10000"
-        }
+      "pricingPlan": {
+        "value": "Free"
       },
-      "monitoring": {
-        "value": {
-          "enableApplicationInsights": true,
-          "dailyCap": "1"
-        }
+      "applicationType": {
+        "value": "isolatedDotnet5"
       },
       "api": {
         "value": {
@@ -31,42 +24,35 @@
           "subscriptionRequired": true
         }
       },
-      "configuration": {
-        "value": {
-          "enableAppConfiguration": true
-        }
+      "disableApplicationInsights": {
+        "value": false
       },
-      "secrets": {
-        "value": {
-          "enableKeyVault": true
-        }
+      "disableAppConfiguration": {
+        "value": true
       },
-      "messaging": {
-        "value": {
-          "enableServiceBus": true,
-          "serviceBusQueues": [
-            "queue1",
-            "queue2"
-          ]
-        }
+      "disableKeyVault": {
+        "value": true
       },
-      "storage": {
-        "value": {
-          "enableStorage": true,
-          "storageAccounts": [
-            {
-              "number": "1",
-              "comment": "Storage for files",
-              "containers": [
-                "container1",
-                "container2"
-              ],
-              "readOnly": true,
-              "daysBeforeDeletion": 365,
-              "allowBlobPublicAccess": false
-            }
-          ]
-        }
+      "serviceBusQueues": {
+        "value": [
+          "queue1",
+          "queue2"
+        ]
+      },
+      "storageAccounts": {
+        "value": [
+          {
+            "number": "1",
+            "comment": "Storage for files",
+            "containers": [
+              "container1",
+              "container2"
+            ],
+            "readOnly": true,
+            "daysBeforeDeletion": 365,
+            "allowBlobPublicAccess": false
+          }
+        ]
       }
     }
   }

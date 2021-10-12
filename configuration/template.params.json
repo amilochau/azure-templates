@@ -10,6 +10,9 @@
       },
       "hostName": {
         "value": "dev"
+      },
+      "pricingPlan": {
+        "value": "Free"
       }
     }
   }

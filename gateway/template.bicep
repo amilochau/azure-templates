@@ -9,19 +9,16 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+    - `apiPublisherName`
+    - `apiPublisherEmail`
   Optional parameters:
-    - `api`: {}
-      - `publisherEmail`
-      - `publisherName`
-      - `products`: []
-        - `productName`
-        - `productDescription`
-        - `subscriptionRequired`
-        - `approvalRequired`
-    - `monitoring`: {}
-      - `enableApplicationInsights`
-      - `disableLocalAuth`
-      - `dailyCap`
+    - `pricingPlan`
+    - `apiProducts`: []
+      - `productName`
+      - `productDescription`
+      - `subscriptionRequired`
+      - `approvalRequired`
+    - `disableApplicationInsights`
   Outputs:
     [None]
 */
@@ -44,18 +41,24 @@ param applicationName string
 param hostName string
 
 
-@description('The API settings')
-param api object = {
-  publisherEmail: ''
-  publisherName: ''
-  products: []
-}
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
 
-@description('The Monitoring settings')
-param monitoring object = {
-  enableApplicationInsights: false
-  dailyCap: '1'
-}
+@description('The API publisher name')
+param apiPublisherName string
+
+@description('The API publisher email')
+param apiPublisherEmail string
+
+@description('The API products')
+param apiProducts array = []
+
+@description('Whether to disable the Application Insights')
+param disableApplicationInsights bool = false
 
 // === VARIABLES ===
 
@@ -83,13 +86,13 @@ module kv '../modules/configuration/key-vault.bicep' = {
 }
 
 // Application Insights
-module ai '../modules/monitoring/app-insights.bicep' = if (monitoring.enableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     disableLocalAuth: false
-    dailyCap: monitoring.dailyCap
+    pricingPlan: pricingPlan
   }
 }
 
@@ -99,11 +102,11 @@ module apim '../modules/api-management/services.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    publisherEmail: api.publisherEmail
-    publisherName: api.publisherName
+    publisherEmail: apiPublisherEmail
+    publisherName: apiPublisherName
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
-    products: api.products
+    products: apiProducts
   }
 }
 

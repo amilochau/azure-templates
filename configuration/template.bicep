@@ -6,6 +6,8 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+  Optional parameters:
+    - `pricingPlan`
   Outputs:
     [None]
 */
@@ -26,6 +28,14 @@ param applicationName string
 @minLength(3)
 @maxLength(5)
 param hostName string
+
+
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
 
 // === VARIABLES ===
 
@@ -48,5 +58,6 @@ module appConfig '../modules/configuration/app-config.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    pricingPlan: pricingPlan
   }
 }

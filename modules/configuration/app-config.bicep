@@ -5,6 +5,7 @@
   Required parameters:
     - `referential`
     - `conventions`
+    - `pricingPlan`
   Optional parameters:
     [None]
   Outputs:
@@ -21,9 +22,17 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
+var appConfigurationSku = pricingPlan == 'Free' ? 'free' : pricingPlan == 'Basic' ? 'standard' : 'ERROR'
 
 // === RESOURCES ===
 
@@ -32,7 +41,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   name: conventions.naming.appConfiguration.name
   location: location
   sku: {
-    name: 'free'
+    name: appConfigurationSku
   }
   tags: referential
   properties: {
