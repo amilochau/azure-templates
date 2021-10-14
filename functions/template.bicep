@@ -14,10 +14,6 @@
     - `applicationType`
   Optional parameters:
     - `pricingPlan`
-    - `api`: {}
-      - `enableApiManagement`
-      - `apiVersion`
-      - `subscriptionRequired`
     - `disableApplicationInsights`
     - `disableAppConfiguration`
     - `disableKeyVault`
@@ -29,6 +25,9 @@
       - `readOnly`
       - `daysBeforeDeletion`
       - `allowBlobPublicAccess`
+    - `apiManagementProducts`
+    - `apiManagementSubscriptionRequired`
+    - `apiManagementVersion`
   Outputs:
     [None]
 */
@@ -64,13 +63,6 @@ param applicationType string
 ])
 param pricingPlan string = 'Free'
 
-@description('The API settings')
-param api object = {
-  enableApiManagement: false
-  apiVersion: 'v1'
-  subscriptionRequired: true
-}
-
 @description('Whether to disable the Application Insights')
 param disableApplicationInsights bool = false
 
@@ -85,6 +77,15 @@ param serviceBusQueues array = []
 
 @description('The storage accounts')
 param storageAccounts array = []
+
+@description('The products to link with the API Management API')
+param apiManagementProducts array = []
+
+@description('Whether an API Management subscription is required')
+param apiManagementSubscriptionRequired bool = true
+
+@description('The API Management API version')
+param apiManagementVersion string = 'v1'
 
 // === VARIABLES ===
 
@@ -181,7 +182,7 @@ module fn '../modules/functions/application.bicep' = {
 }
 
 // API Management backend
-module apim_backend '../modules/functions/api-management-backend.bicep' = if (api.enableApiManagement) {
+module apim_backend '../modules/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementBackend'
   params: {
     conventions: conventions
@@ -190,15 +191,16 @@ module apim_backend '../modules/functions/api-management-backend.bicep' = if (ap
 }
 
 // API Management API registration with OpenAPI
-module apim_api '../modules/api-management/api-openapi.bicep' = if (api.enableApiManagement) {
+module apim_api '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementApi'
   scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    backendId: api.enableApiManagement ? apim_backend.outputs.backendId : ''
-    apiVersion: api.apiVersion
-    subscriptionRequired: api.subscriptionRequired
+    backendId: !empty(apiManagementProducts) ? apim_backend.outputs.backendId : ''
+    apiVersion: apiManagementVersion
+    subscriptionRequired: apiManagementSubscriptionRequired
+    products: apiManagementProducts
   }
 }
 

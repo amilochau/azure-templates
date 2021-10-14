@@ -27,10 +27,13 @@ param conventions object
 param backendId string
 
 @description('The API version')
-param apiVersion string = 'v1'
+param apiVersion string
 
 @description('Whether a subscription is required')
-param subscriptionRequired bool = true
+param subscriptionRequired bool
+
+@description('The products to link with the API Management API')
+param products array
 
 // === EXISTING ===
 

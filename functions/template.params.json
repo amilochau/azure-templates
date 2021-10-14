@@ -53,6 +53,17 @@
             "allowBlobPublicAccess": false
           }
         ]
+      },
+      "apiManagementProducts": {
+        "value": [
+          
+        ]
+      },
+      "apiManagementSubscriptionRequired": {
+        "value": true
+      },
+      "apiManagementVersion": {
+        "value": "v1"
       }
     }
   }
