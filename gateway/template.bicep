@@ -118,5 +118,6 @@ module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
   params: {
     principalId: apim.outputs.principalId
     keyVaultName: kv.outputs.name
+    roleDescription: 'API Management should read the secrets from Key Vault'
   }
 }

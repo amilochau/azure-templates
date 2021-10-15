@@ -5,6 +5,7 @@
   Required parameters:
     - `principalId`
     - `applicationInsightsName`
+    - `roleDescription`
   Optional parameters:
     [None]
   Outputs:
@@ -18,6 +19,9 @@ param principalId string
 
 @description('Application Insights name')
 param applicationInsightsName string
+
+@description('The role description')
+param roleDescription string
 
 // === VARIABLES ===
 
@@ -44,5 +48,6 @@ resource auth_app_kv 'Microsoft.Authorization/roleAssignments@2020-08-01-preview
   properties: {
     roleDefinitionId: roleMonitoringMetricsPublisher.id
     principalId: principalId
+    description: roleDescription
   }
 }

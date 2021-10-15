@@ -5,6 +5,7 @@
   Required parameters:
     - `principalId`
     - `storageAccountName`
+    - `roleDescription`
   Optional parameters:
     - `readOnly`
   Optional parameters:
@@ -23,6 +24,9 @@ param storageAccountName string
 
 @description('Assign a Read-Only authorization')
 param readOnly bool = false
+
+@description('The role description')
+param roleDescription string
 
 // === VARIABLES ===
 
@@ -53,5 +57,6 @@ resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-previe
   properties: {
     roleDefinitionId: roleDefinitionId
     principalId: principalId
+    description: roleDescription
   }
 }
