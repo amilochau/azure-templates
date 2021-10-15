@@ -36,7 +36,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 
 // === RESOURCES ===
 
-resource kv_secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
   name: secretName
   parent: kv
   properties: {
@@ -46,7 +46,7 @@ resource kv_secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
 
 // === OUTPUTS ===
 
-output id string = kv_secret.id
-output apiVersion string = kv_secret.apiVersion
-output name string = kv_secret.name
-output secretUri string = kv_secret.properties.secretUri
+output id string = secret.id
+output apiVersion string = secret.apiVersion
+output name string = secret.name
+output secretUri string = secret.properties.secretUri

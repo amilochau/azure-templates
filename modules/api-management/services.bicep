@@ -119,7 +119,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Products
-  resource apim_products 'products@2021-01-01-preview' = [for product in products: {
+  resource apimProducts 'products@2021-01-01-preview' = [for product in products: {
     name: product.productName
     properties: {
       displayName: product.productName

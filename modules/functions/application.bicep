@@ -91,7 +91,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   }
 
   // Web Configuration
-  resource fn_config 'config@2021-01-01' = {
+  resource webConfig 'config@2021-01-01' = {
     name: 'web'
     properties: {
       linuxFxVersion: linuxFxVersion
@@ -104,7 +104,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   }
 
   // App Configuration
-  resource fn_appsettings 'config@2021-01-01' = {
+  resource appsettingsConfig 'config@2021-01-01' = {
     name: 'appsettings'
     properties: {
       'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
