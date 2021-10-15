@@ -42,10 +42,16 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
   name: conventions.global.apiManagementName
 }
 
+// API Management Products
+resource apimProducts 'Microsoft.ApiManagement/service/products@2021-01-01-preview' existing = [for (product, i) in products: {
+  name: product
+  parent: apim
+}]
+
 // === RESOURCES ===
 
 // API Managment API version set
-resource apim_apiversionset 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-01-preview' = {
+resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-01-preview' = {
   name: conventions.naming.apiManagement.apiVersionSetName
   parent: apim
   properties: {
@@ -69,7 +75,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     isCurrent: true
     apiVersion: apiVersion
     apiRevision: '1'
-    apiVersionSetId: apim_apiversionset.id
+    apiVersionSetId: apiVersionSet.id
     subscriptionRequired: subscriptionRequired
   }
 
@@ -81,6 +87,12 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     }
   }
 }
+
+// API Management Product API
+resource productApis 'Microsoft.ApiManagement/service/products/apis@2021-01-01-preview' = [for (product, i) in products: {
+  name: api.name
+  parent: apimProducts[i]
+}]
 
 // === OUTPUTS ===
 

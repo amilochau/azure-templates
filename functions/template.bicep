@@ -182,7 +182,7 @@ module fn '../modules/functions/application.bicep' = {
 }
 
 // API Management backend
-module apim_backend '../modules/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
+module apimBackend '../modules/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementBackend'
   params: {
     conventions: conventions
@@ -191,13 +191,13 @@ module apim_backend '../modules/functions/api-management-backend.bicep' = if (!e
 }
 
 // API Management API registration with OpenAPI
-module apim_api '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
+module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementApi'
   scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    backendId: !empty(apiManagementProducts) ? apim_backend.outputs.backendId : ''
+    backendId: !empty(apiManagementProducts) ? apimBackend.outputs.backendId : ''
     apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts

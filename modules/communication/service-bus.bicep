@@ -42,7 +42,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
 }
 
 // Service Bus Queues
-resource queue_owner 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
+resource queues 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
   name: empty(serviceBusQueues) ? 'empty' : queue
   parent: sbn
   properties: {

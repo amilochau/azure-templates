@@ -58,7 +58,7 @@ module fn_key_apim '../api-management/named-value-secret.bicep' = {
 }
 
 // API Management backend
-module apim_backend '../api-management/backend.bicep' = {
+module apimBackend '../api-management/backend.bicep' = {
   name: 'Resource-FunctionsBackend'
   scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
@@ -78,7 +78,7 @@ module apim_backend '../api-management/backend.bicep' = {
 
 // === OUTPUTS ===
 
-output id string = apim_backend.outputs.id
-output apiVersion string = apim_backend.outputs.apiVersion
-output name string = apim_backend.outputs.name
-output backendId string = apim_backend.outputs.backendId
+output id string = apimBackend.outputs.id
+output apiVersion string = apimBackend.outputs.apiVersion
+output name string = apimBackend.outputs.name
+output backendId string = apimBackend.outputs.backendId

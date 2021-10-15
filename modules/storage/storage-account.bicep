@@ -55,7 +55,7 @@ var tags = union(referential, commentTag)
 // === RESOURCES ===
 
 // Storage Account
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
   location: location
   kind: 'StorageV2'
@@ -88,7 +88,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
   }
 
-  resource stg_lifecycle 'managementPolicies@2021-04-01' = if (daysBeforeDeletion > 0) {
+  resource lifecycle 'managementPolicies@2021-04-01' = if (daysBeforeDeletion > 0) {
     name: 'default'
     properties: {
       policy: {
@@ -116,7 +116,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
   }
 
-  resource stg_blobServices 'blobServices@2021-04-01' = {
+  resource blobServices 'blobServices@2021-04-01' = {
     name: 'default'
     properties: {
       deleteRetentionPolicy: {
@@ -124,7 +124,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       }
     }
     
-    resource stg_containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
+    resource containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
       name: container
       properties: {
         publicAccess: allowBlobPublicAccess ? 'Blob' : 'None'
@@ -139,7 +139,7 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
   params: {
     referential: referential
     conventions: conventions
-    storageAccountHostName: replace(replace(stg.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
+    storageAccountHostName: replace(replace(storageAccount.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
     storageAccountComment: comment
     storageAccountNumber: number
     cdnCacheExpirationInDays: 360
@@ -148,6 +148,6 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
 
 // === OUTPUTS ===
 
-output id string = stg.id
-output apiVersion string = stg.apiVersion
-output name string = stg.name
+output id string = storageAccount.id
+output apiVersion string = storageAccount.apiVersion
+output name string = storageAccount.name
