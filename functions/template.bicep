@@ -213,6 +213,7 @@ module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reade
   params: {
     principalId: fn.outputs.principalId
     appConfigurationName: conventions.global.appConfigurationName
+    roleDescription: 'Functions application should read the configuration from App Configuration'
   }
 }
 
@@ -222,6 +223,7 @@ module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if 
   params: {
     principalId: fn.outputs.principalId
     keyVaultName: kv.outputs.name
+    roleDescription: 'Functions application should read the secrets from Key Vault'
   }
 }
 
@@ -231,6 +233,7 @@ module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep'
   params: {
     principalId: fn.outputs.principalId
     applicationInsightsName: ai.outputs.name
+    roleDescription: 'Functions application should send monitoring metrics into Application Insights'
   }
 }
 
@@ -240,6 +243,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
   params: {
     principalId: fn.outputs.principalId
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    roleDescription: 'Functions application should read, write and manage the messages from Service Bus'
   }
 }
 
@@ -250,6 +254,7 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
     principalId: fn.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
     readOnly: account.readOnly
+    roleDescription: 'Functions application should read/write the blobs from Storage Account'
   }
 }]
 
@@ -259,5 +264,6 @@ module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
   params: {
     principalId: fn.outputs.principalId
     storageAccountName: stg.outputs.name
+    roleDescription: 'Functions application should manage technical data from Storage Account'
   }
 }

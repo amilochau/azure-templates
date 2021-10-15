@@ -5,6 +5,7 @@
   Required parameters:
     - `principalId`
     - `appConfigurationName`
+    - `roleDescription`
   Optional parameters:
     [None]
   Outputs:
@@ -18,6 +19,9 @@ param principalId string
 
 @description('App Configuration name')
 param appConfigurationName string
+
+@description('The role description')
+param roleDescription string
 
 // === VARIABLES ===
 
@@ -44,5 +48,6 @@ resource auth_app_appConfig 'Microsoft.Authorization/roleAssignments@2020-08-01-
   properties: {
     roleDefinitionId: roleAppConfigurationDataReader.id
     principalId: principalId
+    description: roleDescription
   }
 }

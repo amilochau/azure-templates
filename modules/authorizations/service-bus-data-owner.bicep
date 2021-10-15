@@ -5,6 +5,7 @@
   Required parameters:
     - `principalId`
     - `serviceBusNamespaceName`
+    - `roleDescription`
   Optional parameters:
     [None]
   Optional parameters:
@@ -20,6 +21,9 @@ param principalId string
 
 @description('Service Bus Namespace name')
 param serviceBusNamespaceName string
+
+@description('The role description')
+param roleDescription string
 
 // === VARIABLES ===
 
@@ -46,5 +50,6 @@ resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-previe
   properties: {
     roleDefinitionId: roleServiceBusDataOwner.id
     principalId: principalId
+    description: roleDescription
   }
 }
