@@ -10,6 +10,7 @@
     - `apiManagementProducts`
     - `apiManagementSubscriptionRequired`
     - `apiManagementVersion`
+    - `relativeOpenApiLink`
   Outputs:
     [None]
 */
@@ -40,6 +41,9 @@ param apiManagementSubscriptionRequired bool = true
 
 @description('The API Management API version')
 param apiManagementVersion string = 'v1'
+
+@description('The OpenAPI link, relative to the application host name')
+param relativeOpenApiLink string = '/api/swagger.json'
 
 // === VARIABLES ===
 
@@ -74,5 +78,6 @@ module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiMan
     apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
+    openApiLink: '${fn.properties.defaultHostName}/${relativeOpenApiLink}'
   }
 }

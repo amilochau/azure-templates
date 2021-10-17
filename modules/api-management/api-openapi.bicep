@@ -6,9 +6,11 @@
     - `applicationName`
     - `conventions`
     - `backendId`
-  Optional parameters:
     - `apiVersion`
     - `subscriptionRequired`
+    - `openApiLink`
+  Optional parameters:
+    [None]
   Outputs:
     - `id`
     - `apiVersion`
@@ -34,6 +36,9 @@ param subscriptionRequired bool
 
 @description('The products to link with the API Management API')
 param products array
+
+@description('The OpenAPI specification link')
+param openApiLink string
 
 // === EXISTING ===
 
@@ -77,6 +82,10 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     apiRevision: '1'
     apiVersionSetId: apiVersionSet.id
     subscriptionRequired: subscriptionRequired
+
+    // OpenAPI specifications from a link
+    format: 'openapi+json-link'
+    value: openApiLink
   }
 
   resource policy 'policies@2021-01-01-preview' = {
