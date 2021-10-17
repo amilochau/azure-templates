@@ -21,8 +21,8 @@
   - Now deploys global policies for APIs (.NET Core headers are removed)
   - Now deploys a dedicated Key Vault to store secret named values for API Management
   - Now deploys products, from the new `products` arrray property
-- `functions` template:
-  - Now deploys an API Management API
+- `functions` templates:
+  - Now deploys an API Management API with its version and operations
   - Now deploys an API Management backend, if `apiManagementProducts` is defined
   - Now creates links between the current API Management API and existing API Management products, as defined from the new `apiManagementProducts` array property
 
