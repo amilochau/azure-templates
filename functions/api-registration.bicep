@@ -78,6 +78,6 @@ module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiMan
     apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
-    openApiLink: '${fn.properties.defaultHostName}/${relativeOpenApiLink}'
+    openApiLink: '${fn.properties.defaultHostName}${relativeOpenApiLink}'
   }
 }
