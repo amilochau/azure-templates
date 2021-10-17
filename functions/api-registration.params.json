@@ -21,6 +21,9 @@
     },
     "apiManagementVersion": {
       "value": "v1"
+    },
+    "relativeOpenApiLink": {
+      "value": "/api/swagger.json"
     }
   }
 }
