@@ -79,6 +79,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     serviceBusQueues: serviceBusQueues
   }
 }

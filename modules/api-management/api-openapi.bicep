@@ -3,12 +3,14 @@
   Resources deployed from this template:
     - API Management children objects
   Required parameters:
-    - `referential`
+    - `applicationName`
     - `conventions`
     - `backendId`
-  Optional parameters:
     - `apiVersion`
     - `subscriptionRequired`
+    - `openApiLink`
+  Optional parameters:
+    [None]
   Outputs:
     - `id`
     - `apiVersion`
@@ -17,8 +19,8 @@
 
 // === PARAMETERS ===
 
-@description('The referential, from the tags.bicep module')
-param referential object
+@description('The application name')
+param applicationName string
 
 @description('The naming convention, from the conventions.json file')
 param conventions object
@@ -34,6 +36,9 @@ param subscriptionRequired bool
 
 @description('The products to link with the API Management API')
 param products array
+
+@description('The OpenAPI specification link')
+param openApiLink string
 
 // === EXISTING ===
 
@@ -55,9 +60,9 @@ resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-0
   name: conventions.naming.apiManagement.apiVersionSetName
   parent: apim
   properties: {
-    displayName: referential.application
+    displayName: applicationName
     versioningScheme: 'Segment'
-    description: 'API version set for the "${referential.application}" application'
+    description: 'API version set for the "${applicationName}" application'
   }
 }
 
@@ -67,8 +72,8 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   parent: apim
   properties: {
     displayName: conventions.naming.apiManagement.apiName
-    description: 'API for the "${referential.application}" application'
-    path: referential.application
+    description: 'API for the "${applicationName}" application'
+    path: applicationName
     protocols: [
       'https'
     ]
@@ -77,6 +82,10 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     apiRevision: '1'
     apiVersionSetId: apiVersionSet.id
     subscriptionRequired: subscriptionRequired
+
+    // OpenAPI specifications from a link
+    format: 'openapi+json-link'
+    value: openApiLink
   }
 
   resource policy 'policies@2021-01-01-preview' = {

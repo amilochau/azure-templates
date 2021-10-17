@@ -17,13 +17,6 @@
       "applicationType": {
         "value": "isolatedDotnet5"
       },
-      "api": {
-        "value": {
-          "enableApiManagement": true,
-          "apiVersion": "v1",
-          "subscriptionRequired": true
-        }
-      },
       "disableApplicationInsights": {
         "value": true
       },
@@ -53,17 +46,6 @@
             "allowBlobPublicAccess": false
           }
         ]
-      },
-      "apiManagementProducts": {
-        "value": [
-          "product1"
-        ]
-      },
-      "apiManagementSubscriptionRequired": {
-        "value": true
-      },
-      "apiManagementVersion": {
-        "value": "v1"
       }
     }
   }

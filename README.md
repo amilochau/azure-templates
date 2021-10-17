@@ -20,11 +20,12 @@ The following templates are proposed for Infrastructure as Code, and can be free
 
 | Path | Usage | Readme |
 | ---- | ----- | ------ |
-| `amilochau/azure-templates/functions/template.bicep@main` | Create infrastructure for an application running with Azure Functions, Storage, CDN, Service Bus, Application Insights, Key Vault and App Configuration | [README.md](./functions/README.md) |
-| `amilochau/azure-templates/functions/local-dependencies.bicep@main` | Create infrastructure for a local application using Storage, CDN, Service Bus and Key Vault | [README.md](./functions/README.md) |
-| `amilochau/azure-templates/configuration/template.bicep@main` | Create infrastructure for configuration with App Configuration | [README.md](./configuration/README.md) |
-| `amilochau/azure-templates/monitoring/template.bicep@main` | Create infrastructure for monitoring with Log Analytics Workspace | [README.md](./monitoring/README.md) |
-| `amilochau/azure-templates/gateway/template.bicep@main` | Create infrastructure for requests gateway with API Management | [README.md](./gateway/README.md) |
+| `amilochau/azure-templates/functions/template.bicep` | Create infrastructure for an application running with Azure Functions, Storage, CDN, Service Bus, Application Insights, Key Vault and App Configuration | [README.md](./functions/README.md) |
+| `amilochau/azure-templates/functions/local-dependencies.bicep` | Create infrastructure for a local application using Storage, CDN, Service Bus and Key Vault | [README.md](./functions/README.md) |
+| `amilochau/azure-templates/functions/api-registration.bicep` | Register an application as an API Management backend | [README.md](./functions/README.md) |
+| `amilochau/azure-templates/configuration/template.bicep` | Create infrastructure for configuration with App Configuration | [README.md](./configuration/README.md) |
+| `amilochau/azure-templates/monitoring/template.bicep` | Create infrastructure for monitoring with Log Analytics Workspace | [README.md](./monitoring/README.md) |
+| `amilochau/azure-templates/gateway/template.bicep` | Create infrastructure for requests gateway with API Management | [README.md](./gateway/README.md) |
 
 ### Run manually
 

@@ -4,6 +4,7 @@
     - Functions application
   Required parameters:
     - `referential`
+    - `conventions`
     - `pricingPlan`
     - `applicationType`
     - `serverFarmId`
@@ -24,6 +25,9 @@
 
 @description('The referential, from the tags.bicep module')
 param referential object
+
+@description('The naming convention, from the conventions.json file')
+param conventions object
 
 @description('The pricing plan')
 @allowed([
@@ -59,7 +63,6 @@ param kvVaultUri string = ''
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var functionsAppName = '${referential.organization}-${referential.application}-${referential.host}-fn'
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet5' ? 'DOTNET|5.0' : 'ERROR'
 var workerRuntime = applicationType == 'isolatedDotnet5' ? 'dotnet-isolated' : 'ERROR'
@@ -76,7 +79,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 
 // Functions application
 resource fn 'Microsoft.Web/sites@2021-01-01' = {
-  name: functionsAppName
+  name: conventions.naming.functionsApplication.name
   location: location
   kind: 'functionapp,linux'
   identity: {
