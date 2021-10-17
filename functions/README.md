@@ -21,4 +21,5 @@ The following template parameters files are proposed as examples:
 | Parameters file | Bicep template | Description |
 | --------------- | -------------- | ----------- |
 | [`template.params.json`](./template.params.json) | [`template.bicep`](./template.bicep) | Full example |
-| [`local-dependencies.params.json`](./local-dependencies.params.json) | [`local-dependencies.bicep`](./local-dependenciesd.bicep) | Full example |
+| [`local-dependencies.params.json`](./local-dependencies.params.json) | [`local-dependencies.bicep`](./local-dependencies.bicep) | Full example |
+| [`api-registration.params.json`](./api-registration.params.json) | [`api-registration.bicep`](./api-registration.bicep) | Full example |

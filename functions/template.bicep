@@ -78,15 +78,6 @@ param serviceBusQueues array = []
 @description('The storage accounts')
 param storageAccounts array = []
 
-@description('The products to link with the API Management API')
-param apiManagementProducts array = []
-
-@description('Whether an API Management subscription is required')
-param apiManagementSubscriptionRequired bool = true
-
-@description('The API Management API version')
-param apiManagementVersion string = 'v1'
-
 // === VARIABLES ===
 
 var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
@@ -128,6 +119,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     serviceBusQueues: serviceBusQueues
   }
 }
@@ -170,6 +162,7 @@ module fn '../modules/functions/application.bicep' = {
   name: 'Resource-FunctionsApplication'
   params: {
     referential: tags.outputs.referential
+    conventions: conventions
     pricingPlan: pricingPlan
     applicationType: applicationType
     serverFarmId: asp.outputs.id
@@ -178,29 +171,6 @@ module fn '../modules/functions/application.bicep' = {
     aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
-  }
-}
-
-// API Management backend
-module apimBackend '../modules/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
-  name: 'Resource-ApiManagementBackend'
-  params: {
-    conventions: conventions
-    functionsAppName: fn.outputs.name
-  }
-}
-
-// API Management API registration with OpenAPI
-module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
-  name: 'Resource-ApiManagementApi'
-  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
-  params: {
-    referential: tags.outputs.referential
-    conventions: conventions
-    backendId: !empty(apiManagementProducts) ? apimBackend.outputs.backendId : ''
-    apiVersion: apiManagementVersion
-    subscriptionRequired: apiManagementSubscriptionRequired
-    products: apiManagementProducts
   }
 }
 

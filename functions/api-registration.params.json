@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "organizationName": {
+      "value": "abc"
+    },
+    "applicationName": {
+      "value": "appname"
+    },
+    "hostName": {
+      "value": "dev"
+    },
+    "apiManagementProducts": {
+      "value": [
+        "product1"
+      ]
+    },
+    "apiManagementSubscriptionRequired": {
+      "value": true
+    },
+    "apiManagementVersion": {
+      "value": "v1"
+    }
+  }
+}

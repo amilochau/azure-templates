@@ -5,6 +5,7 @@
     - Service Bus Queues
   Required parameters:
     - `referential`
+    - `conventions`
   Optional parameters:
     - `serviceBusQueues`
   Outputs:
@@ -18,19 +19,21 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
+@description('The naming convention, from the conventions.json file')
+param conventions object
+
 @description('The Service Bus queues')
 param serviceBusQueues array = []
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var serviceBusNamespaceName = '${referential.organization}-${referential.application}-${referential.host}-sbn'
 
 // === RESOURCES ===
 
 // Service Bus Namespace
 resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
-  name: serviceBusNamespaceName
+  name: conventions.naming.serviceBusNamespace.name
   location: location
   sku: {
     name: 'Basic'

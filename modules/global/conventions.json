@@ -20,6 +20,9 @@
       "apiName": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimapi",
       "apiVersionSetName": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimversionset"
     },
+    "functionsApplication": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-fn"
+    },
     "applicationInsights": {
       "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-ai"
     },
@@ -31,6 +34,9 @@
     },
     "servicePlan": {
       "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-asp"
+    },
+    "serviceBusNamespace" :{
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-sbn"
     },
     "storageAccount": {
       "name": "%ORGANIZATION%%APPLICATION%%HOST%sto"
