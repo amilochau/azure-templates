@@ -8,6 +8,7 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+    - `templateVersion`
   Optional parameters:
     - `disableKeyVault`
     - `serviceBusQueues`: []
@@ -39,6 +40,10 @@ param applicationName string
 @maxLength(5)
 param hostName string
 
+@description('The azure-templates version')
+@minLength(1)
+param templateVersion string
+
 
 @description('Whether to disable the Key Vault')
 param disableKeyVault bool = false
@@ -62,6 +67,7 @@ module tags '../modules/global/tags.bicep' = {
     organizationName: organizationName
     applicationName: applicationName
     hostName: hostName
+    templateVersion: templateVersion
   }
 }
 

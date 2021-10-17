@@ -6,6 +6,7 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+    - `templateVersion`
   Optional parameters:
     [None]
   Outputs:
@@ -26,6 +27,9 @@ param applicationName string
 @description('The host name of the deployment stage')
 param hostName string
 
+@description('The azure-templates version')
+param templateVersion string = ''
+
 @description('The current date')
 param dateUtcNow string = utcNow('yyyy-MM-dd HH:mm:ss')
 
@@ -38,6 +42,7 @@ var referential = {
   application: applicationName
   environment: environmentName
   host: hostName
+  templateVersion: templateVersion
   deploymentDate: dateUtcNow
 }
 
