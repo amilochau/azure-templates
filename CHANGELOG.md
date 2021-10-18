@@ -11,6 +11,7 @@
   - The new parameter `pricingPlan` let you define the configuration set you want to use for SKUs and billing limits
   - Most of the complex `object`-type parameters have been replaced by flat, validable parameters; please refer to each template to see the new parameters
   - Most of global object references, such as Log Analytics workspace, App Configuration and API Management, have been removed; the templates now use naming conventions to find global resources
+  - A new `templateVersion` parameter in needed on almost each template; you can safely pass the version of the current repository you use, typically from the Git tag you reference it
 - `functions` template:
   - Drops support for local conditional deployment from the `functions/template.bicep` template
   - Drops support for `dotnet` worker type, drops support for `DOTNETCORE|3.1` and `DOTNET|6.0` framework versions
