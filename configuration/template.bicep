@@ -6,6 +6,7 @@
     - `organizationName`
     - `applicationName`
     - `hostName`
+    - `templateVersion`
   Optional parameters:
     - `pricingPlan`
   Outputs:
@@ -29,6 +30,10 @@ param applicationName string
 @maxLength(5)
 param hostName string
 
+@description('The azure-templates version')
+@minLength(1)
+param templateVersion string
+
 
 @description('The pricing plan')
 @allowed([
@@ -50,6 +55,7 @@ module tags '../modules/global/tags.bicep' = {
     organizationName: organizationName
     applicationName: applicationName
     hostName: hostName
+    templateVersion: templateVersion
   }
 }
 

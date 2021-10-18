@@ -28,7 +28,7 @@ param applicationName string
 param hostName string
 
 @description('The azure-templates version')
-param templateVersion string = ''
+param templateVersion string
 
 @description('The current date')
 param dateUtcNow string = utcNow('yyyy-MM-dd HH:mm:ss')
