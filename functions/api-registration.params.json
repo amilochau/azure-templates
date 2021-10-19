@@ -24,6 +24,9 @@
     },
     "relativeOpenApiLink": {
       "value": "/api/swagger.json"
+    },
+    "relativeFunctionsUrl": {
+      "value": "/api"
     }
   }
 }

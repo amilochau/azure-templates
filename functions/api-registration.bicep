@@ -10,7 +10,8 @@
     - `apiManagementProducts`
     - `apiManagementSubscriptionRequired`
     - `apiManagementVersion`
-    - `relativeOpenApiLink`
+    - `relativeOpenApiUrl`
+    - `relativeFunctionsUrl`
   Outputs:
     [None]
 */
