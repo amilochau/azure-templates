@@ -5,6 +5,7 @@
   Required parameters:
     - `conventions`
     - `functionsAppName`
+    - `relativeFunctionsUrl`
   Optional parameters:
     [None]
   Outputs:
@@ -21,6 +22,9 @@ param conventions object
 
 @description('The Functions application name')
 param functionsAppName string
+
+@description('The relative URL of the Functions application host')
+param relativeFunctionsUrl string
 
 // === VARIABLES ===
 
@@ -62,7 +66,7 @@ module apimBackend '../api-management/backend.bicep' = {
   name: 'Resource-FunctionsBackend'
   scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
   params: {
-    backendUrl: 'https://${fn.properties.defaultHostName}/'
+    backendUrl: 'https://${fn.properties.defaultHostName}${relativeFunctionsUrl}/'
     conventions: conventions
     resourceId: '${environment().resourceManager}${fn.id}'
     backendName: functionsAppName

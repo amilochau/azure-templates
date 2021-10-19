@@ -43,7 +43,10 @@ param apiManagementSubscriptionRequired bool = true
 param apiManagementVersion string = 'v1'
 
 @description('The OpenAPI link, relative to the application host name')
-param relativeOpenApiLink string = '/api/swagger.json'
+param relativeOpenApiUrl string = '/api/swagger.json'
+
+@description('The relative URL of the Functions application host')
+param relativeFunctionsUrl string = '/api'
 
 // === VARIABLES ===
 
@@ -64,6 +67,7 @@ module apimBackend '../modules/functions/api-management-backend.bicep' = if (!em
   params: {
     conventions: conventions
     functionsAppName: fn.name
+    relativeFunctionsUrl: relativeFunctionsUrl
   }
 }
 
@@ -78,6 +82,6 @@ module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiMan
     apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
-    openApiLink: 'https://${fn.properties.defaultHostName}${relativeOpenApiLink}'
+    openApiLink: 'https://${fn.properties.defaultHostName}${relativeOpenApiUrl}'
   }
 }
