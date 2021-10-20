@@ -54,9 +54,11 @@ param templateVersion string
 param pricingPlan string = 'Free'
 
 @description('The API publisher name')
+@minLength(1)
 param apiPublisherName string
 
 @description('The API publisher email')
+@minLength(1)
 param apiPublisherEmail string
 
 @description('The API products')

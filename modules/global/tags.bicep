@@ -48,7 +48,7 @@ var referential = {
 
 // === RESOURCES ===
 
-// Key Vault
+// Resource group tags
 resource tags 'Microsoft.Resources/tags@2021-04-01' = {
   name: 'default'
   properties: {
