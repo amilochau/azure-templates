@@ -41,12 +41,15 @@ param apiManagementProducts array = []
 param apiManagementSubscriptionRequired bool = true
 
 @description('The API Management API version')
+@minLength(1)
 param apiManagementVersion string = 'v1'
 
 @description('The OpenAPI link, relative to the application host name')
+@minLength(1)
 param relativeOpenApiUrl string = '/api/swagger.json'
 
 @description('The relative URL of the Functions application host')
+@minLength(1)
 param relativeFunctionsUrl string = '/api'
 
 // === VARIABLES ===
