@@ -87,6 +87,14 @@ param storageAccounts array = []
 
 var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
 
+// === EXISTING ===
+
+// App Configuration
+resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
+  name: conventions.global.appConfigurationName
+  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
+}
+
 // === RESOURCES ===
 
 // Tags
@@ -173,7 +181,7 @@ module fn '../modules/functions/application.bicep' = {
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
-    appConfigurationEndpoint: ''
+    appConfigurationEndpoint: !disableAppConfiguration ? appConfig.properties.endpoint : ''
     aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
