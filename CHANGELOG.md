@@ -4,30 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## Breaking changes
-
-- All templates:
-  - The global parameter `environmentName` is now removed; environment name is computed from the `hostName` global parameter
-  - The new parameter `pricingPlan` let you define the configuration set you want to use for SKUs and billing limits
-  - Most of the complex `object`-type parameters have been replaced by flat, validable parameters; please refer to each template to see the new parameters
-  - Most of global object references, such as Log Analytics workspace, App Configuration and API Management, have been removed; the templates now use naming conventions to find global resources
-  - A new `templateVersion` parameter in needed on almost each template; you can safely pass the version of the current repository you use, typically from the Git tag you reference it
-- `functions` template:
-  - Drops support for local conditional deployment from the `functions/template.bicep` template
-  - Drops support for `dotnet` worker type, drops support for `DOTNETCORE|3.1` and `DOTNET|6.0` framework versions
-
-## New features
-
-- `gateway` template:
-  - Now deploys global policies for APIs (.NET Core headers are removed)
-  - Now deploys a dedicated Key Vault to store secret named values for API Management
-  - Now deploys products, from the new `products` arrray property
-- `functions` templates:
-  - Now deploys an API Management API with its version and operations
-  - Now deploys an API Management backend, if `apiManagementProducts` is defined
-  - Now creates links between the current API Management API and existing API Management products, as defined from the new `apiManagementProducts` array property
-
 ## Bug fixes
 
-- The `gateway` template do not create a new named value for loggers at each deployment anymore
-- The `configuration` template now works with defined referential
+- Azure Functions applications are now well configured to use the global Azure App Configuration
