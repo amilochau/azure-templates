@@ -188,6 +188,16 @@ module fn '../modules/functions/application.bicep' = {
   }
 }
 
+// Dashboard
+module dashboard '../modules/monitoring/web-dashboard.bicep' = {
+  name: 'Resource-Dashboard'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    functionsName: fn.outputs.name
+  }
+}
+
 // === AUTHORIZATIONS ===
 
 // Functions to App Configuration

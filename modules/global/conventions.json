@@ -43,6 +43,9 @@
     },
     "keyVault": {
       "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-kv"
+    },
+    "dashboard": {
+      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-dsh"
     }
   }
 }
