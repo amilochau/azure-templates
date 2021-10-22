@@ -37,7 +37,7 @@ param disableLocalAuth bool = false
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '1000' : 'ERROR' // in GB/d
+var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 'ERROR' // in GB/d
 
 // === RESOURCES ===
 
