@@ -95,8 +95,8 @@ var conventions = json(replace(replace(replace(replace(loadTextContent('../modul
 
 @description('App Configuration')
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
-  name: conventions.global.appConfigurationName
-  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
+  name: conventions.global.appConfiguration.name
+  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
 }
 
 // === RESOURCES ===
@@ -208,10 +208,10 @@ module dashboard '../modules/monitoring/web-dashboard.bicep' = {
 @description('Functions to App Configuration')
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!disableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
+  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
   params: {
     principalId: fn.outputs.principalId
-    appConfigurationName: conventions.global.appConfigurationName
+    appConfigurationName: conventions.global.appConfiguration.name
     roleDescription: 'Functions application should read the configuration from App Configuration'
   }
 }

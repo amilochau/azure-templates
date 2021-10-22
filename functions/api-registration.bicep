@@ -99,7 +99,7 @@ module apimBackend '../modules/functions/api-management-backend.bicep' = if (!em
 @description('API Management API registration with OpenAPI')
 module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementApi'
-  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
   params: {
     applicationName: applicationName
     conventions: conventions

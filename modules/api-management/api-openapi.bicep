@@ -44,7 +44,7 @@ param openApiLink string
 
 @description('API Management')
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: conventions.global.apiManagementName
+  name: conventions.global.apiManagement.name
 }
 
 @description('API Management Products')
