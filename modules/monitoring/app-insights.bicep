@@ -41,13 +41,13 @@ var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '1000' :
 
 // === RESOURCES ===
 
-// Log Analytics Workspace
+@description('Log Analytics Workspace')
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   scope: resourceGroup(conventions.global.logAnalyticsWorkspaceResourceGroupName)
   name: conventions.global.logAnalyticsWorkspaceName
 }
 
-// Application Insights
+@description('Application Insights')
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: conventions.naming.applicationInsights.name
   location: location

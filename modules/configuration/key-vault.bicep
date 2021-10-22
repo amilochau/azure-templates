@@ -29,7 +29,7 @@ var tenantId = subscription().tenantId
 
 // === RESOURCES ===
 
-// Key Vault
+@description('Key Vault')
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   name: conventions.naming.keyVault.name
   location: location

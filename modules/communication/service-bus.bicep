@@ -31,7 +31,7 @@ var location = resourceGroup().location
 
 // === RESOURCES ===
 
-// Service Bus Namespace
+@description('Service Bus Namespace')
 resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   name: conventions.naming.serviceBusNamespace.name
   location: location
@@ -44,7 +44,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   }
 }
 
-// Service Bus Queues
+@description('Service Bus Queues')
 resource queues 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
   name: empty(serviceBusQueues) ? 'empty' : queue
   parent: sbn

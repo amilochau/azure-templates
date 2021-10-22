@@ -69,22 +69,27 @@ param disableApplicationInsights bool = false
 
 // === VARIABLES ===
 
-var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+@description('The region name')
+var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+
+@description('Global & naming conventions')
+var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
 // === RESOURCES ===
 
-// Tags
+@description('Resource groupe tags')
 module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     hostName: hostName
+    regionName: regionName
     templateVersion: templateVersion
   }
 }
 
-// Key Vault
+@description('Key Vault')
 module kv '../modules/configuration/key-vault.bicep' = {
   name: 'Resource-KeyVault'
   params: {
@@ -93,7 +98,7 @@ module kv '../modules/configuration/key-vault.bicep' = {
   }
 }
 
-// Application Insights
+@description('Application Insights')
 module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
@@ -104,7 +109,7 @@ module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationIn
   }
 }
 
-// API Management instance
+@description('API Management instance')
 module apim '../modules/api-management/services.bicep' = {
   name: 'Resource-ApiManagementServices'
   params: {
@@ -120,7 +125,7 @@ module apim '../modules/api-management/services.bicep' = {
 
 // === AUTHORIZATIONS ===
 
-// API Management to Key Vault
+@description('API Management to Key Vault')
 module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
   name: 'Authorization-ApiManagement-KeyVault'
   params: {

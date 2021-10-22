@@ -30,14 +30,14 @@ var location = resourceGroup().location
 
 // === EXISTING ===
 
-// Functions application
+@description('Functions application')
 resource fn 'Microsoft.Web/sites@2021-02-01' existing = {
   name: functionsName
 }
 
 // === RESOURCES ===
 
-// Dashboard
+@description('Dashboard')
 resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
   name: conventions.naming.dashboard.name
   location: location

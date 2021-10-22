@@ -53,7 +53,7 @@ var apimLoggerKeyName = '${conventions.naming.apiManagement.name}-loggerkey'
 
 // === RESOURCES ===
 
-// API Management services
+@description('API Management services')
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   name: conventions.naming.apiManagement.name
   location: location

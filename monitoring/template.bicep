@@ -44,22 +44,27 @@ param pricingPlan string = 'Free'
 
 // === VARIABLES ===
 
-var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+@description('The region name')
+var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+
+@description('Global & naming conventions')
+var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
 // === RESOURCES ===
 
-// Tags
+@description('Resource groupe tags')
 module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     hostName: hostName
+    regionName: regionName
     templateVersion: templateVersion
   }
 }
 
-// Log Analytics Workspace
+@description('Log Analytics Workspace')
 module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
   name: 'Resource-LogAnalyticsWorkspace'
   params: {

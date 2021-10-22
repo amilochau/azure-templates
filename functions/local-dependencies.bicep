@@ -56,22 +56,27 @@ param storageAccounts array = []
 
 // === VARIABLES ===
 
-var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+@description('The region name')
+var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+
+@description('Global & naming conventions')
+var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
 // === RESOURCES ===
 
-// Tags
+@description('Resource groupe tags')
 module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     hostName: hostName
+    regionName: regionName
     templateVersion: templateVersion
   }
 }
 
-// Key Vault
+@description('Key Vault')
 module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
@@ -80,7 +85,7 @@ module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   }
 }
 
-// Service Bus
+@description('Service Bus')
 module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Resource-ServiceBus'
   params: {
@@ -90,7 +95,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
   }
 }
 
-// Storage Accounts
+@description('Storage Accounts')
 module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account.number) ? 'empty' : 'Resource-StorageAccount-${account.number}'
   params: {
