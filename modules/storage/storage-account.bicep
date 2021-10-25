@@ -1,23 +1,5 @@
 /*
   Deploy a Storage Account with blob containers
-  Resources deployed from this template:
-    - Storage Account
-    - Blob containers
-    - CDN
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `comment`
-  Optional parameters:
-    - `number`
-    - `blobContainers`: []
-       - `name`
-    - `daysBeforeDeletion`
-    - `allowBlobPublicAccess`
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
 */
 
 // === PARAMETERS ===

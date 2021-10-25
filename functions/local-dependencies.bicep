@@ -1,26 +1,5 @@
 /*
-  Deploy infrastructure to test a local Azure Functions application
-  Resources deployed from this template:
-    - Key Vault
-    - Service Bus namespace and queues
-    - Storage accounts, storage containers and CDN
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-    - `templateVersion`
-  Optional parameters:
-    - `disableKeyVault`
-    - `serviceBusQueues`: []
-    - `storageAccounts`: []
-      - `number`
-      - `comment`
-      - `containers`
-      - `readOnly`
-      - `daysBeforeDeletion`
-      - `allowBlobPublicAccess`
-  Outputs:
-    [None]
+  Deploy infrastructure to test a local Azure Functions application, with a Key Vault, service bus and storage account resources
 */
 
 // === PARAMETERS ===

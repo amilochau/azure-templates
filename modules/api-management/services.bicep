@@ -1,26 +1,5 @@
 /*
-  Deploy an API Management
-  Resources deployed from this template:
-    - API Management services and products
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `appInsightsId`
-    - `appInsightsInstrumentationKey`
-    - `publisherEmail`
-    - `publisherName`
-    - `products`: []
-      - `productName`
-      - `productDescription`
-      - `subscriptionRequired`
-      - `approvalRequired`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `principalId`
+  Deploy an API Management with its services and products
 */
 
 // === PARAMETERS ===

@@ -1,20 +1,5 @@
 /*
   Reference an API with OpenAPI into API Management
-  Resources deployed from this template:
-    - API Management children objects
-  Required parameters:
-    - `applicationName`
-    - `conventions`
-    - `backendId`
-    - `apiVersion`
-    - `subscriptionRequired`
-    - `openApiLink`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
 */
 
 // === PARAMETERS ===

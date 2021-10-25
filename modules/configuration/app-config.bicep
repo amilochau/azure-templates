@@ -1,17 +1,5 @@
 /*
   Deploy an App Configuration
-  Resources deployed from this template:
-    - App Configuration
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `pricingPlan`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
 */
 
 // === PARAMETERS ===

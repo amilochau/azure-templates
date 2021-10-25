@@ -1,18 +1,5 @@
 /*
   Deploy a Key Vault secret
-  Resources deployed from this template:
-    - Key Vault
-  Required parameters:
-    - `keyVaultName`
-    - `secretName`
-    - `secretValue`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `secretUri`
 */
 
 // === PARAMETERS ===

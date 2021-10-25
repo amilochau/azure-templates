@@ -1,17 +1,5 @@
 /*
-  Deploy an Log Analytics Workspace
-  Resources deployed from this template:
-    - Log Analytics Workspace
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `pricingPlan`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
+  Deploy a Log Analytics Workspace
 */
 
 // === PARAMETERS ===

@@ -1,19 +1,5 @@
 /*
   Deploy an Application Insights
-  Resources deployed from this template:
-    - Application Insights
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `pricingPlan`
-    - `disableLocalAuth`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `instrumentationKey`
 */
 
 // === PARAMETERS ===

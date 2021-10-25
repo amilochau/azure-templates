@@ -1,18 +1,5 @@
 /*
   Reference a Functions application as a dedicated backend into API Management
-  Resources deployed from this template:
-    - API Management backend
-  Required parameters:
-    - `conventions`
-    - `functionsAppName`
-    - `relativeFunctionsUrl`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `backendId`
 */
 
 // === PARAMETERS ===

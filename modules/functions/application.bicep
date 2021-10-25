@@ -1,24 +1,5 @@
 /*
   Deploy a Functions application
-  Resources deployed from this template:
-    - Functions application
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `pricingPlan`
-    - `applicationType`
-    - `serverFarmId`
-    - `webJobsStorageAccountName`
-  Optional parameters:
-    - `appConfigurationEndpoint`
-    - `aiInstrumentationKey`
-    - `serviceBusNamespaceName`
-    - `kvVaultUri`
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `principalId`
 */
 
 // === PARAMETERS ===

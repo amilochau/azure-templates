@@ -1,17 +1,5 @@
 /*
-  Deploy a Service Bus namespace with a queue
-  Resources deployed from this template:
-    - Service Bus Namespace
-    - Service Bus Queues
-  Required parameters:
-    - `referential`
-    - `conventions`
-  Optional parameters:
-    - `serviceBusQueues`
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
+  Deploy a Service Bus namespace with its queues
 */
 
 // === PARAMETERS ===

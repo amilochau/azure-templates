@@ -1,16 +1,5 @@
 /*
-  Deploy a Server farm
-  Resources deployed from this template:
-    - Server farm
-  Required parameters:
-    - `referential`
-    - `conventions`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
+  Deploy a Service Plan
 */
 
 // === PARAMETERS ===

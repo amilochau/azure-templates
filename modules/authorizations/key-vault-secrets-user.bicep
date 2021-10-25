@@ -1,15 +1,5 @@
 /*
   Deploy authorizations for a Key Vault
-  Resources deployed from this template:
-    - Authorizations
-  Required parameters:
-    - `principalId`
-    - `keyVaultName`
-    - `roleDescription`
-  Optional parameters:
-    [None]
-  Outputs:
-    [None]
 */
 
 // === PARAMETERS ===
