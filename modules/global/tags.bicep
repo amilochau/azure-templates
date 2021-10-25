@@ -34,7 +34,7 @@ var referential = {
   application: applicationName
   environment: environmentName
   host: hostName
-  regionName: regionName
+  region: regionName
   templateVersion: templateVersion
   deploymentDate: dateUtcNow
 }
@@ -51,8 +51,14 @@ resource tags 'Microsoft.Resources/tags@2021-04-01' = if(!disableResourceGroupTa
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed API Management')
 output id string = tags.id
+
+@description('The API Version of the deployed API Management')
 output apiVersion string = tags.apiVersion
+
+@description('The Name of the deployed API Management')
 output name string = tags.name
+
+@description('The resource group referential; the following properties are exposed: `organization`, `application`, `environemnt`, `host`, `region`, `templateVersion`, `deploymentDate`')
 output referential object = referential
-output environmentName string = environmentName

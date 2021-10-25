@@ -133,6 +133,11 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed Storage Account')
 output id string = storageAccount.id
+
+@description('The API Version of the deployed Storage Account')
 output apiVersion string = storageAccount.apiVersion
+
+@description('The Name of the deployed Storage Account')
 output name string = storageAccount.name

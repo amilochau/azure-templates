@@ -43,6 +43,11 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed App Configuration')
 output id string = appConfig.id
+
+@description('The API Version of the deployed App Configuration')
 output apiVersion string = appConfig.apiVersion
+
+@description('The Name of the deployed App Configuration')
 output name string = appConfig.name

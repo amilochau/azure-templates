@@ -110,7 +110,14 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed Azure Functions')
 output id string = fn.id
+
+@description('The API Version of the deployed Azure Functions')
 output apiVersion string = fn.apiVersion
+
+@description('The Name of the deployed Azure Functions')
 output name string = fn.name
+
+@description('The Principal ID of the deployed Azure Functions')
 output principalId string = fn.identity.principalId

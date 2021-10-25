@@ -37,7 +37,14 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed Key Vault')
 output id string = kv.id
+
+@description('The API Version of the deployed Key Vault')
 output apiVersion string = kv.apiVersion
+
+@description('The Name of the deployed Key Vault')
 output name string = kv.name
+
+@description('The Vault URI of the deployed Key Vault')
 output vaultUri string = kv.properties.vaultUri

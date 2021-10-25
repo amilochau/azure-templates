@@ -17,7 +17,7 @@ var location = resourceGroup().location
 // === RESOURCES ===
 
 @description('Service Plan')
-resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
+resource servicePlan 'Microsoft.Web/serverfarms@2021-01-01' = {
   name: conventions.naming.servicePlan.name
   location: location
   sku: {
@@ -33,6 +33,11 @@ resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
 
 // === OUTPUTS ===
 
-output id string = farm.id
-output apiVersion string = farm.apiVersion
-output name string = farm.name
+@description('The ID of the deployed Service Plan')
+output id string = servicePlan.id
+
+@description('The API Version of the deployed Service Plan')
+output apiVersion string = servicePlan.apiVersion
+
+@description('The Name of the deployed Service Plan')
+output name string = servicePlan.name

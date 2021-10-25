@@ -56,7 +56,14 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed Application Insights')
 output id string = ai.id
+
+@description('The API Version of the deployed Application Insights')
 output apiVersion string = ai.apiVersion
+
+@description('The Name of the deployed Application Insights')
 output name string = ai.name
+
+@description('The Instrumentation Key of the deployed Application Insights')
 output instrumentationKey string = ai.properties.InstrumentationKey

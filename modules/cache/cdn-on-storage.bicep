@@ -90,6 +90,11 @@ resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed CDN profile')
 output id string = cdn.id
+
+@description('The API Version of the deployed CDN profile')
 output apiVersion string = cdn.apiVersion
+
+@description('The Name of the deployed CDN profile')
 output name string = cdn.name
