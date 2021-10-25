@@ -34,7 +34,14 @@ resource secret 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed Key Vault Secret')
 output id string = secret.id
+
+@description('The API Version of the deployed Key Vault Secret')
 output apiVersion string = secret.apiVersion
+
+@description('The Name of the deployed Key Vault Secret')
 output name string = secret.name
+
+@description('The URI of the deployed Key Vault Secret')
 output secretUri string = secret.properties.secretUri

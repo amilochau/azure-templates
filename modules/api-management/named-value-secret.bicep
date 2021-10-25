@@ -37,6 +37,11 @@ resource namedValue 'Microsoft.ApiManagement/service/namedValues@2021-01-01-prev
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed API Management Named Value')
 output id string = namedValue.id
+
+@description('The API Version of the deployed API Management Named Value')
 output apiVersion string = namedValue.apiVersion
+
+@description('The Name of the deployed API Management Named Value')
 output name string = namedValue.name

@@ -69,7 +69,11 @@ module apimBackend '../api-management/backend.bicep' = {
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed API Management Backend')
 output id string = apimBackend.outputs.id
+
+@description('The API Version of the deployed API Management Backend')
 output apiVersion string = apimBackend.outputs.apiVersion
+
+@description('The Name of the deployed API Management Backend')
 output name string = apimBackend.outputs.name
-output backendId string = apimBackend.outputs.backendId

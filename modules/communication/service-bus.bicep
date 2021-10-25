@@ -53,6 +53,11 @@ resource queues 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [f
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed Service Bus Namespace')
 output id string = sbn.id
+
+@description('The API Version of the deployed Service Bus Namespace')
 output apiVersion string = sbn.apiVersion
+
+@description('The Name of the deployed Service Bus Namespace')
 output name string = sbn.name

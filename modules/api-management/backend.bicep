@@ -42,7 +42,11 @@ resource backend 'Microsoft.ApiManagement/service/backends@2021-01-01-preview' =
 
 // === OUTPUTS ===
 
+@description('The ID of the deployed API Management Backend')
 output id string = backend.id
+
+@description('The API Version of the deployed API Management Backend')
 output apiVersion string = backend.apiVersion
+
+@description('The Name of the deployed API Management Backend')
 output name string = backend.name
-output backendId string = backend.name

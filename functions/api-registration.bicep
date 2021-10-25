@@ -89,7 +89,7 @@ module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiMan
   params: {
     applicationName: applicationName
     conventions: conventions
-    backendId: !empty(apiManagementProducts) ? apimBackend.outputs.backendId : ''
+    backendId: !empty(apiManagementProducts) ? apimBackend.outputs.name : ''
     apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
