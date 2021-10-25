@@ -1,36 +1,5 @@
 /*
-  Deploy infrastructure for Azure Functions application
-  Resources deployed from this template:
-    - Functions with its dedicated Service Plan and storage account
-    - Application Insights
-    - Key Vault
-    - Service Bus namespace and queues
-    - Storage accounts, storage containers and CDN
-    - Authorizations
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-    - `templateVersion`
-    - `applicationType`
-  Optional parameters:
-    - `pricingPlan`
-    - `disableApplicationInsights`
-    - `disableAppConfiguration`
-    - `disableKeyVault`
-    - `serviceBusQueues`: []
-    - `storageAccounts`: []
-      - `number`
-      - `comment`
-      - `containers`: []
-      - `readOnly`
-      - `daysBeforeDeletion`
-      - `allowBlobPublicAccess`
-    - `apiManagementProducts`
-    - `apiManagementSubscriptionRequired`
-    - `apiManagementVersion`
-  Outputs:
-    [None]
+  Deploy infrastructure for Azure Functions application, with Application Insights, Key Vault, service bus and storage account resources, authorizations
 */
 
 // === PARAMETERS ===

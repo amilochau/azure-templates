@@ -1,27 +1,5 @@
 /*
-  Deploy infrastructure for API Management
-  Resources deployed from this template:
-    - API Management
-    - Application Insights
-    - Key Vault
-    - Authorizations
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-    - `templateVersion`
-    - `apiPublisherName`
-    - `apiPublisherEmail`
-  Optional parameters:
-    - `pricingPlan`
-    - `apiProducts`: []
-      - `productName`
-      - `productDescription`
-      - `subscriptionRequired`
-      - `approvalRequired`
-    - `disableApplicationInsights`
-  Outputs:
-    [None]
+  Deploy infrastructure for API Management, with its Key Vault, services and products, authorizations
 */
 
 // === PARAMETERS ===

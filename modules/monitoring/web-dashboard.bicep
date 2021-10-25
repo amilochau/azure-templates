@@ -1,16 +1,5 @@
 /*
-  Deploy an Azure Portal Dashboard
-  Resources deployed from this template:
-    - Dashboard
-  Required parameters:
-    - `referential`
-    - `conventions`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
+  Deploy a Portal Dashboard
 */
 
 // === PARAMETERS ===

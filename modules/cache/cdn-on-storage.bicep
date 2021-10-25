@@ -1,22 +1,5 @@
 /*
-  Deploy a CDN
-  Resources deployed from this template:
-    - CDN profile
-    - CDN endpoint
-  Required parameters:
-    - `referential`
-    - `conventions`
-    - `storageAccountHostName`
-    - `storageAccountComment`
-  Optional parameters:
-    - `storageAccountNumber`
-    - `cdnCacheExpirationInDays`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
+  Deploy a CDN profile and endpoint
 */
 
 // === PARAMETERS ===

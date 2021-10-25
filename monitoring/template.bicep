@@ -1,16 +1,5 @@
 /*
-  Deploy infrastructure for Azure monitoring
-  Resources deployed from this template:
-    - Log Analytics Workspace
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-    - `templateVersion`
-  Optional parameters:
-    - `pricingPlan`
-  Outputs:
-    [None]
+  Deploy infrastructure for Azure monitoring with Log Analytics
 */
 
 // === PARAMETERS ===

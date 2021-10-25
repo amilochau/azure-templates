@@ -1,19 +1,5 @@
 /*
-  Deploy infrastructure for Azure Functions API registration
-  Resources deployed from this template:
-    - API Management registrations
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-  Optional parameters:
-    - `apiManagementProducts`
-    - `apiManagementSubscriptionRequired`
-    - `apiManagementVersion`
-    - `relativeOpenApiUrl`
-    - `relativeFunctionsUrl`
-  Outputs:
-    [None]
+  REgister an Azure Functions into API Management
 */
 
 // === PARAMETERS ===

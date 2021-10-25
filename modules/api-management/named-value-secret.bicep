@@ -1,17 +1,5 @@
 /*
   Deploy an API Management named value
-  Resources deployed from this template:
-    - API Management named value
-  Required parameters:
-    - `conventions`
-    - `secretKey`
-    - `secretUri`
-  Optional parameters:
-    [None]
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
 */
 
 // === PARAMETERS ===

@@ -1,21 +1,5 @@
 /*
-  Deploy a list of Tags
-  Resources deployed from this template:
-    - Tags
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-    - `regionName`
-    - `templateVersion`
-  Optional parameters:
-    - `disableResourceGroupTags`
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `referential`
-    - `environmentName`
+  Deploy a list of tags to the current resource group
 */
 
 // === PARAMETERS ===

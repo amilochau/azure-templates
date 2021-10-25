@@ -1,19 +1,5 @@
 /*
   Deploy an API Management backend
-  Resources deployed from this template:
-    - API Management backend
-  Required parameters:
-    - `conventions`
-    - `resourceId`
-    - `backendName`
-    - `backendUrl`
-  Optional parameters:
-    - `credentials`
-  Outputs:
-    - `id`
-    - `apiVersion`
-    - `name`
-    - `backendId`
 */
 
 // === PARAMETERS ===

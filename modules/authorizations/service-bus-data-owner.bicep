@@ -1,17 +1,5 @@
 /*
   Deploy authorizations for a Service Bus namespace
-  Resources deployed from this template:
-    - Authorizations
-  Required parameters:
-    - `principalId`
-    - `serviceBusNamespaceName`
-    - `roleDescription`
-  Optional parameters:
-    [None]
-  Optional parameters:
-    [None]
-  Outputs:
-    [None]
 */
 
 // === PARAMETERS ===

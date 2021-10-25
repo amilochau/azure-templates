@@ -1,16 +1,5 @@
 /*
   Deploy infrastructure for Azure App Configuration
-  Resources deployed from this template:
-    - App Configuration
-  Required parameters:
-    - `organizationName`
-    - `applicationName`
-    - `hostName`
-    - `templateVersion`
-  Optional parameters:
-    - `pricingPlan`
-  Outputs:
-    [None]
 */
 
 // === PARAMETERS ===
