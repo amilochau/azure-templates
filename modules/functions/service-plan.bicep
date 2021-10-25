@@ -27,7 +27,7 @@ var location = resourceGroup().location
 
 // === RESOURCES ===
 
-// Service Plan
+@description('Service Plan')
 resource farm 'Microsoft.Web/serverfarms@2021-01-01' = {
   name: conventions.naming.servicePlan.name
   location: location

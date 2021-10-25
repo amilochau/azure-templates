@@ -42,12 +42,12 @@ param openApiLink string
 
 // === EXISTING ===
 
-// API Management
+@description('API Management')
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: conventions.global.apiManagementName
+  name: conventions.global.apiManagement.name
 }
 
-// API Management Products
+@description('API Management Products')
 resource apimProducts 'Microsoft.ApiManagement/service/products@2021-01-01-preview' existing = [for (product, i) in products: {
   name: product
   parent: apim
@@ -55,7 +55,7 @@ resource apimProducts 'Microsoft.ApiManagement/service/products@2021-01-01-previ
 
 // === RESOURCES ===
 
-// API Managment API version set
+@description('API Managment API version set')
 resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-01-preview' = {
   name: conventions.naming.apiManagement.apiVersionSetName
   parent: apim
@@ -66,7 +66,7 @@ resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-0
   }
 }
 
-// API Management API
+@description('API Management API')
 resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   name: conventions.naming.apiManagement.apiName
   parent: apim
@@ -97,7 +97,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   }
 }
 
-// API Management Product API
+@description('API Management Product API')
 resource productApis 'Microsoft.ApiManagement/service/products/apis@2021-01-01-preview' = [for (product, i) in products: {
   name: api.name
   parent: apimProducts[i]

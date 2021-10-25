@@ -53,7 +53,7 @@ var tags = union(referential, commentTag)
 
 // === RESOURCES ===
 
-// CDN Profile
+@description('CDN Profile')
 resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
   name: cdnProfileName
   location: location

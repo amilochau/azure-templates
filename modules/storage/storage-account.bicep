@@ -54,7 +54,7 @@ var tags = union(referential, commentTag)
 
 // === RESOURCES ===
 
-// Storage Account
+@description('Storage Account')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountName
   location: location
@@ -88,6 +88,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
   }
 
+  // Storage lifecycle policy
   resource lifecycle 'managementPolicies@2021-04-01' = if (daysBeforeDeletion > 0) {
     name: 'default'
     properties: {
@@ -116,6 +117,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     }
   }
 
+  // Blob services
   resource blobServices 'blobServices@2021-04-01' = {
     name: 'default'
     properties: {
@@ -124,6 +126,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       }
     }
     
+    // Blob containers
     resource containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
       name: container
       properties: {
@@ -133,7 +136,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 }
 
-// CDN
+@description('CDN')
 module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
   name: 'Resource-CDN-${number}'
   params: {

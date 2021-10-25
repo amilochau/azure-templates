@@ -36,7 +36,7 @@ var appConfigurationSku = pricingPlan == 'Free' ? 'free' : pricingPlan == 'Basic
 
 // === RESOURCES ===
 
-// App Configuration
+@description('App Configuration')
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
   name: conventions.naming.appConfiguration.name
   location: location

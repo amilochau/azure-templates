@@ -37,17 +37,17 @@ param disableLocalAuth bool = false
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '1000' : 'ERROR' // in GB/d
+var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 'ERROR' // in GB/d
 
 // === RESOURCES ===
 
-// Log Analytics Workspace
+@description('Log Analytics Workspace')
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
-  scope: resourceGroup(conventions.global.logAnalyticsWorkspaceResourceGroupName)
-  name: conventions.global.logAnalyticsWorkspaceName
+  scope: resourceGroup(conventions.global.logAnalyticsWorkspace.resourceGroupName)
+  name: conventions.global.logAnalyticsWorkspace.name
 }
 
-// Application Insights
+@description('Application Insights')
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: conventions.naming.applicationInsights.name
   location: location

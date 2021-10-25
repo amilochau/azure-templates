@@ -29,19 +29,19 @@ var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 
 // === EXISTING ===
 
-// Role
+@description('Role - Key Vault Secrets User')
 resource roleKeyVaultSecretsUser 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   name: buildInRoles['Key Vault Secrets User']
 }
 
-// Key Vault
+@description('Key Vault')
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
   name: keyVaultName
 }
 
 // === AUTHORIZATIONS ===
 
-// Principal to Key Vault
+@description('Principal to Key Vault')
 resource auth_app_kv 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(principalId, kv.id, roleKeyVaultSecretsUser.id)
   scope: kv

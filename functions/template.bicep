@@ -85,30 +85,35 @@ param storageAccounts array = []
 
 // === VARIABLES ===
 
-var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+@description('The region name')
+var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+
+@description('Global & naming conventions')
+var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
 // === EXISTING ===
 
-// App Configuration
+@description('App Configuration')
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
-  name: conventions.global.appConfigurationName
-  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
+  name: conventions.global.appConfiguration.name
+  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
 }
 
 // === RESOURCES ===
 
-// Tags
+@description('Resource groupe tags')
 module tags '../modules/global/tags.bicep' = {
   name: 'Resource-Tags'
   params: {
     organizationName: organizationName
     applicationName: applicationName
     hostName: hostName
+    regionName: regionName
     templateVersion: templateVersion
   }
 }
 
-// Key Vault
+@description('Key Vault')
 module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   name: 'Resource-KeyVault'
   params: {
@@ -117,7 +122,7 @@ module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   }
 }
 
-// Application Insights
+@description('Application Insights')
 module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
   name: 'Resource-ApplicationInsights'
   params: {
@@ -128,7 +133,7 @@ module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationIn
   }
 }
 
-// Service Bus
+@description('Service Bus')
 module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Resource-ServiceBus'
   params: {
@@ -138,7 +143,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
   }
 }
 
-// Storage Accounts
+@description('Storage Accounts')
 module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account.number) ? 'empty' : 'Resource-StorageAccount-${account.number}'
   params: {
@@ -152,7 +157,7 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
   }
 }]
 
-// Dedicated Storage Account for Functions application
+@description('Dedicated Storage Account for Functions application')
 module stg '../modules/storage/storage-account.bicep' = {
   name: 'Resource-StorageAccount'
   params: {
@@ -162,7 +167,7 @@ module stg '../modules/storage/storage-account.bicep' = {
   }
 }
 
-// Service Plan
+@description('Service Plan')
 module asp '../modules/functions/service-plan.bicep' = {
   name: 'Resource-ServerFarm'
   params: {
@@ -171,7 +176,7 @@ module asp '../modules/functions/service-plan.bicep' = {
   }
 }
 
-// Functions application
+@description('Functions application')
 module fn '../modules/functions/application.bicep' = {
   name: 'Resource-FunctionsApplication'
   params: {
@@ -188,20 +193,30 @@ module fn '../modules/functions/application.bicep' = {
   }
 }
 
+@description('Dashboard')
+module dashboard '../modules/monitoring/web-dashboard.bicep' = {
+  name: 'Resource-Dashboard'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    functionsName: fn.outputs.name
+  }
+}
+
 // === AUTHORIZATIONS ===
 
-// Functions to App Configuration
+@description('Functions to App Configuration')
 module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!disableAppConfiguration) {
   name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(conventions.global.appConfigurationResourceGroupName)
+  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
   params: {
     principalId: fn.outputs.principalId
-    appConfigurationName: conventions.global.appConfigurationName
+    appConfigurationName: conventions.global.appConfiguration.name
     roleDescription: 'Functions application should read the configuration from App Configuration'
   }
 }
 
-// Functions to Key Vault
+@description('Functions to Key Vault')
 module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!disableKeyVault) {
   name: 'Authorization-Functions-KeyVault'
   params: {
@@ -211,7 +226,7 @@ module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if 
   }
 }
 
-// Functions to Application Insights
+@description('Functions to Application Insights')
 module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (!disableApplicationInsights) {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
@@ -221,7 +236,7 @@ module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep'
   }
 }
 
-// Functions to extra Service Bus
+@description('Functions to extra Service Bus')
 module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
@@ -231,7 +246,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
   }
 }
 
-// Functions to extra Storage Accounts
+@description('Functions to extra Storage Accounts')
 module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.number}'
   params: {
@@ -242,7 +257,7 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
   }
 }]
 
-// Functions to dedicated Storage Account
+@description('Functions to dedicated Storage Account')
 module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
   name: 'Authorization-Functions-StorageAccount'
   params: {

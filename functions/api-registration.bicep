@@ -33,6 +33,10 @@ param applicationName string
 @maxLength(5)
 param hostName string
 
+@description('The ARM templates version')
+@minLength(1)
+param templateVersion string
+
 
 @description('The products to link with the API Management API')
 param apiManagementProducts array = []
@@ -54,18 +58,35 @@ param relativeFunctionsUrl string = '/api'
 
 // === VARIABLES ===
 
-var conventions = json(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName))
+@description('The region name')
+var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+
+@description('Global & naming conventions')
+var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
 // === EXISTING ===
 
-// Functions application
+@description('Functions application')
 resource fn 'Microsoft.Web/sites@2021-01-15' existing = {
   name: conventions.naming.functionsApplication.name
 }
 
 // === RESOURCES ===
 
-// API Management backend
+@description('Resource groupe tags')
+module tags '../modules/global/tags.bicep' = {
+  name: 'Resource-Tags'
+  params: {
+    organizationName: organizationName
+    applicationName: applicationName
+    hostName: hostName
+    regionName: regionName
+    templateVersion: templateVersion
+    disableResourceGroupTags: true
+  }
+}
+
+@description('API Management backend')
 module apimBackend '../modules/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementBackend'
   params: {
@@ -75,10 +96,10 @@ module apimBackend '../modules/functions/api-management-backend.bicep' = if (!em
   }
 }
 
-// API Management API registration with OpenAPI
+@description('API Management API registration with OpenAPI')
 module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementApi'
-  scope: resourceGroup(conventions.global.apiManagementResourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
   params: {
     applicationName: applicationName
     conventions: conventions

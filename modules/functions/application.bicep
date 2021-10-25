@@ -70,14 +70,14 @@ var extensionVersion = applicationType == 'isolatedDotnet5' ? '~3' : 'ERROR'
 
 // === EXISTING ===
 
-// Storage Account
+@description('Storage Account')
 resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
   name: webJobsStorageAccountName
 }
 
 // === RESOURCES ===
 
-// Functions application
+@description('Functions application')
 resource fn 'Microsoft.Web/sites@2021-01-01' = {
   name: conventions.naming.functionsApplication.name
   location: location

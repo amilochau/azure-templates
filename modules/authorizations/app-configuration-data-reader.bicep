@@ -29,19 +29,19 @@ var buildInRoles = json(loadTextContent('./build-in-roles.json'))
 
 // === EXISTING ===
 
-// Role
+@description('Role - App Configuration Data Reader')
 resource roleAppConfigurationDataReader 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   name: buildInRoles['App Configuration Data Reader']
 }
 
-// App Configuration
+@description('App Configuration')
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
   name: appConfigurationName
 }
 
 // === AUTHORIZATIONS ===
 
-// Principal to App Configuration
+@description('Principal to App Configuration')
 resource auth_app_appConfig 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(principalId, appConfig.id, roleAppConfigurationDataReader.id)
   scope: appConfig
