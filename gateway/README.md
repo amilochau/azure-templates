@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`amilochau/azure-templates/diagnostics/template.bicep` is a Bicep template developed to manage infrastructure for requests gateway running with API Management.
+`amilochau/azure-templates/gateway/template.bicep` is a Bicep template developed to manage infrastructure for requests gateway running with API Management.
 
 ---
 
