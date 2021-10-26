@@ -27,7 +27,7 @@ param disableResourceGroupTags bool = false
 
 // === VARIABLES ===
 
-var environmentName = startsWith(hostName, 'prd') ? 'Production' : startsWith(hostName, 'stg') ? 'Staging' : 'Development'
+var environmentName = startsWith(hostName, 'shd') ? 'Shared' : startsWith(hostName, 'prd') ? 'Production' : startsWith(hostName, 'stg') ? 'Staging' : 'Development'
 
 var referential = {
   organization: organizationName
