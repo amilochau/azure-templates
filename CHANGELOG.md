@@ -4,10 +4,6 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
-## New features
-
-- Add more validations on templates parameters
-
 ## Bug fixes
 
-- Azure Functions applications are now well configured to use the global Azure App Configuration
+- Application name (the `applicationName` template parameter) is now limited to 11 characters, to reflect limits with Key Vault naming limits
