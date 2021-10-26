@@ -7,6 +7,7 @@
 ## New features
 
 - Support `Shared` environment
+- Support hyphens in application name where Key Vault are deployed
 
 ## Bug fixes
 
