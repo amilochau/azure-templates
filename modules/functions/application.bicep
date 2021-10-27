@@ -60,7 +60,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 
 @description('Functions application')
 resource fn 'Microsoft.Web/sites@2021-01-01' = {
-  name: conventions.naming.functionsApplication
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
   location: location
   kind: 'functionapp,linux'
   identity: {

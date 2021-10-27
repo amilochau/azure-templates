@@ -42,7 +42,7 @@ resource apimProducts 'Microsoft.ApiManagement/service/products@2021-01-01-previ
 
 @description('API Managment API version set')
 resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-01-preview' = {
-  name: conventions.naming.apiManagementApiVersionSet
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementApiVersionSet}'
   parent: apim
   properties: {
     displayName: applicationName
@@ -53,10 +53,10 @@ resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-0
 
 @description('API Management API')
 resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
-  name: conventions.naming.apiManagementApi
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementApi}'
   parent: apim
   properties: {
-    displayName: conventions.naming.apiManagementApi
+    displayName: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementApi}'
     description: 'API for the "${applicationName}" application'
     path: applicationName
     protocols: [
