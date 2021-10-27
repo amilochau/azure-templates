@@ -13,8 +13,8 @@ param conventions object
 @description('The storage account comment')
 param comment string
 
-@description('The storage account number')
-param number string = ''
+@description('The storage account suffix')
+param suffix string = ''
 
 @description('The blob containers')
 param blobContainers array = []
@@ -28,7 +28,7 @@ param allowBlobPublicAccess bool = false
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var storageAccountName = empty(number) ? conventions.naming.storageAccount.name : '${conventions.naming.storageAccount.name}${number}'
+var storageAccountName = '${conventions.naming.storageAccount.name}${suffix}'
 var commentTag = {
   comment: comment
 }
@@ -38,7 +38,7 @@ var tags = union(referential, commentTag)
 
 @description('Storage Account')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: storageAccountName
+  name: replace(storageAccountName, '-', '')
   location: location
   kind: 'StorageV2'
   sku: {
@@ -120,13 +120,13 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 
 @description('CDN')
 module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
-  name: 'Resource-CDN-${number}'
+  name: 'Resource-CDN-${suffix}'
   params: {
     referential: referential
     conventions: conventions
     storageAccountHostName: replace(replace(storageAccount.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
     storageAccountComment: comment
-    storageAccountNumber: number
+    storageAccountSuffix: suffix
     cdnCacheExpirationInDays: 360
   }
 }

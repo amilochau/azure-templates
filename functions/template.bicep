@@ -119,7 +119,7 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     referential: tags.outputs.referential
     conventions: conventions
     comment: account.comment
-    number: account.number
+    suffix: account.number // TODO rename to `suffix` for next major version
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
     allowBlobPublicAccess: account.allowBlobPublicAccess
