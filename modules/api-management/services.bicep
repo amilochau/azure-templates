@@ -28,13 +28,13 @@ param products array
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var apimLoggerKeyName = '${conventions.naming.apiManagement.name}-loggerkey'
+var apimLoggerKeyName = '${conventions.naming.apiManagement}-loggerkey'
 
 // === RESOURCES ===
 
 @description('API Management services')
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
-  name: conventions.naming.apiManagement.name
+  name: conventions.naming.apiManagement
   location: location
   sku: {
     name: 'Consumption'

@@ -23,7 +23,7 @@
       "storageAccounts": {
         "value": [
           {
-            "number": "1",
+            "suffix": "1",
             "comment": "Storage for files",
             "containers": [
               "container1",

@@ -35,7 +35,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existin
 
 @description('Application Insights')
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
-  name: conventions.naming.applicationInsights.name
+  name: conventions.naming.applicationInsights
   location: location
   kind: 'web'
   tags: referential

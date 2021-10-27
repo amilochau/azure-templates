@@ -15,7 +15,7 @@ param relativeFunctionsUrl string
 
 // === VARIABLES ===
 
-var apimFunctionsKeyName = '${conventions.naming.apiManagement.name}-functionskey'
+var apimFunctionsKeyName = '${conventions.naming.apiManagement}-functionskey'
 
 // === EXISTING ===
 

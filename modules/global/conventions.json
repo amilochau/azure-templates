@@ -15,43 +15,19 @@
     }
   },
   "naming": {
-    "appConfiguration": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-cfg"
-    },
-    "logAnalyticsWorkspace": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-ws"
-    },
-    "apiManagement": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-apim",
-      "apiName": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimapi",
-      "apiVersionSetName": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimversionset"
-    },
-    "functionsApplication": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-fn"
-    },
-    "applicationInsights": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-ai"
-    },
-    "cdnProfile": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdnprofile"
-    },
-    "cdnEndpoint": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdnedp"
-    },
-    "servicePlan": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-asp"
-    },
-    "serviceBusNamespace" :{
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-sbn"
-    },
-    "storageAccount": {
-      "name": "%ORGANIZATION%%APPLICATION%%HOST%sto"
-    },
-    "keyVault": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-kv"
-    },
-    "dashboard": {
-      "name": "%ORGANIZATION%-%APPLICATION%-%HOST%-dsh"
-    }
+    "appConfiguration": "%ORGANIZATION%-%APPLICATION%-%HOST%-cfg",
+    "logAnalyticsWorkspace": "%ORGANIZATION%-%APPLICATION%-%HOST%-ws",
+    "apiManagement": "%ORGANIZATION%-%APPLICATION%-%HOST%-apim",
+    "apiManagementApi": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimapi",
+    "apiManagementApiVersionSet": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimversionset",
+    "functionsApplication": "%ORGANIZATION%-%APPLICATION%-%HOST%-fn",
+    "applicationInsights": "%ORGANIZATION%-%APPLICATION%-%HOST%-ai",
+    "cdnProfile": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdnp",
+    "cdnEndpoint": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdne",
+    "servicePlan": "%ORGANIZATION%-%APPLICATION%-%HOST%-asp",
+    "serviceBusNamespace": "%ORGANIZATION%-%APPLICATION%-%HOST%-sbn",
+    "storageAccount": "%ORGANIZATION%%APPLICATION%%HOST%sto",
+    "keyVault": "%ORGANIZATION%-%APPLICATION%-%HOST%-kv",
+    "dashboard": "%ORGANIZATION%-%APPLICATION%-%HOST%-dsh"
   }
 }

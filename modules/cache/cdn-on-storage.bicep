@@ -16,8 +16,8 @@ param storageAccountHostName string
 @description('The storage account comment')
 param storageAccountComment string
 
-@description('The storage account number')
-param storageAccountNumber string = ''
+@description('The storage account suffix')
+param storageAccountSuffix string = ''
 
 @description('The CDN cache expiration in days')
 @minValue(1)
@@ -27,8 +27,8 @@ param cdnCacheExpirationInDays int = 360
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var cdnProfileName = empty(storageAccountNumber) ? conventions.naming.cdnProfile.name : '${conventions.naming.cdnProfile.name}-${storageAccountNumber}'
-var cdnEndpointName = empty(storageAccountNumber) ? conventions.naming.cdnEndpoint.name : '${conventions.naming.cdnEndpoint.name}-${storageAccountNumber}'
+var cdnProfileName = empty(storageAccountSuffix) ? conventions.naming.cdnProfile : '${conventions.naming.cdnProfile}-${storageAccountSuffix}'
+var cdnEndpointName = empty(storageAccountSuffix) ? conventions.naming.cdnEndpoint : '${conventions.naming.cdnEndpoint}-${storageAccountSuffix}'
 var commentTag = {
   comment: storageAccountComment
 }

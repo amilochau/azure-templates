@@ -21,7 +21,7 @@ var location = resourceGroup().location
 
 @description('Service Bus Namespace')
 resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
-  name: conventions.naming.serviceBusNamespace.name
+  name: conventions.naming.serviceBusNamespace
   location: location
   sku: {
     name: 'Basic'

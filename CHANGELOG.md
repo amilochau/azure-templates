@@ -4,10 +4,14 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
+## Breaking changes
+
+- The previous `number` parameter for storage accounts in `functions` templates has been renamed; you should now use the `suffix` parameter instead
+
 ## New features
 
 - Support `Shared` environment
-- Support hyphens in application name where Key Vault are deployed
+- Support hyphens in application name where Storage Accounts are deployed
 
 ## Bug fixes
 
