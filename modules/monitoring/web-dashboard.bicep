@@ -28,7 +28,7 @@ resource fn 'Microsoft.Web/sites@2021-02-01' existing = {
 
 @description('Dashboard')
 resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
-  name: conventions.naming.dashboard.name
+  name: conventions.naming.dashboard
   location: location
   tags: referential
   properties: {

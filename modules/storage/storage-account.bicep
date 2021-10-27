@@ -28,7 +28,7 @@ param allowBlobPublicAccess bool = false
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var storageAccountName = '${conventions.naming.storageAccount.name}${suffix}'
+var storageAccountName = '${conventions.naming.storageAccount}${suffix}'
 var commentTag = {
   comment: comment
 }

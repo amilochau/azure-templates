@@ -27,8 +27,8 @@ param cdnCacheExpirationInDays int = 360
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var cdnProfileName = empty(storageAccountSuffix) ? conventions.naming.cdnProfile.name : '${conventions.naming.cdnProfile.name}-${storageAccountSuffix}'
-var cdnEndpointName = empty(storageAccountSuffix) ? conventions.naming.cdnEndpoint.name : '${conventions.naming.cdnEndpoint.name}-${storageAccountSuffix}'
+var cdnProfileName = empty(storageAccountSuffix) ? conventions.naming.cdnProfile : '${conventions.naming.cdnProfile}-${storageAccountSuffix}'
+var cdnEndpointName = empty(storageAccountSuffix) ? conventions.naming.cdnEndpoint : '${conventions.naming.cdnEndpoint}-${storageAccountSuffix}'
 var commentTag = {
   comment: storageAccountComment
 }

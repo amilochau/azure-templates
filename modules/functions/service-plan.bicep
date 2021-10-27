@@ -18,7 +18,7 @@ var location = resourceGroup().location
 
 @description('Service Plan')
 resource servicePlan 'Microsoft.Web/serverfarms@2021-01-01' = {
-  name: conventions.naming.servicePlan.name
+  name: conventions.naming.servicePlan
   location: location
   sku: {
     name: 'Y1'

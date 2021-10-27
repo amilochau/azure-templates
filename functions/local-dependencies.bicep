@@ -76,12 +76,12 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
 
 @description('Storage Accounts')
 module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
-  name: empty(account.number) ? 'empty' : 'Resource-StorageAccount-${account.number}'
+  name: empty(account.suffix) ? 'empty' : 'Resource-StorageAccount-${account.suffix}'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     comment: account.comment
-    suffix: account.number // TODO rename to `suffix` for next major version
+    suffix: account.suffix
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
     allowBlobPublicAccess: account.allowBlobPublicAccess

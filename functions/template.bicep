@@ -114,12 +114,12 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
 
 @description('Storage Accounts')
 module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
-  name: empty(account.number) ? 'empty' : 'Resource-StorageAccount-${account.number}'
+  name: empty(account.suffix) ? 'empty' : 'Resource-StorageAccount-${account.suffix}'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     comment: account.comment
-    suffix: account.number // TODO rename to `suffix` for next major version
+    suffix: account.suffix
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
     allowBlobPublicAccess: account.allowBlobPublicAccess
@@ -217,7 +217,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
 
 @description('Functions to extra Storage Accounts')
 module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
-  name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.number}'
+  name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
   params: {
     principalId: fn.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
