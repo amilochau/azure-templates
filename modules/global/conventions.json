@@ -15,19 +15,22 @@
     }
   },
   "naming": {
-    "appConfiguration": "%ORGANIZATION%-%APPLICATION%-%HOST%-cfg",
-    "logAnalyticsWorkspace": "%ORGANIZATION%-%APPLICATION%-%HOST%-ws",
-    "apiManagement": "%ORGANIZATION%-%APPLICATION%-%HOST%-apim",
-    "apiManagementApi": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimapi",
-    "apiManagementApiVersionSet": "%ORGANIZATION%-%APPLICATION%-%HOST%-apimversionset",
-    "functionsApplication": "%ORGANIZATION%-%APPLICATION%-%HOST%-fn",
-    "applicationInsights": "%ORGANIZATION%-%APPLICATION%-%HOST%-ai",
-    "cdnProfile": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdnp",
-    "cdnEndpoint": "%ORGANIZATION%-%APPLICATION%-%HOST%-cdne",
-    "servicePlan": "%ORGANIZATION%-%APPLICATION%-%HOST%-asp",
-    "serviceBusNamespace": "%ORGANIZATION%-%APPLICATION%-%HOST%-sbn",
-    "storageAccount": "%ORGANIZATION%%APPLICATION%%HOST%sto",
-    "keyVault": "%ORGANIZATION%-%APPLICATION%-%HOST%-kv",
-    "dashboard": "%ORGANIZATION%-%APPLICATION%-%HOST%-dsh"
+    "prefix": "%ORGANIZATION%-%APPLICATION%-%HOST%-",
+    "suffixes": {
+      "appConfiguration": "cfg",
+      "logAnalyticsWorkspace": "ws",
+      "apiManagement": "apim",
+      "apiManagementApi": "apimapi",
+      "apiManagementApiVersionSet": "apimversionset",
+      "functionsApplication": "fn",
+      "applicationInsights": "ai",
+      "cdnProfile": "cdnp",
+      "cdnEndpoint": "cdne",
+      "servicePlan": "asp",
+      "serviceBusNamespace": "sbn",
+      "storageAccount": "sto",
+      "keyVault": "kv",
+      "dashboard": "dsh"
+    }
   }
 }

@@ -54,7 +54,7 @@ var conventions = json(replace(replace(replace(replace(loadTextContent('../modul
 
 @description('Functions application')
 resource fn 'Microsoft.Web/sites@2021-01-15' existing = {
-  name: conventions.naming.functionsApplication
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
 }
 
 // === RESOURCES ===

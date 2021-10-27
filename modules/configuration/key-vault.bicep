@@ -19,7 +19,7 @@ var tenantId = subscription().tenantId
 
 @description('Key Vault')
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
-  name: conventions.naming.keyVault
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.keyVault}'
   location: location
   tags: referential
   properties: {

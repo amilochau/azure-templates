@@ -26,7 +26,7 @@ var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 
 
 @description('Log Analytics Workspace')
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
-  name: conventions.naming.logAnalyticsWorkspace
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.logAnalyticsWorkspace}'
   location: location
   tags: referential
   properties: {
