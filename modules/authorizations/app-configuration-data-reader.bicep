@@ -39,5 +39,6 @@ resource auth_app_appConfig 'Microsoft.Authorization/roleAssignments@2020-08-01-
     roleDefinitionId: roleAppConfigurationDataReader.id
     principalId: principalId
     description: roleDescription
+    principalType: 'ServicePrincipal'
   }
 }

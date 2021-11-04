@@ -39,5 +39,6 @@ resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-previe
     roleDefinitionId: roleServiceBusDataOwner.id
     principalId: principalId
     description: roleDescription
+    principalType: 'ServicePrincipal'
   }
 }
