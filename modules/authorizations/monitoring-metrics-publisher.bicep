@@ -39,5 +39,6 @@ resource auth_app_kv 'Microsoft.Authorization/roleAssignments@2020-08-01-preview
     roleDefinitionId: roleMonitoringMetricsPublisher.id
     principalId: principalId
     description: roleDescription
+    principalType: 'ServicePrincipal'
   }
 }
