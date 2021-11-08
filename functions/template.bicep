@@ -215,7 +215,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
   }
 }
 
-@description('Functions to extra Storage Accounts')
+// This does not work... @description('Functions to extra Storage Accounts')
 module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
   params: {

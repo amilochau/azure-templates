@@ -17,3 +17,4 @@
 
 - Application name (the `applicationName` template parameter) is now limited to 11 characters, to reflect limits with Key Vault naming limits
 - Reduce Bicep linter verbosity on deployment
+- Fix authorization on Functions template without extra storage
