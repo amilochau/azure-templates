@@ -10,8 +10,11 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The Functions ID')
-param functionsName string
+@description('The website name')
+param websiteName string
+
+@description('The Application Insights name')
+param applicationInsightsName string
 
 // === VARIABLES ===
 
@@ -19,10 +22,16 @@ var location = resourceGroup().location
 
 // === EXISTING ===
 
-@description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-02-01' existing = {
-  name: functionsName
+@description('Web application')
+resource website 'Microsoft.Web/sites@2021-02-01' existing = {
+  name: websiteName
 }
+
+@description('Application insights')
+resource ai 'Microsoft.Web/sites@2021-02-01' existing = {
+  name: applicationInsightsName
+}
+
 
 // === RESOURCES ===
 
@@ -53,13 +62,13 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                       metrics: [
                         {
                           resourceMetadata: {
-                            id: fn.id
+                            id: website.id
                           }
                           name: 'FunctionExecutionCount'
                           aggregationType: 1
                           metricVisualization: {
                             displayName: 'Function execution count'
-                            resourceDisplayName: fn.name
+                            resourceDisplayName: website.name
                           }
                         }
                       ]
@@ -80,36 +89,103 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                   isOptional: true
                 }
               ]
-              settings: {
-                content: {
-                  options: {
+              settings: {}
+            }
+          }
+          {
+            position: {
+              x: 4
+              y: 0
+              rowSpan: 4
+              colSpan: 4
+            }
+            metadata: {
+              type: 'Extension/HubsExtension/PartType/MonitorChartPart'
+              inputs: [
+                {
+                  name: 'options'
+                  value: {
                     chart: {
                       metrics: [
                         {
                           resourceMetadata: {
-                            id: fn.id
+                            id: website.id
                           }
-                          name: 'FunctionExecutionCount'
+                          name: 'FunctionExecutionUnits'
                           aggregationType: 1
-                          displayName: {
-                            displayName: 'Function execution count'
-                            resourceDisplayName: fn.name
+                          metricVisualization: {
+                            displayName: 'Function execution units'
+                            resourceDisplayName: website.name
                           }
                         }
                       ]
-                      title: 'Function execution count'
+                      title: 'MB Milliseconds'
                       titleKind: 2
                       visualization: {
                         chartTpe: 2
-                        disablePinning: true
                       }
                       openBladeOnClick: {
                         openBlade: true
                       }
                     }
                   }
+                  isOptional: true
                 }
-              }
+                {
+                  name: 'sharedTimeRange'
+                  isOptional: true
+                }
+              ]
+              settings: {}
+            }
+          }
+          {
+            position: {
+              x: 8
+              y: 0
+              rowSpan: 4
+              colSpan: 4
+            }
+            metadata: {
+              type: 'Extension/HubsExtension/PartType/MonitorChartPart'
+              inputs: [
+                {
+                  name: 'options'
+                  value: {
+                    chart: {
+                      metrics: [
+                        {
+                          resourceMetadata: {
+                            id: ai.id
+                          }
+                          name: 'requests/duration'
+                          aggregationType: 4
+                          namespace: 'microsoft.insights/components'
+                          metricVisualization: {
+                            displayName: 'Server response time'
+                            resourceDisplayName: website.name
+                          }
+                        }
+                      ]
+                      title: 'Server response time'
+                      titleKind: 2
+                      visualization: {
+                        chartTpe: 2
+                      }
+                      openBladeOnClick: {
+                        openBlade: true
+                        // More here?
+                      }
+                    }
+                  }
+                  isOptional: true
+                }
+                {
+                  name: 'sharedTimeRange'
+                  isOptional: true
+                }
+              ]
+              settings: {}
             }
           }
         ]
@@ -121,26 +197,8 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
           type: 'MsPortalFx.Composition.Configuration.ValueTypes.TimeRange'
           value: {
             relative: {
-              duration: 1
-              timeUnit: 2
-            }
-          }
-        }
-        filterLocale: {
-          value: 'en-us'
-        }
-        filters: {
-          value: {
-            'MsPortalFx_TimeRange': {
-              model: {
-                format: 'local'
-                granularity: 'auto'
-                relative: '1h'
-              }
-              displayCache: {
-                name: 'Local Time'
-                value: 'Past hour'
-              }
+              duration: 24
+              timeUnit: 1
             }
           }
         }
