@@ -220,7 +220,7 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
   name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
   params: {
     principalId: fn.outputs.principalId
-    storageAccountName: extra_stg[index].outputs.name
+    storageAccountName: replace('${conventions.naming.prefix}${conventions.naming.suffixes.storageAccount}${account.suffix}', '-', '')
     readOnly: account.readOnly
     roleDescription: 'Functions application should read/write the blobs from Storage Account'
   }
