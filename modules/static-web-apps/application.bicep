@@ -37,6 +37,10 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   properties: {
     stagingEnvironmentPolicy: 'Disabled'
     allowConfigFileUpdates: false
+    provider: 'GitHub'
+    buildProperties: {
+      skipGithubActionWorkflowGeneration: true
+    }
   }
 }
 
