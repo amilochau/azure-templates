@@ -17,8 +17,7 @@ param conventions object
 ])
 param pricingPlan string
 
-
-@description('The repository URL')
+@description('The GitHub repository URL')
 param repositoryUrl string
 
 // === VARIABLES ===
@@ -40,7 +39,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   }
   properties: {
     stagingEnvironmentPolicy: 'Disabled'
-    allowConfigFileUpdates: false
+    allowConfigFileUpdates: true
     provider: 'GitHub'
     repositoryUrl: repositoryUrl
     buildProperties: {
