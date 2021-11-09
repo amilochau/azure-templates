@@ -31,6 +31,9 @@ param templateVersion string
 ])
 param pricingPlan string = 'Free'
 
+@description('The GitHub repository URL')
+param repositoryUrl string
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -60,5 +63,6 @@ module fn '../modules/static-web-apps/application.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     pricingPlan: pricingPlan
+    repositoryUrl: repositoryUrl
   }
 }

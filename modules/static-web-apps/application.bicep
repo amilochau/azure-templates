@@ -17,6 +17,10 @@ param conventions object
 ])
 param pricingPlan string
 
+
+@description('The repository URL')
+param repositoryUrl string
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -38,6 +42,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
     stagingEnvironmentPolicy: 'Disabled'
     allowConfigFileUpdates: false
     provider: 'GitHub'
+    repositoryUrl: repositoryUrl
     buildProperties: {
       skipGithubActionWorkflowGeneration: true
     }
