@@ -50,6 +50,3 @@ output apiVersion string = swa.apiVersion
 
 @description('The Name of the deployed Azure Static Web Apps')
 output name string = swa.name
-
-@description('The Principal ID of the deployed Azure Static Web Apps')
-output principalId string = swa.identity.principalId
