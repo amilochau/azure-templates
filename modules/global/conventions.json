@@ -30,7 +30,8 @@
       "serviceBusNamespace": "sbn",
       "storageAccount": "sto",
       "keyVault": "kv",
-      "dashboard": "dsh"
+      "dashboard": "dsh",
+      "staticWebApplication": "swa"
     }
   }
 }

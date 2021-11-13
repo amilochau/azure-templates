@@ -1,5 +1,5 @@
 /*
-  Deploy infrastructure for Azure App Configuration
+  Deploy infrastructure for Azure Functions application, with Application Insights, Key Vault, service bus and storage account resources, authorizations
 */
 
 // === PARAMETERS ===
@@ -19,7 +19,7 @@ param applicationName string
 @maxLength(5)
 param hostName string
 
-@description('The ARM templates version')
+@description('The azure-templates version')
 @minLength(1)
 param templateVersion string
 
@@ -30,6 +30,9 @@ param templateVersion string
   'Basic'   // Basic use with default limitations
 ])
 param pricingPlan string = 'Free'
+
+@description('The GitHub repository URL')
+param repositoryUrl string
 
 // === VARIABLES ===
 
@@ -53,12 +56,13 @@ module tags '../modules/global/tags.bicep' = {
   }
 }
 
-@description('App Configuration')
-module appConfig '../modules/configuration/app-config.bicep' = {
-  name: 'Resource-AppConfiguration'
+@description('Static Web Apps application')
+module fn '../modules/static-web-apps/application.bicep' = {
+  name: 'Resource-StaticWebAppsApplication'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     pricingPlan: pricingPlan
+    repositoryUrl: repositoryUrl
   }
 }

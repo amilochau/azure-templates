@@ -12,6 +12,7 @@
 
 - Support `Shared` environment
 - Support hyphens in application name where Storage Accounts are deployed
+- Add the `static-web-apps/template.bicep` template to create infrastructure for an application running with Azure Static Web Apps
 
 ## Bug fixes
 
