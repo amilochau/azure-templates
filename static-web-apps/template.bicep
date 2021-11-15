@@ -34,6 +34,9 @@ param pricingPlan string = 'Free'
 @description('The GitHub repository URL')
 param repositoryUrl string
 
+@description('The application custom domains')
+param customDomains array = []
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -64,5 +67,6 @@ module fn '../modules/static-web-apps/application.bicep' = {
     conventions: conventions
     pricingPlan: pricingPlan
     repositoryUrl: repositoryUrl
+    customDomains: customDomains
   }
 }
