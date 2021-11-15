@@ -163,12 +163,13 @@ module fn '../modules/functions/application.bicep' = {
 }
 
 @description('Dashboard')
-module dashboard '../modules/monitoring/web-dashboard.bicep' = {
+module dashboard '../modules/monitoring/web-dashboard.bicep' = if (!disableApplicationInsights) {
   name: 'Resource-Dashboard'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    functionsName: fn.outputs.name
+    websiteName: fn.outputs.name
+    applicationInsightsName: !disableApplicationInsights ? ai.outputs.name : ''
   }
 }
 
