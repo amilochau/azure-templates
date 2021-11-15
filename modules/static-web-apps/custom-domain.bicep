@@ -13,6 +13,9 @@ param swaName string
 @description('The application custom domain')
 param customDomain string
 
+@description('Whether the domain is the default one')
+param isDefault bool = false
+
 // === VARIABLES ===
 
 var rootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)
@@ -43,4 +46,7 @@ resource swaDomain 'Microsoft.Web/staticSites/customDomains@2021-02-01' = {
   dependsOn: [
     dnsRecord
   ]
+  properties: {
+    isDefault: isDefault // Not documented from API but useful
+  }
 }

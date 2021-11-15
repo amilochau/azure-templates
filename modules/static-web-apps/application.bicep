@@ -52,12 +52,13 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
 }
 
 @description('Custom domains for Static Web Apps')
-module domains 'custom-domain.bicep' = [for customDomain in customDomains: {
+module domains 'custom-domain.bicep' = [for (customDomain, i) in customDomains: if (!empty(customDomains)) {
   name: 'Resource-CustomDomain-${customDomain}'
   params: {
     conventions: conventions
     customDomain: customDomain
     swaName: swa.name
+    isDefault: i == 0
   }
 }]
 
