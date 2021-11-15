@@ -20,6 +20,9 @@ param pricingPlan string
 @description('The GitHub repository URL')
 param repositoryUrl string
 
+@description('The application custom domains')
+param customDomains array = []
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -47,6 +50,12 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
     }
   }
 }
+
+@description('Custom domains for Static Web Apps')
+resource domains 'Microsoft.Web/staticSites/customDomains@2021-02-01' = [for customDomain in customDomains: if (!empty(customDomains))  {
+  name: customDomain
+  parent: swa
+}]
 
 // === OUTPUTS ===
 
