@@ -12,6 +12,9 @@
       "name": "%ORGANIZATION%-gateway-%HOST%-apim",
       "keyVaultName": "%ORGANIZATION%-gateway-%HOST%-kv",
       "resourceGroupName": "%ORGANIZATION%-gateway-%HOST%-rg"
+    },
+    "dnsZone": {
+      "milochau.com": "mil-rg-milochau"
     }
   },
   "naming": {
