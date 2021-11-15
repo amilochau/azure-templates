@@ -56,6 +56,7 @@ module records '../networking/dns-cname-record.bicep' = [for customDomain in cus
   name: 'Resource-CnameRecord-${customDomain}'
   params: {
     customDomain: customDomain
+    target: swa.properties.defaultHostname
   }
 }]
 
@@ -63,6 +64,9 @@ module records '../networking/dns-cname-record.bicep' = [for customDomain in cus
 resource domains 'Microsoft.Web/staticSites/customDomains@2021-02-01' = [for customDomain in customDomains: if (!empty(customDomains))  {
   name: customDomain
   parent: swa
+  dependsOn: [
+    records
+  ]
 }]
 
 // === OUTPUTS ===

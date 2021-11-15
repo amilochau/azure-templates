@@ -7,6 +7,9 @@
 @description('The custom domain')
 param customDomain string
 
+@description('The target of the CNAME record')
+param target string
+
 // === VARIABLES ===
 
 var isRootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') && indexOf(customDomain, '.') != -1
@@ -29,7 +32,7 @@ resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
   properties: {
     TTL: 3600
     CNAMERecord: {
-      cname: aliasRecordName
+      cname: target
     }
   }
 }
