@@ -51,6 +51,14 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   }
 }
 
+@description('CNAME record for custom domains')
+module records '../networking/dns-cname-record.bicep' = [for customDomain in customDomains: {
+  name: 'Resource-CnameRecord-${customDomain}'
+  params: {
+    customDomain: customDomain
+  }
+}]
+
 @description('Custom domains for Static Web Apps')
 resource domains 'Microsoft.Web/staticSites/customDomains@2021-02-01' = [for customDomain in customDomains: if (!empty(customDomains))  {
   name: customDomain
