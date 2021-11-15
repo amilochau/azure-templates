@@ -26,6 +26,7 @@ The following templates are proposed for Infrastructure as Code, and can be free
 | `amilochau/azure-templates/configuration/template.bicep` | Create infrastructure for configuration with App Configuration | [README.md](./configuration/README.md) |
 | `amilochau/azure-templates/monitoring/template.bicep` | Create infrastructure for monitoring with Log Analytics Workspace | [README.md](./monitoring/README.md) |
 | `amilochau/azure-templates/gateway/template.bicep` | Create infrastructure for requests gateway with API Management | [README.md](./gateway/README.md) |
+| `amilochau/azure-templates/static-web-apps/template.bicep` | Create infrastructure for an application running with Azure Static Web Apps | [README.md](./static-web-apps/README.md) |
 
 ### Run manually
 

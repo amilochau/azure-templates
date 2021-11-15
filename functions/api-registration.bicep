@@ -10,7 +10,7 @@
 param organizationName string
 
 @description('The application name')
-@minLength(3)
+@minLength(2)
 @maxLength(11)
 param applicationName string
 
