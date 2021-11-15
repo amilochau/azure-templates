@@ -51,23 +51,14 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   }
 }
 
-@description('CNAME record for custom domains')
-module records '../networking/dns-cname-record.bicep' = [for customDomain in customDomains: {
-  name: 'Resource-CnameRecord-${customDomain}'
-  scope: resourceGroup(conventions.global.dnsZone[indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)])
-  params: {
-    customDomain: customDomain
-    target: swa.properties.defaultHostname
-  }
-}]
-
 @description('Custom domains for Static Web Apps')
-resource domains 'Microsoft.Web/staticSites/customDomains@2021-02-01' = [for customDomain in customDomains: if (!empty(customDomains))  {
-  name: customDomain
-  parent: swa
-  dependsOn: [
-    records
-  ]
+module domains 'custom-domain.bicep' = [for customDomain in customDomains: {
+  name: 'Resource-CustomDomain-${customDomain}'
+  params: {
+    conventions: conventions
+    customDomain: customDomain
+    swaName: swa.name
+  }
 }]
 
 // === OUTPUTS ===
