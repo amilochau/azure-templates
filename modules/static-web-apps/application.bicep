@@ -47,7 +47,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
     stagingEnvironmentPolicy: 'Disabled'
     allowConfigFileUpdates: true
     provider: 'GitHub' // This property is needed, the ARM documentation is not accurate
-    //repositoryUrl: repositoryUrl
+    repositoryUrl: repositoryUrl
     //branch: repositoryBranch
     buildProperties: {
       skipGithubActionWorkflowGeneration: true
