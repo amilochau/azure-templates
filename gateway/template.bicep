@@ -116,7 +116,7 @@ module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
 // === OUTPUTS ===
 
 @description('The ID of the deployed API Management')
-output apimId string = apim.outputs.id
+output resourceId string = apim.outputs.id
 
 @description('The Name of the deployed API Management')
-output apimName string = apim.outputs.name
+output resourceName string = apim.outputs.name

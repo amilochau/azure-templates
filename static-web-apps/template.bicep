@@ -78,7 +78,7 @@ module swa '../modules/static-web-apps/application.bicep' = {
 // === OUTPUTS ===
 
 @description('The ID of the deployed Azure Static Web Apps')
-output swaId string = swa.outputs.id
+output resourceId string = swa.outputs.id
 
 @description('The Name of the deployed Azure Static Web Apps')
-output swaName string = swa.outputs.name
+output resourceName string = swa.outputs.name

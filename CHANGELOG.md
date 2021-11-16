@@ -6,7 +6,7 @@
 
 ## New features
 
-- Add main resource ID as templates output
+- Add main resource ID and name as templates output
 
 ## Bug fixes
 

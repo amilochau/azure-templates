@@ -66,7 +66,7 @@ module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
 // === OUTPUTS ===
 
 @description('The ID of the deployed Log Analytics Workspace')
-output wsId string = workspace.outputs.id
+output resourceId string = workspace.outputs.id
 
 @description('The Name of the deployed Log Analytics Workspace')
-output wsName string = workspace.outputs.name
+output resourceName string = workspace.outputs.name

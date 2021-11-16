@@ -240,7 +240,7 @@ module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
 // === OUTPUTS ===
 
 @description('The ID of the deployed Azure Functions')
-output fnId string = fn.outputs.id
+output resourceId string = fn.outputs.id
 
 @description('The Name of the deployed Azure Functions')
-output fnName string = fn.outputs.name
+output resourceName string = fn.outputs.name
