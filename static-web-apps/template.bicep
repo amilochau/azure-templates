@@ -63,7 +63,7 @@ module tags '../modules/global/tags.bicep' = {
 }
 
 @description('Static Web Apps application')
-module fn '../modules/static-web-apps/application.bicep' = {
+module swa '../modules/static-web-apps/application.bicep' = {
   name: 'Resource-StaticWebAppsApplication'
   params: {
     referential: tags.outputs.referential
@@ -74,3 +74,11 @@ module fn '../modules/static-web-apps/application.bicep' = {
     customDomains: customDomains
   }
 }
+
+// === OUTPUTS ===
+
+@description('The ID of the deployed Azure Static Web Apps')
+output id string = swa.outputs.id
+
+@description('The Name of the deployed Azure Static Web Apps')
+output name string = swa.outputs.name
