@@ -236,3 +236,11 @@ module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
     roleDescription: 'Functions application should manage technical data from Storage Account'
   }
 }
+
+// === OUTPUTS ===
+
+@description('The ID of the deployed Azure Functions')
+output fnId string = fn.outputs.id
+
+@description('The Name of the deployed Azure Functions')
+output fnName string = fn.outputs.name
