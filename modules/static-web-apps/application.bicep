@@ -46,7 +46,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   properties: {
     stagingEnvironmentPolicy: 'Disabled'
     allowConfigFileUpdates: true
-    //provider: 'DevOps' // This property is needed, the ARM documentation is not accurate
+    provider: 'GitHub' // This property is needed, the ARM documentation is not accurate
     //repositoryUrl: repositoryUrl
     //branch: repositoryBranch
     buildProperties: {
