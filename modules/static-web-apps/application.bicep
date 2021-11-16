@@ -62,7 +62,7 @@ module domains 'custom-domain.bicep' = [for (customDomain, i) in customDomains: 
     conventions: conventions
     customDomain: customDomain
     swaName: swa.name
-    isDefault: i == 0
+    // isDefault: i == 0 // isDefault does not work on first deployment...
   }
 }]
 
