@@ -4,6 +4,10 @@
 [//]: # (Bug fixes)
 [//]: # (Minor changes)
 
+## New features
+
+- Add main resource ID as templates output
+
 ## Bug fixes
 
 - Change the `provider` property for the Static Web Apps (now uses `DevOps`)
