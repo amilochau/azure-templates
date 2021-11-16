@@ -17,9 +17,6 @@ param conventions object
 ])
 param pricingPlan string
 
-@description('The GitHub repository URL')
-param repositoryUrl string
-
 @description('The application custom domains')
 param customDomains array = []
 
@@ -43,8 +40,6 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   properties: {
     stagingEnvironmentPolicy: 'Disabled'
     allowConfigFileUpdates: true
-    provider: 'GitHub' // This property is needed, the ARM documentation is not accurate
-    repositoryUrl: repositoryUrl
     buildProperties: {
       skipGithubActionWorkflowGeneration: true
     }
@@ -58,7 +53,6 @@ module domains 'custom-domain.bicep' = [for (customDomain, i) in customDomains: 
     conventions: conventions
     customDomain: customDomain
     swaName: swa.name
-    isDefault: i == 0
   }
 }]
 

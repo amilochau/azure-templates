@@ -62,3 +62,11 @@ module appConfig '../modules/configuration/app-config.bicep' = {
     pricingPlan: pricingPlan
   }
 }
+
+// === OUTPUTS ===
+
+@description('The ID of the deployed App Configuration')
+output resourceId string = appConfig.outputs.id
+
+@description('The Name of the deployed App Configuration')
+output resourceName string = appConfig.outputs.name

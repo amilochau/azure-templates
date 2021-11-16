@@ -112,3 +112,11 @@ module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
     roleDescription: 'API Management should read the secrets from Key Vault to use secret named values'
   }
 }
+
+// === OUTPUTS ===
+
+@description('The ID of the deployed API Management')
+output resourceId string = apim.outputs.id
+
+@description('The Name of the deployed API Management')
+output resourceName string = apim.outputs.name

@@ -31,9 +31,6 @@ param templateVersion string
 ])
 param pricingPlan string = 'Free'
 
-@description('The GitHub repository URL')
-param repositoryUrl string
-
 @description('The application custom domains')
 param customDomains array = []
 
@@ -60,13 +57,20 @@ module tags '../modules/global/tags.bicep' = {
 }
 
 @description('Static Web Apps application')
-module fn '../modules/static-web-apps/application.bicep' = {
+module swa '../modules/static-web-apps/application.bicep' = {
   name: 'Resource-StaticWebAppsApplication'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     pricingPlan: pricingPlan
-    repositoryUrl: repositoryUrl
     customDomains: customDomains
   }
 }
+
+// === OUTPUTS ===
+
+@description('The ID of the deployed Azure Static Web Apps')
+output resourceId string = swa.outputs.id
+
+@description('The Name of the deployed Azure Static Web Apps')
+output resourceName string = swa.outputs.name

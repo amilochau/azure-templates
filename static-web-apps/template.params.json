@@ -13,9 +13,6 @@
     },
     "pricingPlan": {
       "value": "Free"
-    },
-    "repositoryUrl": {
-      "value": "https://github.com/org/repo"
     }
   }
 }

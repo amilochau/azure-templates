@@ -62,3 +62,11 @@ module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
     pricingPlan: pricingPlan
   }
 }
+
+// === OUTPUTS ===
+
+@description('The ID of the deployed Log Analytics Workspace')
+output resourceId string = workspace.outputs.id
+
+@description('The Name of the deployed Log Analytics Workspace')
+output resourceName string = workspace.outputs.name
