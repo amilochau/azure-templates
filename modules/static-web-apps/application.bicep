@@ -20,6 +20,9 @@ param pricingPlan string
 @description('The GitHub repository URL')
 param repositoryUrl string
 
+@description('The GitHub repository branch')
+param repositoryBranch string
+
 @description('The application custom domains')
 param customDomains array = []
 
@@ -45,6 +48,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
     allowConfigFileUpdates: true
     provider: 'GitHub' // This property is needed, the ARM documentation is not accurate
     repositoryUrl: repositoryUrl
+    branch: repositoryBranch
     buildProperties: {
       skipGithubActionWorkflowGeneration: true
     }

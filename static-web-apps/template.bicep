@@ -34,6 +34,9 @@ param pricingPlan string = 'Free'
 @description('The GitHub repository URL')
 param repositoryUrl string
 
+@description('The GitHub repository branch')
+param repositoryBranch string
+
 @description('The application custom domains')
 param customDomains array = []
 
@@ -67,6 +70,7 @@ module fn '../modules/static-web-apps/application.bicep' = {
     conventions: conventions
     pricingPlan: pricingPlan
     repositoryUrl: repositoryUrl
+    repositoryBranch: repositoryBranch
     customDomains: customDomains
   }
 }
