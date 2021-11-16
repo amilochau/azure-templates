@@ -17,20 +17,14 @@ param conventions object
 ])
 param pricingPlan string
 
-@description('The GitHub repository URL')
-param repositoryUrl string
-
-@description('The GitHub repository branch')
-param repositoryBranch string
-
 @description('The application custom domains')
 param customDomains array = []
 
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var swaSkuName = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Standard' : repositoryUrl // 'ERROR'
-var swaSkuTier = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Standard' : repositoryBranch // 'ERROR'
+var swaSkuName = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Standard' : 'ERROR'
+var swaSkuTier = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Standard' : 'ERROR'
 
 // === RESOURCES ===
 
@@ -46,9 +40,6 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
   properties: {
     stagingEnvironmentPolicy: 'Disabled'
     allowConfigFileUpdates: true
-    //provider: 'DevOps' // This property is needed, the ARM documentation is not accurate
-    //repositoryUrl: repositoryUrl
-    //branch: repositoryBranch
     buildProperties: {
       skipGithubActionWorkflowGeneration: true
     }
@@ -62,7 +53,6 @@ module domains 'custom-domain.bicep' = [for (customDomain, i) in customDomains: 
     conventions: conventions
     customDomain: customDomain
     swaName: swa.name
-    // isDefault: i == 0 // isDefault does not work on first deployment...
   }
 }]
 

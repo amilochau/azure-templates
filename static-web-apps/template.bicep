@@ -31,12 +31,6 @@ param templateVersion string
 ])
 param pricingPlan string = 'Free'
 
-@description('The GitHub repository URL')
-param repositoryUrl string
-
-@description('The GitHub repository branch')
-param repositoryBranch string = 'main'
-
 @description('The application custom domains')
 param customDomains array = []
 
@@ -69,8 +63,6 @@ module swa '../modules/static-web-apps/application.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     pricingPlan: pricingPlan
-    repositoryUrl: repositoryUrl
-    repositoryBranch: repositoryBranch
     customDomains: customDomains
   }
 }
