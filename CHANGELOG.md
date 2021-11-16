@@ -6,4 +6,4 @@
 
 ## Bug fixes
 
-- Make the `repositoryBranch` mandatory for the `static-web-apps` template
+- Add the `repositoryBranch` parameter for the `static-web-apps` template

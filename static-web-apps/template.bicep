@@ -35,7 +35,7 @@ param pricingPlan string = 'Free'
 param repositoryUrl string
 
 @description('The GitHub repository branch')
-param repositoryBranch string
+param repositoryBranch string = 'main'
 
 @description('The application custom domains')
 param customDomains array = []
