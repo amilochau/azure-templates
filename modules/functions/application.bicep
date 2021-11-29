@@ -97,6 +97,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       'AZURE_FUNCTIONS_APPLICATION': referential.application
       'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
       'AZURE_FUNCTIONS_HOST': referential.host
+      'AZURE_FUNCTIONS_REGION': referential.region
       'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
       'AzureWebJobsDisableHomepage': 'true' // Disable homepage
       'FUNCTIONS_EXTENSION_VERSION': extensionVersion
