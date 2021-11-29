@@ -6,9 +6,4 @@
 
 ## New features
 
-- Add main resource ID and name as templates output
-
-## Bug fixes
-
-- Remove the `provider` property for the Static Web Apps
-- Remove the default custom domain from Static Web Apps, as it is not supported on first deployment
+- Add the Azure region in the Functions environment variables
