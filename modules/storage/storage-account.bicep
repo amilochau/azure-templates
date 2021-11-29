@@ -19,7 +19,7 @@ param suffix string = ''
 @description('The blob containers')
 param blobContainers array = []
 
-@description('Duration before blobs deletion in days - 0 disable this feature')
+@description('Duration before blobs deletion in days - 0 disables this feature')
 param daysBeforeDeletion int = 0
 
 @description('Allow blob public access')
