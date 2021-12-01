@@ -2,8 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "administratorsGroupPrincipalId": {
-      "value": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    "groups": {
+      "value": [
+        {
+          "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+          "name": "App Configuration Data Reader"
+        }
+      ]
     }
   }
 }

@@ -6,8 +6,8 @@ targetScope = 'managementGroup'
 
 // === PARAMETERS ===
 
-@description('The principal ID for Azure resources administrators')
-param administratorsGroupPrincipalId string
+@description('The groups with their ID and the role to attribute')
+param groups array = []
 
 // === VARIABLES ===
 
@@ -17,10 +17,10 @@ var buildInRoles = json(loadTextContent('../modules/authorizations/build-in-role
 // === AUTHORIZATIONS ===
 
 @description('Principal to App Configuration')
-module group_appConfig '../modules/authorizations/management-group/group-role.bicep' = {
-  name: 'Authorization-AppConfiguration'
+module authorizations '../modules/authorizations/management-group/group-role.bicep' = [for group in groups: {
+  name: 'Authorization-${guid(group.id, group.role)}'
   params: {
-    roleName: buildInRoles['App Configuration Data Reader']
-    principalId: administratorsGroupPrincipalId
+    principalId: group.id
+    roleName: buildInRoles[group.role]
   }
-}
+}]
