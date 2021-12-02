@@ -14,6 +14,7 @@
 ## Bug fixes
 
 - Avoid creating useless app settings in Functions application
+- Fix infinine-loading graph in Functions dashboard
 
 ## Minor changes
 
