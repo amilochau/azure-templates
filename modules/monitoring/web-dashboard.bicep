@@ -300,14 +300,18 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                       name: 'timestamp'
                       type: 'datetime'
                     }
-                    yAxis: {
-                      name: 'count_'
-                      type: 'long'
-                    }
-                    splitBy: {
-                      name: 'operation_Name'
-                      type: 'string'
-                    }
+                    yAxis: [
+                      {
+                        name: 'count_'
+                        type: 'long'
+                      }
+                    ]
+                    splitBy: [
+                      {
+                        name: 'operation_Name'
+                        type: 'string'
+                      }
+                    ]
                     aggregation: 'Sum'
                   }
                 }
