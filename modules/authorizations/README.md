@@ -1,6 +1,6 @@
 # Authorizations
 
-Authorizations let other templates add build-in roles to resources.
+Authorizations let other templates add built-in roles to resources.
 
 See [this page](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles)
 
