@@ -13,3 +13,7 @@
 ## Bug fixes
 
 - Avoid creating useless app settings in Functions application
+
+## Minor changes
+
+- HTTP is now removed from CDN, HTTPS remains enabled
