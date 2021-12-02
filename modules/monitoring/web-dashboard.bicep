@@ -275,7 +275,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                 }
                 {
                   name: 'Query'
-                  value: 'requests summarize count() by operation_Name, bin(timestamp, 30m)'
+                  value: 'requests\n| summarize count() by operation_Name, bin(timestamp, 30m)\n\n'
                 }
                 {
                   name: 'ControlType'
