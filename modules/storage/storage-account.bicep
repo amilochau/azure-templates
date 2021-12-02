@@ -25,10 +25,19 @@ param daysBeforeDeletion int = 0
 @description('Allow blob public access')
 param allowBlobPublicAccess bool = false
 
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
 var storageAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.storageAccount}${suffix}'
+var extendedRecoverability = referential.environment == 'Production'
+var storageAccountSku = extendedRecoverability ? 'Standard_GRS' : 'Standard_LRS'
 var commentTag = {
   comment: comment
 }
@@ -42,7 +51,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   location: location
   kind: 'StorageV2'
   sku: {
-    name: 'Standard_LRS'
+    name: storageAccountSku
   }
   tags: tags
   properties: {
@@ -54,19 +63,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
-    }
-    encryption: {
-      services: {
-        file: {
-          keyType: 'Account'
-          enabled: true
-        }
-        blob: {
-          keyType: 'Account'
-          enabled: true
-        }
-      }
-      keySource: 'Microsoft.Storage'
     }
   }
 
@@ -103,8 +99,21 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   resource blobServices 'blobServices@2021-04-01' = {
     name: 'default'
     properties: {
+      isVersioningEnabled: pricingPlan != 'Free'
+      changeFeed: {
+        enabled: pricingPlan != 'Free'
+      }
       deleteRetentionPolicy: {
-        enabled: false
+        enabled: extendedRecoverability
+        days: 90
+      }
+      restorePolicy: {
+        enabled: extendedRecoverability
+        days: 30
+      }
+      containerDeleteRetentionPolicy: {
+        enabled: extendedRecoverability
+        days: 30
       }
     }
     
