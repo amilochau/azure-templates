@@ -55,7 +55,7 @@ var baseAppSettings = {
   'AZURE_FUNCTIONS_REGION': referential.region
   'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet5' ? '~3' : 'ERROR'
   'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet5' ? 'dotnet-isolated' : 'ERROR'
-  'AzureWebJobsDisableHomepage': 'true' // Disable homepage
+  'AzureWebJobsDisableHomepage': 'true'
   'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
 }
