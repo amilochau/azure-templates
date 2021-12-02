@@ -123,6 +123,7 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
     allowBlobPublicAccess: account.allowBlobPublicAccess
+    pricingPlan: pricingPlan
   }
 }]
 
@@ -133,6 +134,7 @@ module stg '../modules/storage/storage-account.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     comment: 'Technical storage for Functions application'
+    pricingPlan: pricingPlan
   }
 }
 
