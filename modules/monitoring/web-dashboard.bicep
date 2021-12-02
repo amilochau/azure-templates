@@ -247,9 +247,11 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               inputs: [
                 {
                   name: 'resourceTypeMode'
+                  isOptional: true
                 }
                 {
                   name: 'ComponentId'
+                  isOptional: true
                 }
                 {
                   name: 'Scope'
@@ -269,13 +271,15 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                 }
                 {
                   name: 'DashboardId'
+                  isOptional: true
                 }
                 {
                   name: 'DraftRequestParameters'
+                  isOptional: true
                 }
                 {
                   name: 'Query'
-                  value: 'requests\n| summarize count() by operation_Name, bin(timestamp, 30m)\n\n'
+                  value: 'requests | summarize count() by operation_Name, bin(timestamp, 30m)'
                 }
                 {
                   name: 'ControlType'
