@@ -15,7 +15,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('./build-in-roles.json'))
+var buildInRoles = json(loadTextContent('./built-in-roles.json'))
 
 // === EXISTING ===
 

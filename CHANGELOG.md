@@ -8,3 +8,4 @@
 
 - Add the Azure region in the Functions environment variables
 - Add a template to deploy management group
+- Support more built-in roles for RBAC attribution
