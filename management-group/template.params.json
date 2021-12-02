@@ -6,7 +6,7 @@
       "value": [
         {
           "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-          "name": "App Configuration Data Reader"
+          "role": "App Configuration Data Reader"
         }
       ]
     }
