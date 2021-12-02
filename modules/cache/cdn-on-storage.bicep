@@ -51,7 +51,7 @@ resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
     location: location
     tags: referential
     properties: {
-      isHttpAllowed: true
+      isHttpAllowed: false
       isHttpsAllowed: true
       isCompressionEnabled: true
       originHostHeader: storageAccountHostName
