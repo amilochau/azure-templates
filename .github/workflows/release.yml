@@ -23,6 +23,7 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    environment: RELEASE
     steps:
       - uses: actions/checkout@main
       - name: Set up a GitHub Release
