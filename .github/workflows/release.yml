@@ -35,3 +35,4 @@ jobs:
           versionUnstableSuffix: ${{ github.event.inputs.versionUnstableSuffix }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           avoidGitHubPrerelease: true
+          generateReleaseNotes: true

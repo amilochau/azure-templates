@@ -4,13 +4,9 @@
 
 `azure-templates` is a set of Bicep templates developed to help creating Azure infrastructure for `amilochau` projects.
 
-## Getting Started
+## What's new
 
-1. Installation process
-From your local computer, clone the repository.
-
-2. Integration process
-Please follow the development good practices, then follow the integration process.
+You can find the new releases on the [GitHub releases page](https://github.com/amilochau/azure-templates/releases).
 
 ---
 
