@@ -113,7 +113,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       }
       containerDeleteRetentionPolicy: {
         enabled: extendedRecoverability
-        days: 30
+        days: 90
       }
     }
     
