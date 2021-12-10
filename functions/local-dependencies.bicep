@@ -85,6 +85,5 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
     allowBlobPublicAccess: account.allowBlobPublicAccess
-    pricingPlan: 'Free' // TODO @next-major-version parameterize this
   }
 }]
