@@ -53,6 +53,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: true
+    allowCrossTenantReplication: true
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
