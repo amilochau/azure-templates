@@ -102,10 +102,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
         enabled: extendedRecoverability
         days: 90
       }
-      restorePolicy: {
+      // restorePolicy does not work, see https://github.com/Azure/azure-rest-api-specs/issues/11237
+      /*restorePolicy: {
         enabled: extendedRecoverability
         days: 30
-      }
+      }*/
       containerDeleteRetentionPolicy: {
         enabled: extendedRecoverability
         days: 90
