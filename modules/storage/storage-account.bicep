@@ -93,7 +93,8 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   resource blobServices 'blobServices@2021-04-01' = {
     name: 'default'
     properties: {
-      isVersioningEnabled: extendedRecoverability
+      // restorePolicy does not work, see https://github.com/Azure/azure-rest-api-specs/issues/11237
+      /*isVersioningEnabled: extendedRecoverability
       changeFeed: {
         enabled: extendedRecoverability
         retentionInDays: 90
@@ -102,15 +103,14 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
         enabled: extendedRecoverability
         days: 90
       }
-      // restorePolicy does not work, see https://github.com/Azure/azure-rest-api-specs/issues/11237
-      /*restorePolicy: {
+      restorePolicy: {
         enabled: extendedRecoverability
         days: 30
-      }*/
+      }
       containerDeleteRetentionPolicy: {
         enabled: extendedRecoverability
         days: 90
-      }
+      }*/
     }
     
     // Blob containers
