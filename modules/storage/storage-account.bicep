@@ -25,13 +25,6 @@ param daysBeforeDeletion int = 0
 @description('Allow blob public access')
 param allowBlobPublicAccess bool = false
 
-@description('The pricing plan')
-@allowed([
-  'Free'    // The cheapest plan, can create some small fees
-  'Basic'   // Basic use with default limitations
-])
-param pricingPlan string
-
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -60,6 +53,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: true
+    allowCrossTenantReplication: true
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
@@ -99,9 +93,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   resource blobServices 'blobServices@2021-04-01' = {
     name: 'default'
     properties: {
-      isVersioningEnabled: pricingPlan != 'Free'
+      // restorePolicy does not work, see https://github.com/Azure/azure-rest-api-specs/issues/11237
+      /*isVersioningEnabled: extendedRecoverability
       changeFeed: {
-        enabled: pricingPlan != 'Free'
+        enabled: extendedRecoverability
+        retentionInDays: 90
       }
       deleteRetentionPolicy: {
         enabled: extendedRecoverability
@@ -113,8 +109,8 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       }
       containerDeleteRetentionPolicy: {
         enabled: extendedRecoverability
-        days: 30
-      }
+        days: 90
+      }*/
     }
     
     // Blob containers
