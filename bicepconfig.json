@@ -21,6 +21,21 @@
         },
         "simplify-interpolation": {
           "level": "error"
+        },
+        "adminusername-should-not-be-literal": {
+          "level": "error"
+        },
+        "no-unnecessary-dependson": {
+          "level": "error"
+        },
+        "outputs-should-not-contain-secrets": {
+          "level": "error"
+        },
+        "use-protectedsettings-for-commandtoexecute-secrets":{
+          "level": "error"
+        },
+        "use-stable-vm-image": {
+          "level": "error"
         }
       }
     }
