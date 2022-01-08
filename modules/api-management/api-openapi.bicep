@@ -25,6 +25,10 @@ param products array
 @description('The OpenAPI specification link')
 param openApiLink string
 
+// === VARIABLES ===
+
+var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 4) : applicationName
+
 // === EXISTING ===
 
 @description('API Management')
@@ -58,7 +62,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   properties: {
     displayName: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementApi}'
     description: 'API for the "${applicationName}" application'
-    path: applicationName
+    path: apiPath
     protocols: [
       'https'
     ]
