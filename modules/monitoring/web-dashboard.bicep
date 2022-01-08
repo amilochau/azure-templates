@@ -52,6 +52,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               colSpan: 4
             }
             metadata: {
+              #disable-next-line BCP036
               type: 'Extension/HubsExtension/PartType/MonitorChartPart'
               inputs: [
                 {
@@ -99,6 +100,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               colSpan: 4
             }
             metadata: {
+              #disable-next-line BCP036
               type: 'Extension/HubsExtension/PartType/MonitorChartPart'
               inputs: [
                 {
@@ -146,6 +148,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               colSpan: 4
             }
             metadata: {
+              #disable-next-line BCP036
               type: 'Extension/HubsExtension/PartType/MonitorChartPart'
               inputs: [
                 {
@@ -194,6 +197,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               colSpan: 4
             }
             metadata: {
+              #disable-next-line BCP036
               type: 'Extension/HubsExtension/PartType/MonitorChartPart'
               inputs: [
                 {
@@ -243,6 +247,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               colSpan: 8
             }
             metadata: {
+              #disable-next-line BCP036
               type: 'Extension/Microsoft_OperationsManagementSuite_Workspace/PartType/LogsDashboardPart'
               inputs: [
                 {
