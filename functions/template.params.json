@@ -15,7 +15,7 @@
         "value": "Free"
       },
       "applicationType": {
-        "value": "isolatedDotnet5"
+        "value": "isolatedDotnet6"
       },
       "disableApplicationInsights": {
         "value": true
