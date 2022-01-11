@@ -59,9 +59,9 @@ var baseAppSettings = {
   'AzureWebJobsDisableHomepage': 'true'
   'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
-  'WEBSITE_RUN_FROM_PACKAGE': list('${fn.id}/config/appsettings', fn.apiVersion).properties.WEBSITE_RUN_FROM_PACKAGE
-  '_TEST': list('${fn.id}/config/appsettings', fn.apiVersion).properties._TEST
-  '_TEST2': list('${fn.id}/config/appsettings', fn.apiVersion).properties._TEST2
+  'WEBSITE_RUN_FROM_PACKAGE': list('${fn_deployed.id}/config/appsettings', fn_deployed.apiVersion).properties.WEBSITE_RUN_FROM_PACKAGE
+  '_TEST': list('${fn_deployed.id}/config/appsettings', fn_deployed.apiVersion).properties._TEST
+  '_TEST2': list('${fn_deployed.id}/config/appsettings', fn_deployed.apiVersion).properties._TEST2
 }
 var appSettingsAppInsights = empty(aiInstrumentationKey) ? baseAppSettings : union(baseAppSettings, {
   'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
@@ -117,9 +117,14 @@ resource fn 'Microsoft.Web/sites@2021-02-01' = {
   }
 }
 
+resource fn_deployed 'Microsoft.Web/sites@2021-02-01' existing = {
+  name: fn.name
+}
+
 // App Configuration
 resource appsettingsConfig 'Microsoft.Web/sites/config@2021-02-01' = {
-  name: '${fn.id}/appsettings'
+  name: 'appsettings'
+  parent: fn_deployed
   properties: appSettings
 }
 
