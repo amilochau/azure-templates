@@ -27,7 +27,7 @@ param openApiLink string
 
 // === VARIABLES ===
 
-var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 4) : applicationName
+var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
 
 // === EXISTING ===
 
