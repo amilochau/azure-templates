@@ -48,30 +48,73 @@ var location = resourceGroup().location
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet5' ? 'DOTNET|5.0' : applicationType == 'isolatedDotnet6' ? 'DOTNET|6.0' : 'ERROR'
 
-var baseAppSettings = {
-  'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
-  'AZURE_FUNCTIONS_APPLICATION': referential.application
-  'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
-  'AZURE_FUNCTIONS_HOST': referential.host
-  'AZURE_FUNCTIONS_REGION': referential.region
-  'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet5' ? '~3' : applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet5' || applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
-  'AzureWebJobsDisableHomepage': 'true'
-  'AzureWebJobsStorage': 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
-  'AzureWebJobsStorage__accountName': webJobsStorageAccountName
-}
-var appSettingsAppInsights = empty(aiInstrumentationKey) ? baseAppSettings : union(baseAppSettings, {
-  'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
-})
-var appSettingsAppConfig = empty(appConfigurationEndpoint) ? appSettingsAppInsights : union(appSettingsAppInsights, {
-  'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
-})
-var appSettingsKeyVault = empty(kvVaultUri) ? appSettingsAppConfig : union(appSettingsAppConfig, {
-  'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
-})
-var appSettingsServiceBus = empty(serviceBusNamespaceName) ? appSettingsKeyVault : union(appSettingsKeyVault, {
-  'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
-})
+var baseAppSettings = [
+  {
+    name: 'AZURE_FUNCTIONS_ORGANIZATION'
+    value: referential.organization
+  }
+  {
+    name: 'AZURE_FUNCTIONS_APPLICATION'
+    value: referential.application
+  }
+  {
+    name: 'AZURE_FUNCTIONS_ENVIRONMENT'
+    value: referential.environment
+  }
+  {
+    name: 'AZURE_FUNCTIONS_HOST'
+    value: referential.host
+  }
+  {
+    name: 'AZURE_FUNCTIONS_REGION'
+    value: referential.region
+  }
+  {
+    name: 'FUNCTIONS_EXTENSION_VERSION'
+    value: applicationType == 'isolatedDotnet5' ? '~3' : applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
+  }
+  {
+    name: 'FUNCTIONS_WORKER_RUNTIME'
+    value: applicationType == 'isolatedDotnet5' || applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  }
+  {
+    name: 'AzureWebJobsDisableHomepage'
+    value: 'true'
+  }
+  {
+    name: 'AzureWebJobsStorage'
+    value: 'DefaultEndpointsProtocol=https;AccountName=${webJobsStorageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${stg.listKeys().keys[0].value}' // Connection to technical storage account - still needed until https://github.com/Azure/functions-action/issues/94 is completed
+  }
+  {
+    name: 'AzureWebJobsStorage__accountName'
+    value: webJobsStorageAccountName
+  }
+]
+
+var appSettingsAppInsights = empty(aiInstrumentationKey) ? baseAppSettings : concat(baseAppSettings, [
+  {
+    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+    value: aiInstrumentationKey
+  }
+])
+var appSettingsAppConfig = empty(appConfigurationEndpoint) ? appSettingsAppInsights : concat(appSettingsAppInsights, [
+  {
+    name: 'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT'
+    value: appConfigurationEndpoint
+  }
+])
+var appSettingsKeyVault = empty(kvVaultUri) ? appSettingsAppConfig : concat(appSettingsAppConfig, [
+  {
+  name: 'AZURE_FUNCTIONS_KEYVAULT_VAULT'
+  value: kvVaultUri
+  }
+])
+var appSettingsServiceBus = empty(serviceBusNamespaceName) ? appSettingsKeyVault : concat(appSettingsKeyVault, [
+  {
+    name: 'AzureWebJobsServiceBus__fullyQualifiedNamespace'
+    value: '${serviceBusNamespaceName}.servicebus.windows.net'
+  }
+])
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsServiceBus
 
@@ -85,7 +128,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-01-01' = {
+resource fn 'Microsoft.Web/sites@2021-02-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
   location: location
   kind: 'functionapp,linux'
@@ -98,10 +141,15 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
     reserved: true
     httpsOnly: true
     dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
+
+    // App Configuration
+    siteConfig: {
+      appSettings: appSettings
+    }
   }
 
   // Web Configuration
-  resource webConfig 'config@2021-01-01' = {
+  resource webConfig 'config@2021-02-01' = {
     name: 'web'
     properties: {
       linuxFxVersion: linuxFxVersion
@@ -111,12 +159,6 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       scmMinTlsVersion: '1.2'
       ftpsState: 'Disabled'
     }
-  }
-
-  // App Configuration
-  resource appsettingsConfig 'config@2021-01-01' = {
-    name: 'appsettings'
-    properties: appSettings
   }
 }
 
