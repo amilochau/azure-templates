@@ -119,8 +119,7 @@ resource fn 'Microsoft.Web/sites@2021-02-01' = {
 
 // App Configuration
 resource appsettingsConfig 'Microsoft.Web/sites/config@2021-02-01' = {
-  name: 'appsettings'
-  parent: fn
+  name: '${fn.id}/appsettings'
   properties: appSettings
 }
 
