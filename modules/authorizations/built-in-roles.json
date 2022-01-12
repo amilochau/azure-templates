@@ -9,5 +9,9 @@
   "Monitoring Reader": "43d0d8ad-25c7-4714-9337-8ba259a9fe05",
   "Service Bus Data Owner": "090c5cfd-751d-490a-894a-3ce6f1109419",
   "Storage Blob Data Owner": "b7e6dc6d-f1e8-4753-8033-0f276bb0955b",
-  "Storage Blob Data Reader": "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1"
+  "Storage Blob Data Contributor": "ba92f5b4-2d11-453d-a403-e96b0029c9fe",
+  "Storage Blob Data Reader": "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1",
+  "Owner": "8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+  "Contributor": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+  "Reader": "acdd72a7-3385-48ef-bd42-f606fba81ae7"
 }
