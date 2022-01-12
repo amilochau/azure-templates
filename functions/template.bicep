@@ -134,6 +134,9 @@ module stg '../modules/storage/storage-account.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     comment: 'Technical storage for Functions application'
+    blobContainers: [
+      'deployment-packages'
+    ]
   }
 }
 
