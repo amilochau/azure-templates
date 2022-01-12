@@ -19,7 +19,6 @@ param pricingPlan string
 
 @description('The application type')
 @allowed([
-  'isolatedDotnet5'
   'isolatedDotnet6'
 ])
 param applicationType string
@@ -46,7 +45,7 @@ param kvVaultUri string = ''
 
 var location = resourceGroup().location
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
-var linuxFxVersion = applicationType == 'isolatedDotnet5' ? 'DOTNET|5.0' : applicationType == 'isolatedDotnet6' ? 'DOTNET|6.0' : 'ERROR'
+var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET|6.0' : 'ERROR'
 
 var baseAppSettings = {
   'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
@@ -54,8 +53,8 @@ var baseAppSettings = {
   'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
   'AZURE_FUNCTIONS_HOST': referential.host
   'AZURE_FUNCTIONS_REGION': referential.region
-  'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet5' ? '~3' : applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet5' || applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
+  'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
   'AzureWebJobsDisableHomepage': 'true'
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
 }
