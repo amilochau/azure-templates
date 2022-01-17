@@ -52,6 +52,9 @@ param serviceBusQueues array = []
 @description('The storage accounts')
 param storageAccounts array = []
 
+@description('The application packages URI')
+param applicationPackageUri string = ''
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -162,6 +165,7 @@ module fn '../modules/functions/application.bicep' = {
     aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
+    applicationPackageUri: applicationPackageUri
   }
 }
 

@@ -41,6 +41,9 @@ param serviceBusNamespaceName string = ''
 @description('The Key Vault vault URI')
 param kvVaultUri string = ''
 
+@description('The application packages URI')
+param applicationPackageUri string = ''
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -65,13 +68,16 @@ var appSettingsAppConfig = empty(appConfigurationEndpoint) ? appSettingsAppInsig
   'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
 })
 var appSettingsKeyVault = empty(kvVaultUri) ? appSettingsAppConfig : union(appSettingsAppConfig, {
-  'AZURE_FUNCTIONS_KEYVAULT_VAULT' : kvVaultUri
+  'AZURE_FUNCTIONS_KEYVAULT_VAULT': kvVaultUri
 })
 var appSettingsServiceBus = empty(serviceBusNamespaceName) ? appSettingsKeyVault : union(appSettingsKeyVault, {
   'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
 })
+var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus : union(appSettingsServiceBus, {
+  'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
+})
 // -- Add more conditional unions here if you want to support more settings
-var appSettings = appSettingsServiceBus
+var appSettings = appSettingsPackageUri
 
 // === EXISTING ===
 
