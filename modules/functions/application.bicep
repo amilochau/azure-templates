@@ -75,7 +75,6 @@ var appSettingsServiceBus = empty(serviceBusNamespaceName) ? appSettingsKeyVault
 })
 var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus : union(appSettingsServiceBus, {
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
-  'WEBSITE_MOUNT_ENABLED': '1'
 })
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsPackageUri
