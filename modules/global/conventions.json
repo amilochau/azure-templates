@@ -29,6 +29,7 @@
       "applicationInsights": "ai",
       "cdnProfile": "cdnp",
       "cdnEndpoint": "cdne",
+      "cosmosDatabase": "cosmos",
       "servicePlan": "asp",
       "serviceBusNamespace": "sbn",
       "storageAccount": "sto",
