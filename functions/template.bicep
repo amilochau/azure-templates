@@ -55,6 +55,9 @@ param storageAccounts array = []
 @description('The application packages URI')
 param applicationPackageUri string = ''
 
+@description('Whether to enable a Cosmos DB accoujnt')
+param useCosmosAccount bool = false
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -128,6 +131,15 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     allowBlobPublicAccess: account.allowBlobPublicAccess
   }
 }]
+
+@description('Cosmos Accounts')
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (useCosmosAccount) {
+  name: 'Resource-CosmosAccount'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+  }
+}
 
 @description('Dedicated Storage Account for Functions application')
 module stg '../modules/storage/storage-account.bicep' = {

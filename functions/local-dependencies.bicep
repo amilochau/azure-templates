@@ -33,6 +33,9 @@ param serviceBusQueues array = []
 @description('The storage accounts')
 param storageAccounts array = []
 
+@description('Whether to enable a Cosmos DB accoujnt')
+param useCosmosAccount bool = false
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -87,3 +90,12 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     allowBlobPublicAccess: account.allowBlobPublicAccess
   }
 }]
+
+@description('Cosmos Accounts')
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (useCosmosAccount) {
+  name: 'Resource-CosmosAccount'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+  }
+}

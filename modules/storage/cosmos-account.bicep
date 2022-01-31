@@ -13,9 +13,12 @@ param conventions object
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
+var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosAccount}'
+var cosmosDatabaseName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
 var extendedRecoverability = referential.environment == 'Production'
 var cosmosAccountBackupRedundancy = extendedRecoverability ? 'Geo' : 'Local'
+var azureIpAddresses = json(loadTextContent('../global/azure-ip-addresses.json'))
+var ipRules = union(azureIpAddresses['azurePortal'], azureIpAddresses['azureServices'])
 
 // === RESOURCES ===
 
@@ -23,11 +26,19 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   name: cosmosAccountName
   tags: referential
   kind: 'GlobalDocumentDB'
+  location: location
   properties: {
     databaseAccountOfferType: 'Standard'
+    disableLocalAuth: true
+    enableFreeTier: false
     locations: [
       {
         locationName: location
+      }
+    ]
+    capabilities: [
+      {
+        name: 'EnableServerless'
       }
     ]
     backupPolicy: {
@@ -38,12 +49,18 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
         backupStorageRedundancy: cosmosAccountBackupRedundancy
       }
     }
-    capabilities: [
-      {
-        name: 'EnableServerless'
+    ipRules: [ for ipAddress in ipRules : {
+      ipAddressOrRange: ipAddress
+    }]
+  }
+
+  resource database 'sqlDatabases@2021-10-15' = {
+    name: cosmosDatabaseName
+    properties: {
+      resource: {
+        id: cosmosDatabaseName
       }
-    ]
-    enableFreeTier: false
+    }
   }
 }
 
