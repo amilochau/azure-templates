@@ -28,7 +28,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' existi
 
 // === AUTHORIZATIONS ===
 
-@description('Principal to App Configuration')
+@description('Principal to Cosmos DB account')
 resource auth_app_cosmos 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2021-10-15' = {
   name: guid(principalId, cosmosAccount.id, roleCosmosDataContributor.id)
   properties: {
