@@ -35,8 +35,16 @@
           }
         ]
       },
-      "useCosmosAccount": {
-        "value": "true"
+      "cosmosContainers": {
+        "value": [
+          {
+            "name": "containerName",
+            "partitionKey": "/partitionKey",
+            "uniqueKeys": [
+              "/uniqueKey"
+            ]
+          }
+        ]
       },
       "contributionGroups": {
         "value": [

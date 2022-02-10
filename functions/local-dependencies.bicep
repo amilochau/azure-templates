@@ -33,8 +33,8 @@ param serviceBusQueues array = []
 @description('The storage accounts')
 param storageAccounts array = []
 
-@description('Whether to enable a Cosmos DB accoujnt')
-param useCosmosAccount bool = false
+@description('The Cosmos DB containers')
+param cosmosContainers array = []
 
 @description('The contribution groups')
 param contributionGroups array = []
@@ -95,11 +95,12 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
 }]
 
 @description('Cosmos Accounts')
-module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (useCosmosAccount) {
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmosContainers)) {
   name: 'Resource-CosmosAccount'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    cosmosContainers: cosmosContainers
   }
 }
 

@@ -10,6 +10,9 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
+@description('the Cosmos DB containers')
+param cosmosContainers array
+
 // === VARIABLES ===
 
 var location = resourceGroup().location
@@ -64,6 +67,31 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
         id: cosmosDatabaseName
       }
     }
+
+    // Cosmos DB Containers
+    resource containers 'containers@2021-10-15' = [for (container, index) in cosmosContainers: {
+      name: container.name
+      location: location
+      tags: referential
+      properties: {
+        resource: {
+          id: container.name
+          partitionKey: {
+            kind: 'Hash'
+            paths: [
+              container.partitionKey
+            ]
+          }
+          uniqueKeyPolicy: {
+            uniqueKeys: [
+              {
+                paths: container.uniqueKeys
+              }
+            ]
+          }
+        }
+      }
+    }]
   }
 }
 
