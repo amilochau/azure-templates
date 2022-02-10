@@ -27,6 +27,7 @@ resource roleCosmosDataContributor 'Microsoft.DocumentDB/databaseAccounts/sqlRol
   name: roleName
   parent: cosmosAccount
 }
+
 // === AUTHORIZATIONS ===
 
 @description('Principal to Cosmos DB account')
@@ -36,6 +37,6 @@ resource auth_app_cosmos 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignmen
   properties: {
     principalId: principalId
     roleDefinitionId: roleCosmosDataContributor.id
-    scope: '/'
+    scope: cosmosAccount.id
   }
 }
