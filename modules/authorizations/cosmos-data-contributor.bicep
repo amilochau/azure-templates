@@ -13,6 +13,7 @@ param cosmosAccountName string
 // === VARIABLES ===
 
 var buildInRoles = json(loadTextContent('../global/built-in-roles.json'))
+var roleName = buildInRoles['cosmos']['Cosmos DB Built-in Data Contributor']
 
 // === EXISTING ===
 
@@ -23,7 +24,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' existi
 
 @description('Role - Cosmos DB Data Contributor')
 resource roleCosmosDataContributor 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2021-10-15' existing = {
-  name: buildInRoles['cosmos']['Cosmos DB Built-in Data Contributor']
+  name: roleName
   parent: cosmosAccount
 }
 // === AUTHORIZATIONS ===
