@@ -33,7 +33,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   location: location
   properties: {
     databaseAccountOfferType: 'Standard'
-    disableKeyBasedMetadataWriteAccess: true
+    disableLocalAuth: false
     enableFreeTier: false
     locations: [
       {
