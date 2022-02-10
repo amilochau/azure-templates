@@ -83,11 +83,11 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
             ]
           }
           uniqueKeyPolicy: {
-            uniqueKeys: [
-              {
-                paths: container.uniqueKeys
-              }
-            ]
+            uniqueKeys: [for (uniqueKey, indexKey) in container.uniqueKeys: {
+              paths: [
+                uniqueKey
+              ]
+            }]
           }
         }
       }
