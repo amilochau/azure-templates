@@ -81,6 +81,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
             paths: [
               container.partitionKey
             ]
+            version: 2
           }
           uniqueKeyPolicy: {
             uniqueKeys: [for (uniqueKey, indexKey) in container.uniqueKeys: {
