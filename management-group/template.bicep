@@ -14,10 +14,6 @@ param groups array = []
 @description('Global & naming conventions')
 var buildInRoles = json(loadTextContent('../modules/global/built-in-roles.json'))
 
-// === RESOURCES ===
-
-
-
 // === AUTHORIZATIONS ===
 
 @description('Principal to Resources')

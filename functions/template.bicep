@@ -58,6 +58,9 @@ param applicationPackageUri string = ''
 @description('Whether to enable a Cosmos DB accoujnt')
 param useCosmosAccount bool = false
 
+@description('The contribution groups')
+param contributionGroups array = []
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -246,6 +249,7 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
   }
 }]
 
+@description('Functions to extra Cosmos DB Account')
 module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = {
   name: 'Authorization-Functions-CosmosAccount'
   params: {
@@ -253,6 +257,15 @@ module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.b
     cosmosAccountName: extra_cosmos.outputs.name
   }
 }
+
+@description('Contribution authorization to extra Cosmos DB Accounts')
+module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = [for (group, index) in contributionGroups: if (!empty(contributionGroups)) {
+  name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${group.id}-CosmosAccount'
+  params: {
+    principalId: group.id
+    cosmosAccountName: extra_cosmos.outputs.name
+  }
+}]
 
 @description('Functions to dedicated Storage Account')
 module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {

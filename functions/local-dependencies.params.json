@@ -37,6 +37,13 @@
       },
       "useCosmosAccount": {
         "value": "true"
+      },
+      "contributionGroups": {
+        "value": [
+          {
+            "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+          }
+        ]
       }
     }
   }
