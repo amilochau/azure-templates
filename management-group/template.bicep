@@ -12,11 +12,15 @@ param groups array = []
 // === VARIABLES ===
 
 @description('Global & naming conventions')
-var buildInRoles = json(loadTextContent('../modules/authorizations/built-in-roles.json'))
+var buildInRoles = json(loadTextContent('../modules/global/built-in-roles.json'))
+
+// === RESOURCES ===
+
+
 
 // === AUTHORIZATIONS ===
 
-@description('Principal to App Configuration')
+@description('Principal to Resources')
 module authorizations '../modules/authorizations/management-group/group-role.bicep' = [for group in groups: {
   name: 'Authorization-${guid(group.id, group.role)}'
   params: {

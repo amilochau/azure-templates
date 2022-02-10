@@ -46,6 +46,9 @@
             "allowBlobPublicAccess": false
           }
         ]
+      },
+      "useCosmosAccount": {
+        "value": "true"
       }
     }
   }

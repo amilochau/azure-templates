@@ -18,7 +18,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('./built-in-roles.json'))
+var buildInRoles = json(loadTextContent('../global/built-in-roles.json'))
 var roleDefinitionId = readOnly ? roleStorageBlobDataReader.id : roleStorageBlobDataOwner.id
 
 // === EXISTING ===

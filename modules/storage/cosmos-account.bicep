@@ -22,6 +22,7 @@ var ipRules = union(azureIpAddresses['azurePortal'], azureIpAddresses['azureServ
 
 // === RESOURCES ===
 
+@description('Cosmos DB Account')
 resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   name: cosmosAccountName
   tags: referential
@@ -30,6 +31,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   properties: {
     databaseAccountOfferType: 'Standard'
     disableLocalAuth: true
+    disableKeyBasedMetadataWriteAccess: true
     enableFreeTier: false
     locations: [
       {
@@ -54,6 +56,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
     }]
   }
 
+  // Cosmos DB Database
   resource database 'sqlDatabases@2021-10-15' = {
     name: cosmosDatabaseName
     properties: {

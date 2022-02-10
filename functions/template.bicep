@@ -246,6 +246,14 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
   }
 }]
 
+module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = {
+  name: 'Authorization-Functions-CosmosAccount'
+  params: {
+    principalId: fn.outputs.principalId
+    cosmosAccountName: extra_cosmos.outputs.name
+  }
+}
+
 @description('Functions to dedicated Storage Account')
 module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
   name: 'Authorization-Functions-StorageAccount'
