@@ -33,6 +33,12 @@ param serviceBusQueues array = []
 @description('The storage accounts')
 param storageAccounts array = []
 
+@description('The Cosmos DB containers')
+param cosmosContainers array = []
+
+@description('The contribution groups')
+param contributionGroups array = []
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -85,5 +91,26 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     blobContainers: account.containers
     daysBeforeDeletion: account.daysBeforeDeletion
     allowBlobPublicAccess: account.allowBlobPublicAccess
+  }
+}]
+
+@description('Cosmos Accounts')
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmosContainers)) {
+  name: 'Resource-CosmosAccount'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    cosmosContainers: cosmosContainers
+  }
+}
+
+// === AUTHORIZATIONS ===
+
+@description('Contribution authorization to extra Cosmos DB Accounts')
+module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = [for (group, index) in contributionGroups: if (!empty(contributionGroups)) {
+  name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${index}-CosmosAccount'
+  params: {
+    principalId: group.id
+    cosmosAccountName: extra_cosmos.outputs.name
   }
 }]

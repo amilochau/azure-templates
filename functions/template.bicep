@@ -55,6 +55,12 @@ param storageAccounts array = []
 @description('The application packages URI')
 param applicationPackageUri string = ''
 
+@description('The Cosmos DB containers')
+param cosmosContainers array = []
+
+@description('The contribution groups')
+param contributionGroups array = []
+
 // === VARIABLES ===
 
 @description('The region name')
@@ -128,6 +134,16 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
     allowBlobPublicAccess: account.allowBlobPublicAccess
   }
 }]
+
+@description('Cosmos Accounts')
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmosContainers)) {
+  name: 'Resource-CosmosAccount'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    cosmosContainers: cosmosContainers
+  }
+}
 
 @description('Dedicated Storage Account for Functions application')
 module stg '../modules/storage/storage-account.bicep' = {
@@ -231,6 +247,24 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
     storageAccountName: extra_stg[index].outputs.name
     readOnly: account.readOnly
     roleDescription: 'Functions application should read/write the blobs from Storage Account'
+  }
+}]
+
+@description('Functions to extra Cosmos DB Account')
+module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = {
+  name: 'Authorization-Functions-CosmosAccount'
+  params: {
+    principalId: fn.outputs.principalId
+    cosmosAccountName: extra_cosmos.outputs.name
+  }
+}
+
+@description('Contribution authorization to extra Cosmos DB Accounts')
+module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = [for (group, index) in contributionGroups: if (!empty(contributionGroups)) {
+  name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${index}-CosmosAccount'
+  params: {
+    principalId: group.id
+    cosmosAccountName: extra_cosmos.outputs.name
   }
 }]
 
