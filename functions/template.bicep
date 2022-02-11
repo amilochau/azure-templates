@@ -26,6 +26,7 @@ param templateVersion string
 
 @description('The application type')
 @allowed([
+  'isolatedDotnet5'
   'isolatedDotnet6'
 ])
 param applicationType string
