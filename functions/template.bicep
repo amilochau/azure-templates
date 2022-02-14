@@ -255,7 +255,7 @@ module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.b
   name: 'Authorization-Functions-CosmosAccount'
   params: {
     principalId: fn.outputs.principalId
-    cosmosAccountName: extra_cosmos.outputs.name
+    cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
   }
 }
 
@@ -264,7 +264,7 @@ module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contribut
   name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${index}-CosmosAccount'
   params: {
     principalId: group.id
-    cosmosAccountName: extra_cosmos.outputs.name
+    cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
   }
 }]
 
