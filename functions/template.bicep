@@ -251,20 +251,20 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
 }]
 
 @description('Functions to extra Cosmos DB Account')
-module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = {
+module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = if (!empty(cosmosContainers)) {
   name: 'Authorization-Functions-CosmosAccount'
   params: {
     principalId: fn.outputs.principalId
-    cosmosAccountName: extra_cosmos.outputs.name
+    cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
   }
 }
 
 @description('Contribution authorization to extra Cosmos DB Accounts')
-module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = [for (group, index) in contributionGroups: if (!empty(contributionGroups)) {
+module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = [for (group, index) in contributionGroups: if (!empty(cosmosContainers) && !empty(contributionGroups)) {
   name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${index}-CosmosAccount'
   params: {
     principalId: group.id
-    cosmosAccountName: extra_cosmos.outputs.name
+    cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
   }
 }]
 
