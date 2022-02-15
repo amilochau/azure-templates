@@ -260,12 +260,16 @@ module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.b
 }
 
 @description('Contribution authorization to extra Cosmos DB Accounts')
+@batchSize(1) // This is needed because Azure Cosmos DB assignements can't be performed in parallel
 module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = [for (group, index) in contributionGroups: if (!empty(cosmosContainers) && !empty(contributionGroups)) {
   name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${index}-CosmosAccount'
   params: {
     principalId: group.id
     cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
   }
+  dependsOn: [
+    auth_fn_extra_cosmos // This is needed because Azure Cosmos DB assignements can't be performed in parallel
+  ]
 }]
 
 @description('Functions to dedicated Storage Account')
