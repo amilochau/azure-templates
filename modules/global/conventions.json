@@ -36,7 +36,8 @@
       "storageAccount": "sto",
       "keyVault": "kv",
       "dashboard": "dsh",
-      "staticWebApplication": "swa"
+      "staticWebApplication": "swa",
+      "webTest": "test"
     }
   }
 }

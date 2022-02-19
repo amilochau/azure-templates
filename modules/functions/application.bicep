@@ -137,3 +137,6 @@ output name string = fn.name
 
 @description('The Principal ID of the deployed Azure Functions')
 output principalId string = fn.identity.principalId
+
+@description('The default host name if the deployed Azure Functions')
+output defaultHostName string = fn.properties.defaultHostName

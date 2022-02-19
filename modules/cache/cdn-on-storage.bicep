@@ -29,10 +29,10 @@ param cdnCacheExpirationInDays int = 360
 var location = resourceGroup().location
 var cdnProfileName = '${conventions.naming.prefix}${conventions.naming.suffixes.cdnProfile}${storageAccountSuffix}'
 var cdnEndpointName = '${conventions.naming.prefix}${conventions.naming.suffixes.cdnEndpoint}${storageAccountSuffix}'
-var commentTag = {
+var specificTags = {
   comment: storageAccountComment
 }
-var tags = union(referential, commentTag)
+var tags = union(referential, specificTags)
 
 // === RESOURCES ===
 
