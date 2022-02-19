@@ -44,7 +44,7 @@ var tags = union(referential, specificTags)
 // === RESOURCES ===
 
 @description('Availability test')
-resource availabilityTest 'Microsoft.Insights/webtests@2020-10-05-preview' = {
+resource availabilityTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { // @2020-10-05-preview is not available on westeurope
   name: availabilityTestName
   location: location
   tags: tags
