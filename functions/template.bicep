@@ -193,7 +193,7 @@ module performanceTest '../modules/monitoring/availability-test.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    targetUrl: '${fn.outputs.defaultHostName}${availabilityTestsSettings.performance.urlSuffix}'
+    targetUrl: 'https://${fn.outputs.defaultHostName}${availabilityTestsSettings.performance.urlSuffix}'
     applicationInsightsId: ai.outputs.id
     comment: 'Performance tests'
     suffix: 'performance'
