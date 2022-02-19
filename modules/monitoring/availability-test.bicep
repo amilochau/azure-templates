@@ -69,10 +69,14 @@ resource availabilityTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { /
     Request: {
       RequestUrl: targetUrl
       HttpVerb: 'GET'
+      Headers: null
+      RequestBody: null
+      FollowRedirects: true
     }
     ValidationRules: {
       ExpectedHttpStatusCode: 200
       IgnoreHttpsStatusCode: false
+      ContentValidation: null
       SSLCheck: true
       SSLCertRemainingLifetimeCheck: 7
     }
