@@ -26,7 +26,12 @@ param comment string
 param suffix string
 
 @description('The test frequency in seconds')
-param frequency int = 1800
+@allowed([
+  300
+  600
+  900
+])
+param frequency int = 900
 
 @description('The test timeout in seconds')
 param timeout int = 60
