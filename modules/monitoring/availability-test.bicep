@@ -39,7 +39,7 @@ param timeout int = 60
 // === VARIABLES ===
 
 var location = resourceGroup().location
-var availabilityTestName = '${conventions.naming.prefix}${conventions.naming.suffixes.webTest}${suffix}'
+var availabilityTestName = 'https://${conventions.naming.prefix}${conventions.naming.suffixes.webTest}${suffix}'
 var specificTags = {
   comment: comment
   'hidden-link:${applicationInsightsId}': 'Resource'
