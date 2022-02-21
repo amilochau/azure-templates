@@ -69,6 +69,12 @@ var regionName = json(loadTextContent('../modules/global/regions.json'))[resourc
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
+@description('Availability tests settings')
+var availabilityTestsSettings = json(loadTextContent('../modules/global/organization-based/availability-tests-settings.json'))
+
+@description('Extended monitoring')
+var extendedMonitoring = startsWith(hostName, 'prd')
+
 // === EXISTING ===
 
 @description('App Configuration')
@@ -182,6 +188,19 @@ module fn '../modules/functions/application.bicep' = {
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
     applicationPackageUri: applicationPackageUri
+  }
+}
+
+module performanceTest '../modules/monitoring/availability-test.bicep' = if (extendedMonitoring) {
+  name: 'Resource-PerformanceTest'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    targetUrl: 'https://${fn.outputs.defaultHostName}${availabilityTestsSettings.performance.urlSuffix}'
+    applicationInsightsId: ai.outputs.id
+    comment: 'Performance tests'
+    suffix: 'performance'
+    testLocations: availabilityTestsSettings.performance.locations
   }
 }
 

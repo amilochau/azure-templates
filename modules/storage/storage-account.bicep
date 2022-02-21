@@ -31,10 +31,10 @@ var location = resourceGroup().location
 var storageAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.storageAccount}${suffix}'
 var extendedRecoverability = referential.environment == 'Production'
 var storageAccountSku = extendedRecoverability ? 'Standard_GRS' : 'Standard_LRS'
-var commentTag = {
+var specificTags = {
   comment: comment
 }
-var tags = union(referential, commentTag)
+var tags = union(referential, specificTags)
 
 // === RESOURCES ===
 
