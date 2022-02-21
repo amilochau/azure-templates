@@ -72,6 +72,9 @@ var conventions = json(replace(replace(replace(replace(loadTextContent('../modul
 @description('Availability tests settings')
 var availabilityTestsSettings = json(loadTextContent('../modules/global/organization-based/availability-tests-settings.json'))
 
+@description('Extended monitoring')
+var extendedMonitoring = startsWith(hostName, 'prd')
+
 // === EXISTING ===
 
 @description('App Configuration')
@@ -188,7 +191,7 @@ module fn '../modules/functions/application.bicep' = {
   }
 }
 
-module performanceTest '../modules/monitoring/availability-test.bicep' = {
+module performanceTest '../modules/monitoring/availability-test.bicep' = if (extendedMonitoring) {
   name: 'Resource-PerformanceTest'
   params: {
     referential: tags.outputs.referential
