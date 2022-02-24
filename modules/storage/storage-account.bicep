@@ -25,9 +25,11 @@ param daysBeforeDeletion int = 0
 @description('Allow blob public access')
 param allowBlobPublicAccess bool = false
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var storageAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.storageAccount}${suffix}'
 var extendedRecoverability = referential.environment == 'Production'
 var storageAccountSku = extendedRecoverability ? 'Standard_GRS' : 'Standard_LRS'
@@ -129,6 +131,7 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
   params: {
     referential: referential
     conventions: conventions
+    location: location
     storageAccountHostName: replace(replace(storageAccount.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
     storageAccountComment: comment
     storageAccountSuffix: suffix

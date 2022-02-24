@@ -17,9 +17,11 @@ param conventions object
 ])
 param pricingPlan string
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var appConfigurationSku = pricingPlan == 'Free' ? 'free' : pricingPlan == 'Basic' ? 'standard' : 'ERROR'
 
 // === RESOURCES ===

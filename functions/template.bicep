@@ -61,10 +61,13 @@ param cosmosContainers array = []
 @description('The contribution groups')
 param contributionGroups array = []
 
+@description('The deployment location')
+param location string = resourceGroup().location
+
 // === VARIABLES ===
 
 @description('The region name')
-var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+var regionName = json(loadTextContent('../modules/global/regions.json'))[location]
 
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
@@ -103,6 +106,7 @@ module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
   }
 }
 
@@ -112,6 +116,7 @@ module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationIn
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     disableLocalAuth: false
     pricingPlan: pricingPlan
   }
@@ -123,6 +128,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     serviceBusQueues: serviceBusQueues
   }
 }
@@ -133,6 +139,7 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     comment: account.comment
     suffix: account.suffix
     blobContainers: account.containers
@@ -147,6 +154,7 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmo
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     cosmosContainers: cosmosContainers
   }
 }
@@ -157,6 +165,7 @@ module stg '../modules/storage/storage-account.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     comment: 'Technical storage for Functions application'
     blobContainers: [
       'deployment-packages'
@@ -170,6 +179,7 @@ module asp '../modules/functions/service-plan.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
   }
 }
 
@@ -179,6 +189,7 @@ module fn '../modules/functions/application.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     pricingPlan: pricingPlan
     applicationType: applicationType
     serverFarmId: asp.outputs.id
@@ -196,6 +207,7 @@ module performanceTest '../modules/monitoring/availability-test.bicep' = if (ext
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     targetUrl: 'https://${fn.outputs.defaultHostName}${availabilityTestsSettings.performance.urlSuffix}'
     applicationInsightsId: ai.outputs.id
     comment: 'Performance tests'
@@ -210,6 +222,7 @@ module dashboard '../modules/monitoring/web-dashboard.bicep' = if (!disableAppli
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     websiteName: fn.outputs.name
     applicationInsightsName: !disableApplicationInsights ? ai.outputs.name : ''
   }

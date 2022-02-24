@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: RELEASE
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
       - name: Set up a GitHub Release
         uses: amilochau/github-actions/release/basic@v1
         with:

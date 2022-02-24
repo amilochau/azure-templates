@@ -1,0 +1,19 @@
+name: Build
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Bicep files
+        shell: pwsh
+        run: Get-ChildItem -Recurse | Where-Object { $_.Name -like '*.bicep' } | ForEach-Object { bicep build $_.FullName }

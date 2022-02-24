@@ -39,10 +39,13 @@ param cosmosContainers array = []
 @description('The contribution groups')
 param contributionGroups array = []
 
+@description('The deployment location')
+param location string = resourceGroup().location
+
 // === VARIABLES ===
 
 @description('The region name')
-var regionName = json(loadTextContent('../modules/global/regions.json'))[resourceGroup().location]
+var regionName = json(loadTextContent('../modules/global/regions.json'))[location]
 
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
@@ -67,6 +70,7 @@ module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
   }
 }
 
@@ -76,6 +80,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(servi
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     serviceBusQueues: serviceBusQueues
   }
 }
@@ -86,6 +91,7 @@ module extra_stg '../modules/storage/storage-account.bicep' = [for account in st
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     comment: account.comment
     suffix: account.suffix
     blobContainers: account.containers
@@ -100,6 +106,7 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmo
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    location: location
     cosmosContainers: cosmosContainers
   }
 }

@@ -44,9 +44,11 @@ param kvVaultUri string = ''
 @description('The application packages URI')
 param applicationPackageUri string = ''
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET|6.0' : 'ERROR'
 

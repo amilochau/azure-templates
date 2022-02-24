@@ -17,9 +17,11 @@ param conventions object
 ])
 param pricingPlan string
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 'ERROR' // in GB/d
 
 // === RESOURCES ===

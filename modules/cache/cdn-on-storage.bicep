@@ -24,9 +24,11 @@ param storageAccountSuffix string = ''
 @maxValue(360)
 param cdnCacheExpirationInDays int = 360
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var cdnProfileName = '${conventions.naming.prefix}${conventions.naming.suffixes.cdnProfile}${storageAccountSuffix}'
 var cdnEndpointName = '${conventions.naming.prefix}${conventions.naming.suffixes.cdnEndpoint}${storageAccountSuffix}'
 var specificTags = {
