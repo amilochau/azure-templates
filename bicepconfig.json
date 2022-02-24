@@ -31,10 +31,19 @@
         "outputs-should-not-contain-secrets": {
           "level": "error"
         },
-        "use-protectedsettings-for-commandtoexecute-secrets":{
+        "use-stable-vm-image": {
           "level": "error"
         },
-        "use-stable-vm-image": {
+        "protect-commandtoexecute-secrets": {
+          "level": "error"
+        },
+        "explicit-values-for-loc-params": {
+          "level": "error"
+        },
+        "no-hardcoded-location":{
+          "level": "error"
+        },
+        "no-loc-expr-outside-params": { 
           "level": "error"
         }
       }
