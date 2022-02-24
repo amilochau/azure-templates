@@ -13,9 +13,8 @@ param conventions object
 @description('The Service Bus queues')
 param serviceBusQueues array = []
 
-// === VARIABLES ===
-
-var location = resourceGroup().location
+@description('The deployment location')
+param location string
 
 // === RESOURCES ===
 

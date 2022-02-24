@@ -20,9 +20,11 @@ param pricingPlan string
 @description('Disable non-AAD based authentication to publish metrics')
 param disableLocalAuth bool = false
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 'ERROR' // in GB/d
 
 // === RESOURCES ===

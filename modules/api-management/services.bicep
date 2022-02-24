@@ -25,9 +25,11 @@ param publisherName string
 @description('The API Management products')
 param products array
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var apimLoggerKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-loggerkey'
 
 // === RESOURCES ===

@@ -36,9 +36,11 @@ param frequency int = 900
 @description('The test timeout in seconds')
 param timeout int = 60
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var availabilityTestName = '${conventions.naming.prefix}${conventions.naming.suffixes.webTest}-${suffix}'
 var specificTags = {
   comment: comment

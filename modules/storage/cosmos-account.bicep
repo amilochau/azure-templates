@@ -13,9 +13,11 @@ param conventions object
 @description('the Cosmos DB containers')
 param cosmosContainers array
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosAccount}'
 var cosmosDatabaseName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
 var extendedRecoverability = referential.environment == 'Production'

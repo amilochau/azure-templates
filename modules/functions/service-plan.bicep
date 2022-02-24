@@ -10,9 +10,8 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-// === VARIABLES ===
-
-var location = resourceGroup().location
+@description('The deployment location')
+param location string
 
 // === RESOURCES ===
 

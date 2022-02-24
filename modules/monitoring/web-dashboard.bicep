@@ -16,9 +16,8 @@ param websiteName string
 @description('The Application Insights name')
 param applicationInsightsName string
 
-// === VARIABLES ===
-
-var location = resourceGroup().location
+@description('The deployment location')
+param location string
 
 // === EXISTING ===
 

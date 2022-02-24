@@ -20,9 +20,11 @@ param pricingPlan string
 @description('The application custom domains')
 param customDomains array = []
 
+@description('The deployment location')
+param location string
+
 // === VARIABLES ===
 
-var location = resourceGroup().location
 var swaSkuName = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Standard' : 'ERROR'
 var swaSkuTier = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Standard' : 'ERROR'
 
