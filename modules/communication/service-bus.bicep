@@ -19,7 +19,7 @@ param location string
 // === RESOURCES ===
 
 @description('Service Bus Namespace')
-resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
+resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.serviceBusNamespace}'
   location: location
   sku: {
@@ -28,27 +28,27 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' = {
   tags: referential
   properties: {
     zoneRedundant: false
+    disableLocalAuth: true
   }
-}
 
-@description('Service Bus Queues')
-resource queues 'Microsoft.ServiceBus/namespaces/queues@2018-01-01-preview' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
-  name: empty(serviceBusQueues) ? 'empty' : queue
-  parent: sbn
-  properties: {
-    lockDuration: 'PT30S'
-    maxSizeInMegabytes: 1024
-    requiresDuplicateDetection: false
-    requiresSession: false
-    defaultMessageTimeToLive: 'P14D'
-    deadLetteringOnMessageExpiration: false
-    enableBatchedOperations: true
-    duplicateDetectionHistoryTimeWindow: 'PT10M'
-    maxDeliveryCount: 10
-    enablePartitioning: false
-    enableExpress: false
-  }
-}]
+  // Service Bus Queues
+  resource queues 'queues@2021-11-01' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
+    name: empty(serviceBusQueues) ? 'empty' : queue
+    properties: {
+      lockDuration: 'PT30S'
+      maxSizeInMegabytes: 1024
+      requiresDuplicateDetection: false
+      requiresSession: false
+      defaultMessageTimeToLive: 'P14D'
+      deadLetteringOnMessageExpiration: true
+      enableBatchedOperations: true
+      duplicateDetectionHistoryTimeWindow: 'PT10M'
+      maxDeliveryCount: 10
+      enablePartitioning: false
+      enableExpress: false
+    }
+  }]
+}
 
 // === OUTPUTS ===
 
