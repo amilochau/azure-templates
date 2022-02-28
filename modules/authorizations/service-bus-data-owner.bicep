@@ -25,7 +25,7 @@ resource roleServiceBusDataOwner 'Microsoft.Authorization/roleDefinitions@2018-0
 }
 
 @description('Service Bus Namespace')
-resource sbn 'Microsoft.ServiceBus/namespaces@2021-01-01-preview' existing = {
+resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' existing = {
   name: serviceBusNamespaceName
 }
 
