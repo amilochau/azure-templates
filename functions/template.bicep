@@ -55,6 +55,9 @@ param storageAccounts array = []
 @description('The application packages URI')
 param applicationPackageUri string = ''
 
+@description('The application secret names')
+param applicationSecretNames array = []
+
 @description('The Cosmos DB containers')
 param cosmosContainers array = []
 
@@ -199,6 +202,7 @@ module fn '../modules/functions/application.bicep' = {
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
     applicationPackageUri: applicationPackageUri
+    applicationSecretNames: !disableKeyVault ? applicationSecretNames : []
   }
 }
 
