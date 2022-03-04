@@ -81,13 +81,6 @@ var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsPackageUri
 
-// === EXISTING ===
-
-@description('Storage Account')
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
-  name: webJobsStorageAccountName
-}
-
 // === RESOURCES ===
 
 @description('Functions application')
