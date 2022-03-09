@@ -4,6 +4,9 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
@@ -12,6 +15,18 @@ param functionsAppName string
 
 @description('The relative URL of the Functions application host')
 param relativeFunctionsUrl string
+
+@description('The API version')
+param apiVersion string
+
+@description('Whether a subscription is required')
+param subscriptionRequired bool
+
+@description('The products to link with the API Management API')
+param products array
+
+@description('The OpenAPI link, relative to the application host name')
+param relativeOpenApiUrl string
 
 // === VARIABLES ===
 
@@ -29,9 +44,9 @@ resource fn 'Microsoft.Web/sites@2021-01-01' existing = {
 @description('Key Vault secret to store Functions key')
 module fn_key_kv '../configuration/secret.bicep' = {
   name: 'Resource-FunctionsKeySecret'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
-    keyVaultName: conventions.global.apiManagement.keyVaultName
+    keyVaultName: conventions.global.apiManagement[referential.environment].keyVaultName
     secretName: apimFunctionsKeyName
     secretValue: listkeys('${fn.id}/host/default', fn.apiVersion).functionKeys.default
   }
@@ -40,8 +55,9 @@ module fn_key_kv '../configuration/secret.bicep' = {
 @description('Named value to store the Functions Key')
 module fn_key_apim '../api-management/named-value-secret.bicep' = {
   name: 'Resource-FunctionsKeyNamedValue'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
+    referential: referential
     conventions: conventions
     secretKey: apimFunctionsKeyName
     secretUri: fn_key_kv.outputs.secretUri
@@ -51,9 +67,10 @@ module fn_key_apim '../api-management/named-value-secret.bicep' = {
 @description('API Management backend')
 module apimBackend '../api-management/backend.bicep' = {
   name: 'Resource-FunctionsBackend'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
+  scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
     backendUrl: 'https://${fn.properties.defaultHostName}${relativeFunctionsUrl}/'
+    referential: referential
     conventions: conventions
     resourceId: '${environment().resourceManager}${fn.id}'
     backendName: functionsAppName
@@ -64,6 +81,22 @@ module apimBackend '../api-management/backend.bicep' = {
         ]
       }
     }
+  }
+}
+
+@description('API Management API registration with OpenAPI')
+module apimApi '../api-management/api-openapi.bicep' = {
+  name: 'Resource-ApiManagementApi'
+  scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
+  params: {
+    applicationName: referential.application
+    referential: referential
+    conventions: conventions
+    backendId: apimBackend.outputs.name
+    apiVersion: apiVersion
+    subscriptionRequired: subscriptionRequired
+    products: products
+    openApiLink: 'https://${fn.properties.defaultHostName}${relativeOpenApiUrl}'
   }
 }
 

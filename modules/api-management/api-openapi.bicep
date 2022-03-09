@@ -7,6 +7,9 @@
 @description('The application name')
 param applicationName string
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
@@ -33,7 +36,7 @@ var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, l
 
 @description('API Management')
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: conventions.global.apiManagement.name
+  name: conventions.global.apiManagement[referential.environment].name
 }
 
 @description('API Management Products')
