@@ -31,8 +31,8 @@ var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 
 
 @description('Log Analytics Workspace')
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
-  scope: resourceGroup(conventions.global.logAnalyticsWorkspace.resourceGroupName)
-  name: conventions.global.logAnalyticsWorkspace.name
+  scope: resourceGroup(conventions.global.logAnalyticsWorkspace[referential.environment].resourceGroupName)
+  name: conventions.global.logAnalyticsWorkspace[referential.environment].name
 }
 
 @description('Application Insights')
