@@ -202,6 +202,7 @@ module fn '../modules/functions/application.bicep' = {
   }
 }
 
+@description('Performance tests')
 module performanceTest '../modules/monitoring/availability-test.bicep' = if (extendedMonitoring) {
   name: 'Resource-PerformanceTest'
   params: {
