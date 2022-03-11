@@ -208,11 +208,11 @@ module performanceTest '../modules/monitoring/availability-test.bicep' = if (ext
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    targetUrl: 'https://${fn.outputs.defaultHostName}${availabilityTestsSettings.performance.urlSuffix}'
+    targetUrl: 'https://${fn.outputs.defaultHostName}${availabilityTestsSettings.functions.urlSuffix}'
     applicationInsightsId: ai.outputs.id
     comment: 'Performance tests'
     suffix: 'performance'
-    testLocations: availabilityTestsSettings.performance.locations
+    testLocations: availabilityTestsSettings.functions.locations
   }
 }
 
@@ -271,7 +271,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
   }
 }
 
-// This does not work... @description('Functions to extra Storage Accounts')
+@description('Functions to extra Storage Accounts')
 module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
   params: {

@@ -22,8 +22,8 @@ var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffix
 var cosmosDatabaseName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
 var extendedRecoverability = referential.environment == 'Production'
 var cosmosAccountBackupRedundancy = extendedRecoverability ? 'Geo' : 'Local'
-var azureIpAddresses = json(loadTextContent('../global/azure-ip-addresses.json'))
-var ipRules = union(azureIpAddresses['azurePortal'], azureIpAddresses['azureServices'])
+var knownIpAddresses = json(loadTextContent('../global/ip-addresses.json'))
+var authorizedIpAddresses = union(knownIpAddresses['azurePortal'], knownIpAddresses['azureServices'])
 
 // === RESOURCES ===
 
@@ -56,7 +56,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
         backupStorageRedundancy: cosmosAccountBackupRedundancy
       }
     }
-    ipRules: [ for ipAddress in ipRules : {
+    ipRules: [ for ipAddress in authorizedIpAddresses : {
       ipAddressOrRange: ipAddress
     }]
   }
