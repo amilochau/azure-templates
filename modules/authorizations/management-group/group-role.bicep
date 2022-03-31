@@ -21,7 +21,7 @@ resource role 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' exist
 
 // === AUTHORIZATIONS ===
 
-@description('Principal to Managemnt group')
+@description('Principal to Management group')
 resource auth_app_appConfig 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(principalId, role.id)
   properties: {
