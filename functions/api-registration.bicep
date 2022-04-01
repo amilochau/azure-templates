@@ -32,7 +32,7 @@ param apiManagementSubscriptionRequired bool = true
 
 @description('The API Management API version')
 @minLength(1)
-param apiManagementApiVersion string = 'v1'
+param apiManagementVersion string = 'v1'
 
 @description('The OpenAPI link, relative to the application host name')
 @minLength(1)
@@ -83,7 +83,7 @@ module apimBackend '../modules/functions/api-management-backend.bicep' = if (!em
     conventions: conventions
     functionsAppName: fn.name
     relativeFunctionsUrl: relativeFunctionsUrl
-    apiVersion: apiManagementApiVersion
+    apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
     relativeOpenApiUrl: relativeOpenApiUrl

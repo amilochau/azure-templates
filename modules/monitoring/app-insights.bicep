@@ -43,7 +43,10 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   tags: referential
   properties: {
     Application_Type: 'web'
-    DisableLocalAuth: disableLocalAuth
+    DisableLocalAuth: disableLocalAuth // true = Enforcing AAD as the only authentication method
+    /* One main limitation to put this 'DisableLocalAuth' settings to 'true':
+      1/ Functions application do not support RBAC authentication yet
+    */
     WorkspaceResourceId: workspace.id
   }
 
