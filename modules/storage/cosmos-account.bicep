@@ -35,7 +35,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   location: location
   properties: {
     databaseAccountOfferType: 'Standard'
-    disableLocalAuth: false
+    disableLocalAuth: true // true = Enforcing RBAC as the only authentication method
     disableKeyBasedMetadataWriteAccess: true
     enableFreeTier: false
     locations: [

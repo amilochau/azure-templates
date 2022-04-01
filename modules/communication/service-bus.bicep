@@ -28,7 +28,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
   tags: referential
   properties: {
     zoneRedundant: false
-    disableLocalAuth: true
+    disableLocalAuth: true // true = Enforcing AAD as the only authentication method
   }
 
   // Service Bus Queues
