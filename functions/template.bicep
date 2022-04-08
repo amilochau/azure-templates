@@ -174,7 +174,7 @@ module stg '../modules/storage/storage-account.bicep' = {
 }
 
 @description('Service Plan')
-module asp '../modules/functions/service-plan.bicep' = {
+module asp '../modules/applications/functions/service-plan.bicep' = {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
@@ -184,7 +184,7 @@ module asp '../modules/functions/service-plan.bicep' = {
 }
 
 @description('Functions application')
-module fn '../modules/functions/application.bicep' = {
+module fn '../modules/applications/functions/application.bicep' = {
   name: 'Resource-FunctionsApplication'
   params: {
     referential: tags.outputs.referential

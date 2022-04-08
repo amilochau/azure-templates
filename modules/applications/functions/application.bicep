@@ -81,10 +81,14 @@ var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsPackageUri
 
+var slotAppSettingNames = [
+  'AZURE_FUNCTIONS_HOST'
+]
+
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-01-01' = {
+resource fn 'Microsoft.Web/sites@2021-03-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
   location: location
   kind: 'functionapp,linux'
@@ -100,7 +104,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   }
 
   // Web Configuration
-  resource webConfig 'config@2021-01-01' = {
+  resource webConfig 'config@2021-03-01' = {
     name: 'web'
     properties: {
       linuxFxVersion: linuxFxVersion
@@ -113,9 +117,17 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   }
 
   // App Configuration
-  resource appsettingsConfig 'config@2021-01-01' = {
+  resource appsettingsConfig 'config@2021-03-01' = {
     name: 'appsettings'
     properties: appSettings
+  }
+
+  // Slot settings
+  resource slotConfigNamesConfig 'config@2021-03-01' = {
+    name: 'slotConfigNames'
+    properties: {
+      appSettingNames: slotAppSettingNames
+    }
   }
 }
 

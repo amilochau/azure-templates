@@ -60,7 +60,7 @@ module tags '../modules/global/tags.bicep' = {
 }
 
 @description('Static Web Apps application')
-module swa '../modules/static-web-apps/application.bicep' = {
+module swa '../modules/applications/static/application.bicep' = {
   name: 'Resource-StaticWebAppsApplication'
   params: {
     referential: tags.outputs.referential

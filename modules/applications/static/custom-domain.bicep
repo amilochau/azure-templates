@@ -27,7 +27,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' existing = {
 // === RESOURCES ===
 
 @description('CNAME record for custom domains')
-module dnsRecord '../networking/dns-cname-record.bicep' = {
+module dnsRecord '../../networking/dns-cname-record.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
   scope: resourceGroup(conventions.global.dnsZone[rootDomain])
   params: {
