@@ -58,6 +58,9 @@ param applicationPackageUri string = ''
 @description('The Cosmos DB containers')
 param cosmosContainers array = []
 
+@description('The extra deployment slots')
+param deploymentSlots array = []
+
 @description('The contribution groups')
 param contributionGroups array = []
 
@@ -97,6 +100,16 @@ module tags '../modules/global/tags.bicep' = {
     hostName: hostName
     regionName: regionName
     templateVersion: templateVersion
+  }
+}
+
+@description('User-Assigned Identity')
+module userAssignedIdentity '../modules/authorizations/user-assigned-identity.bicep' = {
+  name: 'Resource-UAI'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
   }
 }
 
@@ -191,6 +204,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     conventions: conventions
     location: location
     pricingPlan: pricingPlan
+    userAssignedIdentityId: userAssignedIdentity.outputs.id
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
@@ -201,6 +215,26 @@ module fn '../modules/applications/functions/application.bicep' = {
     applicationPackageUri: applicationPackageUri
   }
 }
+
+@description('Functions application')
+module fnSlots '../modules/applications/functions/application-slot.bicep' = [for deploymentSlot in deploymentSlots: {
+  name: 'Resource-FunctionsSlot-${deploymentSlot}'
+  params: {
+    referential: tags.outputs.referential
+    location: location
+    pricingPlan: pricingPlan
+    userAssignedIdentityId: userAssignedIdentity.outputs.id
+    slotName: deploymentSlot.name
+    applicationType: applicationType
+    serverFarmId: asp.outputs.id
+    webJobsStorageAccountName: stg.outputs.name
+    appConfigurationEndpoint: !disableAppConfiguration ? appConfig.properties.endpoint : ''
+    aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
+    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
+    applicationPackageUri: applicationPackageUri
+  }
+}]
 
 @description('Performance tests')
 module performanceTest '../modules/monitoring/availability-test.bicep' = if (extendedMonitoring) {
@@ -236,7 +270,7 @@ module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reade
   name: 'Authorization-Functions-AppConfiguration'
   scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     appConfigurationName: conventions.global.appConfiguration.name
     roleDescription: 'Functions application should read the configuration from App Configuration'
   }
@@ -246,7 +280,7 @@ module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reade
 module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!disableKeyVault) {
   name: 'Authorization-Functions-KeyVault'
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     keyVaultName: kv.outputs.name
     roleDescription: 'Functions application should read the secrets from Key Vault'
   }
@@ -256,7 +290,7 @@ module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if 
 module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (!disableApplicationInsights) {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     applicationInsightsName: ai.outputs.name
     roleDescription: 'Functions application should send monitoring metrics into Application Insights'
   }
@@ -266,7 +300,7 @@ module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep'
 module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     roleDescription: 'Functions application should read, write and manage the messages from Service Bus'
   }
@@ -276,7 +310,7 @@ module auth_fn_extra_sbn '../modules/authorizations/service-bus-data-owner.bicep
 module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
     readOnly: account.readOnly
     roleDescription: 'Functions application should read/write the blobs from Storage Account'
@@ -287,7 +321,7 @@ module auth_fn_extra_stg '../modules/authorizations/storage-blob-data.bicep' = [
 module auth_fn_extra_cosmos '../modules/authorizations/cosmos-data-contributor.bicep' = if (!empty(cosmosContainers)) {
   name: 'Authorization-Functions-CosmosAccount'
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
   }
 }
@@ -309,7 +343,7 @@ module auth_contributors_cosmos '../modules/authorizations/cosmos-data-contribut
 module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
   name: 'Authorization-Functions-StorageAccount'
   params: {
-    principalId: fn.outputs.principalId
+    principalId: userAssignedIdentity.outputs.principalId
     storageAccountName: stg.outputs.name
     roleDescription: 'Functions application should manage technical data from Storage Account'
   }
@@ -317,8 +351,8 @@ module auth_fn_stg  '../modules/authorizations/storage-blob-data.bicep' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Azure Functions')
+@description('The ID of the deployed resource')
 output resourceId string = fn.outputs.id
 
-@description('The Name of the deployed Azure Functions')
+@description('The Name of the deployed resource')
 output resourceName string = fn.outputs.name

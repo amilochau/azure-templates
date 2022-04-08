@@ -51,13 +51,13 @@ resource tags 'Microsoft.Resources/tags@2021-04-01' = if(!disableResourceGroupTa
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management')
+@description('The ID of the deployed resource')
 output id string = tags.id
 
-@description('The API Version of the deployed API Management')
+@description('The API Version of the deployed resource')
 output apiVersion string = tags.apiVersion
 
-@description('The Name of the deployed API Management')
+@description('The Name of the deployed resource')
 output name string = tags.name
 
 @description('The resource group referential; the following properties are exposed: `organization`, `application`, `environemnt`, `host`, `region`, `templateVersion`, `deploymentDate`')

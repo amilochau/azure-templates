@@ -60,11 +60,11 @@ module domains 'custom-domain.bicep' = [for (customDomain, i) in customDomains: 
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Azure Static Web Apps')
+@description('The ID of the deployed resource')
 output id string = swa.id
 
-@description('The API Version of the deployed Azure Static Web Apps')
+@description('The API Version of the deployed resource')
 output apiVersion string = swa.apiVersion
 
-@description('The Name of the deployed Azure Static Web Apps')
+@description('The Name of the deployed resource')
 output name string = swa.name

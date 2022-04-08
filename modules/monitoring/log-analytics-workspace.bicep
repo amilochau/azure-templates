@@ -44,11 +44,11 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Log Analytics Workspace')
+@description('The ID of the deployed resource')
 output id string = workspace.id
 
-@description('The API Version of the deployed Log Analytics Workspace')
+@description('The API Version of the deployed resource')
 output apiVersion string = workspace.apiVersion
 
-@description('The Name of the deployed Log Analytics Workspace')
+@description('The Name of the deployed resource')
 output name string = workspace.name

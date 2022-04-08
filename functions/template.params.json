@@ -58,6 +58,13 @@
           }
         ]
       },
+      "deploymentSlots": {
+        "value": [
+          {
+            "name": "dev-bis"
+          }
+        ]
+      },
       "contributionGroups": {
         "value": [
           {

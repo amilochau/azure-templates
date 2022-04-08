@@ -32,11 +32,11 @@ resource servicePlan 'Microsoft.Web/serverfarms@2021-01-01' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Service Plan')
+@description('The ID of the deployed resource')
 output id string = servicePlan.id
 
-@description('The API Version of the deployed Service Plan')
+@description('The API Version of the deployed resource')
 output apiVersion string = servicePlan.apiVersion
 
-@description('The Name of the deployed Service Plan')
+@description('The Name of the deployed resource')
 output name string = servicePlan.name

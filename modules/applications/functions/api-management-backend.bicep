@@ -102,11 +102,11 @@ module apimApi '../../api-management/api-openapi.bicep' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management Backend')
+@description('The ID of the deployed resource')
 output id string = apimBackend.outputs.id
 
-@description('The API Version of the deployed API Management Backend')
+@description('The API Version of the deployed resource')
 output apiVersion string = apimBackend.outputs.apiVersion
 
-@description('The Name of the deployed API Management Backend')
+@description('The Name of the deployed resource')
 output name string = apimBackend.outputs.name

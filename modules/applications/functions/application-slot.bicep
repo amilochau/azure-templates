@@ -1,5 +1,5 @@
 /*
-  Deploy a Functions application
+  Deploy a Functions application slot
 */
 
 // === PARAMETERS ===
@@ -7,15 +7,15 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The naming convention, from the conventions.json file')
-param conventions object
-
 @description('The pricing plan')
 @allowed([
   'Free'    // The cheapest plan, can create some small fees
   'Basic'   // Basic use with default limitations
 ])
 param pricingPlan string
+
+@description('The slot name')
+param slotName string
 
 @description('The ID of the User-Assigned Identity to use')
 param userAssignedIdentityId string
@@ -84,17 +84,12 @@ var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsPackageUri
 
-var slotAppSettingNames = [
-  'AZURE_FUNCTIONS_HOST'
-]
-
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-03-01' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
+resource fn 'Microsoft.Web/sites/slots@2021-03-01' = {
+  name: slotName
   location: location
-  kind: 'functionapp,linux'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -126,14 +121,6 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   resource appsettingsConfig 'config@2021-03-01' = {
     name: 'appsettings'
     properties: appSettings
-  }
-
-  // Slot settings
-  resource slotConfigNamesConfig 'config@2021-03-01' = {
-    name: 'slotConfigNames'
-    properties: {
-      appSettingNames: slotAppSettingNames
-    }
   }
 }
 
