@@ -14,6 +14,9 @@ param referential object
 ])
 param pricingPlan string
 
+@description('The functions name')
+param functionsName string
+
 @description('The slot name')
 param slotName string
 
@@ -84,11 +87,19 @@ var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsPackageUri
 
+// === EXISTING ===
+
+@description('Functions application')
+resource fn 'Microsoft.Web/sites@2021-03-01' existing = {
+  name: functionsName
+}
+
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites/slots@2021-03-01' = {
+resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   name: slotName
+  parent: fn
   location: location
   identity: {
     type: 'UserAssigned'
@@ -127,13 +138,13 @@ resource fn 'Microsoft.Web/sites/slots@2021-03-01' = {
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
-output id string = fn.id
+output id string = fnSlot.id
 
 @description('The API Version of the deployed resource')
-output apiVersion string = fn.apiVersion
+output apiVersion string = fnSlot.apiVersion
 
 @description('The Name of the deployed resource')
-output name string = fn.name
+output name string = fnSlot.name
 
 @description('The default host name if the deployed resource')
-output defaultHostName string = fn.properties.defaultHostName
+output defaultHostName string = fnSlot.properties.defaultHostName

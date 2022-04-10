@@ -58,6 +58,7 @@
       "apiManagementApiVersionSet": "apimversionset",
       "functionsApplication": "fn",
       "applicationInsights": "ai",
+      "userAssignedIdentity": "uai",
       "cdnProfile": "cdnp",
       "cdnEndpoint": "cdne",
       "cosmosAccount": "cosmos",

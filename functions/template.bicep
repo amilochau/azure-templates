@@ -218,12 +218,13 @@ module fn '../modules/applications/functions/application.bicep' = {
 
 @description('Functions application')
 module fnSlots '../modules/applications/functions/application-slot.bicep' = [for deploymentSlot in deploymentSlots: {
-  name: 'Resource-FunctionsSlot-${deploymentSlot}'
+  name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
   params: {
     referential: tags.outputs.referential
     location: location
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity.outputs.id
+    functionsName: fn.outputs.name
     slotName: deploymentSlot.name
     applicationType: applicationType
     serverFarmId: asp.outputs.id
