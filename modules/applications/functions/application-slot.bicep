@@ -1,5 +1,5 @@
 /*
-  Deploy a Functions application
+  Deploy a Functions application slot
 */
 
 // === PARAMETERS ===
@@ -7,15 +7,21 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The naming convention, from the conventions.json file')
-param conventions object
-
 @description('The pricing plan')
 @allowed([
   'Free'    // The cheapest plan, can create some small fees
   'Basic'   // Basic use with default limitations
 ])
 param pricingPlan string
+
+@description('The functions name')
+param functionsName string
+
+@description('The slot name')
+param slotName string
+
+@description('The ID of the User-Assigned Identity to use')
+param userAssignedIdentityId string
 
 @description('The application type')
 @allowed([
@@ -81,15 +87,25 @@ var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus
 // -- Add more conditional unions here if you want to support more settings
 var appSettings = appSettingsPackageUri
 
+// === EXISTING ===
+
+@description('Functions application')
+resource fn 'Microsoft.Web/sites@2021-03-01' existing = {
+  name: functionsName
+}
+
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-01-01' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
+resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
+  name: slotName
+  parent: fn
   location: location
-  kind: 'functionapp,linux'
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userAssignedIdentityId}': {}
+    }
   }
   tags: referential
   properties: {
@@ -100,7 +116,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   }
 
   // Web Configuration
-  resource webConfig 'config@2021-01-01' = {
+  resource webConfig 'config@2021-03-01' = {
     name: 'web'
     properties: {
       linuxFxVersion: linuxFxVersion
@@ -113,7 +129,7 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
   }
 
   // App Configuration
-  resource appsettingsConfig 'config@2021-01-01' = {
+  resource appsettingsConfig 'config@2021-03-01' = {
     name: 'appsettings'
     properties: appSettings
   }
@@ -121,17 +137,14 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Azure Functions')
-output id string = fn.id
+@description('The ID of the deployed resource')
+output id string = fnSlot.id
 
-@description('The API Version of the deployed Azure Functions')
-output apiVersion string = fn.apiVersion
+@description('The API Version of the deployed resource')
+output apiVersion string = fnSlot.apiVersion
 
-@description('The Name of the deployed Azure Functions')
-output name string = fn.name
+@description('The Name of the deployed resource')
+output name string = fnSlot.name
 
-@description('The Principal ID of the deployed Azure Functions')
-output principalId string = fn.identity.principalId
-
-@description('The default host name if the deployed Azure Functions')
-output defaultHostName string = fn.properties.defaultHostName
+@description('The default host name if the deployed resource')
+output defaultHostName string = fnSlot.properties.defaultHostName

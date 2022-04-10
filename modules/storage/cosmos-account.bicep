@@ -100,11 +100,11 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Cosmos DB Account')
+@description('The ID of the deployed resource')
 output id string = cosmosAccount.id
 
-@description('The API Version of the deployed Cosmos DB Account')
+@description('The API Version of the deployed resource')
 output apiVersion string = cosmosAccount.apiVersion
 
-@description('The Name of the deployed Cosmos DB Account')
+@description('The Name of the deployed resource')
 output name string = cosmosAccount.name

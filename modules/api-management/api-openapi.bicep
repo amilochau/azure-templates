@@ -97,11 +97,11 @@ resource productApis 'Microsoft.ApiManagement/service/products/apis@2021-01-01-p
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management API')
+@description('The ID of the deployed resource')
 output id string = api.id
 
-@description('The API Version of the deployed API Management API')
+@description('The API Version of the deployed resource')
 output apiVersion string = api.apiVersion
 
-@description('The Name of the deployed API Management API')
+@description('The Name of the deployed resource')
 output name string = api.name

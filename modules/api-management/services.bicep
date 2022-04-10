@@ -114,14 +114,14 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management')
+@description('The ID of the deployed resource')
 output id string = apim.id
 
-@description('The API Version of the deployed API Management')
+@description('The API Version of the deployed resource')
 output apiVersion string = apim.apiVersion
 
-@description('The Name of the deployed API Management')
+@description('The Name of the deployed resource')
 output name string = apim.name
 
-@description('The Principal ID of the deployed API Management')
+@description('The Principal ID of the deployed resource')
 output principalId string = apim.identity.principalId

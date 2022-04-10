@@ -35,14 +35,14 @@ var apimFunctionsKeyName = '${conventions.naming.prefix}${conventions.naming.suf
 // === EXISTING ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-01-01' existing = {
+resource fn 'Microsoft.Web/sites@2021-03-01' existing = {
   name: functionsAppName
 }
 
 // === RESOURCES ===
 
 @description('Key Vault secret to store Functions key')
-module fn_key_kv '../configuration/secret.bicep' = {
+module fn_key_kv '../../configuration/secret.bicep' = {
   name: 'Resource-FunctionsKeySecret'
   scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
@@ -53,7 +53,7 @@ module fn_key_kv '../configuration/secret.bicep' = {
 }
 
 @description('Named value to store the Functions Key')
-module fn_key_apim '../api-management/named-value-secret.bicep' = {
+module fn_key_apim '../../api-management/named-value-secret.bicep' = {
   name: 'Resource-FunctionsKeyNamedValue'
   scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
@@ -65,7 +65,7 @@ module fn_key_apim '../api-management/named-value-secret.bicep' = {
 }
 
 @description('API Management backend')
-module apimBackend '../api-management/backend.bicep' = {
+module apimBackend '../../api-management/backend.bicep' = {
   name: 'Resource-FunctionsBackend'
   scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
@@ -85,7 +85,7 @@ module apimBackend '../api-management/backend.bicep' = {
 }
 
 @description('API Management API registration with OpenAPI')
-module apimApi '../api-management/api-openapi.bicep' = {
+module apimApi '../../api-management/api-openapi.bicep' = {
   name: 'Resource-ApiManagementApi'
   scope: resourceGroup(conventions.global.apiManagement[referential.environment].resourceGroupName)
   params: {
@@ -102,11 +102,11 @@ module apimApi '../api-management/api-openapi.bicep' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management Backend')
+@description('The ID of the deployed resource')
 output id string = apimBackend.outputs.id
 
-@description('The API Version of the deployed API Management Backend')
+@description('The API Version of the deployed resource')
 output apiVersion string = apimBackend.outputs.apiVersion
 
-@description('The Name of the deployed API Management Backend')
+@description('The Name of the deployed resource')
 output name string = apimBackend.outputs.name

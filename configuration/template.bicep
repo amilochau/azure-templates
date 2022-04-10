@@ -69,8 +69,8 @@ module appConfig '../modules/configuration/app-config.bicep' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed App Configuration')
+@description('The ID of the deployed resource')
 output resourceId string = appConfig.outputs.id
 
-@description('The Name of the deployed App Configuration')
+@description('The Name of the deployed resource')
 output resourceName string = appConfig.outputs.name
