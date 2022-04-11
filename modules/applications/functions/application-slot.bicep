@@ -51,7 +51,7 @@ param kvVaultUri string = ''
 param applicationPackageUri string = ''
 
 @description('The application secret names')
-param applicationSecretNames array = []
+param extraAppSettings object = {}
 
 @description('The deployment location')
 param location string
@@ -61,63 +61,28 @@ param location string
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
 
-var secrets = [for secretName in applicationSecretNames: {
-  name: secretName
-  value: '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/${secretName}/)'
-}]
-var appSettings = concat([
-  {
-    name: 'AZURE_FUNCTIONS_ORGANIZATION'
-    value: referential.organization
-  }
-  {
-    name: 'AZURE_FUNCTIONS_APPLICATION'
-    value: referential.application
-  }
-  {
-    name: 'AZURE_FUNCTIONS_ENVIRONMENT'
-    value: referential.environment
-  }
-  {
-    name: 'AZURE_FUNCTIONS_HOST'
-    value: slotName
-  }
-  {
-    name: 'AZURE_FUNCTIONS_REGION'
-    value: referential.region
-  }
-  {
-    name: 'FUNCTIONS_EXTENSION_VERSION'
-    value: applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  }
-  {
-    name: 'FUNCTIONS_WORKER_RUNTIME'
-    value: applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
-  }
-  {
-    name: 'AzureWebJobsDisableHomepage'
-    value: 'true'
-  }
-  {
-    name: 'AzureWebJobsStorage__accountName'
-    value: webJobsStorageAccountName
-  }
-], empty(aiConnectionString) ? [] : array({
-  name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-  value: aiConnectionString
-}), empty(appConfigurationEndpoint) ? [] : array({
-  name: 'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT'
-  value: appConfigurationEndpoint
-}), empty(kvVaultUri) ? [] : array({
-  name: 'AZURE_FUNCTIONS_KEYVAULT_VAULT'
-  value: kvVaultUri
-}), empty(serviceBusNamespaceName) ? [] : array({
-  name: 'AzureWebJobsServiceBus__fullyQualifiedNamespace'
-  value: '${serviceBusNamespaceName}.servicebus.windows.net'
-}), empty(applicationPackageUri) ?  [] : array({
-  name: 'WEBSITE_RUN_FROM_PACKAGE'
-  value: applicationPackageUri
-}), empty(applicationSecretNames) ? [] : secrets)
+var formattedExtraAppSettings = json(replace(string(extraAppSettings), '##', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'))
+var appSettings = union(formattedExtraAppSettings, {
+  'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
+  'AZURE_FUNCTIONS_APPLICATION': referential.application
+  'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
+  'AZURE_FUNCTIONS_HOST': slotName
+  'AZURE_FUNCTIONS_REGION': referential.region
+  'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
+  'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  'AzureWebJobsDisableHomepage': 'true'
+  'AzureWebJobsStorage__accountName': webJobsStorageAccountName
+}, empty(aiConnectionString) ? {} : {
+  'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
+}, empty(appConfigurationEndpoint) ? {} : {
+  'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
+}, empty(kvVaultUri) ? {} : {
+  'AZURE_FUNCTIONS_KEYVAULT_VAULT': kvVaultUri
+}, empty(serviceBusNamespaceName) ? {} : {
+  'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
+}, empty(applicationPackageUri) ? {} : {
+  'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
+})
 
 // === EXISTING ===
 
@@ -145,15 +110,25 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
     reserved: true
     httpsOnly: true
     dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
-    siteConfig: {
+  }
+
+  // Web Configuration
+  resource webConfig 'config@2021-03-01' = {
+    name: 'web'
+    properties: {
       linuxFxVersion: linuxFxVersion
       localMySqlEnabled: false
       http20Enabled: true
       minTlsVersion: '1.2'
       scmMinTlsVersion: '1.2'
       ftpsState: 'Disabled'
-      appSettings: appSettings
     }
+  }
+
+  // App Configuration
+  resource appsettingsConfig 'config@2021-03-01' = {
+    name: 'appsettings'
+    properties: appSettings
   }
 }
 
