@@ -122,6 +122,7 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
       minTlsVersion: '1.2'
       scmMinTlsVersion: '1.2'
       ftpsState: 'Disabled'
+      keyVaultReferenceIdentity: userAssignedIdentityId
     }
   }
 
