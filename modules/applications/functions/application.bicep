@@ -178,3 +178,6 @@ output name string = fn.name
 
 @description('The default host name if the deployed resource')
 output defaultHostName string = fn.properties.defaultHostName
+
+// TODO TO REMOVE
+output appSettings array = appSettings
