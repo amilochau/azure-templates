@@ -54,7 +54,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: allowBlobPublicAccess
-    allowSharedKeyAccess: false // false = Enforcing AAD as the only authentication method
+    allowSharedKeyAccess: true // false = Enforcing AAD as the only authentication method
     allowCrossTenantReplication: true
     networkAcls: {
       bypass: 'AzureServices'
