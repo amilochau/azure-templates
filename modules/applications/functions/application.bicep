@@ -104,6 +104,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
     reserved: true
     httpsOnly: true
     dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
+    keyVaultReferenceIdentity: userAssignedIdentityId
   }
 
   // Web Configuration
@@ -116,7 +117,6 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
       minTlsVersion: '1.2'
       scmMinTlsVersion: '1.2'
       ftpsState: 'Disabled'
-      keyVaultReferenceIdentity: userAssignedIdentityId
     }
   }
 
