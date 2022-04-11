@@ -99,27 +99,27 @@ var appSettings = concat([
     name: 'AzureWebJobsStorage__accountName'
     value: webJobsStorageAccountName
   }
-  empty(aiConnectionString) ? {
+  empty(aiConnectionString) ? [] : {
     name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
     value: aiConnectionString
-  } : []
-  empty(appConfigurationEndpoint) ? {
+  }
+  empty(appConfigurationEndpoint) ? [] : {
     name: 'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT'
     value: appConfigurationEndpoint
-  } : []
-  empty(kvVaultUri) ? {
+  }
+  empty(kvVaultUri) ? [] : {
     name: 'AZURE_FUNCTIONS_KEYVAULT_VAULT'
     value: kvVaultUri
-  } : []
-  empty(serviceBusNamespaceName) ? {
+  }
+  empty(serviceBusNamespaceName) ? [] : {
     name: 'AzureWebJobsServiceBus__fullyQualifiedNamespace'
     value: '${serviceBusNamespaceName}.servicebus.windows.net'
-  } : []
-  empty(applicationPackageUri) ? {
+  }
+  empty(applicationPackageUri) ?  [] :{
     name: 'WEBSITE_RUN_FROM_PACKAGE'
     value: applicationPackageUri
-  } : []
-  empty(applicationSecretNames) ? secrets : []
+  }
+  empty(applicationSecretNames) ? [] : secrets
 ])
 
 var slotAppSettingNames = [
