@@ -14,7 +14,7 @@ param conventions object
 param appInsightsId string
 
 @description('The Application Insights connection string')
-param appInsightsConnectionString string
+param appInsightsInstrumentationKey string
 
 @description('The API Management publisher email')
 param publisherEmail string
@@ -55,30 +55,30 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Named value to store the Application Insights connection string
-  resource loggerKey 'namedValues@2021-01-01-preview' = {
+  resource loggerKey 'namedValues@2021-01-01-preview' = if (!empty(appInsightsInstrumentationKey)) {
     name: apimLoggerKeyName
     properties: {
       displayName: apimLoggerKeyName
-      value: appInsightsConnectionString
+      value: appInsightsInstrumentationKey
       secret: true
     }
   }
 
   // Logger
-  resource logger 'loggers@2021-01-01-preview' = {
+  resource logger 'loggers@2021-01-01-preview' = if (!empty(appInsightsInstrumentationKey)) {
     name: 'logger-applicationinsights'
     properties: {
       loggerType: 'applicationInsights'
       description: 'API Management logger'
       resourceId: appInsightsId
       credentials: {
-        'instrumentationKey': '{{${loggerKey.name}}}' !!
+        'instrumentationKey': '{{${loggerKey.name}}}'
       }
     }
   }
 
   // Diagnostic
-  resource diagnostic 'diagnostics@2021-01-01-preview' = {
+  resource diagnostic 'diagnostics@2021-01-01-preview' = if (!empty(appInsightsInstrumentationKey)) {
     name: 'applicationinsights'
     properties: {
       loggerId: logger.id

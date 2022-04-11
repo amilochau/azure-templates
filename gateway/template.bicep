@@ -102,7 +102,7 @@ module apim '../modules/api-management/services.bicep' = {
     publisherEmail: apiPublisherEmail
     publisherName: apiPublisherName
     appInsightsId: ai.outputs.id
-    appInsightsInstrumentationKey: ai.outputs.instrumentationKey
+    appInsightsInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
     products: apiProducts
   }
 }
