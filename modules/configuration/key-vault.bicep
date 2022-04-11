@@ -33,20 +33,20 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
     enablePurgeProtection: true
-    enableRbacAuthorization: true
+    enableRbacAuthorization: true // true = Enforcing AAD as the only authentication method
   }
 }
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Key Vault')
+@description('The ID of the deployed resource')
 output id string = kv.id
 
-@description('The API Version of the deployed Key Vault')
+@description('The API Version of the deployed resource')
 output apiVersion string = kv.apiVersion
 
-@description('The Name of the deployed Key Vault')
+@description('The Name of the deployed resource')
 output name string = kv.name
 
-@description('The Vault URI of the deployed Key Vault')
+@description('The Vault URI of the deployed resource')
 output vaultUri string = kv.properties.vaultUri

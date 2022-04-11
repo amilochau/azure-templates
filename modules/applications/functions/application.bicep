@@ -17,6 +17,9 @@ param conventions object
 ])
 param pricingPlan string
 
+@description('The ID of the User-Assigned Identity to use')
+param userAssignedIdentityId string
+
 @description('The application type')
 @allowed([
   'isolatedDotnet6'
@@ -32,8 +35,8 @@ param webJobsStorageAccountName string
 @description('The App Configuration endpoint')
 param appConfigurationEndpoint string = ''
 
-@description('The Application Insights instrumentation key')
-param aiInstrumentationKey string = ''
+@description('The Application Insights connection string')
+param aiConnectionString string = ''
 
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string = ''
@@ -96,9 +99,9 @@ var appSettings = concat([
     name: 'AzureWebJobsStorage__accountName'
     value: webJobsStorageAccountName
   }
-  empty(aiInstrumentationKey) ? {
-    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-    value: aiInstrumentationKey
+  empty(aiConnectionString) ? {
+    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+    value: aiConnectionString
   } : []
   empty(appConfigurationEndpoint) ? {
     name: 'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT'
@@ -119,22 +122,22 @@ var appSettings = concat([
   empty(applicationSecretNames) ? secrets : []
 ])
 
-// === EXISTING ===
-
-@description('Storage Account')
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
-  name: webJobsStorageAccountName
-}
+var slotAppSettingNames = [
+  'AZURE_FUNCTIONS_HOST'
+]
 
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-01-01' = {
+resource fn 'Microsoft.Web/sites@2021-03-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
   location: location
   kind: 'functionapp,linux'
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${userAssignedIdentityId}': {}
+    }
   }
   tags: referential
   properties: {
@@ -152,21 +155,26 @@ resource fn 'Microsoft.Web/sites@2021-01-01' = {
       appSettings: appSettings
     }
   }
+
+  // Slot settings
+  resource slotConfigNamesConfig 'config@2021-03-01' = {
+    name: 'slotConfigNames'
+    properties: {
+      appSettingNames: slotAppSettingNames
+    }
+  }
 }
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Azure Functions')
+@description('The ID of the deployed resource')
 output id string = fn.id
 
-@description('The API Version of the deployed Azure Functions')
+@description('The API Version of the deployed resource')
 output apiVersion string = fn.apiVersion
 
-@description('The Name of the deployed Azure Functions')
+@description('The Name of the deployed resource')
 output name string = fn.name
 
-@description('The Principal ID of the deployed Azure Functions')
-output principalId string = fn.identity.principalId
-
-@description('The default host name if the deployed Azure Functions')
+@description('The default host name if the deployed resource')
 output defaultHostName string = fn.properties.defaultHostName

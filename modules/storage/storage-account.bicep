@@ -54,7 +54,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: allowBlobPublicAccess
-    allowSharedKeyAccess: true
+    allowSharedKeyAccess: false // false = Enforcing AAD as the only authentication method
     allowCrossTenantReplication: true
     networkAcls: {
       bypass: 'AzureServices'
@@ -141,11 +141,11 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Storage Account')
+@description('The ID of the deployed resource')
 output id string = storageAccount.id
 
-@description('The API Version of the deployed Storage Account')
+@description('The API Version of the deployed resource')
 output apiVersion string = storageAccount.apiVersion
 
-@description('The Name of the deployed Storage Account')
+@description('The Name of the deployed resource')
 output name string = storageAccount.name

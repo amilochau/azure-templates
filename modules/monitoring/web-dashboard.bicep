@@ -22,7 +22,7 @@ param location string
 // === EXISTING ===
 
 @description('Web application')
-resource website 'Microsoft.Web/sites@2021-02-01' existing = {
+resource website 'Microsoft.Web/sites@2021-03-01' existing = {
   name: websiteName
 }
 
@@ -66,12 +66,12 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                           name: 'FunctionExecutionCount'
                           aggregationType: 1
                           metricVisualization: {
-                            displayName: 'Function execution count'
+                            displayName: 'Functions execution count'
                             resourceDisplayName: website.name
                           }
                         }
                       ]
-                      title: 'Function execution count'
+                      title: 'Functions execution count'
                       titleKind: 2
                       visualization: {
                         chartTpe: 2
@@ -114,7 +114,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
                           name: 'FunctionExecutionUnits'
                           aggregationType: 1
                           metricVisualization: {
-                            displayName: 'Function execution units'
+                            displayName: 'Functions execution units'
                             resourceDisplayName: website.name
                           }
                         }
@@ -337,7 +337,7 @@ resource dashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
               ]
               settings: {
                 content: {
-                  PartTitle: 'Function calls'
+                  PartTitle: 'Functions calls'
                   PartSubTitle: website.name
                 }
               }

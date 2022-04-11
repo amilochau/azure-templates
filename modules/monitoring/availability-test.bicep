@@ -87,11 +87,11 @@ resource availabilityTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { /
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Availability Test')
+@description('The ID of the deployed resource')
 output id string = availabilityTest.id
 
-@description('The API Version of the deployed Availability Test')
+@description('The API Version of the deployed resource')
 output apiVersion string = availabilityTest.apiVersion
 
-@description('The Name of the deployed Availability Test')
+@description('The Name of the deployed resource')
 output name string = availabilityTest.name

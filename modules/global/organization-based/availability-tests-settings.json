@@ -1,5 +1,5 @@
 {
-  "performance": {
+  "functions": {
     "urlSuffix": "/api/health/light",
     "locations": [
       "emea-fr-pra-edge"

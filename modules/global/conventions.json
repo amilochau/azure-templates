@@ -5,13 +5,44 @@
       "resourceGroupName": "%ORGANIZATION%-config-shd-rg"
     },
     "logAnalyticsWorkspace": {
-      "name": "%ORGANIZATION%-monitoring-%HOST%-ws",
-      "resourceGroupName": "%ORGANIZATION%-monitoring-%HOST%-rg"
+      "Development": {
+        "name": "%ORGANIZATION%-monitoring-dev-ws",
+        "resourceGroupName": "%ORGANIZATION%-monitoring-dev-rg"
+      },
+      "Staging": {
+        "name": "%ORGANIZATION%-monitoring-dev-ws",
+        "resourceGroupName": "%ORGANIZATION%-monitoring-dev-rg"
+      },
+      "Production": {
+        "name": "%ORGANIZATION%-monitoring-prd-ws",
+        "resourceGroupName": "%ORGANIZATION%-monitoring-prd-rg"
+      },
+      "Shared": {
+        "name": "%ORGANIZATION%-monitoring-prd-ws",
+        "resourceGroupName": "%ORGANIZATION%-monitoring-prd-rg"
+      }
     },
     "apiManagement": {
-      "name": "%ORGANIZATION%-gateway-%HOST%-apim",
-      "keyVaultName": "%ORGANIZATION%-gateway-%HOST%-kv",
-      "resourceGroupName": "%ORGANIZATION%-gateway-%HOST%-rg"
+      "Development": {
+        "name": "%ORGANIZATION%-gateway-dev-apim",
+        "keyVaultName": "%ORGANIZATION%-gateway-dev-kv",
+        "resourceGroupName": "%ORGANIZATION%-gateway-dev-rg"
+      },
+      "Staging": {
+        "name": "%ORGANIZATION%-gateway-dev-apim",
+        "keyVaultName": "%ORGANIZATION%-gateway-dev-kv",
+        "resourceGroupName": "%ORGANIZATION%-gateway-dev-rg"
+      },
+      "Production": {
+        "name": "%ORGANIZATION%-gateway-prd-apim",
+        "keyVaultName": "%ORGANIZATION%-gateway-prd-kv",
+        "resourceGroupName": "%ORGANIZATION%-gateway-prd-rg"
+      },
+      "Shared": {
+        "name": "%ORGANIZATION%-gateway-prd-apim",
+        "keyVaultName": "%ORGANIZATION%-gateway-prd-kv",
+        "resourceGroupName": "%ORGANIZATION%-gateway-prd-rg"
+      }
     },
     "dnsZone": {
       "milochau.com": "mil-rg-milochau"
@@ -27,6 +58,7 @@
       "apiManagementApiVersionSet": "apimversionset",
       "functionsApplication": "fn",
       "applicationInsights": "ai",
+      "userAssignedIdentity": "uai",
       "cdnProfile": "cdnp",
       "cdnEndpoint": "cdne",
       "cosmosAccount": "cosmos",

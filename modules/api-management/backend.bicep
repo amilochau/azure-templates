@@ -4,6 +4,9 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
@@ -23,7 +26,7 @@ param credentials object = {}
 
 @description('API Management')
 resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
-  name: conventions.global.apiManagement.name
+  name: conventions.global.apiManagement[referential.environment].name
 }
 
 // === RESOURCES ===
@@ -42,11 +45,11 @@ resource backend 'Microsoft.ApiManagement/service/backends@2021-01-01-preview' =
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management Backend')
+@description('The ID of the deployed resource')
 output id string = backend.id
 
-@description('The API Version of the deployed API Management Backend')
+@description('The API Version of the deployed resource')
 output apiVersion string = backend.apiVersion
 
-@description('The Name of the deployed API Management Backend')
+@description('The Name of the deployed resource')
 output name string = backend.name

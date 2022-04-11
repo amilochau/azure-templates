@@ -28,7 +28,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
   tags: referential
   properties: {
     zoneRedundant: false
-    disableLocalAuth: true
+    disableLocalAuth: true // true = Enforcing AAD as the only authentication method
   }
 
   // Service Bus Queues
@@ -52,11 +52,11 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Service Bus Namespace')
+@description('The ID of the deployed resource')
 output id string = sbn.id
 
-@description('The API Version of the deployed Service Bus Namespace')
+@description('The API Version of the deployed resource')
 output apiVersion string = sbn.apiVersion
 
-@description('The Name of the deployed Service Bus Namespace')
+@description('The Name of the deployed resource')
 output name string = sbn.name

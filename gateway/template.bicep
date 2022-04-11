@@ -102,7 +102,7 @@ module apim '../modules/api-management/services.bicep' = {
     publisherEmail: apiPublisherEmail
     publisherName: apiPublisherName
     appInsightsId: ai.outputs.id
-    appInsightsInstrumentationKey: ai.outputs.instrumentationKey
+    appInsightsInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
     products: apiProducts
   }
 }
@@ -121,8 +121,8 @@ module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed API Management')
+@description('The ID of the deployed resource')
 output resourceId string = apim.outputs.id
 
-@description('The Name of the deployed API Management')
+@description('The Name of the deployed resource')
 output resourceName string = apim.outputs.name

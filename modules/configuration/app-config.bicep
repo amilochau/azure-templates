@@ -35,7 +35,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   }
   tags: referential
   properties: {
-    disableLocalAuth: false
+    disableLocalAuth: false // true = Enforcing AAD as the only authentication method
     /* Two limitations to put this 'disableLocalAuth' settings to 'true':
       1/ ARM template won't work well: https://docs.microsoft.com/en-us/azure/azure-app-configuration/howto-disable-access-key-authentication?tabs=portal#arm-template-access
       2/ Configuration keys deployment won't work well from GitHub Actions: https://github.com/marketplace/actions/azure-app-configuration-sync#connection-string
@@ -45,11 +45,11 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed App Configuration')
+@description('The ID of the deployed resource')
 output id string = appConfig.id
 
-@description('The API Version of the deployed App Configuration')
+@description('The API Version of the deployed resource')
 output apiVersion string = appConfig.apiVersion
 
-@description('The Name of the deployed App Configuration')
+@description('The Name of the deployed resource')
 output name string = appConfig.name

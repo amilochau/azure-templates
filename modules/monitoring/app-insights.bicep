@@ -31,8 +31,8 @@ var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 
 
 @description('Log Analytics Workspace')
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
-  scope: resourceGroup(conventions.global.logAnalyticsWorkspace.resourceGroupName)
-  name: conventions.global.logAnalyticsWorkspace.name
+  scope: resourceGroup(conventions.global.logAnalyticsWorkspace[referential.environment].resourceGroupName)
+  name: conventions.global.logAnalyticsWorkspace[referential.environment].name
 }
 
 @description('Application Insights')
@@ -43,7 +43,10 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
   tags: referential
   properties: {
     Application_Type: 'web'
-    DisableLocalAuth: disableLocalAuth
+    DisableLocalAuth: disableLocalAuth // true = Enforcing AAD as the only authentication method
+    /* One main limitation to put this 'DisableLocalAuth' settings to 'true':
+      1/ Functions application do not support RBAC authentication yet
+    */
     WorkspaceResourceId: workspace.id
   }
 
@@ -58,14 +61,17 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Application Insights')
+@description('The ID of the deployed resource')
 output id string = ai.id
 
-@description('The API Version of the deployed Application Insights')
+@description('The API Version of the deployed resource')
 output apiVersion string = ai.apiVersion
 
-@description('The Name of the deployed Application Insights')
+@description('The Name of the deployed resource')
 output name string = ai.name
 
-@description('The Instrumentation Key of the deployed Application Insights')
+@description('The Instrumentation Key of the deployed resource')
 output instrumentationKey string = ai.properties.InstrumentationKey
+
+@description('The Connection String of the deployed resource')
+output connectionString string = ai.properties.ConnectionString

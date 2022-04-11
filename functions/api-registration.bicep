@@ -1,5 +1,5 @@
 /*
-  REgister an Azure Functions into API Management
+  Register an Azure Functions into API Management
 */
 
 // === PARAMETERS ===
@@ -56,7 +56,7 @@ var conventions = json(replace(replace(replace(replace(loadTextContent('../modul
 // === EXISTING ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-01-15' existing = {
+resource fn 'Microsoft.Web/sites@2021-03-01' existing = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
 }
 
@@ -75,27 +75,17 @@ module tags '../modules/global/tags.bicep' = {
   }
 }
 
-@description('API Management backend')
-module apimBackend '../modules/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
+@description('API Management backend & API registration')
+module apimBackend '../modules/applications/functions/api-management-backend.bicep' = if (!empty(apiManagementProducts)) {
   name: 'Resource-ApiManagementBackend'
   params: {
+    referential: tags.outputs.referential
     conventions: conventions
     functionsAppName: fn.name
     relativeFunctionsUrl: relativeFunctionsUrl
-  }
-}
-
-@description('API Management API registration with OpenAPI')
-module apimApi '../modules/api-management/api-openapi.bicep' = if (!empty(apiManagementProducts)) {
-  name: 'Resource-ApiManagementApi'
-  scope: resourceGroup(conventions.global.apiManagement.resourceGroupName)
-  params: {
-    applicationName: applicationName
-    conventions: conventions
-    backendId: !empty(apiManagementProducts) ? apimBackend.outputs.name : ''
     apiVersion: apiManagementVersion
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
-    openApiLink: 'https://${fn.properties.defaultHostName}${relativeOpenApiUrl}'
+    relativeOpenApiUrl: relativeOpenApiUrl
   }
 }

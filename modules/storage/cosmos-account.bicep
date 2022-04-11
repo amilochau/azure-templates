@@ -22,8 +22,8 @@ var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffix
 var cosmosDatabaseName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
 var extendedRecoverability = referential.environment == 'Production'
 var cosmosAccountBackupRedundancy = extendedRecoverability ? 'Geo' : 'Local'
-var azureIpAddresses = json(loadTextContent('../global/azure-ip-addresses.json'))
-var ipRules = union(azureIpAddresses['azurePortal'], azureIpAddresses['azureServices'])
+var knownIpAddresses = json(loadTextContent('../global/ip-addresses.json'))
+var authorizedIpAddresses = union(knownIpAddresses['azurePortal'], knownIpAddresses['azureServices'])
 
 // === RESOURCES ===
 
@@ -35,7 +35,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   location: location
   properties: {
     databaseAccountOfferType: 'Standard'
-    disableLocalAuth: false
+    disableLocalAuth: true // true = Enforcing RBAC as the only authentication method
     disableKeyBasedMetadataWriteAccess: true
     enableFreeTier: false
     locations: [
@@ -56,7 +56,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
         backupStorageRedundancy: cosmosAccountBackupRedundancy
       }
     }
-    ipRules: [ for ipAddress in ipRules : {
+    ipRules: [ for ipAddress in authorizedIpAddresses : {
       ipAddressOrRange: ipAddress
     }]
   }
@@ -100,11 +100,11 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
 
 // === OUTPUTS ===
 
-@description('The ID of the deployed Cosmos DB Account')
+@description('The ID of the deployed resource')
 output id string = cosmosAccount.id
 
-@description('The API Version of the deployed Cosmos DB Account')
+@description('The API Version of the deployed resource')
 output apiVersion string = cosmosAccount.apiVersion
 
-@description('The Name of the deployed Cosmos DB Account')
+@description('The Name of the deployed resource')
 output name string = cosmosAccount.name
