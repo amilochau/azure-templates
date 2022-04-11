@@ -139,7 +139,12 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
     reserved: true
     httpsOnly: true
     dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
-    siteConfig: {
+  }
+
+  // Web Configuration
+  resource webConfig 'config@2021-03-01' = {
+    name: 'web'
+    properties: {
       linuxFxVersion: linuxFxVersion
       localMySqlEnabled: false
       http20Enabled: true
