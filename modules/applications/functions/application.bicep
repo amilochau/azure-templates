@@ -35,8 +35,8 @@ param webJobsStorageAccountName string
 @description('The App Configuration endpoint')
 param appConfigurationEndpoint string = ''
 
-@description('The Application Insights instrumentation key')
-param aiInstrumentationKey string = ''
+@description('The Application Insights connection string')
+param aiConnectionString string = ''
 
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string = ''
@@ -66,8 +66,8 @@ var baseAppSettings = {
   'AzureWebJobsDisableHomepage': 'true'
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
 }
-var appSettingsAppInsights = empty(aiInstrumentationKey) ? baseAppSettings : union(baseAppSettings, {
-  'APPINSIGHTS_INSTRUMENTATIONKEY': aiInstrumentationKey
+var appSettingsAppInsights = empty(aiConnectionString) ? baseAppSettings : union(baseAppSettings, {
+  'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
 })
 var appSettingsAppConfig = empty(appConfigurationEndpoint) ? appSettingsAppInsights : union(appSettingsAppInsights, {
   'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint

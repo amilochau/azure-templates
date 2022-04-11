@@ -209,7 +209,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: !disableAppConfiguration ? appConfig.properties.endpoint : ''
-    aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
+    aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
     applicationPackageUri: applicationPackageUri
@@ -230,7 +230,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
     appConfigurationEndpoint: !disableAppConfiguration ? appConfig.properties.endpoint : ''
-    aiInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
+    aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
     applicationPackageUri: applicationPackageUri

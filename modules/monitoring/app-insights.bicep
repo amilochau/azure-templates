@@ -72,3 +72,6 @@ output name string = ai.name
 
 @description('The Instrumentation Key of the deployed resource')
 output instrumentationKey string = ai.properties.InstrumentationKey
+
+@description('The Connection String of the deployed resource')
+output connectionString string = ai.properties.ConnectionString
