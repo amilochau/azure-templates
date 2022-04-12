@@ -23,6 +23,9 @@ param slotName string
 @description('The ID of the User-Assigned Identity to use')
 param userAssignedIdentityId string
 
+@description('The Client ID of the User-Assigned Identity to use')
+param userAssignedIdentityClientId string
+
 @description('The application type')
 @allowed([
   'isolatedDotnet6'
@@ -59,7 +62,7 @@ param location string
 // === VARIABLES ===
 
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
-var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET|6.0' : 'ERROR'
+var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
 
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
@@ -72,7 +75,10 @@ var appSettings = union(formattedExtraAppSettings, {
   'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
   'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID': userAssignedIdentityId
   'AzureWebJobsDisableHomepage': 'true'
+  // Connection information for Storage Account (triggers management)
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
+  'AzureWebJobsStorage__credential': 'managedidentity'
+  'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
 }, empty(aiConnectionString) ? {} : {
   'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
 }, empty(appConfigurationEndpoint) ? {} : {
@@ -80,7 +86,10 @@ var appSettings = union(formattedExtraAppSettings, {
 }, empty(kvVaultUri) ? {} : {
   'AZURE_FUNCTIONS_KEYVAULT_VAULT': kvVaultUri
 }, empty(serviceBusNamespaceName) ? {} : {
+  // Connection information for Service Bus namespace
   'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
+  'AzureWebJobsServiceBus__credential': 'managedidentity'
+  'AzureWebJobsServiceBus__clientId': userAssignedIdentityClientId
 }, empty(applicationPackageUri) ? {} : {
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
 })
@@ -100,7 +109,7 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   parent: fn
   location: location
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${userAssignedIdentityId}': {}
     }

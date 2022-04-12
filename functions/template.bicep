@@ -208,6 +208,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     location: location
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity.outputs.id
+    userAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
@@ -228,6 +229,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     location: location
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity.outputs.id
+    userAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     functionsName: fn.outputs.name
     slotName: deploymentSlot.name
     applicationType: applicationType
