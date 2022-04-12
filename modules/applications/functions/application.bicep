@@ -67,6 +67,7 @@ var appSettings = union(formattedExtraAppSettings, {
   'AZURE_FUNCTIONS_REGION': referential.region
   'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
   'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID': userAssignedIdentityId
   'AzureWebJobsDisableHomepage': 'true'
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
 }, empty(aiConnectionString) ? {} : {
@@ -93,7 +94,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   location: location
   kind: 'functionapp,linux'
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${userAssignedIdentityId}': {}
     }
