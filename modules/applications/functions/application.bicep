@@ -91,14 +91,9 @@ var appSettings = union(formattedExtraAppSettings, {
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
 })
 
-var slotAppSettingNames = union([
+var slotAppSettingNames = [
   'AZURE_FUNCTIONS_HOST'
-  'AzureWebJobsStorage__clientId'
-  'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID'
-  'AZURE_CLIENT_ID'
-], empty(serviceBusNamespaceName) ? [] : [
-  'AzureWebJobsServiceBus__clientId'
-])
+]
 
 // === RESOURCES ===
 
@@ -108,7 +103,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   location: location
   kind: 'functionapp,linux'
   identity: {
-    type: 'SystemAssigned, UserAssigned'
+    type: 'UserAssigned'
     userAssignedIdentities: {
       '${userAssignedIdentityId}': {}
     }

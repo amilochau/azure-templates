@@ -109,7 +109,7 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   parent: fn
   location: location
   identity: {
-    type: 'SystemAssigned, UserAssigned'
+    type: 'UserAssigned'
     userAssignedIdentities: {
       '${userAssignedIdentityId}': {}
     }
