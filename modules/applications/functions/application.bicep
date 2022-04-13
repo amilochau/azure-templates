@@ -39,7 +39,7 @@ param webJobsStorageAccountName string
 param kvVaultUri string
 
 @description('The Application Insights connection string')
-param aiConnectionString string = ''
+param aiConnectionString string
 
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string = ''
@@ -73,7 +73,6 @@ var appSettings = union(formattedExtraAppSettings, {
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
   'AzureWebJobsStorage__credential': 'managedidentity'
   'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
-}, empty(aiConnectionString) ? {} : {
   'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
 }, empty(serviceBusNamespaceName) ? {} : {
   // Connection information for Service Bus namespace

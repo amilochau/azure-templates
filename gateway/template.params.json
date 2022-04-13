@@ -26,9 +26,6 @@
             "approvalRequired": true
           }
         ]
-      },
-      "disableApplicationInsights": {
-        "value": true
       }
     }
   }

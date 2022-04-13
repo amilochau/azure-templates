@@ -17,9 +17,6 @@
       "applicationType": {
         "value": "isolatedDotnet6"
       },
-      "disableApplicationInsights": {
-        "value": true
-      },
       "serviceBusQueues": {
         "value": [
           "queue1",

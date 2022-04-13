@@ -42,9 +42,6 @@ param apiPublisherEmail string
 @description('The API products')
 param apiProducts array = []
 
-@description('Whether to disable the Application Insights')
-param disableApplicationInsights bool = false
-
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -81,7 +78,7 @@ module kv '../modules/configuration/key-vault.bicep' = {
 }
 
 @description('Application Insights')
-module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
@@ -102,7 +99,7 @@ module apim '../modules/api-management/services.bicep' = {
     publisherEmail: apiPublisherEmail
     publisherName: apiPublisherName
     appInsightsId: ai.outputs.id
-    appInsightsInstrumentationKey: !disableApplicationInsights ? ai.outputs.instrumentationKey : ''
+    appInsightsInstrumentationKey: ai.outputs.instrumentationKey
     products: apiProducts
   }
 }
