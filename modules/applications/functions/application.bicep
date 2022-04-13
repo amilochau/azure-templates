@@ -35,9 +35,6 @@ param serverFarmId string
 @description('The Azure WebJobs Storage Account name')
 param webJobsStorageAccountName string
 
-@description('The App Configuration endpoint')
-param appConfigurationEndpoint string = ''
-
 @description('The Application Insights connection string')
 param aiConnectionString string = ''
 
@@ -78,8 +75,6 @@ var appSettings = union(formattedExtraAppSettings, {
   'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
 }, empty(aiConnectionString) ? {} : {
   'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
-}, empty(appConfigurationEndpoint) ? {} : {
-  'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
 }, empty(kvVaultUri) ? {} : {
   'AZURE_FUNCTIONS_KEYVAULT_VAULT': kvVaultUri
 }, empty(serviceBusNamespaceName) ? {} : {
