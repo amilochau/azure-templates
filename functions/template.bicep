@@ -40,9 +40,6 @@ param pricingPlan string = 'Free'
 @description('Whether to disable the Application Insights')
 param disableApplicationInsights bool = false
 
-@description('Whether to disable the App Configuration')
-param disableAppConfiguration bool = false
-
 @description('Whether to disable the Key Vault')
 param disableKeyVault bool = false
 
@@ -83,14 +80,6 @@ var availabilityTestsSettings = json(loadTextContent('../modules/global/organiza
 
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
-
-// === EXISTING ===
-
-@description('App Configuration')
-resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' existing = {
-  name: conventions.global.appConfiguration.name
-  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
-}
 
 // === RESOURCES ===
 
@@ -212,7 +201,6 @@ module fn '../modules/applications/functions/application.bicep' = {
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
-    appConfigurationEndpoint: !disableAppConfiguration ? appConfig.properties.endpoint : ''
     aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
@@ -221,7 +209,7 @@ module fn '../modules/applications/functions/application.bicep' = {
   }
 }
 
-@description('Functions application')
+@description('Functions application - slots')
 module fnSlots '../modules/applications/functions/application-slot.bicep' = [for deploymentSlot in deploymentSlots: {
   name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
   params: {
@@ -235,7 +223,6 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
-    appConfigurationEndpoint: !disableAppConfiguration ? appConfig.properties.endpoint : ''
     aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
@@ -272,17 +259,6 @@ module dashboard '../modules/monitoring/web-dashboard.bicep' = if (!disableAppli
 }
 
 // === AUTHORIZATIONS ===
-
-@description('Functions to App Configuration')
-module auth_fn_appConfig '../modules/authorizations/app-configuration-data-reader.bicep' = if (!disableAppConfiguration) {
-  name: 'Authorization-Functions-AppConfiguration'
-  scope: resourceGroup(conventions.global.appConfiguration.resourceGroupName)
-  params: {
-    principalId: userAssignedIdentity.outputs.principalId
-    appConfigurationName: conventions.global.appConfiguration.name
-    roleDescription: 'Functions application should read the configuration from App Configuration'
-  }
-}
 
 @description('Functions to Key Vault')
 module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!disableKeyVault) {

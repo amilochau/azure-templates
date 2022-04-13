@@ -1,9 +1,5 @@
 {
   "global": {
-    "appConfiguration": {
-      "name": "%ORGANIZATION%-config-shd-cfg",
-      "resourceGroupName": "%ORGANIZATION%-config-shd-rg"
-    },
     "logAnalyticsWorkspace": {
       "Development": {
         "name": "%ORGANIZATION%-monitoring-dev-ws",
