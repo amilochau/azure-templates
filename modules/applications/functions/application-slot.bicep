@@ -63,26 +63,34 @@ var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0
 
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
+  // General hosting information
   'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
   'AZURE_FUNCTIONS_APPLICATION': referential.application
   'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
   'AZURE_FUNCTIONS_HOST': slotName
   'AZURE_FUNCTIONS_REGION': referential.region
+  // Functions runtime configuration
   'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
   'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
-  'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID': userAssignedIdentityId
+  // Functions misc configuration
   'AzureWebJobsDisableHomepage': 'true'
   // Connection information for Storage Account (triggers management)
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
   'AzureWebJobsStorage__credential': 'managedidentity'
   'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
+  // Application Insights configuration
   'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
+  // Application deployment package authorization
+  'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID': userAssignedIdentityId
+  // Application identity configuration
+  'AZURE_CLIENT_ID': userAssignedIdentityClientId
 }, empty(serviceBusNamespaceName) ? {} : {
   // Connection information for Service Bus namespace
   'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
   'AzureWebJobsServiceBus__credential': 'managedidentity'
   'AzureWebJobsServiceBus__clientId': userAssignedIdentityClientId
 }, empty(applicationPackageUri) ? {} : {
+  // Application deployment package URI
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
 })
 
