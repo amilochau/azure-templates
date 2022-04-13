@@ -24,9 +24,6 @@ param hostName string
 param templateVersion string
 
 
-@description('Whether to disable the Key Vault')
-param disableKeyVault bool = false
-
 @description('The service bus queues')
 param serviceBusQueues array = []
 
@@ -65,7 +62,7 @@ module tags '../modules/global/tags.bicep' = {
 }
 
 @description('Key Vault')
-module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
+module kv '../modules/configuration/key-vault.bicep' = {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential

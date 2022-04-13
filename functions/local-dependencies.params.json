@@ -11,9 +11,6 @@
       "hostName": {
         "value": "local"
       },
-      "disableKeyVault": {
-        "value": true
-      },
       "serviceBusQueues": {
         "value": [
           "queue1",

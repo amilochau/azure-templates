@@ -20,12 +20,6 @@
       "disableApplicationInsights": {
         "value": true
       },
-      "disableAppConfiguration": {
-        "value": true
-      },
-      "disableKeyVault": {
-        "value": true
-      },
       "serviceBusQueues": {
         "value": [
           "queue1",
