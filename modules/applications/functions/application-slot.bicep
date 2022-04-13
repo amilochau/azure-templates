@@ -38,14 +38,14 @@ param serverFarmId string
 @description('The Azure WebJobs Storage Account name')
 param webJobsStorageAccountName string
 
+@description('The Key Vault vault URI')
+param kvVaultUri string
+
 @description('The Application Insights connection string')
 param aiConnectionString string = ''
 
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string = ''
-
-@description('The Key Vault vault URI')
-param kvVaultUri string = ''
 
 @description('The application packages URI')
 param applicationPackageUri string = ''
@@ -78,8 +78,6 @@ var appSettings = union(formattedExtraAppSettings, {
   'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
 }, empty(aiConnectionString) ? {} : {
   'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
-}, empty(kvVaultUri) ? {} : {
-  'AZURE_FUNCTIONS_KEYVAULT_VAULT': kvVaultUri
 }, empty(serviceBusNamespaceName) ? {} : {
   // Connection information for Service Bus namespace
   'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'

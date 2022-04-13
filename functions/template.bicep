@@ -40,9 +40,6 @@ param pricingPlan string = 'Free'
 @description('Whether to disable the Application Insights')
 param disableApplicationInsights bool = false
 
-@description('Whether to disable the Key Vault')
-param disableKeyVault bool = false
-
 @description('The service bus queues')
 param serviceBusQueues array = []
 
@@ -106,7 +103,7 @@ module userAssignedIdentity '../modules/authorizations/user-assigned-identity.bi
 }
 
 @description('Key Vault')
-module kv '../modules/configuration/key-vault.bicep' = if (!disableKeyVault) {
+module kv '../modules/configuration/key-vault.bicep' = {
   name: 'Resource-KeyVault'
   params: {
     referential: tags.outputs.referential
@@ -203,7 +200,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     webJobsStorageAccountName: stg.outputs.name
     aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
-    kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
+    kvVaultUri: kv.outputs.vaultUri
     applicationPackageUri: applicationPackageUri
     extraAppSettings: extraAppSettings
   }
@@ -225,7 +222,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     webJobsStorageAccountName: stg.outputs.name
     aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
-    kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
+    kvVaultUri: kv.outputs.vaultUri
     applicationPackageUri: applicationPackageUri
     extraAppSettings: extraAppSettings
   }
@@ -261,7 +258,7 @@ module dashboard '../modules/monitoring/web-dashboard.bicep' = if (!disableAppli
 // === AUTHORIZATIONS ===
 
 @description('Functions to Key Vault')
-module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = if (!disableKeyVault) {
+module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
   name: 'Authorization-Functions-KeyVault'
   params: {
     principalId: userAssignedIdentity.outputs.principalId
