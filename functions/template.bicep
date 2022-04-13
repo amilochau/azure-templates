@@ -37,9 +37,6 @@ param applicationType string
 ])
 param pricingPlan string = 'Free'
 
-@description('Whether to disable the Application Insights')
-param disableApplicationInsights bool = false
-
 @description('The service bus queues')
 param serviceBusQueues array = []
 
@@ -113,7 +110,7 @@ module kv '../modules/configuration/key-vault.bicep' = {
 }
 
 @description('Application Insights')
-module ai '../modules/monitoring/app-insights.bicep' = if (!disableApplicationInsights) {
+module ai '../modules/monitoring/app-insights.bicep' = {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
@@ -198,7 +195,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
-    aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
+    aiConnectionString: ai.outputs.connectionString
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
     applicationPackageUri: applicationPackageUri
@@ -220,7 +217,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
-    aiConnectionString: !disableApplicationInsights ? ai.outputs.connectionString : ''
+    aiConnectionString: ai.outputs.connectionString
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
     applicationPackageUri: applicationPackageUri
@@ -244,14 +241,14 @@ module performanceTest '../modules/monitoring/availability-test.bicep' = if (ext
 }
 
 @description('Dashboard')
-module dashboard '../modules/monitoring/web-dashboard.bicep' = if (!disableApplicationInsights) {
+module dashboard '../modules/monitoring/web-dashboard.bicep' = {
   name: 'Resource-Dashboard'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
     websiteName: fn.outputs.name
-    applicationInsightsName: !disableApplicationInsights ? ai.outputs.name : ''
+    applicationInsightsName: ai.outputs.name
   }
 }
 
@@ -268,7 +265,7 @@ module auth_fn_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
 }
 
 @description('Functions to Application Insights')
-module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = if (!disableApplicationInsights) {
+module auth_fn_ai '../modules/authorizations/monitoring-metrics-publisher.bicep' = {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
     principalId: userAssignedIdentity.outputs.principalId
