@@ -47,6 +47,12 @@
           }
         ]
       },
+      "extraAppSettings": {
+        "value": {
+          "key1": "value1",
+          "key2": "<secret>secret_name</secret>"
+        }
+      },
       "cosmosContainers": {
         "value": [
           {

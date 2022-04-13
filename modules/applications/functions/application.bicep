@@ -20,6 +20,9 @@ param pricingPlan string
 @description('The ID of the User-Assigned Identity to use')
 param userAssignedIdentityId string
 
+@description('The Client ID of the User-Assigned Identity to use')
+param userAssignedIdentityClientId string
+
 @description('The application type')
 @allowed([
   'isolatedDotnet6'
@@ -47,6 +50,9 @@ param kvVaultUri string = ''
 @description('The application packages URI')
 param applicationPackageUri string = ''
 
+@description('The application secret names')
+param extraAppSettings object = {}
+
 @description('The deployment location')
 param location string
 
@@ -55,7 +61,8 @@ param location string
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
 
-var baseAppSettings = {
+var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
+var appSettings = union(formattedExtraAppSettings, {
   'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
   'AZURE_FUNCTIONS_APPLICATION': referential.application
   'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
@@ -63,26 +70,26 @@ var baseAppSettings = {
   'AZURE_FUNCTIONS_REGION': referential.region
   'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
   'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID': userAssignedIdentityId
   'AzureWebJobsDisableHomepage': 'true'
+  // Connection information for Storage Account (triggers management)
   'AzureWebJobsStorage__accountName': webJobsStorageAccountName
-}
-var appSettingsAppInsights = empty(aiConnectionString) ? baseAppSettings : union(baseAppSettings, {
+  'AzureWebJobsStorage__credential': 'managedidentity'
+  'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
+}, empty(aiConnectionString) ? {} : {
   'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
-})
-var appSettingsAppConfig = empty(appConfigurationEndpoint) ? appSettingsAppInsights : union(appSettingsAppInsights, {
+}, empty(appConfigurationEndpoint) ? {} : {
   'AZURE_FUNCTIONS_APPCONFIG_ENDPOINT': appConfigurationEndpoint
-})
-var appSettingsKeyVault = empty(kvVaultUri) ? appSettingsAppConfig : union(appSettingsAppConfig, {
+}, empty(kvVaultUri) ? {} : {
   'AZURE_FUNCTIONS_KEYVAULT_VAULT': kvVaultUri
-})
-var appSettingsServiceBus = empty(serviceBusNamespaceName) ? appSettingsKeyVault : union(appSettingsKeyVault, {
+}, empty(serviceBusNamespaceName) ? {} : {
+  // Connection information for Service Bus namespace
   'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
-})
-var appSettingsPackageUri = empty(applicationPackageUri) ? appSettingsServiceBus : union(appSettingsServiceBus, {
+  'AzureWebJobsServiceBus__credential': 'managedidentity'
+  'AzureWebJobsServiceBus__clientId': userAssignedIdentityClientId
+}, empty(applicationPackageUri) ? {} : {
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
 })
-// -- Add more conditional unions here if you want to support more settings
-var appSettings = appSettingsPackageUri
 
 var slotAppSettingNames = [
   'AZURE_FUNCTIONS_HOST'
@@ -96,7 +103,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   location: location
   kind: 'functionapp,linux'
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${userAssignedIdentityId}': {}
     }
@@ -107,6 +114,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
     reserved: true
     httpsOnly: true
     dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
+    keyVaultReferenceIdentity: userAssignedIdentityId
   }
 
   // Web Configuration

@@ -55,6 +55,9 @@ param storageAccounts array = []
 @description('The application packages URI')
 param applicationPackageUri string = ''
 
+@description('The extra app settings to add')
+param extraAppSettings object = {}
+
 @description('The Cosmos DB containers')
 param cosmosContainers array = []
 
@@ -205,6 +208,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     location: location
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity.outputs.id
+    userAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
@@ -213,6 +217,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
     applicationPackageUri: applicationPackageUri
+    extraAppSettings: extraAppSettings
   }
 }
 
@@ -224,6 +229,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     location: location
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity.outputs.id
+    userAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     functionsName: fn.outputs.name
     slotName: deploymentSlot.name
     applicationType: applicationType
@@ -234,6 +240,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     kvVaultUri: !disableKeyVault ? kv.outputs.vaultUri : ''
     applicationPackageUri: applicationPackageUri
+    extraAppSettings: extraAppSettings
   }
 }]
 
