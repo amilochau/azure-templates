@@ -56,8 +56,8 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
         backupStorageRedundancy: cosmosAccountBackupRedundancy
       }
     }
-    ipRules: [ for ipAddress in authorizedIpAddresses : {
-      ipAddressOrRange: ipAddress
+    ipRules: [ for ipAddress in items(authorizedIpAddresses) : {
+      ipAddressOrRange: ipAddress.value
     }]
   }
 

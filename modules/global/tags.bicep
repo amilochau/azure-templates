@@ -60,5 +60,5 @@ output apiVersion string = tags.apiVersion
 @description('The Name of the deployed resource')
 output name string = tags.name
 
-@description('The resource group referential; the following properties are exposed: `organization`, `application`, `environemnt`, `host`, `region`, `templateVersion`, `deploymentDate`')
+@description('The resource group referential; the following properties are exposed: `organization`, `application`, `environment`, `host`, `region`, `templateVersion`, `deploymentDate`')
 output referential object = referential

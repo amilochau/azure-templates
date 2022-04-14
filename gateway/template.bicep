@@ -107,11 +107,12 @@ module apim '../modules/api-management/services.bicep' = {
 // === AUTHORIZATIONS ===
 
 @description('API Management to Key Vault')
-module auth_apim_kv '../modules/authorizations/key-vault-secrets-user.bicep' = {
+module auth_apim_kv '../modules/authorizations/subscription/key-vault-secrets-data.bicep' = {
   name: 'Authorization-ApiManagement-KeyVault'
   params: {
     principalId: apim.outputs.principalId
     keyVaultName: kv.outputs.name
+    roleType: 'Reader'
     roleDescription: 'API Management should read the secrets from Key Vault to use secret named values'
   }
 }
