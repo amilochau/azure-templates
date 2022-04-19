@@ -86,11 +86,16 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
             version: 2
           }
           uniqueKeyPolicy: {
-            uniqueKeys: [for (uniqueKey, indexKey) in container.uniqueKeys: {
+            uniqueKeys: [for (uniqueKey, indexKey) in !contains(container, 'uniqueKeys') ? [] : container.uniqueKeys: {
               paths: [
                 uniqueKey
               ]
             }]
+          }
+          indexingPolicy: {
+            indexingMode: 'consistent'
+            automatic: true
+            compositeIndexes: !contains(container, 'compositeIndexes') ? [] : container.compositeIndexes
           }
         }
       }
