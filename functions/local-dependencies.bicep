@@ -61,16 +61,6 @@ module tags '../modules/global/tags.bicep' = {
   }
 }
 
-@description('Key Vault')
-module kv '../modules/configuration/key-vault.bicep' = {
-  name: 'Resource-KeyVault'
-  params: {
-    referential: tags.outputs.referential
-    conventions: conventions
-    location: location
-  }
-}
-
 @description('Service Bus')
 module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Resource-ServiceBus'
