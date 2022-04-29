@@ -24,11 +24,17 @@ param hostName string
 param templateVersion string
 
 
-@description('The service bus queues')
-param serviceBusQueues array = []
+@description('The service bus options')
+param serviceBusOptions object = {
+  queues: []
+  authorizeClients: true
+}
 
-@description('The storage accounts')
-param storageAccounts array = []
+@description('The storage account options')
+param storageAccountsOptions object = {
+  accounts: []
+  authorizeClients: true
+}
 
 @description('The Cosmos DB containers')
 param cosmosContainers array = []
@@ -46,6 +52,9 @@ var regionName = json(loadTextContent('../modules/global/regions.json'))[locatio
 
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
+
+var serviceBusQueues = !contains(serviceBusOptions, 'queues') ? [] : serviceBusOptions.queues
+var storageAccounts = !contains(storageAccountsOptions, 'accounts') ? [] : storageAccountsOptions.accounts
 
 // === RESOURCES ===
 
