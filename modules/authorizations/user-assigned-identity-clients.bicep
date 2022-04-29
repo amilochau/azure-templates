@@ -1,5 +1,5 @@
 /*
-  Deploy a User-Assigned Identity for the current application itself
+  Deploy a User-Assigned Identity for the current application clients
 */
 
 // === PARAMETERS ===

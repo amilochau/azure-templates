@@ -37,11 +37,17 @@ param applicationType string
 ])
 param pricingPlan string = 'Free'
 
-@description('The service bus queues')
-param serviceBusQueues array = []
+@description('The service bus options')
+param serviceBusOptions object = {
+  queues: []
+  authorizeClients: true
+}
 
-@description('The storage accounts')
-param storageAccounts array = []
+@description('The storage account options')
+param storageAccountsOptions object = {
+  accounts: []
+  authorizeClients: true
+}
 
 @description('The application packages URI')
 param applicationPackageUri string = ''
@@ -75,6 +81,9 @@ var availabilityTestsSettings = json(loadTextContent('../modules/global/organiza
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
 
+var serviceBusQueues = !contains(serviceBusOptions, 'queues') ? [] : serviceBusOptions.queues
+var storageAccounts = !contains(storageAccountsOptions, 'accounts') ? [] : storageAccountsOptions.accounts
+
 // === RESOURCES ===
 
 @description('Resource groupe tags')
@@ -92,6 +101,16 @@ module tags '../modules/global/tags.bicep' = {
 @description('User-Assigned Identity')
 module userAssignedIdentity '../modules/authorizations/user-assigned-identity.bicep' = {
   name: 'Resource-UAI'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
+  }
+}
+
+@description('User-Assigned Identity')
+module clients_userAssignedIdentity '../modules/authorizations/user-assigned-identity-clients.bicep' = {
+  name: 'Resource-UAI-Clients'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
@@ -332,6 +351,28 @@ module auth_fn_stg  '../modules/authorizations/subscription/storage-blob-data.bi
     roleDescription: 'Functions application should manage technical data from Storage Account'
   }
 }
+
+@description('Clients UAI to extra Service Bus')
+module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues) && serviceBusOptions.authorizeClients) {
+  name: 'Authorization-Clients-ServiceBus'
+  params: {
+    principalId: clients_userAssignedIdentity.outputs.principalId
+    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    roleType: 'Sender'
+    roleDescription: 'Functions application clients should write messages to Service Bus'
+  }
+}
+
+@description('Clients UAI to extra Storage Accounts')
+module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts) && storageAccountsOptions.authorizeClients) {
+  name: empty(account) ? 'empty' : 'Authorization-Clients-StorageAccount${account.suffix}'
+  params: {
+    principalId: clients_userAssignedIdentity.outputs.principalId
+    storageAccountName: extra_stg[index].outputs.name
+    roleType: 'Contributor'
+    roleDescription: 'Functions application clients should read & write the blobs from Storage Account'
+  }
+}]
 
 // === OUTPUTS ===
 

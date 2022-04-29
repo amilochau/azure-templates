@@ -55,6 +55,7 @@
       "functionsApplication": "fn",
       "applicationInsights": "ai",
       "userAssignedIdentity": "uai",
+      "userAssignedIdentityClients": "uaiclients",
       "cdnProfile": "cdnp",
       "cdnEndpoint": "cdne",
       "cosmosAccount": "cosmos",

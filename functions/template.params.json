@@ -17,26 +17,32 @@
       "applicationType": {
         "value": "isolatedDotnet6"
       },
-      "serviceBusQueues": {
-        "value": [
-          "queue1",
-          "queue2"
-        ]
+      "serviceBusOptions": {
+        "value": {
+          "queues": [
+            "queue1",
+            "queue2"
+          ],
+          "authorizeClients": true
+        }
       },
-      "storageAccounts": {
-        "value": [
-          {
-            "suffix": "1",
-            "comment": "Storage for files",
-            "containers": [
-              "container1",
-              "container2"
-            ],
-            "readOnly": true,
-            "daysBeforeDeletion": 365,
-            "allowBlobPublicAccess": false
-          }
-        ]
+      "storageAccountsOptions": {
+        "value": {
+          "accounts": [
+            {
+              "suffix": "1",
+              "comment": "Storage for files",
+              "containers": [
+                "container1",
+                "container2"
+              ],
+              "readOnly": true,
+              "daysBeforeDeletion": 365,
+              "allowBlobPublicAccess": false
+            }
+          ],
+          "authorizeClients": true
+        }
       },
       "extraAppSettings": {
         "value": {
