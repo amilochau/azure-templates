@@ -65,7 +65,7 @@
                   "order": "ascending"
                 },
                 {  
-                  "path": "/name",
+                  "path": "/creation",
                   "order": "descending"
                 }
               ]
