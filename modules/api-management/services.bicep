@@ -13,7 +13,7 @@ param conventions object
 @description('The Application Insights ID')
 param appInsightsId string
 
-@description('The Application Insights connection string')
+@description('The Application Insights instrumentation key')
 param appInsightsInstrumentationKey string
 
 @description('The API Management publisher email')
@@ -54,7 +54,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     }
   }
 
-  // Named value to store the Application Insights connection string
+  // Named value to store the Application Insights instrumentation key
   resource loggerKey 'namedValues@2021-01-01-preview' = {
     name: apimLoggerKeyName
     properties: {
