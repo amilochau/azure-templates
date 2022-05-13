@@ -45,6 +45,18 @@
             "partitionKey": "/partitionKey",
             "uniqueKeys": [
               "/uniqueKey"
+            ],
+            "compositeIndexes": [
+              [
+                {  
+                  "path": "/name",
+                  "order": "ascending"
+                },
+                {  
+                  "path": "/creation",
+                  "order": "descending"
+                }
+              ]
             ]
           }
         ]
