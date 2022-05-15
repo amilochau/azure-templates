@@ -245,7 +245,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
 }]
 
 @description('Performance tests')
-module performanceTest '../modules/monitoring/availability-test.bicep' = if (extendedMonitoring) {
+module performanceTest '../modules/monitoring/ping-test.bicep' = if (extendedMonitoring) {
   name: 'Resource-PerformanceTest'
   params: {
     referential: tags.outputs.referential
