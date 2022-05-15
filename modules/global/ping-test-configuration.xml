@@ -1,0 +1,16 @@
+<WebTest
+  xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010"
+  Name="%TEST_NAME%"
+  Enabled="True"
+  Timeout="120"
+  Description="%TEST_DESCRIPTION%">
+  <Items>
+    <Request
+      Method="GET"
+      Version="1.1"
+      Url="%TEST_URL%"
+      ThinkTime="0"
+      Timeout="300"
+      ExpectedHttpStatusCode="200" />
+  </Items>
+</WebTest>
