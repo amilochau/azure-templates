@@ -15,7 +15,7 @@ param location string
 
 // === RESOURCES ===
 
-@description('User assigned Managed identity') // Note: can't be extracted in a module
+@description('User assigned Managed identity')
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.userAssignedIdentity}'
   location: location
