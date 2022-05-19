@@ -13,6 +13,11 @@
     },
     "pricingPlan": {
       "value": "Free"
+    },
+    "customDomains": {
+      "value": [
+        "subdomain.domain.com"
+      ]
     }
   }
 }
