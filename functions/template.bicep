@@ -64,6 +64,11 @@ param deploymentSlots array = []
 @description('The contribution groups')
 param contributionGroups array = []
 
+@description('The static web app to attach')
+param staticWebApp object = {
+  enabled: false
+}
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -243,6 +248,18 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     extraAppSettings: extraAppSettings
   }
 }]
+
+@description('Static Web Apps application')
+module swa '../modules/applications/static/application.bicep' = if (staticWebApp.enabled) {
+  name: 'Resource-StaticWebAppsApplication'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
+    pricingPlan: pricingPlan
+    customDomains: !contains(staticWebApp, 'customDomains') ? [] : staticWebApp.customDomains
+  }
+}
 
 @description('Performance tests')
 module performanceTest '../modules/monitoring/ping-test.bicep' = if (extendedMonitoring) {

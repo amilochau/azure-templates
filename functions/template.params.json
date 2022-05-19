@@ -80,6 +80,14 @@
           }
         ]
       },
+      "staticWebApp": {
+        "value": {
+          "enabled": true,
+          "customDomains": [
+            "subdomain.domain.com"
+          ]
+        }
+      },
       "contributionGroups": {
         "value": [
           {
