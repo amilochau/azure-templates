@@ -1,72 +1,72 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "organizationName": {
-        "value": "abc"
-      },
-      "applicationName": {
-        "value": "appname"
-      },
-      "hostName": {
-        "value": "local"
-      },
-      "serviceBusOptions": {
-        "value": {
-          "queues": [
-            "queue1",
-            "queue2"
-          ],
-          "authorizeClients": true
-        }
-      },
-      "storageAccountsOptions": {
-        "value": {
-          "accounts": [
-            {
-              "suffix": "1",
-              "comment": "Storage for files",
-              "containers": [
-                "container1",
-                "container2"
-              ],
-              "readOnly": true,
-              "daysBeforeDeletion": 365,
-              "allowBlobPublicAccess": false
-            }
-          ],
-          "authorizeClients": true
-        }
-      },
-      "cosmosContainers": {
-        "value": [
-          {
-            "name": "containerName",
-            "partitionKey": "/partitionKey",
-            "uniqueKeys": [
-              "/uniqueKey"
-            ],
-            "compositeIndexes": [
-              [
-                {  
-                  "path": "/name",
-                  "order": "ascending"
-                },
-                {  
-                  "path": "/creation",
-                  "order": "descending"
-                }
-              ]
-            ]
-          }
-        ]
-      },
-      "contributionGroups": {
-        "value": [
-          {
-            "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-          }
-        ]
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "organizationName": {
+      "value": "abc"
+    },
+    "applicationName": {
+      "value": "appname"
+    },
+    "hostName": {
+      "value": "local"
+    },
+    "serviceBusOptions": {
+      "value": {
+        "queues": [
+          "queue1",
+          "queue2"
+        ],
+        "authorizeClients": true
       }
+    },
+    "storageAccountsOptions": {
+      "value": {
+        "accounts": [
+          {
+            "suffix": "1",
+            "comment": "Storage for files",
+            "containers": [
+              "container1",
+              "container2"
+            ],
+            "readOnly": true,
+            "daysBeforeDeletion": 365,
+            "allowBlobPublicAccess": false
+          }
+        ],
+        "authorizeClients": true
+      }
+    },
+    "cosmosContainers": {
+      "value": [
+        {
+          "name": "containerName",
+          "partitionKey": "/partitionKey",
+          "uniqueKeys": [
+            "/uniqueKey"
+          ],
+          "compositeIndexes": [
+            [
+              {  
+                "path": "/name",
+                "order": "ascending"
+              },
+              {  
+                "path": "/creation",
+                "order": "descending"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    "contributionGroups": {
+      "value": [
+        {
+          "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+        }
+      ]
     }
   }
+}
