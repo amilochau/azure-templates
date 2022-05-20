@@ -103,22 +103,24 @@ module tags '../modules/global/tags.bicep' = {
   }
 }
 
-@description('User-Assigned Identity')
-module userAssignedIdentity '../modules/authorizations/user-assigned-identity.bicep' = {
-  name: 'Resource-UAI'
+@description('User-Assigned Identity for application itself')
+module userAssignedIdentity_application '../modules/authorizations/user-assigned-identity.bicep' = {
+  name: 'Resource-UAI-Application'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    type: 'application'
     location: location
   }
 }
 
-@description('User-Assigned Identity')
-module clients_userAssignedIdentity '../modules/authorizations/user-assigned-identity-clients.bicep' = {
+@description('User-Assigned Identity for clients')
+module userAssignedIdentity_clients '../modules/authorizations/user-assigned-identity.bicep' = {
   name: 'Resource-UAI-Clients'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    type: 'clients'
     location: location
   }
 }
@@ -214,8 +216,8 @@ module fn '../modules/applications/functions/application.bicep' = {
     conventions: conventions
     location: location
     pricingPlan: pricingPlan
-    userAssignedIdentityId: userAssignedIdentity.outputs.id
-    userAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
+    userAssignedIdentityId: userAssignedIdentity_application.outputs.id
+    userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
     applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
@@ -234,8 +236,8 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     referential: tags.outputs.referential
     location: location
     pricingPlan: pricingPlan
-    userAssignedIdentityId: userAssignedIdentity.outputs.id
-    userAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
+    userAssignedIdentityId: userAssignedIdentity_application.outputs.id
+    userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
     functionsName: fn.outputs.name
     slotName: deploymentSlot.name
     applicationType: applicationType
@@ -294,7 +296,7 @@ module dashboard '../modules/monitoring/web-dashboard.bicep' = {
 module auth_fn_kv '../modules/authorizations/subscription/key-vault-secrets-data.bicep' = {
   name: 'Authorization-Functions-KeyVault'
   params: {
-    principalId: userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_application.outputs.principalId
     keyVaultName: kv.outputs.name
     roleType: 'Reader'
     roleDescription: 'Functions application should read the secrets from Key Vault'
@@ -305,7 +307,7 @@ module auth_fn_kv '../modules/authorizations/subscription/key-vault-secrets-data
 module auth_fn_ai '../modules/authorizations/subscription/monitoring-data.bicep' = {
   name: 'Authorization-Functions-ApplicationInsights'
   params: {
-    principalId: userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_application.outputs.principalId
     applicationInsightsName: ai.outputs.name
     roleType: 'Metrics Publisher'
     roleDescription: 'Functions application should send monitoring metrics into Application Insights'
@@ -316,7 +318,7 @@ module auth_fn_ai '../modules/authorizations/subscription/monitoring-data.bicep'
 module auth_fn_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues)) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
-    principalId: userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_application.outputs.principalId
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     roleType: 'Owner'
     roleDescription: 'Functions application should read, write and manage the messages from Service Bus'
@@ -327,7 +329,7 @@ module auth_fn_extra_sbn '../modules/authorizations/subscription/service-bus-dat
 module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
   name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
   params: {
-    principalId: userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_application.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
     roleType: account.readOnly ? 'Reader' : 'Contributor'
     roleDescription: 'Functions application should read/write the blobs from Storage Account'
@@ -338,7 +340,7 @@ module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-da
 module auth_fn_extra_cosmos '../modules/authorizations/subscription/cosmos-db-data.bicep' = if (!empty(cosmosContainers)) {
   name: 'Authorization-Functions-CosmosAccount'
   params: {
-    principalId: userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_application.outputs.principalId
     cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
     roleType: 'Contributor'
   }
@@ -362,7 +364,7 @@ module auth_contributors_cosmos '../modules/authorizations/subscription/cosmos-d
 module auth_fn_stg  '../modules/authorizations/subscription/storage-blob-data.bicep' = {
   name: 'Authorization-Functions-StorageAccount'
   params: {
-    principalId: userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_application.outputs.principalId
     storageAccountName: stg.outputs.name
     roleType: 'Owner'
     roleDescription: 'Functions application should manage technical data from Storage Account'
@@ -373,7 +375,7 @@ module auth_fn_stg  '../modules/authorizations/subscription/storage-blob-data.bi
 module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues) && serviceBusOptions.authorizeClients) {
   name: 'Authorization-Clients-ServiceBus'
   params: {
-    principalId: clients_userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_clients.outputs.principalId
     serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
     roleType: 'Sender'
     roleDescription: 'Functions application clients should write messages to Service Bus'
@@ -384,7 +386,7 @@ module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bu
 module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts) && storageAccountsOptions.authorizeClients) {
   name: empty(account) ? 'empty' : 'Authorization-Clients-StorageAccount${account.suffix}'
   params: {
-    principalId: clients_userAssignedIdentity.outputs.principalId
+    principalId: userAssignedIdentity_clients.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
     roleType: 'Contributor'
     roleDescription: 'Functions application clients should read & write the blobs from Storage Account'

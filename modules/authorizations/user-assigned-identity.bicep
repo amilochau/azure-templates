@@ -10,14 +10,25 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
+@description('The type of UAI to deploy')
+@allowed([
+  'application'
+  'clients'
+])
+param type string
+
 @description('The deployment location')
 param location string
+
+// === VARIABLES ===
+
+var uaiNameSuffix = type == 'application' ? conventions.naming.suffixes.userAssignedIdentityApplication : conventions.naming.suffixes.userAssignedIdentityClients
 
 // === RESOURCES ===
 
 @description('User assigned Managed identity')
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.userAssignedIdentity}'
+  name: '${conventions.naming.prefix}${uaiNameSuffix}'
   location: location
   tags: referential
 }

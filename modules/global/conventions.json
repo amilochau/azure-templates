@@ -54,7 +54,7 @@
       "apiManagementApiVersionSet": "apimversionset",
       "functionsApplication": "fn",
       "applicationInsights": "ai",
-      "userAssignedIdentity": "uai",
+      "userAssignedIdentityApplication": "uaiapp",
       "userAssignedIdentityClients": "uaiclients",
       "cdnProfile": "cdnp",
       "cdnEndpoint": "cdne",
