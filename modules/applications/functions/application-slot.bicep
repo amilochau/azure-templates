@@ -53,6 +53,9 @@ param applicationPackageUri string = ''
 @description('The application secret names')
 param extraAppSettings object = {}
 
+@description('The extra user-assigned identities to be used by the application')
+param extraIdentities object = {}
+
 @description('The deployment location')
 param location string
 
@@ -94,6 +97,10 @@ var appSettings = union(formattedExtraAppSettings, {
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
 })
 
+var userAssignedIdentities = union({
+  '${userAssignedIdentityId}': {}
+}, extraIdentities)
+
 // === EXISTING ===
 
 @description('Functions application')
@@ -110,9 +117,7 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   location: location
   identity: {
     type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentityId}': {}
-    }
+    userAssignedIdentities: userAssignedIdentities
   }
   tags: referential
   properties: {

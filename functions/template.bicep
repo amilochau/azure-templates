@@ -55,6 +55,9 @@ param applicationPackageUri string = ''
 @description('The extra app settings to add')
 param extraAppSettings object = {}
 
+@description('The extra user-assigned identities to be used by the application')
+param extraIdentities object = {}
+
 @description('The Cosmos DB containers')
 param cosmosContainers array = []
 
@@ -226,6 +229,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     kvVaultUri: kv.outputs.vaultUri
     applicationPackageUri: applicationPackageUri
     extraAppSettings: extraAppSettings
+    extraIdentities: extraIdentities
   }
 }
 
@@ -248,6 +252,7 @@ module fnSlots '../modules/applications/functions/application-slot.bicep' = [for
     kvVaultUri: kv.outputs.vaultUri
     applicationPackageUri: applicationPackageUri
     extraAppSettings: extraAppSettings
+    extraIdentities: extraIdentities
   }
 }]
 

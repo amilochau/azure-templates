@@ -50,6 +50,9 @@ param applicationPackageUri string = ''
 @description('The application secret names')
 param extraAppSettings object = {}
 
+@description('The extra user-assigned identities to be used by the application')
+param extraIdentities object = {}
+
 @description('The deployment location')
 param location string
 
@@ -95,6 +98,10 @@ var slotAppSettingNames = [
   'AZURE_FUNCTIONS_HOST'
 ]
 
+var userAssignedIdentities = union({
+  '${userAssignedIdentityId}': {}
+}, extraIdentities)
+
 // === RESOURCES ===
 
 @description('Functions application')
@@ -104,9 +111,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   kind: 'functionapp,linux'
   identity: {
     type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentityId}': {}
-    }
+    userAssignedIdentities: userAssignedIdentities
   }
   tags: referential
   properties: {
