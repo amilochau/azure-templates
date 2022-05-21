@@ -40,13 +40,11 @@ param pricingPlan string = 'Free'
 @description('The service bus options')
 param serviceBusOptions object = {
   queues: []
-  authorizeClients: true
 }
 
 @description('The storage account options')
 param storageAccountsOptions object = {
   accounts: []
-  authorizeClients: true
 }
 
 @description('The application packages URI')
@@ -377,7 +375,7 @@ module auth_fn_stg  '../modules/authorizations/subscription/storage-blob-data.bi
 }
 
 @description('Clients UAI to extra Service Bus')
-module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues) && serviceBusOptions.authorizeClients) {
+module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues) && contains(serviceBusOptions, 'authorizeClients') && serviceBusOptions.authorizeClients) {
   name: 'Authorization-Clients-ServiceBus'
   params: {
     principalId: userAssignedIdentity_clients.outputs.principalId
@@ -388,7 +386,7 @@ module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bu
 }
 
 @description('Clients UAI to extra Storage Accounts')
-module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts) && storageAccountsOptions.authorizeClients) {
+module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts) && contains(account, 'authorizeClients') && account.authorizeClients) {
   name: empty(account) ? 'empty' : 'Authorization-Clients-StorageAccount${account.suffix}'
   params: {
     principalId: userAssignedIdentity_clients.outputs.principalId

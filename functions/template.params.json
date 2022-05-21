@@ -38,10 +38,10 @@
             ],
             "readOnly": true,
             "daysBeforeDeletion": 365,
-            "allowBlobPublicAccess": false
+            "allowBlobPublicAccess": false,
+            "authorizeClients": true
           }
-        ],
-        "authorizeClients": true
+        ]
       }
     },
     "extraAppSettings": {
