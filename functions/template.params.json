@@ -50,6 +50,11 @@
         "key2": "<secret>secret_name</secret>"
       }
     },
+    "extraIdentities": {
+      "value": {
+        "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
+      }
+    },
     "cosmosContainers": {
       "value": [
         {
