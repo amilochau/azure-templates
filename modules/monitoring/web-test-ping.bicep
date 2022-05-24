@@ -1,5 +1,5 @@
 /*
-  Deploy an Application Insights Standard Availability Test
+  Deploy an Application Insights Ping Web Test
 */
 
 // === PARAMETERS ===
@@ -19,10 +19,10 @@ param targetUrl string
 @description('The test locations')
 param testLocations array
 
-@description('The availability test comment')
+@description('The web test comment')
 param comment string
 
-@description('The availability test suffix')
+@description('The web test suffix')
 param suffix string
 
 @description('The test frequency in seconds')
@@ -41,18 +41,19 @@ param location string
 
 // === VARIABLES ===
 
-var availabilityTestName = '${conventions.naming.prefix}${conventions.naming.suffixes.webTest}-${suffix}'
+var webTestName = '${conventions.naming.prefix}${conventions.naming.suffixes.webTest}-${suffix}'
 var specificTags = {
   comment: comment
   'hidden-link:${applicationInsightsId}': 'Resource'
 }
+var webTestConfiguration = replace(replace(replace(loadTextContent('../global/web-test-ping-template.xml'), '%TEST_NAME%', webTestName), '%TEST_URL%', targetUrl), '%TEST_DESCRIPTION%', comment)
 var tags = union(referential, specificTags)
 
 // === RESOURCES ===
 
-@description('Availability test')
-resource availabilityTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { // @2020-10-05-preview is not available in westeurope
-  name: availabilityTestName
+@description('Ping test')
+resource webTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { // @2020-10-05-preview is not available in westeurope
+  name: webTestName
   location: location
   tags: tags
   kind: 'ping'
@@ -63,24 +64,13 @@ resource availabilityTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { /
     Frequency: frequency
     Timeout: timeout
     SyntheticMonitorId: targetUrl
-    Kind: 'standard'
+    Kind: 'ping'
     RetryEnabled: true
     Locations: [ for testLocation in testLocations: {
       Id: testLocation
     }]
-    Request: {
-      RequestUrl: targetUrl
-      HttpVerb: 'GET'
-      Headers: null
-      RequestBody: null
-      FollowRedirects: true
-    }
-    ValidationRules: {
-      ExpectedHttpStatusCode: 200
-      IgnoreHttpsStatusCode: false
-      ContentValidation: null
-      SSLCheck: true
-      SSLCertRemainingLifetimeCheck: 7
+    Configuration: {
+      WebTest: webTestConfiguration
     }
   }
 }
@@ -88,10 +78,10 @@ resource availabilityTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { /
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
-output id string = availabilityTest.id
+output id string = webTest.id
 
 @description('The API Version of the deployed resource')
-output apiVersion string = availabilityTest.apiVersion
+output apiVersion string = webTest.apiVersion
 
 @description('The Name of the deployed resource')
-output name string = availabilityTest.name
+output name string = webTest.name

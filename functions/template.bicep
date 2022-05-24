@@ -81,8 +81,8 @@ var regionName = json(loadTextContent('../modules/global/regions.json'))[locatio
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
-@description('Availability tests settings')
-var availabilityTestsSettings = json(loadTextContent('../modules/global/organization-based/availability-tests-settings.json'))
+@description('Web tests settings')
+var webTestsSettings = json(loadTextContent('../modules/global/organization-based/web-tests-settings.json'))
 
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
@@ -266,18 +266,18 @@ module swa '../modules/applications/static/application.bicep' = if (staticWebApp
   }
 }
 
-@description('Performance tests')
-module performanceTest '../modules/monitoring/ping-test.bicep' = if (extendedMonitoring) {
-  name: 'Resource-PerformanceTest'
+@description('Web tests')
+module webTest '../modules/monitoring/web-test-ping.bicep' = if (extendedMonitoring) {
+  name: 'Resource-WebTest'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    targetUrl: 'https://${fn.outputs.defaultHostName}${availabilityTestsSettings.functions.urlSuffix}'
+    targetUrl: 'https://${fn.outputs.defaultHostName}${webTestsSettings.functions.urlSuffix}'
     applicationInsightsId: ai.outputs.id
     comment: 'Performance tests'
     suffix: 'performance'
-    testLocations: availabilityTestsSettings.functions.locations
+    testLocations: webTestsSettings.functions.locations
   }
 }
 
