@@ -2,12 +2,7 @@
     <inbound>
         <cors allow-credentials="true">
             <allowed-origins>
-                <origin>https://maps-dev.milochau.com</origin>
-                <origin>https://maps.milochau.com</origin>
-                <origin>https://dev.milochau.com</origin>
-                <origin>https://www.milochau.com</origin>
-                <origin>https://milochau.com</origin>
-                <origin>http://localhost:3000</origin>
+                <origin>%CORS_ORIGINS%</origin>
             </allowed-origins>
             <allowed-methods preflight-result-max-age="300">
                 <method>*</method>

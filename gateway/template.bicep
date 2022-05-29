@@ -42,6 +42,9 @@ param apiPublisherEmail string
 @description('The API products')
 param apiProducts array = []
 
+@description('The CORS authorized origins, comma-separated')
+param apiCorsAuthorized string = ''
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -101,6 +104,7 @@ module apim '../modules/api-management/services.bicep' = {
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
     products: apiProducts
+    apiCorsAuthorized: apiCorsAuthorized
   }
 }
 

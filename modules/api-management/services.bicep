@@ -25,12 +25,17 @@ param publisherName string
 @description('The API Management products')
 param products array
 
+@description('The CORS authorized origins, comma-separated')
+param apiCorsAuthorized string
+
 @description('The deployment location')
 param location string
 
 // === VARIABLES ===
 
 var apimLoggerKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-loggerkey'
+var apimOrigins = replace(apiCorsAuthorized, ',', '</origin><origin>')
+var apimPolicy = replace(loadTextContent('./global-api-policy.xml'), '%CORS_ORIGNS%', apimOrigins)
 
 // === RESOURCES ===
 
@@ -95,7 +100,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: loadTextContent('./global-api-policy.xml')
+      value: apimPolicy
     }
   }
 
