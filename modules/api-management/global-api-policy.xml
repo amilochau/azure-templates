@@ -7,6 +7,7 @@
                 <origin>https://dev.milochau.com</origin>
                 <origin>https://www.milochau.com</origin>
                 <origin>https://milochau.com</origin>
+                <origin>http://localhost:3000</origin>
             </allowed-origins>
             <allowed-methods preflight-result-max-age="300">
                 <method>*</method>
