@@ -35,7 +35,7 @@ param location string
 
 var apimLoggerKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-loggerkey'
 var apimOrigins = replace(apiCorsAuthorized, ',', '</origin><origin>')
-var apimPolicy = replace(loadTextContent('./global-api-policy.xml'), '%CORS_ORIGNS%', apimOrigins)
+var apimPolicy = replace(loadTextContent('./global-api-policy.xml'), '%CORS_ORIGINS%', apimOrigins)
 
 // === RESOURCES ===
 
