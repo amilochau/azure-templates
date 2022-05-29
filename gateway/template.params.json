@@ -26,6 +26,9 @@
           "approvalRequired": true
         }
       ]
+    },
+    "apiCorsAuthorized": {
+      "value": "http://localhost:3000,https://google.com"
     }
   }
 }
