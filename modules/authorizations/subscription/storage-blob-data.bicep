@@ -41,7 +41,7 @@ resource role 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' exist
 }
 
 @description('Storage account')
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
+resource stg 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
   name: storageAccountName
 }
 

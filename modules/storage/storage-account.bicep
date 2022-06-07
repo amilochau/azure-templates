@@ -41,7 +41,7 @@ var tags = union(referential, specificTags)
 // === RESOURCES ===
 
 @description('Storage Account')
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   name: replace(storageAccountName, '-', '')
   location: location
   kind: 'StorageV2'
@@ -56,6 +56,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: false // false = Enforcing AAD as the only authentication method
     allowCrossTenantReplication: true
+    defaultToOAuthAuthentication: true
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
@@ -63,7 +64,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 
   // Storage lifecycle policy
-  resource lifecycle 'managementPolicies@2021-04-01' = if (daysBeforeDeletion > 0) {
+  resource lifecycle 'managementPolicies@2021-09-01' = if (daysBeforeDeletion > 0) {
     name: 'default'
     properties: {
       policy: {
@@ -92,7 +93,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   }
 
   // Blob services
-  resource blobServices 'blobServices@2021-04-01' = {
+  resource blobServices 'blobServices@2021-09-01' = {
     name: 'default'
     properties: {
       // restorePolicy does not work, see https://github.com/Azure/azure-rest-api-specs/issues/11237
