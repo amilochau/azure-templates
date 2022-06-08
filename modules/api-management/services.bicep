@@ -60,7 +60,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Named value to store the Application Insights instrumentation key
-  resource loggerKey 'namedValues@2021-01-01-preview' = {
+  resource loggerKey 'namedValues' = {
     name: apimLoggerKeyName
     properties: {
       displayName: apimLoggerKeyName
@@ -70,7 +70,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Logger
-  resource logger 'loggers@2021-01-01-preview' = {
+  resource logger 'loggers' = {
     name: 'logger-applicationinsights'
     properties: {
       loggerType: 'applicationInsights'
@@ -83,7 +83,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Diagnostic
-  resource diagnostic 'diagnostics@2021-01-01-preview' = {
+  resource diagnostic 'diagnostics' = {
     name: 'applicationinsights'
     properties: {
       loggerId: logger.id
@@ -96,7 +96,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Policy
-  resource policy 'policies@2021-01-01-preview' = {
+  resource policy 'policies' = {
     name: 'policy'
     properties: {
       format: 'xml'
@@ -105,7 +105,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
   }
 
   // Products
-  resource apimProducts 'products@2021-01-01-preview' = [for product in products: {
+  resource apimProducts 'products' = [for product in products: {
     name: product.productName
     properties: {
       displayName: product.productName

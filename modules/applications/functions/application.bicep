@@ -123,7 +123,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   }
 
   // Web Configuration
-  resource webConfig 'config@2021-03-01' = {
+  resource webConfig 'config' = {
     name: 'web'
     properties: {
       linuxFxVersion: linuxFxVersion
@@ -136,13 +136,13 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   }
 
   // App Configuration
-  resource appsettingsConfig 'config@2021-03-01' = {
+  resource appsettingsConfig 'config' = {
     name: 'appsettings'
     properties: appSettings
   }
 
   // Slot settings
-  resource slotConfigNamesConfig 'config@2021-03-01' = {
+  resource slotConfigNamesConfig 'config' = {
     name: 'slotConfigNames'
     properties: {
       appSettingNames: slotAppSettingNames

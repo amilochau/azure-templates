@@ -32,7 +32,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
   }
 
   // Service Bus Queues
-  resource queues 'queues@2021-11-01' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
+  resource queues 'queues' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
     name: empty(serviceBusQueues) ? 'empty' : queue
     properties: {
       lockDuration: 'PT30S'
