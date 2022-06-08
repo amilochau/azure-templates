@@ -41,7 +41,7 @@ var tags = union(referential, specificTags)
 // === RESOURCES ===
 
 @description('Storage Account')
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   name: replace(storageAccountName, '-', '')
   location: location
   kind: 'StorageV2'
@@ -56,6 +56,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: false // false = Enforcing AAD as the only authentication method
     allowCrossTenantReplication: true
+    defaultToOAuthAuthentication: true
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
