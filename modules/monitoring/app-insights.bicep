@@ -50,7 +50,7 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
     WorkspaceResourceId: workspace.id
   }
 
-  resource featuresCapabilities 'pricingPlans' = {
+  resource featuresCapabilities 'pricingPlans@2017-10-01' = {
     name: 'current'
     properties: {
       cap: json(dailyCap)
