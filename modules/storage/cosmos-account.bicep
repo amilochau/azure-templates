@@ -63,7 +63,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
   }
 
   // Cosmos DB Database
-  resource database 'sqlDatabases@2021-10-15' = {
+  resource database 'sqlDatabases' = {
     name: cosmosDatabaseName
     properties: {
       resource: {
@@ -72,7 +72,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
     }
 
     // Cosmos DB Containers
-    resource containers 'containers@2021-10-15' = [for (container, index) in cosmosContainers: {
+    resource containers 'containers' = [for (container, index) in cosmosContainers: {
       name: container.name
       location: location
       tags: referential

@@ -64,7 +64,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
 
   // Storage lifecycle policy
-  resource lifecycle 'managementPolicies@2021-09-01' = if (daysBeforeDeletion > 0) {
+  resource lifecycle 'managementPolicies' = if (daysBeforeDeletion > 0) {
     name: 'default'
     properties: {
       policy: {
@@ -93,7 +93,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
 
   // Blob services
-  resource blobServices 'blobServices@2021-09-01' = {
+  resource blobServices 'blobServices' = {
     name: 'default'
     properties: {
       // restorePolicy does not work, see https://github.com/Azure/azure-rest-api-specs/issues/11237
@@ -117,7 +117,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
     }
     
     // Blob containers
-    resource containers 'containers@2021-04-01' = [for container in blobContainers: if (length(blobContainers) > 0) {
+    resource containers 'containers' = [for container in blobContainers: if (length(blobContainers) > 0) {
       name: container
       properties: {
         publicAccess: allowBlobPublicAccess ? 'Blob' : 'None'

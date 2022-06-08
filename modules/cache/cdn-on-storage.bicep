@@ -48,7 +48,7 @@ resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
   }
 
   // CDN Endpoint
-  resource endpoint 'endpoints@2020-09-01' = {
+  resource endpoint 'endpoints' = {
     name: cdnEndpointName
     location: location
     tags: referential
