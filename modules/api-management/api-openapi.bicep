@@ -28,9 +28,13 @@ param products array
 @description('The OpenAPI specification link')
 param openApiLink string
 
+@description('The OpenID configuration for authentication')
+param openIdConfiguration object
+
 // === VARIABLES ===
 
 var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
+var apiPolicy = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId') ? replace(replace(replace(loadTextContent('../global/api-policies/local-jwt.xml'), '%BACKEND_ID%', backendId), '%OPENID_CONFIG_ENDPOINT%', openIdConfiguration.endpoint), '%API_CLIENT_ID%', openIdConfiguration.apiClientId) : replace(loadTextContent('../global/api-policies/local-simple.xml'), '%BACKEND_ID%', backendId)
 
 // === EXISTING ===
 
@@ -84,7 +88,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml'
-      value: replace(loadTextContent('./local-api-policy.xml'), '%BACKEND_ID%', backendId)
+      value: apiPolicy
     }
   }
 }

@@ -42,6 +42,9 @@ param relativeOpenApiUrl string = '/api/swagger.json'
 @minLength(1)
 param relativeFunctionsUrl string = '/api'
 
+@description('The OpenID configuration for authentication')
+param openIdConfiguration object = {}
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -87,5 +90,6 @@ module apimBackend '../modules/applications/functions/api-management-backend.bic
     subscriptionRequired: apiManagementSubscriptionRequired
     products: apiManagementProducts
     relativeOpenApiUrl: relativeOpenApiUrl
+    openIdConfiguration: openIdConfiguration
   }
 }

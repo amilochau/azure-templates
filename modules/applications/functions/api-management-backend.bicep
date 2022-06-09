@@ -28,6 +28,9 @@ param products array
 @description('The OpenAPI link, relative to the application host name')
 param relativeOpenApiUrl string
 
+@description('The OpenID configuration for authentication')
+param openIdConfiguration object
+
 // === VARIABLES ===
 
 var apimFunctionsKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-functionskey'
@@ -97,6 +100,7 @@ module apimApi '../../api-management/api-openapi.bicep' = {
     subscriptionRequired: subscriptionRequired
     products: products
     openApiLink: 'https://${fn.properties.defaultHostName}${relativeOpenApiUrl}'
+    openIdConfiguration: openIdConfiguration
   }
 }
 
