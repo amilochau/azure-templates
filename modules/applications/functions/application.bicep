@@ -97,7 +97,7 @@ var appSettings = union(formattedExtraAppSettings, {
 }, empty(applicationPackageUri) ? {} : {
   // Application deployment package URI
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
-}, enableOpenId ? {} : {
+}, !enableOpenId ? {} : {
   'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET': formattedOpenIdSecret
 })
 
