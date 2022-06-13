@@ -99,6 +99,13 @@
           "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
         }
       ]
+    },
+    "openIdConfiguration": {
+      "value": {
+        "endpoint": "https://B2CTENANT.b2clogin.com/TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_FLOWNAME",
+        "apiClientId": "00000000-0000-0000-0000-000000000000",
+        "clientSecretKey": "<secret>Identity__Secret</secret>"
+      }
     }
   }
 }
