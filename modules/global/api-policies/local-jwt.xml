@@ -1,0 +1,23 @@
+<policies>
+    <inbound>
+        <base />
+        <set-backend-service id="bicep-generated-policy" backend-id="%BACKEND_ID%" />
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid." require-expiration-time="true" require-signed-tokens="true" clock-skew="300">
+            <openid-config url="%OPENID_CONFIG_ENDPOINT%" />
+            <required-claims>
+                <claim name="aud">
+                    <value>%API_CLIENT_ID%</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

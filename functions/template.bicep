@@ -70,6 +70,9 @@ param staticWebApp object = {
   enabled: false
 }
 
+@description('The OpenID configuration for authentication')
+param openIdConfiguration object = {}
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -228,6 +231,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     applicationPackageUri: applicationPackageUri
     extraAppSettings: extraAppSettings
     extraIdentities: extraIdentities
+    openIdConfiguration: openIdConfiguration
   }
 }
 

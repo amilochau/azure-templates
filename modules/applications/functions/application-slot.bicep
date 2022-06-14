@@ -56,14 +56,25 @@ param extraAppSettings object = {}
 @description('The extra user-assigned identities to be used by the application')
 param extraIdentities object = {}
 
+@description('The OpenID configuration for authentication')
+param openIdConfiguration object = {}
+
 @description('The deployment location')
 param location string
 
 // === VARIABLES ===
 
+// General settings
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
 
+// OpenID
+var enableOpenId = contains(openIdConfiguration, 'clientSecretKey') && contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
+var formattedOpenIdSecret = enableOpenId ? replace(replace(openIdConfiguration.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
+var defaultAnonymousEndpoints = json(loadTextContent('../../global/anonymous-endpoints.json'))
+var anonymousEndpoints = enableOpenId ? contains(openIdConfiguration, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, openIdConfiguration.anonymousEndpoints) : defaultAnonymousEndpoints : []
+
+// App settings
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
   // General hosting information
@@ -95,8 +106,11 @@ var appSettings = union(formattedExtraAppSettings, {
 }, empty(applicationPackageUri) ? {} : {
   // Application deployment package URI
   'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
+}, !enableOpenId ? {} : {
+  'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET': formattedOpenIdSecret
 })
 
+// Identity settings
 var userAssignedIdentities = union({
   '${userAssignedIdentityId}': {}
 }, extraIdentities)
@@ -145,6 +159,39 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   resource appsettingsConfig 'config' = {
     name: 'appsettings'
     properties: appSettings
+  }
+
+  // Authentication
+  resource aa 'config' = if (enableOpenId) {
+    name: 'authsettingsV2'
+    properties: {
+      platform: {
+        enabled: true
+      }
+      globalValidation: {
+        requireAuthentication: true
+        unauthenticatedClientAction: 'Return401'
+        excludedPaths: anonymousEndpoints
+      }
+      login: {
+        tokenStore: {
+          enabled: true
+        }
+      }
+      httpSettings: {
+        requireHttps: true
+      }
+      identityProviders: {
+        azureActiveDirectory: {
+          enabled: true
+          registration: {
+            clientId: openIdConfiguration.apiClientId
+            clientSecretSettingName: 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
+            openIdIssuer: openIdConfiguration.endpoint
+          }
+        }
+      }
+    }
   }
 }
 

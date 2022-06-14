@@ -1,0 +1,12 @@
+[
+  "/api/health",
+  "/api/health/light",
+  "/api/swagger.json",
+  "/api/system/application/assembly",
+  "/api/system/application/environment",
+  "/api/system/cache/local/compact",
+  "/api/system/cache/local/contains",
+  "/api/system/cache/local/count",
+  "/api/system/cache/local/remove",
+  "/api/system/configuration/providers"
+]
