@@ -61,12 +61,18 @@ param location string
 
 // === VARIABLES ===
 
-var enableOpenId = contains(openIdConfiguration, 'clientSecretKey') && contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
+// General settings
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
 
-var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
+// OpenID
+var enableOpenId = contains(openIdConfiguration, 'clientSecretKey') && contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
 var formattedOpenIdSecret = enableOpenId ? replace(replace(openIdConfiguration.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
+var defaultAnonymousEndpoints = json(loadTextContent('../../global/anonymous-endpoints.json'))
+var anonymousEndpoints = enableOpenId ? contains(openIdConfiguration, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, openIdConfiguration.anonymousEndpoints) : defaultAnonymousEndpoints : []
+
+// App settings
+var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
   // General hosting information
   'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
@@ -101,10 +107,12 @@ var appSettings = union(formattedExtraAppSettings, {
   'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET': formattedOpenIdSecret
 })
 
+// Slot settings
 var slotAppSettingNames = [
   'AZURE_FUNCTIONS_HOST'
 ]
 
+// Identity settings
 var userAssignedIdentities = union({
   '${userAssignedIdentityId}': {}
 }, extraIdentities)
@@ -166,10 +174,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
       globalValidation: {
         requireAuthentication: true
         unauthenticatedClientAction: 'Return401'
-        excludedPaths: [
-          '/api/health'
-          '/api/health/light'
-        ]
+        excludedPaths: anonymousEndpoints
       }
       login: {
         tokenStore: {
