@@ -30,7 +30,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('../../global/built-in-roles.json'))
+var buildInRoles = loadJsonContent('../../global/built-in-roles.json')
 var roleName = roleType == 'Owner' ? buildInRoles['Storage Blob Data Owner'] : roleType == 'Contributor' ? buildInRoles['Storage Blob Data Contributor'] : buildInRoles['Storage Blob Data Reader']
 
 // === EXISTING ===

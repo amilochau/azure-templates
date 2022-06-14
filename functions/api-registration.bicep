@@ -51,7 +51,7 @@ param location string = resourceGroup().location
 // === VARIABLES ===
 
 @description('The region name')
-var regionName = json(loadTextContent('../modules/global/regions.json'))[location]
+var regionName = loadJsonContent('../modules/global/regions.json')[location]
 
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))

@@ -12,7 +12,7 @@ param groups array = []
 // === VARIABLES ===
 
 @description('Global & naming conventions')
-var buildInRoles = json(loadTextContent('../modules/global/built-in-roles.json'))
+var buildInRoles = loadJsonContent('../modules/global/built-in-roles.json')
 
 // === AUTHORIZATIONS ===
 

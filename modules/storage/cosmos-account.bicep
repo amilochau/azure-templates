@@ -22,7 +22,7 @@ var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffix
 var cosmosDatabaseName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
 var cosmosAccountBackupRedundancy = referential.environment == 'Production' ? 'Geo' : 'Local'
 var cosmosApplyFirewall = referential.environment == 'Production'
-var knownIpAddresses = json(loadTextContent('../global/ip-addresses.json'))
+var knownIpAddresses = loadJsonContent('../global/ip-addresses.json')
 var authorizedIpAddresses = union(knownIpAddresses['azurePortal'], knownIpAddresses['azureServices'])
 var ipRules = [ for ipAddress in items(authorizedIpAddresses) : {
   ipAddressOrRange: ipAddress.value
