@@ -29,7 +29,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('../../global/built-in-roles.json'))
+var buildInRoles = loadJsonContent('../../global/built-in-roles.json')
 var roleName = roleType == 'Admin' ? buildInRoles['Key Vault Secrets Officer'] : buildInRoles['Key Vault Secrets User']
 
 // === EXISTING ===

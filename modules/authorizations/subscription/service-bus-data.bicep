@@ -30,7 +30,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('../../global/built-in-roles.json'))
+var buildInRoles = loadJsonContent('../../global/built-in-roles.json')
 var roleName = roleType == 'Owner' ? buildInRoles['Service Bus Data Owner'] : roleType == 'Receiver' ? buildInRoles['Service Bus Data Receiver'] : buildInRoles['Service Bus Data Sender']
 
 // === EXISTING ===

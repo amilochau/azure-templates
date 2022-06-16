@@ -58,7 +58,7 @@ resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
       isCompressionEnabled: true
       originHostHeader: storageAccountHostName
       queryStringCachingBehavior: 'IgnoreQueryString'
-      contentTypesToCompress: json(loadTextContent('./content-types.json'))
+      contentTypesToCompress: loadJsonContent('./content-types.json')
       origins: [
         {
           name: replace(storageAccountHostName, '.', '-')

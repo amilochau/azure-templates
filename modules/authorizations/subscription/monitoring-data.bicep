@@ -29,7 +29,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('../../global/built-in-roles.json'))
+var buildInRoles = loadJsonContent('../../global/built-in-roles.json')
 var roleName = roleType == 'Metrics Publisher' ? buildInRoles['Monitoring Metrics Publisher'] : buildInRoles['Monitoring Reader']
 
 // === EXISTING ===

@@ -79,13 +79,13 @@ param location string = resourceGroup().location
 // === VARIABLES ===
 
 @description('The region name')
-var regionName = json(loadTextContent('../modules/global/regions.json'))[location]
+var regionName = loadJsonContent('../modules/global/regions.json')[location]
 
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
 @description('Web tests settings')
-var webTestsSettings = json(loadTextContent('../modules/global/organization-based/web-tests-settings.json'))
+var webTestsSettings = loadJsonContent('../modules/global/organization-based/web-tests-settings.json', 'functions')
 
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
@@ -277,11 +277,11 @@ module webTest '../modules/monitoring/web-test-ping.bicep' = if (extendedMonitor
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    targetUrl: 'https://${fn.outputs.defaultHostName}${webTestsSettings.functions.urlSuffix}'
+    targetUrl: 'https://${fn.outputs.defaultHostName}${webTestsSettings.urlSuffix}'
     applicationInsightsId: ai.outputs.id
     comment: 'Performance tests'
     suffix: 'performance'
-    testLocations: webTestsSettings.functions.locations
+    testLocations: webTestsSettings.locations
   }
 }
 

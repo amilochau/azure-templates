@@ -29,7 +29,7 @@ param roleDescription string
 
 // === VARIABLES ===
 
-var buildInRoles = json(loadTextContent('../../global/built-in-roles.json'))
+var buildInRoles = loadJsonContent('../../global/built-in-roles.json')
 var roleName = roleType == 'Owner' ? buildInRoles['App Configuration Data Owner'] : buildInRoles['App Configuration Data Reader']
 
 // === EXISTING ===
