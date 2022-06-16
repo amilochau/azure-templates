@@ -19,7 +19,7 @@ param location string
 // === RESOURCES ===
 
 @description('Service Bus Namespace')
-resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
+resource sbn 'Microsoft.ServiceBus/namespaces@2022-01-01-preview' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.serviceBusNamespace}'
   location: location
   sku: {
@@ -29,6 +29,7 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2021-11-01' = {
   properties: {
     zoneRedundant: false
     disableLocalAuth: true // true = Enforcing AAD as the only authentication method
+    minimumTlsVersion: '1.2'
   }
 
   // Service Bus Queues
