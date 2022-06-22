@@ -97,6 +97,12 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
             indexingMode: 'consistent'
             automatic: true
             compositeIndexes: !contains(container, 'compositeIndexes') ? [] : container.compositeIndexes
+            includedPaths: !contains(container, 'includedPaths') ? [{
+              path: '/*'
+            }] : container.includedPaths
+            excludedPaths: !contains(container, 'excludedPaths') ? [{
+              path: '/\\"_etag\\"/?'
+            }] : container.excludedPaths
           }
         }
       }
