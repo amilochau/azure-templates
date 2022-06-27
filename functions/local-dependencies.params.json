@@ -57,7 +57,13 @@
                 "order": "descending"
               }
             ]
-          ]
+          ],
+          "includedPaths": [{
+            "path": "/*"
+          }],
+          "excludedPaths": [{
+            "path": "/\"_etag\"/?"
+          }]
         }
       ]
     },
