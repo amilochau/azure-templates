@@ -78,36 +78,36 @@ var anonymousEndpoints = enableOpenId ? contains(openIdConfiguration, 'anonymous
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
   // General hosting information
-  'AZURE_FUNCTIONS_ORGANIZATION': referential.organization
-  'AZURE_FUNCTIONS_APPLICATION': referential.application
-  'AZURE_FUNCTIONS_ENVIRONMENT': referential.environment
-  'AZURE_FUNCTIONS_HOST': slotName
-  'AZURE_FUNCTIONS_REGION': referential.region
+  AZURE_FUNCTIONS_ORGANIZATION: referential.organization
+  AZURE_FUNCTIONS_APPLICATION: referential.application
+  AZURE_FUNCTIONS_ENVIRONMENT: referential.environment
+  AZURE_FUNCTIONS_HOST: slotName
+  AZURE_FUNCTIONS_REGION: referential.region
   // Functions runtime configuration
-  'FUNCTIONS_EXTENSION_VERSION': applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  'FUNCTIONS_WORKER_RUNTIME': applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  FUNCTIONS_EXTENSION_VERSION: applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
+  FUNCTIONS_WORKER_RUNTIME: applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
   // Functions misc configuration
-  'AzureWebJobsDisableHomepage': 'true'
+  AzureWebJobsDisableHomepage: 'true'
   // Connection information for Storage Account (triggers management)
-  'AzureWebJobsStorage__accountName': webJobsStorageAccountName
-  'AzureWebJobsStorage__credential': 'managedidentity'
-  'AzureWebJobsStorage__clientId': userAssignedIdentityClientId
+  AzureWebJobsStorage__accountName: webJobsStorageAccountName
+  AzureWebJobsStorage__credential: 'managedidentity'
+  AzureWebJobsStorage__clientId: userAssignedIdentityClientId
   // Application Insights configuration
-  'APPLICATIONINSIGHTS_CONNECTION_STRING': aiConnectionString
+  APPLICATIONINSIGHTS_CONNECTION_STRING: aiConnectionString
   // Application deployment package authorization
-  'WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID': userAssignedIdentityId
+  WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID: userAssignedIdentityId
   // Application identity configuration
-  'AZURE_CLIENT_ID': userAssignedIdentityClientId
+  AZURE_CLIENT_ID: userAssignedIdentityClientId
 }, empty(serviceBusNamespaceName) ? {} : {
   // Connection information for Service Bus namespace
-  'AzureWebJobsServiceBus__fullyQualifiedNamespace': '${serviceBusNamespaceName}.servicebus.windows.net'
-  'AzureWebJobsServiceBus__credential': 'managedidentity'
-  'AzureWebJobsServiceBus__clientId': userAssignedIdentityClientId
+  AzureWebJobsServiceBus__fullyQualifiedNamespace: '${serviceBusNamespaceName}.servicebus.windows.net'
+  AzureWebJobsServiceBus__credential: 'managedidentity'
+  AzureWebJobsServiceBus__clientId: userAssignedIdentityClientId
 }, empty(applicationPackageUri) ? {} : {
   // Application deployment package URI
-  'WEBSITE_RUN_FROM_PACKAGE': applicationPackageUri
+  WEBSITE_RUN_FROM_PACKAGE: applicationPackageUri
 }, !enableOpenId ? {} : {
-  'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET': formattedOpenIdSecret
+  MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: formattedOpenIdSecret
 })
 
 // Identity settings

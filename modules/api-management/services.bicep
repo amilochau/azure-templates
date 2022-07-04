@@ -77,7 +77,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
       description: 'API Management logger'
       resourceId: appInsightsId
       credentials: {
-        'instrumentationKey': '{{${loggerKey.name}}}'
+        instrumentationKey: '{{${loggerKey.name}}}'
       }
     }
   }

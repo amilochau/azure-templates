@@ -45,6 +45,9 @@
         },
         "no-loc-expr-outside-params": { 
           "level": "error"
+        },
+        "prefer-unquoted-property-names": {
+          "level": "error"
         }
       }
     }

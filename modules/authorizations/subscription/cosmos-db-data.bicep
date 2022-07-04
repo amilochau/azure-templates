@@ -20,7 +20,7 @@ param roleType string
 // === VARIABLES ===
 
 var buildInRoles = loadJsonContent('../../global/built-in-roles.json')
-var roleName = roleType == 'Contributor' ? buildInRoles['cosmos']['Cosmos DB Built-in Data Contributor'] : buildInRoles['cosmos']['Cosmos DB Built-in Data Reader']
+var roleName = roleType == 'Contributor' ? buildInRoles.cosmos['Cosmos DB Built-in Data Contributor'] : buildInRoles.cosmos['Cosmos DB Built-in Data Reader']
 
 // === EXISTING ===
 
