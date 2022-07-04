@@ -63,7 +63,8 @@
           }],
           "excludedPaths": [{
             "path": "/\"_etag\"/?"
-          }]
+          }],
+          "defaultTtl": 3600
         }
       ]
     },
