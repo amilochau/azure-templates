@@ -101,7 +101,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
               path: '/*'
             }] : container.includedPaths
             excludedPaths: !contains(container, 'excludedPaths') ? [{
-              path: '/\\"_etag\\"/?'
+              path: '"/"_etag"/?"'
             }] : container.excludedPaths
           }
           defaultTtl: !contains(container, 'defaultTtl') ? -1 : container.defaultTtl
