@@ -8,5 +8,6 @@
   "/api/system/cache/local/contains",
   "/api/system/cache/local/count",
   "/api/system/cache/local/remove",
-  "/api/system/configuration/providers"
+  "/api/system/configuration/providers",
+  "/api/swagger.json"
 ]
