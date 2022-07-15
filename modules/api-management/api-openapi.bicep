@@ -35,7 +35,7 @@ param openIdConfiguration object
 
 var enableOpenId = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
 var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
-var anonymousUrlRegex = contains(openIdConfiguration, 'gatewayAnonymousUrlRegex') ? openIdConfiguration.gatewayAnonymousUrlRegex : ''
+var anonymousUrlRegex = contains(openIdConfiguration, 'gatewayAnonymousUrlRegex') ? openIdConfiguration.gatewayAnonymousUrlRegex : '^$'
 var apiPolicy = enableOpenId ? replace(replace(replace(replace(
     loadTextContent('../global/api-policies/local-jwt.xml'),
     '%BACKEND_ID%', backendId),
