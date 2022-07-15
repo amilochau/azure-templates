@@ -174,6 +174,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
       }
       globalValidation: skipAuthentication ? {
         requireAuthentication: false
+        unauthenticatedClientAction: 'AllowAnonymous'
       } : {
         requireAuthentication: true
         unauthenticatedClientAction: 'Return401'
