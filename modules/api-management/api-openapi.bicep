@@ -35,7 +35,17 @@ param openIdConfiguration object
 
 var enableOpenId = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
 var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
-var apiPolicy = enableOpenId ? replace(replace(replace(loadTextContent('../global/api-policies/local-jwt.xml'), '%BACKEND_ID%', backendId), '%OPENID_CONFIG_ENDPOINT%', openIdConfiguration.endpoint), '%API_CLIENT_ID%', openIdConfiguration.apiClientId) : replace(loadTextContent('../global/api-policies/local-simple.xml'), '%BACKEND_ID%', backendId)
+var anonymousUrlRegex = contains(openIdConfiguration, 'gatewayAnonymousUrlRegex') ? openIdConfiguration.gatewayAnonymousUrlRegex : ''
+var apiPolicy = enableOpenId ? replace(replace(replace(replace(
+    loadTextContent('../global/api-policies/local-jwt.xml'),
+    '%BACKEND_ID%', backendId),
+    '%OPENID_CONFIG_ENDPOINT%', openIdConfiguration.endpoint),
+    '%API_CLIENT_ID%', openIdConfiguration.apiClientId),
+    '%ANONYMOUS_URL_REGEX%', anonymousUrlRegex
+  ) : replace(
+    loadTextContent('../global/api-policies/local-simple.xml'),
+    '%BACKEND_ID%', backendId
+  )
 
 // === EXISTING ===
 
