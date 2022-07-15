@@ -41,7 +41,7 @@ var apiPolicy = enableOpenId ? replace(replace(replace(replace(
     '%BACKEND_ID%', backendId),
     '%OPENID_CONFIG_ENDPOINT%', openIdConfiguration.endpoint),
     '%API_CLIENT_ID%', openIdConfiguration.apiClientId),
-    '%ANONYMOUS_URL_REGEX%', anonymousUrlRegex
+    '%ANONYMOUS_URL_REGEX%', '"${anonymousUrlRegex}"'
   ) : replace(
     loadTextContent('../global/api-policies/local-simple.xml'),
     '%BACKEND_ID%', backendId
