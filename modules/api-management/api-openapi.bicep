@@ -99,7 +99,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   resource policy 'policies' = {
     name: 'policy'
     properties: {
-      format: 'xml-link'
+      format: 'rawxml-link'
 #disable-next-line no-hardcoded-env-urls
       value: 'https://todeletetestapimpolicy.blob.core.windows.net/policies/mil-maps-dev-apimapi.xml'
     }
