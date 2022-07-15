@@ -36,6 +36,7 @@ param openIdConfiguration object
 var enableOpenId = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
 var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
 var anonymousUrlRegex = contains(openIdConfiguration, 'gatewayAnonymousUrlRegex') ? openIdConfiguration.gatewayAnonymousUrlRegex : '^$'
+#disable-next-line no-unused-vars
 var apiPolicy = enableOpenId ? replace(replace(replace(replace(
     loadTextContent('../global/api-policies/local-jwt.xml'),
     '%BACKEND_ID%', backendId),
@@ -99,6 +100,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
     name: 'policy'
     properties: {
       format: 'xml-link'
+#disable-next-line no-hardcoded-env-urls
       value: 'https://todeletetestapimpolicy.blob.core.windows.net/policies/mil-maps-dev-apimapi.xml'
     }
   }
