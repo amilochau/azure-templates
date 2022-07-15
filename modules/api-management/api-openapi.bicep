@@ -98,7 +98,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   resource policy 'policies' = {
     name: 'policy'
     properties: {
-      format: 'xml'
+      format: 'rawxml'
       value: apiPolicy
     }
   }
