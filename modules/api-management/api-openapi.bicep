@@ -33,7 +33,7 @@ param openIdConfiguration object
 
 // === VARIABLES ===
 
-var enableOpenId = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
+var enableOpenId = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId') && (!contains(openIdConfiguration, 'skipAuthentication') || !openIdConfiguration.skipAuthentication)
 var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
 var anonymousUrlRegex = contains(openIdConfiguration, 'gatewayAnonymousUrlRegex') ? openIdConfiguration.gatewayAnonymousUrlRegex : ''
 var apiPolicy = enableOpenId ? replace(replace(replace(replace(
