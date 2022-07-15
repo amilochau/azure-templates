@@ -98,8 +98,8 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
   resource policy 'policies' = {
     name: 'policy'
     properties: {
-      format: 'rawxml'
-      value: apiPolicy
+      format: 'xml-link'
+      value: 'https://todeletetestapimpolicy.blob.core.windows.net/policies/mil-maps-dev-apimapi.xml'
     }
   }
 }
