@@ -3,7 +3,7 @@
         <base />
         <set-backend-service id="bicep-generated-policy" backend-id="%BACKEND_ID%" />
         <choose>
-            <when condition="@(!Regex.Match(context.Request.Url.Path, @"%ANONYMOUS_URL_REGEX%", RegexOptions.IgnoreCase))">
+            <when condition="@(!Regex.IsMatch(context.Request.Url.Path, "%ANONYMOUS_URL_REGEX%", RegexOptions.IgnoreCase))">
                 <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid." require-expiration-time="true" require-signed-tokens="true" clock-skew="300">
                     <openid-config url="%OPENID_CONFIG_ENDPOINT%" />
                     <required-claims>
