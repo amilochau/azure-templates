@@ -163,7 +163,7 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   }
 
   // Authentication
-  resource aa 'config' = if (enableOpenId) {
+  resource authSettingsConfig 'config' = if (enableOpenId) {
     name: 'authsettingsV2'
     properties: {
       platform: {
@@ -171,6 +171,7 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
       }
       globalValidation: skipAuthentication ? {
         requireAuthentication: false
+        unauthenticatedClientAction: 'AllowAnonymous'
       } : {
         requireAuthentication: true
         unauthenticatedClientAction: 'Return401'
