@@ -166,7 +166,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   }
 
   // Authentication
-  resource aa 'config' = if (enableOpenId) {
+  resource authSettingsConfig 'config' = if (enableOpenId) {
     name: 'authsettingsV2'
     properties: {
       platform: {
