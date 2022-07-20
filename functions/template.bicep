@@ -231,32 +231,10 @@ module fn '../modules/applications/functions/application.bicep' = {
     applicationPackageUri: applicationPackageUri
     extraAppSettings: extraAppSettings
     extraIdentities: extraIdentities
+    deploymentSlots: deploymentSlots
     openIdConfiguration: openIdConfiguration
   }
 }
-
-@description('Functions application - slots')
-module fnSlots '../modules/applications/functions/application-slot.bicep' = [for deploymentSlot in deploymentSlots: {
-  name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
-  params: {
-    referential: tags.outputs.referential
-    location: location
-    pricingPlan: pricingPlan
-    userAssignedIdentityId: userAssignedIdentity_application.outputs.id
-    userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
-    functionsName: fn.outputs.name
-    slotName: deploymentSlot.name
-    applicationType: applicationType
-    serverFarmId: asp.outputs.id
-    webJobsStorageAccountName: stg.outputs.name
-    aiConnectionString: ai.outputs.connectionString
-    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
-    kvVaultUri: kv.outputs.vaultUri
-    applicationPackageUri: applicationPackageUri
-    extraAppSettings: extraAppSettings
-    extraIdentities: extraIdentities
-  }
-}]
 
 @description('Static Web Apps application')
 module swa '../modules/applications/static/application.bicep' = if (staticWebApp.enabled) {
