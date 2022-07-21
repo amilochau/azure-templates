@@ -79,6 +79,14 @@
         ]
       }
     },
+    "staticWebApp": {
+      "value": {
+        "enabled": true,
+        "customDomains": [
+          "subdomain.domain.com"
+        ]
+      }
+    },
     "extraAppSettings": {
       "value": {
         "key1": "value1",
@@ -96,14 +104,6 @@
           "name": "dev-bis"
         }
       ]
-    },
-    "staticWebApp": {
-      "value": {
-        "enabled": true,
-        "customDomains": [
-          "subdomain.domain.com"
-        ]
-      }
     },
     "contributionGroups": {
       "value": [

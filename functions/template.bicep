@@ -57,7 +57,7 @@ The storage accounts options:
   - *daysBeforeDeletion*: int
   - *allowBlobPublicAccess*: bool
   - *authorizeClients*: bool
-  - *readOnly*
+  - *readOnly*: bool
 ''')
 param storageAccountsOptions object = {
   enabled: false
@@ -67,15 +67,28 @@ param storageAccountsOptions object = {
 The Cosmos account options:
 - **enabled**: bool
 - **containers**: array
-  - **name**
-  - **partitionKey**
-  - *uniqueKeys*
-  - *compositeIndexes*
-  - *includedPaths*
-  - *excludedPaths*
-  - *defaultTtl*
+  - **name**: string
+  - **partitionKey**: string
+  - *uniqueKeys*: string[]
+  - *compositeIndexes*: array of array
+    - **path**: string
+    - **order**: string
+  - *includedPaths*: array
+    - **path**: string
+  - *excludedPaths*: array
+    - **path**: string
+  - *defaultTtl*: int
 ''')
 param cosmosAccountOptions object = {
+  enabled: false
+}
+
+@description('''
+The Static Web app options:
+- **enabled**: bool
+- *customDomains*: string[]
+''')
+param staticWebAppOptions object = {
   enabled: false
 }
 
@@ -93,11 +106,6 @@ param deploymentSlots array = []
 
 @description('The contribution groups')
 param contributionGroups array = []
-
-@description('The static web app to attach')
-param staticWebApp object = {
-  enabled: false
-}
 
 @description('The OpenID configuration for authentication')
 param openIdConfiguration object = {}
@@ -261,14 +269,14 @@ module fn '../modules/applications/functions/application.bicep' = {
 }
 
 @description('Static Web Apps application')
-module swa '../modules/applications/static/application.bicep' = if (staticWebApp.enabled) {
+module swa '../modules/applications/static/application.bicep' = if (staticWebAppOptions.enabled) {
   name: 'Resource-StaticWebAppsApplication'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
     pricingPlan: pricingPlan
-    customDomains: !contains(staticWebApp, 'customDomains') ? [] : staticWebApp.customDomains
+    staticWebAppOptions: staticWebAppOptions
   }
 }
 
