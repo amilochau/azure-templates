@@ -72,7 +72,7 @@ var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0
 var enableOpenId = contains(openIdConfiguration, 'clientSecretKey') && contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
 var formattedOpenIdSecret = enableOpenId ? replace(replace(openIdConfiguration.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
 var defaultAnonymousEndpoints = loadJsonContent('../../global/anonymous-endpoints.json')
-var skipAuthentication = contains(openIdConfiguration, 'skipAuthentication')  && openIdConfiguration.skipAuthentication
+var skipAuthentication = contains(openIdConfiguration, 'skipAuthentication') && openIdConfiguration.skipAuthentication
 var anonymousEndpoints = enableOpenId ? contains(openIdConfiguration, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, openIdConfiguration.anonymousEndpoints) : defaultAnonymousEndpoints : []
 
 // Identity settings
