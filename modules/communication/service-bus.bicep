@@ -10,8 +10,8 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The Service Bus queues')
-param serviceBusQueues array = []
+@description('The Service Bus options')
+param serviceBusOptions object
 
 @description('The deployment location')
 param location string
@@ -33,8 +33,8 @@ resource sbn 'Microsoft.ServiceBus/namespaces@2022-01-01-preview' = {
   }
 
   // Service Bus Queues
-  resource queues 'queues' = [for queue in serviceBusQueues: if (length(serviceBusQueues) > 0) {
-    name: empty(serviceBusQueues) ? 'empty' : queue
+  resource queues 'queues' = [for queue in serviceBusOptions.queues: if (length(serviceBusOptions.queues) > 0) {
+    name: empty(serviceBusOptions.queues) ? 'empty' : queue
     properties: {
       lockDuration: 'PT30S'
       maxSizeInMegabytes: 1024

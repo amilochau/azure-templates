@@ -19,6 +19,7 @@
     },
     "serviceBusOptions": {
       "value": {
+        "enabled": true,
         "queues": [
           "queue1",
           "queue2"
@@ -28,6 +29,7 @@
     },
     "storageAccountsOptions": {
       "value": {
+        "enabled": true,
         "accounts": [
           {
             "suffix": "1",
@@ -44,6 +46,39 @@
         ]
       }
     },
+    "cosmosAccountOptions": {
+      "value": {
+        "enabled": true,
+        "containers": [
+          {
+            "name": "containerName",
+            "partitionKey": "/partitionKey",
+            "uniqueKeys": [
+              "/uniqueKey"
+            ],
+            "compositeIndexes": [
+              [
+                {  
+                  "path": "/name",
+                  "order": "ascending"
+                },
+                {  
+                  "path": "/creation",
+                  "order": "descending"
+                }
+              ]
+            ],
+            "includedPaths": [{
+              "path": "/*"
+            }],
+            "excludedPaths": [{
+              "path": "/\"_etag\"/?"
+            }],
+            "defaultTtl": 3600
+          }
+        ]
+      }
+    },
     "extraAppSettings": {
       "value": {
         "key1": "value1",
@@ -54,36 +89,6 @@
       "value": {
         "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
       }
-    },
-    "cosmosContainers": {
-      "value": [
-        {
-          "name": "containerName",
-          "partitionKey": "/partitionKey",
-          "uniqueKeys": [
-            "/uniqueKey"
-          ],
-          "compositeIndexes": [
-            [
-              {  
-                "path": "/name",
-                "order": "ascending"
-              },
-              {  
-                "path": "/creation",
-                "order": "descending"
-              }
-            ]
-          ],
-          "includedPaths": [{
-            "path": "/*"
-          }],
-          "excludedPaths": [{
-            "path": "/\"_etag\"/?"
-          }],
-          "defaultTtl": 3600
-        }
-      ]
     },
     "deploymentSlots": {
       "value": [
