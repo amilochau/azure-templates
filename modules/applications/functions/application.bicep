@@ -53,6 +53,9 @@ param extraAppSettings object = {}
 @description('The extra user-assigned identities to be used by the application')
 param extraIdentities object = {}
 
+@description('The extra deployment slots')
+param deploymentSlots array = []
+
 @description('The OpenID configuration for authentication')
 param openIdConfiguration object = {}
 
@@ -71,6 +74,33 @@ var formattedOpenIdSecret = enableOpenId ? replace(replace(openIdConfiguration.c
 var defaultAnonymousEndpoints = loadJsonContent('../../global/anonymous-endpoints.json')
 var skipAuthentication = contains(openIdConfiguration, 'skipAuthentication')  && openIdConfiguration.skipAuthentication
 var anonymousEndpoints = enableOpenId ? contains(openIdConfiguration, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, openIdConfiguration.anonymousEndpoints) : defaultAnonymousEndpoints : []
+
+// Identity settings
+var identitySettings = {
+  type: 'UserAssigned'
+  userAssignedIdentities: union({
+    '${userAssignedIdentityId}': {}
+  }, extraIdentities)
+}
+
+// Site settings
+var siteSettings = {
+  serverFarmId: serverFarmId
+  reserved: true
+  httpsOnly: true
+  dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
+  keyVaultReferenceIdentity: userAssignedIdentityId
+}
+
+// Web settings
+var webSettings = {
+  linuxFxVersion: linuxFxVersion
+  localMySqlEnabled: false
+  http20Enabled: true
+  minTlsVersion: '1.2'
+  scmMinTlsVersion: '1.2'
+  ftpsState: 'Disabled'
+}
 
 // App settings
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
@@ -109,14 +139,44 @@ var appSettings = union(formattedExtraAppSettings, {
 })
 
 // Slot settings
-var slotAppSettingNames = [
-  'AZURE_FUNCTIONS_HOST'
-]
+var slotSettings = {
+  appSettingNames: [
+    'AZURE_FUNCTIONS_HOST'
+  ]
+}
 
-// Identity settings
-var userAssignedIdentities = union({
-  '${userAssignedIdentityId}': {}
-}, extraIdentities)
+// Auth settings
+var authSettings = {
+  platform: {
+    enabled: true
+  }
+  globalValidation: skipAuthentication ? {
+    requireAuthentication: false
+    unauthenticatedClientAction: 'AllowAnonymous'
+  } : {
+    requireAuthentication: true
+    unauthenticatedClientAction: 'Return401'
+    excludedPaths: anonymousEndpoints
+  }
+  login: {
+    tokenStore: {
+      enabled: true
+    }
+  }
+  httpSettings: {
+    requireHttps: true
+  }
+  identityProviders: {
+    azureActiveDirectory: {
+      enabled: true
+      registration: {
+        clientId: openIdConfiguration.apiClientId
+        clientSecretSettingName: 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
+        openIdIssuer: openIdConfiguration.endpoint
+      }
+    }
+  }
+}
 
 // === RESOURCES ===
 
@@ -125,30 +185,14 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
   location: location
   kind: 'functionapp,linux'
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: userAssignedIdentities
-  }
+  identity: identitySettings
   tags: referential
-  properties: {
-    serverFarmId: serverFarmId
-    reserved: true
-    httpsOnly: true
-    dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
-    keyVaultReferenceIdentity: userAssignedIdentityId
-  }
+  properties: siteSettings
 
   // Web Configuration
   resource webConfig 'config' = {
     name: 'web'
-    properties: {
-      linuxFxVersion: linuxFxVersion
-      localMySqlEnabled: false
-      http20Enabled: true
-      minTlsVersion: '1.2'
-      scmMinTlsVersion: '1.2'
-      ftpsState: 'Disabled'
-    }
+    properties: webSettings
   }
 
   // App Configuration
@@ -160,47 +204,31 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   // Slot settings
   resource slotConfigNamesConfig 'config' = {
     name: 'slotConfigNames'
-    properties: {
-      appSettingNames: slotAppSettingNames
-    }
+    properties: slotSettings
   }
 
   // Authentication
   resource authSettingsConfig 'config' = if (enableOpenId) {
     name: 'authsettingsV2'
-    properties: {
-      platform: {
-        enabled: true
-      }
-      globalValidation: skipAuthentication ? {
-        requireAuthentication: false
-        unauthenticatedClientAction: 'AllowAnonymous'
-      } : {
-        requireAuthentication: true
-        unauthenticatedClientAction: 'Return401'
-        excludedPaths: anonymousEndpoints
-      }
-      login: {
-        tokenStore: {
-          enabled: true
-        }
-      }
-      httpSettings: {
-        requireHttps: true
-      }
-      identityProviders: {
-        azureActiveDirectory: {
-          enabled: true
-          registration: {
-            clientId: openIdConfiguration.apiClientId
-            clientSecretSettingName: 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
-            openIdIssuer: openIdConfiguration.endpoint
-          }
-        }
-      }
-    }
+    properties: authSettings
   }
 }
+
+module slots './application-slot.bicep' = [for deploymentSlot in deploymentSlots: {
+  name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
+  params: {
+    referential: referential
+    functionsName: fn.name
+    slotName: deploymentSlot.name
+    identitySettings: identitySettings
+    siteSettings: siteSettings
+    webSettings: webSettings
+    appSettings: appSettings
+    authSettings: authSettings
+    enableOpenId: enableOpenId
+    location: location
+  }
+}]
 
 // === OUTPUTS ===
 
