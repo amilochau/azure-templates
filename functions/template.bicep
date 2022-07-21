@@ -24,12 +24,6 @@ param hostName string
 param templateVersion string
 
 
-@description('The application type')
-@allowed([
-  'isolatedDotnet6'
-])
-param applicationType string
-
 @description('The pricing plan')
 @allowed([
   'Free'    // The cheapest plan, can create some small fees
@@ -92,23 +86,25 @@ param staticWebAppOptions object = {
   enabled: false
 }
 
-@description('The application packages URI')
-param applicationPackageUri string = ''
-
-@description('The extra app settings to add')
-param extraAppSettings object = {}
-
-@description('The extra user-assigned identities to be used by the application')
-param extraIdentities object = {}
-
-@description('The extra deployment slots')
-param deploymentSlots array = []
+@description('''
+The Functions app options:
+- **stack**: string
+- *packageUri*: string
+- *extraAppSettings*: dictionary
+- *extraIdentities*: dictionary
+- *extraSlots*: array
+  - **name**
+- *openId*:
+  - **clientSecretKey**
+  - **endpoint**
+  - **apiClientId**
+  - *skipAuthentication*
+  - *anonymousEndpoints*
+''')
+param functionsAppOptions object
 
 @description('The contribution groups')
 param contributionGroups array = []
-
-@description('The OpenID configuration for authentication')
-param openIdConfiguration object = {}
 
 @description('The deployment location')
 param location string = resourceGroup().location
@@ -254,17 +250,12 @@ module fn '../modules/applications/functions/application.bicep' = {
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity_application.outputs.id
     userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
-    applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
     aiConnectionString: ai.outputs.connectionString
     serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
-    applicationPackageUri: applicationPackageUri
-    extraAppSettings: extraAppSettings
-    extraIdentities: extraIdentities
-    deploymentSlots: deploymentSlots
-    openIdConfiguration: openIdConfiguration
+    functionsAppOptions: functionsAppOptions
   }
 }
 

@@ -14,9 +14,6 @@
     "pricingPlan": {
       "value": "Free"
     },
-    "applicationType": {
-      "value": "isolatedDotnet6"
-    },
     "serviceBusOptions": {
       "value": {
         "enabled": true,
@@ -87,23 +84,31 @@
         ]
       }
     },
-    "extraAppSettings": {
+    "functionsAppOptions": {
       "value": {
-        "key1": "value1",
-        "key2": "<secret>secret_name</secret>"
-      }
-    },
-    "extraIdentities": {
-      "value": {
-        "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
-      }
-    },
-    "deploymentSlots": {
-      "value": [
-        {
-          "name": "dev-bis"
+        "stack": "isolatedDotnet6",
+        "extraAppSettings": {
+          "key1": "value1",
+          "key2": "<secret>secret_name</secret>"
+        },
+        "extraIdentities": {
+          "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
+        },
+        "extraSlots": [
+          {
+            "name": "dev-bis"
+          }
+        ],
+        "openId": {
+          "endpoint": "https://B2CTENANT.b2clogin.com/TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_FLOWNAME",
+          "apiClientId": "00000000-0000-0000-0000-000000000000",
+          "clientSecretKey": "<secret>Identity--Secret</secret>",
+          "skipAuthentication": false,
+          "anonymousEndpoints": [
+            "/api/anonymous-route"
+          ]
         }
-      ]
+      }
     },
     "contributionGroups": {
       "value": [
@@ -111,17 +116,6 @@
           "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
         }
       ]
-    },
-    "openIdConfiguration": {
-      "value": {
-        "endpoint": "https://B2CTENANT.b2clogin.com/TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_FLOWNAME",
-        "apiClientId": "00000000-0000-0000-0000-000000000000",
-        "clientSecretKey": "<secret>Identity--Secret</secret>",
-        "skipAuthentication": false,
-        "anonymousEndpoints": [
-          "/api/anonymous-route"
-        ]
-      }
     }
   }
 }
