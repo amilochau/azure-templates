@@ -77,6 +77,8 @@ var regionName = loadJsonContent('../modules/global/regions.json')[location]
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
+var storageAccounts = storageAccountsOptions.enabled ? storageAccountsOptions.accounts : []
+
 // === RESOURCES ===
 
 @description('Resource groupe tags')
@@ -103,7 +105,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (serviceBusOp
 }
 
 @description('Storage Accounts')
-module extra_stg '../modules/storage/storage-account.bicep' = [for storageAccountOptions in storageAccountsOptions.accounts: if (storageAccountsOptions.enabled) {
+module extra_stg '../modules/storage/storage-account.bicep' = [for storageAccountOptions in storageAccounts: if (storageAccountsOptions.enabled) {
   name: !contains(storageAccountOptions, 'suffix') ? 'empty' : 'Resource-StorageAccount-${storageAccountOptions.suffix}'
   params: {
     referential: tags.outputs.referential

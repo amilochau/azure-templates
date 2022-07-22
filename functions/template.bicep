@@ -123,6 +123,8 @@ var webTestsSettings = loadJsonContent('../modules/global/organization-based/web
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
 
+var storageAccounts = storageAccountsOptions.enabled ? storageAccountsOptions.accounts : []
+
 // === RESOURCES ===
 
 @description('Resource groupe tags')
@@ -193,7 +195,7 @@ module extra_sbn '../modules/communication/service-bus.bicep' = if (serviceBusOp
 }
 
 @description('Storage Accounts')
-module extra_stg '../modules/storage/storage-account.bicep' = [for storageAccountOptions in storageAccountsOptions.accounts: if (storageAccountsOptions.enabled) {
+module extra_stg '../modules/storage/storage-account.bicep' = [for storageAccountOptions in storageAccounts: if (storageAccountsOptions.enabled) {
   name: empty(storageAccountOptions) ? 'empty' : 'Resource-StorageAccount-${storageAccountOptions.suffix}'
   params: {
     referential: tags.outputs.referential
@@ -334,7 +336,7 @@ module auth_fn_extra_sbn '../modules/authorizations/subscription/service-bus-dat
 }
 
 @description('Functions to extra Storage Accounts')
-module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccountsOptions.accounts: if (storageAccountsOptions.enabled) {
+module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccounts: if (storageAccountsOptions.enabled) {
   name: empty(storageAccountOptions) ? 'empty' : 'Authorization-Functions-StorageAccount${storageAccountOptions.suffix}'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
@@ -391,7 +393,7 @@ module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bu
 }
 
 @description('Clients UAI to extra Storage Accounts')
-module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccountsOptions.accounts: if (storageAccountsOptions.enabled && contains(storageAccountOptions, 'authorizeClients') && storageAccountOptions.authorizeClients) {
+module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccounts: if (storageAccountsOptions.enabled && contains(storageAccountOptions, 'authorizeClients') && storageAccountOptions.authorizeClients) {
   name: empty(storageAccountOptions) ? 'empty' : 'Authorization-Clients-StorageAccount${storageAccountOptions.suffix}'
   params: {
     principalId: userAssignedIdentity_clients.outputs.principalId
