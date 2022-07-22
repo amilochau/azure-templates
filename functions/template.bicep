@@ -89,7 +89,6 @@ param staticWebAppOptions object = {
 @description('''
 The Functions app options:
 - **stack**: string
-- *packageUri*: string
 - *extraAppSettings*: dictionary
 - *extraIdentities*: dictionary
 - *extraSlots*: array

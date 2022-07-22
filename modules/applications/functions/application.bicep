@@ -114,9 +114,6 @@ var appSettings = union(formattedExtraAppSettings, {
   AzureWebJobsServiceBus__fullyQualifiedNamespace: '${serviceBusNamespaceName}.servicebus.windows.net'
   AzureWebJobsServiceBus__credential: 'managedidentity'
   AzureWebJobsServiceBus__clientId: userAssignedIdentityClientId
-}, contains(functionsAppOptions, 'packageUri') ? {} : {
-  // Application deployment package URI
-  WEBSITE_RUN_FROM_PACKAGE: functionsAppOptions.packageUri
 }, !enableOpenId ? {} : {
   MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: formattedOpenIdSecret
 })
