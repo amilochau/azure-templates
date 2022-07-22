@@ -13,15 +13,16 @@
     },
     "serviceBusOptions": {
       "value": {
+        "enabled": true,
         "queues": [
           "queue1",
           "queue2"
-        ],
-        "authorizeClients": true
+        ]
       }
     },
     "storageAccountsOptions": {
       "value": {
+        "enabled": true,
         "accounts": [
           {
             "suffix": "1",
@@ -30,43 +31,44 @@
               "container1",
               "container2"
             ],
-            "readOnly": true,
             "daysBeforeDeletion": 365,
             "allowBlobPublicAccess": false
           }
-        ],
-        "authorizeClients": true
+        ]
       }
     },
-    "cosmosContainers": {
-      "value": [
-        {
-          "name": "containerName",
-          "partitionKey": "/partitionKey",
-          "uniqueKeys": [
-            "/uniqueKey"
-          ],
-          "compositeIndexes": [
-            [
-              {  
-                "path": "/name",
-                "order": "ascending"
-              },
-              {  
-                "path": "/creation",
-                "order": "descending"
-              }
-            ]
-          ],
-          "includedPaths": [{
-            "path": "/*"
-          }],
-          "excludedPaths": [{
-            "path": "/\"_etag\"/?"
-          }],
-          "defaultTtl": 3600
-        }
-      ]
+    "cosmosAccountOptions": {
+      "value": {
+        "enabled": true,
+        "containers": [
+          {
+            "name": "containerName",
+            "partitionKey": "/partitionKey",
+            "uniqueKeys": [
+              "/uniqueKey"
+            ],
+            "compositeIndexes": [
+              [
+                {  
+                  "path": "/name",
+                  "order": "ascending"
+                },
+                {  
+                  "path": "/creation",
+                  "order": "descending"
+                }
+              ]
+            ],
+            "includedPaths": [{
+              "path": "/*"
+            }],
+            "excludedPaths": [{
+              "path": "/\"_etag\"/?"
+            }],
+            "defaultTtl": 3600
+          }
+        ]
+      }
     },
     "contributionGroups": {
       "value": [

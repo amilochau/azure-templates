@@ -17,8 +17,8 @@ param conventions object
 ])
 param pricingPlan string
 
-@description('The application custom domains')
-param customDomains array = []
+@description('The Static Web app options')
+param staticWebAppOptions object
 
 @description('The deployment location')
 param location string
@@ -49,7 +49,7 @@ resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
 }
 
 @description('Custom domains for Static Web Apps')
-module domains 'custom-domain.bicep' = [for (customDomain, i) in customDomains: if (!empty(customDomains)) {
+module domains 'custom-domain.bicep' = [for (customDomain, i) in staticWebAppOptions.customDomains: if (contains(staticWebAppOptions, 'customDomains')) {
   name: 'Resource-CustomDomain-${customDomain}'
   params: {
     conventions: conventions

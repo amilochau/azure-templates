@@ -10,8 +10,8 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('the Cosmos DB containers')
-param cosmosContainers array
+@description('The Cosmos account options')
+param cosmosAccountOptions object
 
 @description('The deployment location')
 param location string
@@ -72,7 +72,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
     }
 
     // Cosmos DB Containers
-    resource containers 'containers' = [for (container, index) in cosmosContainers: {
+    resource containers 'containers' = [for (container, index) in cosmosAccountOptions.containers: {
       name: container.name
       location: location
       tags: referential

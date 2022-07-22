@@ -10,20 +10,8 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The storage account comment')
-param comment string
-
-@description('The storage account suffix')
-param suffix string = ''
-
-@description('The blob containers')
-param blobContainers array = []
-
-@description('Duration before blobs deletion in days - 0 disables this feature')
-param daysBeforeDeletion int = 0
-
-@description('Allow blob public access')
-param allowBlobPublicAccess bool = false
+@description('The storage account options')
+param storageAccountOptions object
 
 @description('The deployment location')
 param location string
@@ -34,9 +22,12 @@ var storageAccountName = '${conventions.naming.prefix}${conventions.naming.suffi
 var extendedRecoverability = referential.environment == 'Production'
 var storageAccountSku = extendedRecoverability ? 'Standard_GRS' : 'Standard_LRS'
 var specificTags = {
-  comment: comment
+  comment: storageAccountOptions.comment
 }
 var tags = union(referential, specificTags)
+var suffix = contains(storageAccountOptions, 'suffix') ? storageAccountOptions.suffix : ''
+var daysBeforeDeletion = contains(storageAccountOptions, 'daysBeforeDeletion') ? storageAccountOptions.daysBeforeDeletion : 0
+var allowBlobPublicAccess = contains(storageAccountOptions, 'allowBlobPublicAccess') ? storageAccountOptions.allowBlobPublicAccess : false
 
 // === RESOURCES ===
 
@@ -117,7 +108,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
     }
     
     // Blob containers
-    resource containers 'containers' = [for container in blobContainers: if (length(blobContainers) > 0) {
+    resource containers 'containers' = [for container in storageAccountOptions.containers: if (length(storageAccountOptions.containers) > 0) {
       name: container
       properties: {
         publicAccess: allowBlobPublicAccess ? 'Blob' : 'None'
@@ -134,7 +125,7 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
     conventions: conventions
     location: location
     storageAccountHostName: replace(replace(storageAccount.properties.primaryEndpoints.blob, 'https://', ''), '/', '')
-    storageAccountComment: comment
+    storageAccountComment: storageAccountOptions.comment
     storageAccountSuffix: suffix
     cdnCacheExpirationInDays: 360
   }

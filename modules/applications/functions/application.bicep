@@ -23,11 +23,8 @@ param userAssignedIdentityId string
 @description('The Client ID of the User-Assigned Identity to use')
 param userAssignedIdentityClientId string
 
-@description('The application type')
-@allowed([
-  'isolatedDotnet6'
-])
-param applicationType string
+@description('The Functions app options')
+param functionsAppOptions object
 
 @description('The server farm ID')
 param serverFarmId string
@@ -42,22 +39,10 @@ param kvVaultUri string
 param aiConnectionString string
 
 @description('The Service Bus Namespace name')
-param serviceBusNamespaceName string = ''
+param serviceBusNamespaceName string
 
-@description('The application packages URI')
-param applicationPackageUri string = ''
-
-@description('The application secret names')
-param extraAppSettings object = {}
-
-@description('The extra user-assigned identities to be used by the application')
-param extraIdentities object = {}
-
-@description('The extra deployment slots')
-param deploymentSlots array = []
-
-@description('The OpenID configuration for authentication')
-param openIdConfiguration object = {}
+@description('The application package URI')
+param applicationPackageUri string
 
 @description('The deployment location')
 param location string
@@ -66,16 +51,16 @@ param location string
 
 // General settings
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
-var linuxFxVersion = applicationType == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
+var linuxFxVersion = functionsAppOptions.stack == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
+var extraSlots = contains(functionsAppOptions, 'extraSlots') ? functionsAppOptions.extraSlots : []
 
 // OpenID
-var enableOpenId = contains(openIdConfiguration, 'clientSecretKey') && contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId')
-var formattedOpenIdSecret = enableOpenId ? replace(replace(openIdConfiguration.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
+var enableOpenId = contains(functionsAppOptions, 'openId')
+var formattedOpenIdSecret = enableOpenId ? replace(replace(functionsAppOptions.openId.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
 var defaultAnonymousEndpoints = loadJsonContent('../../global/anonymous-endpoints.json')
-var skipAuthentication = contains(openIdConfiguration, 'skipAuthentication') && openIdConfiguration.skipAuthentication
-var anonymousEndpoints = enableOpenId ? contains(openIdConfiguration, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, openIdConfiguration.anonymousEndpoints) : defaultAnonymousEndpoints : []
 
 // Identity settings
+var extraIdentities = contains(functionsAppOptions, 'extraIdentities') ? functionsAppOptions.extraIdentities : {}
 var identitySettings = {
   type: 'UserAssigned'
   userAssignedIdentities: union({
@@ -103,6 +88,7 @@ var webSettings = {
 }
 
 // App settings
+var extraAppSettings = contains(functionsAppOptions, 'extraAppSettings') ? functionsAppOptions.extraAppSettings : {}
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
   // General hosting information
@@ -112,8 +98,8 @@ var appSettings = union(formattedExtraAppSettings, {
   AZURE_FUNCTIONS_HOST: referential.host
   AZURE_FUNCTIONS_REGION: referential.region
   // Functions runtime configuration
-  FUNCTIONS_EXTENSION_VERSION: applicationType == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  FUNCTIONS_WORKER_RUNTIME: applicationType == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  FUNCTIONS_EXTENSION_VERSION: functionsAppOptions.stack == 'isolatedDotnet6' ? '~4' : 'ERROR'
+  FUNCTIONS_WORKER_RUNTIME: functionsAppOptions.stack == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
   // Functions misc configuration
   AzureWebJobsDisableHomepage: 'true'
   // Connection information for Storage Account (triggers management)
@@ -146,17 +132,17 @@ var slotSettings = {
 }
 
 // Auth settings
-var authSettings = {
+var authSettings = enableOpenId ? {
   platform: {
     enabled: true
   }
-  globalValidation: skipAuthentication ? {
+  globalValidation: contains(functionsAppOptions.openId, 'skipAuthentication') && functionsAppOptions.openId.skipAuthentication ? {
     requireAuthentication: false
     unauthenticatedClientAction: 'AllowAnonymous'
   } : {
     requireAuthentication: true
     unauthenticatedClientAction: 'Return401'
-    excludedPaths: anonymousEndpoints
+    excludedPaths: contains(functionsAppOptions.openId, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, functionsAppOptions.openId.anonymousEndpoints) : defaultAnonymousEndpoints
   }
   login: {
     tokenStore: {
@@ -170,13 +156,13 @@ var authSettings = {
     azureActiveDirectory: {
       enabled: true
       registration: {
-        clientId: openIdConfiguration.apiClientId
+        clientId: functionsAppOptions.openId.apiClientId
         clientSecretSettingName: 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
-        openIdIssuer: openIdConfiguration.endpoint
+        openIdIssuer: functionsAppOptions.openId.endpoint
       }
     }
   }
-}
+} : {}
 
 // === RESOURCES ===
 
@@ -214,7 +200,8 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
-module slots './application-slot.bicep' = [for deploymentSlot in deploymentSlots: {
+@description('The extra deployment slots')
+module slots './application-slot.bicep' = [for deploymentSlot in extraSlots: if (contains(functionsAppOptions, 'extraSlots')) {
   name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
   params: {
     referential: referential

@@ -24,12 +24,6 @@ param hostName string
 param templateVersion string
 
 
-@description('The application type')
-@allowed([
-  'isolatedDotnet6'
-])
-param applicationType string
-
 @description('The pricing plan')
 @allowed([
   'Free'    // The cheapest plan, can create some small fees
@@ -37,41 +31,82 @@ param applicationType string
 ])
 param pricingPlan string = 'Free'
 
-@description('The service bus options')
+@description('''
+The service bus options:
+- **enabled**: bool
+- *queues*: string[]
+- *authorizeClients*: bool
+''')
 param serviceBusOptions object = {
-  queues: []
-}
-
-@description('The storage account options')
-param storageAccountsOptions object = {
-  accounts: []
-}
-
-@description('The application packages URI')
-param applicationPackageUri string = ''
-
-@description('The extra app settings to add')
-param extraAppSettings object = {}
-
-@description('The extra user-assigned identities to be used by the application')
-param extraIdentities object = {}
-
-@description('The Cosmos DB containers')
-param cosmosContainers array = []
-
-@description('The extra deployment slots')
-param deploymentSlots array = []
-
-@description('The contribution groups')
-param contributionGroups array = []
-
-@description('The static web app to attach')
-param staticWebApp object = {
   enabled: false
 }
 
-@description('The OpenID configuration for authentication')
-param openIdConfiguration object = {}
+@description('''
+The storage accounts options:
+- **enabled**: bool
+- **accounts**: array
+  - **suffix**: string
+  - **comment**: string
+  - **containers**: string[]
+  - *daysBeforeDeletion*: int
+  - *allowBlobPublicAccess*: bool
+  - *authorizeClients*: bool
+  - *readOnly*: bool
+''')
+param storageAccountsOptions object = {
+  enabled: false
+}
+
+@description('''
+The Cosmos account options:
+- **enabled**: bool
+- **containers**: array
+  - **name**: string
+  - **partitionKey**: string
+  - *uniqueKeys*: string[]
+  - *compositeIndexes*: array of array
+    - **path**: string
+    - **order**: string
+  - *includedPaths*: array
+    - **path**: string
+  - *excludedPaths*: array
+    - **path**: string
+  - *defaultTtl*: int
+''')
+param cosmosAccountOptions object = {
+  enabled: false
+}
+
+@description('''
+The Static Web app options:
+- **enabled**: bool
+- *customDomains*: string[]
+''')
+param staticWebAppOptions object = {
+  enabled: false
+}
+
+@description('''
+The Functions app options:
+- **stack**: string
+- *extraAppSettings*: dictionary
+- *extraIdentities*: dictionary
+- *extraSlots*: array
+  - **name**
+- *openId*:
+  - **clientSecretKey**
+  - **endpoint**
+  - **apiClientId**
+  - *skipAuthentication*
+  - *anonymousEndpoints*
+''')
+param functionsAppOptions object
+
+@description('The application package URI')
+param applicationPackageUri string = ''
+
+@description('The contribution groups')
+param contributionGroups array = []
 
 @description('The deployment location')
 param location string = resourceGroup().location
@@ -90,8 +125,7 @@ var webTestsSettings = loadJsonContent('../modules/global/organization-based/web
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
 
-var serviceBusQueues = !contains(serviceBusOptions, 'queues') ? [] : serviceBusOptions.queues
-var storageAccounts = !contains(storageAccountsOptions, 'accounts') ? [] : storageAccountsOptions.accounts
+var storageAccounts = storageAccountsOptions.enabled ? storageAccountsOptions.accounts : []
 
 // === RESOURCES ===
 
@@ -152,39 +186,35 @@ module ai '../modules/monitoring/app-insights.bicep' = {
 }
 
 @description('Service Bus')
-module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
+module extra_sbn '../modules/communication/service-bus.bicep' = if (serviceBusOptions.enabled) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    serviceBusQueues: serviceBusQueues
+    serviceBusOptions: serviceBusOptions
   }
 }
 
 @description('Storage Accounts')
-module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
-  name: empty(account.suffix) ? 'empty' : 'Resource-StorageAccount-${account.suffix}'
+module extra_stg '../modules/storage/storage-account.bicep' = [for storageAccountOptions in storageAccounts: if (storageAccountsOptions.enabled) {
+  name: empty(storageAccountOptions) ? 'empty' : 'Resource-StorageAccount-${storageAccountOptions.suffix}'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    comment: account.comment
-    suffix: account.suffix
-    blobContainers: account.containers
-    daysBeforeDeletion: account.daysBeforeDeletion
-    allowBlobPublicAccess: account.allowBlobPublicAccess
+    storageAccountOptions: storageAccountOptions
   }
 }]
 
-@description('Cosmos Accounts')
-module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmosContainers)) {
+@description('Cosmos Account')
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccountOptions.enabled) {
   name: 'Resource-CosmosAccount'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    cosmosContainers: cosmosContainers
+    cosmosAccountOptions: cosmosAccountOptions
   }
 }
 
@@ -195,10 +225,12 @@ module stg '../modules/storage/storage-account.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    comment: 'Technical storage for Functions application'
-    blobContainers: [
-      'deployment-packages'
-    ]
+    storageAccountOptions: {
+      comment: 'Technical storage for Functions application'
+      containers: [
+        'deployment-packages'
+      ]
+    }
   }
 }
 
@@ -222,29 +254,25 @@ module fn '../modules/applications/functions/application.bicep' = {
     pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity_application.outputs.id
     userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
-    applicationType: applicationType
     serverFarmId: asp.outputs.id
     webJobsStorageAccountName: stg.outputs.name
     aiConnectionString: ai.outputs.connectionString
-    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
+    functionsAppOptions: functionsAppOptions
     applicationPackageUri: applicationPackageUri
-    extraAppSettings: extraAppSettings
-    extraIdentities: extraIdentities
-    deploymentSlots: deploymentSlots
-    openIdConfiguration: openIdConfiguration
   }
 }
 
 @description('Static Web Apps application')
-module swa '../modules/applications/static/application.bicep' = if (staticWebApp.enabled) {
+module swa '../modules/applications/static/application.bicep' = if (staticWebAppOptions.enabled) {
   name: 'Resource-StaticWebAppsApplication'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
     pricingPlan: pricingPlan
-    customDomains: !contains(staticWebApp, 'customDomains') ? [] : staticWebApp.customDomains
+    staticWebAppOptions: staticWebAppOptions
   }
 }
 
@@ -300,44 +328,44 @@ module auth_fn_ai '../modules/authorizations/subscription/monitoring-data.bicep'
 }
 
 @description('Functions to extra Service Bus')
-module auth_fn_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues)) {
+module auth_fn_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (serviceBusOptions.enabled) {
   name: 'Authorization-Functions-ServiceBus'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
-    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     roleType: 'Owner'
     roleDescription: 'Functions application should read, write and manage the messages from Service Bus'
   }
 }
 
 @description('Functions to extra Storage Accounts')
-module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts)) {
-  name: empty(account) ? 'empty' : 'Authorization-Functions-StorageAccount${account.suffix}'
+module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccounts: if (storageAccountsOptions.enabled) {
+  name: empty(storageAccountOptions) ? 'empty' : 'Authorization-Functions-StorageAccount${storageAccountOptions.suffix}'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
-    roleType: account.readOnly ? 'Reader' : 'Contributor'
+    roleType: contains(storageAccountOptions, 'readOnly') && storageAccountOptions.readOnly ? 'Reader' : 'Contributor'
     roleDescription: 'Functions application should read/write the blobs from Storage Account'
   }
 }]
 
 @description('Functions to extra Cosmos DB Account')
-module auth_fn_extra_cosmos '../modules/authorizations/subscription/cosmos-db-data.bicep' = if (!empty(cosmosContainers)) {
+module auth_fn_extra_cosmos '../modules/authorizations/subscription/cosmos-db-data.bicep' = if (cosmosAccountOptions.enabled) {
   name: 'Authorization-Functions-CosmosAccount'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
-    cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
+    cosmosAccountName: cosmosAccountOptions.enabled ? extra_cosmos.outputs.name : ''
     roleType: 'Contributor'
   }
 }
 
 @description('Contribution authorization to extra Cosmos DB Accounts')
 @batchSize(1) // This is needed because Azure Cosmos DB assignements can't be performed in parallel
-module auth_contributors_cosmos '../modules/authorizations/subscription/cosmos-db-data.bicep' = [for (group, index) in contributionGroups: if (!empty(cosmosContainers) && !empty(contributionGroups)) {
+module auth_contributors_cosmos '../modules/authorizations/subscription/cosmos-db-data.bicep' = [for (group, index) in contributionGroups: if (cosmosAccountOptions.enabled && !empty(contributionGroups)) {
   name: empty(group) ? 'empty' : 'Authorization-ContributionGroup-${index}-CosmosAccount'
   params: {
     principalId: group.id
-    cosmosAccountName: !empty(cosmosContainers) ? extra_cosmos.outputs.name : ''
+    cosmosAccountName: cosmosAccountOptions.enabled ? extra_cosmos.outputs.name : ''
     roleType: 'Contributor'
   }
   dependsOn: [
@@ -357,19 +385,19 @@ module auth_fn_stg  '../modules/authorizations/subscription/storage-blob-data.bi
 }
 
 @description('Clients UAI to extra Service Bus')
-module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (!empty(serviceBusQueues) && contains(serviceBusOptions, 'authorizeClients') && serviceBusOptions.authorizeClients) {
+module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (serviceBusOptions.enabled && contains(serviceBusOptions, 'authorizeClients') && serviceBusOptions.authorizeClients) {
   name: 'Authorization-Clients-ServiceBus'
   params: {
     principalId: userAssignedIdentity_clients.outputs.principalId
-    serviceBusNamespaceName: !empty(serviceBusQueues) ? extra_sbn.outputs.name : ''
+    serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     roleType: 'Sender'
     roleDescription: 'Functions application clients should write messages to Service Bus'
   }
 }
 
 @description('Clients UAI to extra Storage Accounts')
-module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (account, index) in storageAccounts: if (!empty(storageAccounts) && contains(account, 'authorizeClients') && account.authorizeClients) {
-  name: empty(account) ? 'empty' : 'Authorization-Clients-StorageAccount${account.suffix}'
+module auth_clients_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccounts: if (storageAccountsOptions.enabled && contains(storageAccountOptions, 'authorizeClients') && storageAccountOptions.authorizeClients) {
+  name: empty(storageAccountOptions) ? 'empty' : 'Authorization-Clients-StorageAccount${storageAccountOptions.suffix}'
   params: {
     principalId: userAssignedIdentity_clients.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name

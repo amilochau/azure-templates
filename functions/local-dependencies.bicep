@@ -24,20 +24,44 @@ param hostName string
 param templateVersion string
 
 
-@description('The service bus options')
+@description('''
+The service bus options:
+- **enabled**: bool
+- **queues**: string[]
+''')
 param serviceBusOptions object = {
-  queues: []
-  authorizeClients: true
+  enabled: false
 }
 
-@description('The storage account options')
+@description('''
+The storage accounts options:
+- **enabled**: bool
+- **accounts**: array
+  - *suffix*: string
+  - **comment**: string
+  - **containers**: string[]
+  - *daysBeforeDeletion*: int
+  - *allowBlobPublicAccess*: bool
+''')
 param storageAccountsOptions object = {
-  accounts: []
-  authorizeClients: true
+  enabled: false
 }
 
-@description('The Cosmos DB containers')
-param cosmosContainers array = []
+@description('''
+The Cosmos account options:
+- **enabled**: bool
+- **containers**: array
+  - **name**
+  - **partitionKey**
+  - *uniqueKeys*
+  - *compositeIndexes*
+  - *includedPaths*
+  - *excludedPaths*
+  - *defaultTtl*
+''')
+param cosmosAccountOptions object = {
+  enabled: false
+}
 
 @description('The contribution groups')
 param contributionGroups array = []
@@ -53,8 +77,7 @@ var regionName = loadJsonContent('../modules/global/regions.json')[location]
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
-var serviceBusQueues = !contains(serviceBusOptions, 'queues') ? [] : serviceBusOptions.queues
-var storageAccounts = !contains(storageAccountsOptions, 'accounts') ? [] : storageAccountsOptions.accounts
+var storageAccounts = storageAccountsOptions.enabled ? storageAccountsOptions.accounts : []
 
 // === RESOURCES ===
 
@@ -71,39 +94,35 @@ module tags '../modules/global/tags.bicep' = {
 }
 
 @description('Service Bus')
-module extra_sbn '../modules/communication/service-bus.bicep' = if (!empty(serviceBusQueues)) {
+module extra_sbn '../modules/communication/service-bus.bicep' = if (serviceBusOptions.enabled) {
   name: 'Resource-ServiceBus'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    serviceBusQueues: serviceBusQueues
+    serviceBusOptions: serviceBusOptions
   }
 }
 
 @description('Storage Accounts')
-module extra_stg '../modules/storage/storage-account.bicep' = [for account in storageAccounts: if (!empty(storageAccounts)) {
-  name: empty(account.suffix) ? 'empty' : 'Resource-StorageAccount-${account.suffix}'
+module extra_stg '../modules/storage/storage-account.bicep' = [for storageAccountOptions in storageAccounts: if (storageAccountsOptions.enabled) {
+  name: !contains(storageAccountOptions, 'suffix') ? 'empty' : 'Resource-StorageAccount-${storageAccountOptions.suffix}'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    comment: account.comment
-    suffix: account.suffix
-    blobContainers: account.containers
-    daysBeforeDeletion: account.daysBeforeDeletion
-    allowBlobPublicAccess: account.allowBlobPublicAccess
+    storageAccountOptions: storageAccountOptions
   }
 }]
 
-@description('Cosmos Accounts')
-module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (!empty(cosmosContainers)) {
+@description('Cosmos Account')
+module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccountOptions.enabled) {
   name: 'Resource-CosmosAccount'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    cosmosContainers: cosmosContainers
+    cosmosAccountOptions: cosmosAccountOptions
   }
 }
 

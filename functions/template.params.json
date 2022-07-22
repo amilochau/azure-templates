@@ -14,11 +14,9 @@
     "pricingPlan": {
       "value": "Free"
     },
-    "applicationType": {
-      "value": "isolatedDotnet6"
-    },
     "serviceBusOptions": {
       "value": {
+        "enabled": true,
         "queues": [
           "queue1",
           "queue2"
@@ -28,6 +26,7 @@
     },
     "storageAccountsOptions": {
       "value": {
+        "enabled": true,
         "accounts": [
           {
             "suffix": "1",
@@ -44,60 +43,71 @@
         ]
       }
     },
-    "extraAppSettings": {
+    "cosmosAccountOptions": {
       "value": {
-        "key1": "value1",
-        "key2": "<secret>secret_name</secret>"
+        "enabled": true,
+        "containers": [
+          {
+            "name": "containerName",
+            "partitionKey": "/partitionKey",
+            "uniqueKeys": [
+              "/uniqueKey"
+            ],
+            "compositeIndexes": [
+              [
+                {  
+                  "path": "/name",
+                  "order": "ascending"
+                },
+                {  
+                  "path": "/creation",
+                  "order": "descending"
+                }
+              ]
+            ],
+            "includedPaths": [{
+              "path": "/*"
+            }],
+            "excludedPaths": [{
+              "path": "/\"_etag\"/?"
+            }],
+            "defaultTtl": 3600
+          }
+        ]
       }
     },
-    "extraIdentities": {
-      "value": {
-        "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
-      }
-    },
-    "cosmosContainers": {
-      "value": [
-        {
-          "name": "containerName",
-          "partitionKey": "/partitionKey",
-          "uniqueKeys": [
-            "/uniqueKey"
-          ],
-          "compositeIndexes": [
-            [
-              {  
-                "path": "/name",
-                "order": "ascending"
-              },
-              {  
-                "path": "/creation",
-                "order": "descending"
-              }
-            ]
-          ],
-          "includedPaths": [{
-            "path": "/*"
-          }],
-          "excludedPaths": [{
-            "path": "/\"_etag\"/?"
-          }],
-          "defaultTtl": 3600
-        }
-      ]
-    },
-    "deploymentSlots": {
-      "value": [
-        {
-          "name": "dev-bis"
-        }
-      ]
-    },
-    "staticWebApp": {
+    "staticWebAppOptions": {
       "value": {
         "enabled": true,
         "customDomains": [
           "subdomain.domain.com"
         ]
+      }
+    },
+    "functionsAppOptions": {
+      "value": {
+        "stack": "isolatedDotnet6",
+        "extraAppSettings": {
+          "key1": "value1",
+          "key2": "<secret>secret_name</secret>"
+        },
+        "extraIdentities": {
+          "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
+        },
+        "extraSlots": [
+          {
+            "name": "dev-bis"
+          }
+        ],
+        "openId": {
+          "endpoint": "https://B2CTENANT.b2clogin.com/TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_FLOWNAME",
+          "apiClientId": "00000000-0000-0000-0000-000000000000",
+          "clientSecretKey": "<secret>Identity--Secret</secret>",
+          "skipAuthentication": false,
+          "anonymousEndpoints": [
+            "/api/anonymous-route"
+          ]
+        }
       }
     },
     "contributionGroups": {
@@ -106,17 +116,6 @@
           "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
         }
       ]
-    },
-    "openIdConfiguration": {
-      "value": {
-        "endpoint": "https://B2CTENANT.b2clogin.com/TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_FLOWNAME",
-        "apiClientId": "00000000-0000-0000-0000-000000000000",
-        "clientSecretKey": "<secret>Identity--Secret</secret>",
-        "skipAuthentication": false,
-        "anonymousEndpoints": [
-          "/api/anonymous-route"
-        ]
-      }
     }
   }
 }
