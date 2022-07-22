@@ -102,6 +102,9 @@ The Functions app options:
 ''')
 param functionsAppOptions object
 
+@description('The application package URI')
+param applicationPackageUri string = ''
+
 @description('The contribution groups')
 param contributionGroups array = []
 
@@ -257,6 +260,7 @@ module fn '../modules/applications/functions/application.bicep' = {
     serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
     functionsAppOptions: functionsAppOptions
+    applicationPackageUri: applicationPackageUri
   }
 }
 

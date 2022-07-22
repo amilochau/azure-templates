@@ -23,7 +23,6 @@ param userAssignedIdentityId string
 @description('The Client ID of the User-Assigned Identity to use')
 param userAssignedIdentityClientId string
 
-
 @description('The Functions app options')
 param functionsAppOptions object
 
@@ -41,6 +40,9 @@ param aiConnectionString string
 
 @description('The Service Bus Namespace name')
 param serviceBusNamespaceName string
+
+@description('The application package URI')
+param applicationPackageUri string
 
 @description('The deployment location')
 param location string
@@ -114,6 +116,9 @@ var appSettings = union(formattedExtraAppSettings, {
   AzureWebJobsServiceBus__fullyQualifiedNamespace: '${serviceBusNamespaceName}.servicebus.windows.net'
   AzureWebJobsServiceBus__credential: 'managedidentity'
   AzureWebJobsServiceBus__clientId: userAssignedIdentityClientId
+}, empty(applicationPackageUri) ? {} : {
+  // Application deployment package URI
+  WEBSITE_RUN_FROM_PACKAGE: functionsAppOptions.packageUri
 }, !enableOpenId ? {} : {
   MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: formattedOpenIdSecret
 })
