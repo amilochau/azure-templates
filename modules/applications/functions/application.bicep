@@ -118,7 +118,7 @@ var appSettings = union(formattedExtraAppSettings, {
   AzureWebJobsServiceBus__clientId: userAssignedIdentityClientId
 }, empty(applicationPackageUri) ? {} : {
   // Application deployment package URI
-  WEBSITE_RUN_FROM_PACKAGE: functionsAppOptions.packageUri
+  WEBSITE_RUN_FROM_PACKAGE: applicationPackageUri
 }, !enableOpenId ? {} : {
   MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: formattedOpenIdSecret
 })
