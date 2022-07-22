@@ -52,6 +52,7 @@ param location string
 // General settings
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
 var linuxFxVersion = functionsAppOptions.stack == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
+var extraSlots = contains(functionsAppOptions, 'extraSlots') ? functionsAppOptions.extraSlots : []
 
 // OpenID
 var enableOpenId = contains(functionsAppOptions, 'openId')
@@ -200,7 +201,7 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
 }
 
 @description('The extra deployment slots')
-module slots './application-slot.bicep' = [for deploymentSlot in functionsAppOptions.extraSlots: if (contains(functionsAppOptions, 'extraSlots')) {
+module slots './application-slot.bicep' = [for deploymentSlot in extraSlots: if (contains(functionsAppOptions, 'extraSlots')) {
   name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
   params: {
     referential: referential
