@@ -24,6 +24,13 @@ param hostName string
 param templateVersion string
 
 
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string = 'Free'
+
 @description('''
 The service bus options:
 - **enabled**: bool
@@ -121,6 +128,7 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccoun
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    pricingPlan: pricingPlan
     location: location
     cosmosAccountOptions: cosmosAccountOptions
   }

@@ -10,6 +10,13 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
+@description('The pricing plan')
+@allowed([
+  'Free'    // The cheapest plan, can create some small fees
+  'Basic'   // Basic use with default limitations
+])
+param pricingPlan string
+
 @description('The Cosmos account options')
 param cosmosAccountOptions object
 
@@ -20,18 +27,19 @@ param location string
 
 var cosmosAccountName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosAccount}'
 var cosmosDatabaseName = '${conventions.naming.prefix}${conventions.naming.suffixes.cosmosDatabase}'
-var cosmosAccountBackupRedundancy = referential.environment == 'Production' ? 'Geo' : 'Local'
 var cosmosApplyFirewall = referential.environment == 'Production'
 var knownIpAddresses = loadJsonContent('../global/ip-addresses.json')
 var authorizedIpAddresses = union(knownIpAddresses.azurePortal, knownIpAddresses.azureServices)
 var ipRules = [ for ipAddress in items(authorizedIpAddresses) : {
   ipAddressOrRange: ipAddress.value
 }]
+var backupTier = pricingPlan == 'Basic' ? 'Continuous30Days' : 'Continuous7Days'
+var zoneRedundant = pricingPlan == 'Basic'
 
 // === RESOURCES ===
 
 @description('Cosmos DB Account')
-resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
+resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15-preview' = {
   name: cosmosAccountName
   tags: referential
   kind: 'GlobalDocumentDB'
@@ -44,6 +52,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
     locations: [
       {
         locationName: location
+        isZoneRedundant: zoneRedundant
       }
     ]
     capabilities: [
@@ -51,12 +60,11 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
         name: 'EnableServerless'
       }
     ]
+    enableAutomaticFailover: true
     backupPolicy: {
-      type: 'Periodic'
-      periodicModeProperties: {
-        backupIntervalInMinutes: 1440
-        backupRetentionIntervalInHours: 720
-        backupStorageRedundancy: cosmosAccountBackupRedundancy
+      type: 'Continuous'
+      continuousModeProperties: {
+        tier: backupTier
       }
     }
     ipRules: !cosmosApplyFirewall ? [] : ipRules

@@ -11,6 +11,9 @@
     "hostName": {
       "value": "local"
     },
+    "pricingPlan": {
+      "value": "Free"
+    },
     "serviceBusOptions": {
       "value": {
         "enabled": true,
