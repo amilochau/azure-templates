@@ -67,7 +67,9 @@ module swa '../modules/applications/static/application.bicep' = {
     conventions: conventions
     location: location
     pricingPlan: pricingPlan
-    customDomains: customDomains
+    staticWebAppOptions: {
+      customDomains: customDomains
+    }
   }
 }
 
