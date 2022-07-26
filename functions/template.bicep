@@ -213,6 +213,7 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccoun
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    pricingPlan: pricingPlan
     location: location
     cosmosAccountOptions: cosmosAccountOptions
   }
