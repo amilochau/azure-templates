@@ -1,7 +1,17 @@
 {
-  "northeurope": "en1",
-  "westeurope": "ew1",
-  "francecentral": "fc1",
-  "francesouth": "fs1",
-  "global": "glb"               
+  "northeurope": {
+    "name": "en1"
+  },
+  "westeurope": {
+    "name": "ew1"
+  },
+  "francecentral": {
+    "name": "fc1"
+  },
+  "francesouth": {
+    "name": "fs1"
+  },
+  "global": {
+    "name": "glb"
+  }
 }
