@@ -92,7 +92,7 @@
           "key2": "<secret>secret_name</secret>"
         },
         "extraIdentities": {
-          "/subscriptions/xxx/resourcegroups/xxx/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
+          "/subscriptions/xxx/resourcegroups/xxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
         },
         "extraSlots": [
           {
