@@ -100,6 +100,9 @@
             "quote": "'",
             "delimiter": ",",
             "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
@@ -459,10 +462,10 @@
                 "aggregation": "Sum"
               },
               "numberFormat": {
-                "unit": 0,
+                "unit": 17,
                 "options": {
                   "style": "decimal",
-                  "maximumFractionDigits": 0
+                  "maximumFractionDigits": 1
                 }
               },
               "tooltipFormat": {
@@ -489,10 +492,10 @@
                 "aggregation": "Sum"
               },
               "numberFormat": {
-                "unit": 0,
+                "unit": 17,
                 "options": {
                   "style": "decimal",
-                  "maximumFractionDigits": 0
+                  "maximumFractionDigits": 1
                 }
               },
               "tooltipFormat": {
@@ -523,7 +526,7 @@
                 "unit": 17,
                 "options": {
                   "style": "decimal",
-                  "maximumFractionDigits": 0
+                  "maximumFractionDigits": 1
                 }
               },
               "tooltipFormat": {
@@ -966,7 +969,6 @@
     }
   ],
   "fallbackResourceIds": [
-    "%WORKSPACE_ID%",
     "Azure Monitor"
   ],
   "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
