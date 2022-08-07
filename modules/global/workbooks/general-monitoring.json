@@ -50,11 +50,34 @@
             "timeContext": {
               "durationMs": 86400000
             }
+          },
+          {
+            "id": "7edc39f5-78ff-4fbe-8845-e42934e02f4c",
+            "version": "KqlParameterItem/1.0",
+            "name": "CosmosAccounts",
+            "label": "Cosmos DB accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type == 'microsoft.documentdb/databaseaccounts'\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "value": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
           }
         ],
         "style": "pills",
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces"
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources"
       },
       "name": "parameters - 4"
     },
@@ -225,7 +248,9 @@
         "chartType": 0,
         "resourceType": "microsoft.documentdb/databaseaccounts",
         "metricScope": 0,
+        "resourceParameter": "CosmosAccounts",
         "resourceIds": [
+          "{CosmosAccounts}"
         ],
         "timeContextFromParameter": "TimeRange",
         "timeContext": {
