@@ -5,12 +5,15 @@
       "type": 9,
       "content": {
         "version": "KqlParameterItem/1.0",
+        "crossComponentResources": [
+          "value::all"
+        ],
         "parameters": [
           {
             "id": "5b991d2e-d9e2-4324-943f-87d5ca27f3bd",
             "version": "KqlParameterItem/1.0",
             "name": "TimeRange",
-            "label": "Time Range",
+            "label": "Time range",
             "type": 4,
             "isRequired": true,
             "value": {
@@ -52,6 +55,22 @@
             }
           },
           {
+            "id": "53c944ef-80d7-4c86-916b-650daaa95bfc",
+            "version": "KqlParameterItem/1.0",
+            "name": "LogAnalyticsWorkspace",
+            "label": "Log Analytics workspace",
+            "type": 5,
+            "isRequired": true,
+            "query": "where type == 'microsoft.operationalinsights/workspaces'\r\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": "%WORKSPACE_ID%"
+          },
+          {
             "id": "7edc39f5-78ff-4fbe-8845-e42934e02f4c",
             "version": "KqlParameterItem/1.0",
             "name": "CosmosAccounts",
@@ -62,7 +81,7 @@
             "quote": "'",
             "delimiter": ",",
             "query": "where type == 'microsoft.documentdb/databaseaccounts'\n| project value = id, label = name, selected = true, group = resourceGroup",
-            "value": [
+            "crossComponentResources": [
               "value::all"
             ],
             "typeSettings": {
@@ -71,6 +90,55 @@
               ],
               "showDefault": false
             },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "e3b447a6-cf88-4c6e-ae76-8c65f17bea0c",
+            "version": "KqlParameterItem/1.0",
+            "name": "ServiceBusAccounts",
+            "label": "Service Bus accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type == 'microsoft.servicebus/namespaces'\r\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "200836ff-b871-4624-b8cb-2ba3116f4cb3",
+            "version": "KqlParameterItem/1.0",
+            "name": "StorageAccounts",
+            "label": "Storage accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type == 'microsoft.storage/storageaccounts'\r\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources"
           }
@@ -92,6 +160,9 @@
         "showExportToExcel": true,
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "{LogAnalyticsWorkspace}"
+        ],
         "visualization": "table",
         "showExpandCollapseGrid": true,
         "gridSettings": {
@@ -298,7 +369,7 @@
             "columnName": "Data Usage"
           }
         ],
-        "title": "Databases metrics",
+        "title": "Cosmos DB metrics",
         "gridFormatType": 2,
         "filters": [
           {
@@ -486,7 +557,6 @@
             }
           ],
           "rowLimit": 10000,
-          "filter": true,
           "hierarchySettings": {
             "treeType": 1,
             "groupBy": [
@@ -496,6 +566,10 @@
             "finalBy": "Segment"
           },
           "labelSettings": [
+            {
+              "columnId": "Name",
+              "label": "Cosmos DB account"
+            },
             {
               "columnId": "Request Units",
               "label": "Request Units"
@@ -533,7 +607,167 @@
         "showExportToExcel": true
       },
       "showPin": true,
-      "name": "Databases",
+      "name": "Cosmos DB accounts",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 10,
+      "content": {
+        "chartId": "workbookfab9e9d8-98d4-44b7-b704-3a6c35140f28",
+        "version": "MetricsItem/2.0",
+        "size": 1,
+        "chartType": 0,
+        "resourceType": "microsoft.servicebus/namespaces",
+        "metricScope": 0,
+        "resourceParameter": "ServiceBusAccounts",
+        "resourceIds": [
+          "{ServiceBusAccounts}"
+        ],
+        "timeContextFromParameter": "TimeRange",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "metrics": [
+          {
+            "namespace": "microsoft.servicebus/namespaces",
+            "metric": "microsoft.servicebus/namespaces--IncomingMessages",
+            "aggregation": 7,
+            "columnName": "Incoming Messages"
+          },
+          {
+            "namespace": "microsoft.servicebus/namespaces",
+            "metric": "microsoft.servicebus/namespaces--DeadletteredMessages",
+            "aggregation": 4,
+            "columnName": "DL Messages"
+          }
+        ],
+        "title": "Service Bus metrics",
+        "showRefreshButton": true,
+        "showExpandCollapseGrid": true,
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Subscription",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Name",
+              "formatter": 13,
+              "formatOptions": {
+                "linkTarget": "Resource",
+                "showIcon": true,
+                "customColumnWidthSetting": "250px"
+              },
+              "tooltipFormat": {
+                "tooltip": "Service Bus namespace"
+              }
+            },
+            {
+              "columnMatch": "Incoming Messages",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal"
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Incoming Messages"
+              }
+            },
+            {
+              "columnMatch": "Incoming Messages Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue"
+              },
+              "tooltipFormat": {
+                "tooltip": "Incoming Messages Timeline"
+              }
+            },
+            {
+              "columnMatch": "DL Messages",
+                "min": 0,
+                "palette": "orange"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal"
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Dead-lettered Messages"
+              }
+            },
+            {
+              "columnMatch": "DL Messages Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange"
+              },
+              "tooltipFormat": {
+                "tooltip": "Dead-lettered Messages Timeline"
+              }
+            },
+            {
+              "columnMatch": "microsoft.servicebus/namespaces--IncomingMessages",
+              "formatter": 1,
+              "numberFormat": {
+                "unit": 0,
+                "options": null
+              }
+            },
+            {
+              "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages Timeline",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages",
+              "formatter": 1,
+              "numberFormat": {
+                "unit": 0,
+                "options": null
+              }
+            }
+          ],
+          "rowLimit": 10000,
+          "labelSettings": [
+            {
+              "columnId": "Name",
+              "label": "Service Bus namespace"
+            },
+            {
+              "columnId": "Incoming Messages",
+              "label": "Incoming Messages"
+            },
+            {
+              "columnId": "Incoming Messages Timeline",
+              "label": "Incoming Messages Timeline"
+            },
+            {
+              "columnId": "DL Messages",
+              "label": "DL Messages"
+            },
+            {
+              "columnId": "DL Messages Timeline",
+              "label": "DL Messages Timeline"
+            }
+          ]
+        },
+        "sortBy": [],
+        "showExportToExcel": true
+      },
+      "showPin": true,
+      "name": "metric - 5",
       "styleSettings": {
         "showBorder": true
       }
@@ -549,6 +783,9 @@
         "showExportToExcel": true,
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "{LogAnalyticsWorkspace}"
+        ],
         "gridSettings": {
           "formatters": [
             {
@@ -657,6 +894,9 @@
         "showExportToExcel": true,
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "{LogAnalyticsWorkspace}"
+        ],
         "visualization": "piechart",
         "chartSettings": {
           "yAxis": [
@@ -684,7 +924,8 @@
     }
   ],
   "fallbackResourceIds": [
-    "%WORKSPACE_ID%"
+    "%WORKSPACE_ID%",
+    "Azure Monitor"
   ],
   "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
 }
