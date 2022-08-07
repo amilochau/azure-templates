@@ -67,6 +67,17 @@ module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
   }
 }
 
+@description('Monitor Workbook')
+module workbook '../modules/monitoring/general-monitoring-workbook.bicep' = {
+  name: 'Resource-MonitorWorkbook-GeneralMonitoring'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    workspaceId: workspace.outputs.id
+    location: location
+  }
+}
+
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')

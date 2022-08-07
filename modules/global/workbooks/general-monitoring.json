@@ -1,0 +1,615 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AppRequests\n| where not (Name startswith \"health\")\n| project _ResourceId\n| summarize ['Requests'] = count() by _ResourceId\n| join kind = leftouter (\n    AppRequests\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success\n    | make-series ['Requests Timeline'] = count() default = 0, ['Requests Success Rate Timeline'] = toreal(countif(Success))/count() default = 1 on TimeGenerated step 1d by _ResourceId\n    | project ['Requests Timeline'], ['Requests Success Rate Timeline'], _ResourceId\n) on _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | project Success, _ResourceId, DurationMs\n    | summarize ['SLA'] = toreal(countif(Success))/count(), ['Availability Duration'] = avg(DurationMs) by _ResourceId\n) on _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | project Success, _ResourceId, TimeGenerated, DurationMs\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1, ['Availability Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated step 1d by _ResourceId\n    | project ['Availability Timeline'], ['Availability Duration Timeline'],  _ResourceId\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['Requests'], ['Requests Timeline'], ['Requests Success Rate Timeline'], ['SLA'], ['Availability Timeline'], ['Availability Duration'], ['Availability Duration Timeline']\n| order by ['Resource'] asc",
+        "size": 1,
+        "title": "Applications metrics",
+        "timeContext": {
+          "durationMs": 2592000000
+        },
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-monitoring-prd-rg/providers/Microsoft.OperationalInsights/workspaces/mil-monitoring-prd-ws"
+        ],
+        "visualization": "table",
+        "showExpandCollapseGrid": true,
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Resource",
+              "formatter": 13,
+              "formatOptions": {
+                "linkTarget": "CellDetails",
+                "linkIsContextBlade": true,
+                "showIcon": true
+              },
+              "tooltipFormat": {
+                "tooltip": "Resource"
+              }
+            },
+            {
+              "columnMatch": "Requests",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests"
+              }
+            },
+            {
+              "columnMatch": "Requests Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue"
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests Timeline"
+              }
+            },
+            {
+              "columnMatch": "Requests Success Rate Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0.8,
+                "palette": "redGreen"
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests Success Rate Timeline (>80%)"
+              }
+            },
+            {
+              "columnMatch": "SLA",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0.95,
+                "max": 1,
+                "palette": "redGreen"
+              },
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "percent",
+                  "minimumFractionDigits": 2,
+                  "maximumFractionDigits": 2
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "SLA"
+              }
+            },
+            {
+              "columnMatch": "Availability Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0.8,
+                "max": 1,
+                "palette": "redGreen"
+              },
+              "tooltipFormat": {
+                "tooltip": "Availability Timeline"
+              }
+            },
+            {
+              "columnMatch": "Availability Duration",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "max": 250,
+                "palette": "greenRed"
+              },
+              "numberFormat": {
+                "unit": 23,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Availability Duration"
+              }
+            },
+            {
+              "columnMatch": "Availability Duration Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "max": 250,
+                "palette": "greenRed"
+              },
+              "tooltipFormat": {
+                "tooltip": "Availability Duration Timeline"
+              }
+            }
+          ],
+          "labelSettings": [
+            {
+              "columnId": "Requests Timeline",
+              "label": "Requests"
+            },
+            {
+              "columnId": "Requests Success Rate Timeline",
+              "label": "Requests Success Rate"
+            },
+            {
+              "columnId": "Availability Timeline",
+              "label": "Availability"
+            },
+            {
+              "columnId": "Availability Duration Timeline",
+              "label": "Availability Duration"
+            }
+          ]
+        },
+        "sortBy": []
+      },
+      "showPin": true,
+      "name": "Applications",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 10,
+      "content": {
+        "chartId": "workbooke3352d3d-fcd8-4b25-9749-67d7ecd63006",
+        "version": "MetricsItem/2.0",
+        "size": 1,
+        "chartType": 0,
+        "resourceType": "microsoft.documentdb/databaseaccounts",
+        "metricScope": 0,
+        "resourceIds": [
+          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-emails-prd-rg/providers/Microsoft.DocumentDB/databaseAccounts/mil-emails-prd-cosmos",
+          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-maps-prd-rg/providers/Microsoft.DocumentDB/databaseAccounts/mil-maps-prd-cosmos"
+        ],
+        "timeContext": {
+          "durationMs": 2592000000
+        },
+        "metrics": [
+          {
+            "namespace": "microsoft.documentdb/databaseaccounts",
+            "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+            "aggregation": 1,
+            "splitBy": "CollectionName",
+            "splitBySortOrder": -1,
+            "splitByLimit": 5,
+            "columnName": "Request Units"
+          },
+          {
+            "namespace": "microsoft.documentdb/databaseaccounts",
+            "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequests",
+            "aggregation": 7,
+            "splitBy": "CollectionName",
+            "splitBySortOrder": -1,
+            "splitByLimit": 5,
+            "columnName": "Requests"
+          },
+          {
+            "namespace": "microsoft.documentdb/databaseaccounts",
+            "metric": "microsoft.documentdb/databaseaccounts-Requests-DocumentCount",
+            "aggregation": 4,
+            "splitBy": "CollectionName",
+            "splitBySortOrder": -1,
+            "splitByLimit": 5,
+            "columnName": "Documents"
+          },
+          {
+            "namespace": "microsoft.documentdb/databaseaccounts",
+            "metric": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
+            "aggregation": 4,
+            "splitBy": "CollectionName",
+            "splitBySortOrder": -1,
+            "splitByLimit": 5,
+            "columnName": "Data Usage"
+          }
+        ],
+        "title": "Databases metrics",
+        "gridFormatType": 2,
+        "filters": [
+          {
+            "id": "1",
+            "key": "CollectionName",
+            "operator": 1,
+            "values": [
+              "<empty>"
+            ]
+          }
+        ],
+        "showRefreshButton": true,
+        "showExpandCollapseGrid": true,
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "$gen_group",
+              "formatter": 13,
+              "formatOptions": {
+                "linkTarget": "Resource",
+                "subTarget": "insights",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Subscription",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Name",
+              "formatter": 5,
+              "formatOptions": {
+                "linkTarget": "Resource"
+              }
+            },
+            {
+              "columnMatch": "Segment",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Request Units",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "yellow",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 0
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Request Units"
+              }
+            },
+            {
+              "columnMatch": "Request Units Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "palette": "blue",
+                "aggregation": "Sum"
+              },
+              "tooltipFormat": {
+                "tooltip": "Request Units Timeline"
+              }
+            },
+            {
+              "columnMatch": "Requests",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 0
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests"
+              }
+            },
+            {
+              "columnMatch": "Requests Timeline",
+              "formatter": 21,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "aggregation": "Sum"
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests Timeline"
+              }
+            },
+            {
+              "columnMatch": "Documents",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 0
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Documents"
+              }
+            },
+            {
+              "columnMatch": "Documents Timeline",
+              "formatter": 5,
+              "formatOptions": {
+                "aggregation": "Sum"
+              }
+            },
+            {
+              "columnMatch": "Data Usage",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "yellow",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Data Usage"
+              }
+            },
+            {
+              "columnMatch": "Data Usage Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "palette": "yellow"
+              }
+            },
+            {
+              "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits Timeline",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+              "formatter": 5,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "decimal"
+                }
+              }
+            },
+            {
+              "columnMatch": ".*\\/Request Units$",
+              "formatter": 5
+            },
+            {
+              "columnMatch": ".*\\/Total Requests$",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequests",
+              "formatter": 5,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "decimal"
+                }
+              }
+            }
+          ],
+          "rowLimit": 10000,
+          "filter": true,
+          "hierarchySettings": {
+            "treeType": 1,
+            "groupBy": [
+              "Name"
+            ],
+            "expandTopLevel": false,
+            "finalBy": "Segment"
+          },
+          "labelSettings": [
+            {
+              "columnId": "Request Units",
+              "label": "Request Units"
+            },
+            {
+              "columnId": "Request Units Timeline",
+              "label": "Request Units"
+            },
+            {
+              "columnId": "Requests",
+              "label": "Requests"
+            },
+            {
+              "columnId": "Requests Timeline",
+              "label": "Requests"
+            },
+            {
+              "columnId": "Documents",
+              "label": "Documents"
+            },
+            {
+              "columnId": "Documents Timeline",
+              "label": "Documents"
+            },
+            {
+              "columnId": "Data Usage",
+              "label": "Data Usage"
+            },
+            {
+              "columnId": "Data Usage Timeline",
+              "label": "Data Usage"
+            }
+          ]
+        },
+        "showExportToExcel": true
+      },
+      "showPin": true,
+      "name": "Databases",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union withsource = tt * \r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, tt, _BilledSize, AppRoleName\r\n| summarize ['Count' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application'] = AppRoleName, ['Table'] = tt\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, tt, _BilledSize, AppRoleName\r\n    | make-series ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated step 1d by ['Application'] = AppRoleName, ['Table'] = tt\r\n    | project ['Billed Size Timeline'], ['Table'], ['Application']\r\n) on ['Application'], ['Table']\r\n| project ['Application'], ['Table'], ['Count'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc, ['Table'] asc\r\n",
+        "size": 1,
+        "title": "Billing metrics",
+        "timeContext": {
+          "durationMs": 2592000000
+        },
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-monitoring-prd-rg/providers/Microsoft.OperationalInsights/workspaces/mil-monitoring-prd-ws"
+        ],
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Application",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Table",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Count",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Count"
+              }
+            },
+            {
+              "columnMatch": "Billed Size",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 0
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Billed Size"
+              }
+            },
+            {
+              "columnMatch": "Billed Size Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange",
+                "aggregation": "Sum"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 0
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Billed Size Timeline"
+              }
+            }
+          ],
+          "hierarchySettings": {
+            "treeType": 1,
+            "groupBy": [
+              "Application"
+            ],
+            "expandTopLevel": false,
+            "finalBy": "Table"
+          },
+          "labelSettings": [
+            {
+              "columnId": "Billed Size Timeline",
+              "label": "Billed Size"
+            }
+          ]
+        }
+      },
+      "showPin": true,
+      "name": "Monitoring Billing",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union withsource = tt * \r\n| where _IsBillable == 'True'\r\n| project _BilledSize, AppRoleName\r\n| summarize ['Count' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application'] = AppRoleName",
+        "size": 4,
+        "title": "Billing metrics by Application",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-monitoring-prd-rg/providers/Microsoft.OperationalInsights/workspaces/mil-monitoring-prd-ws"
+        ],
+        "visualization": "piechart",
+        "chartSettings": {
+          "yAxis": [
+            "Billed Size"
+          ],
+          "group": "Application",
+          "createOtherGroup": null,
+          "ySettings": {
+            "numberFormatSettings": {
+              "unit": 2,
+              "options": {
+                "style": "decimal",
+                "useGrouping": true,
+                "maximumFractionDigits": 1
+              }
+            }
+          }
+        }
+      },
+      "showPin": true,
+      "name": "Billing by application",
+      "styleSettings": {
+        "showBorder": true
+      }
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
