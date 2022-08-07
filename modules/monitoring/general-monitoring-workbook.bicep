@@ -18,17 +18,17 @@ param location string
 
 // === VARIABLES ===
 
-var workbookData = loadJsonContent('../global/workbooks/general-monitoring.json')
+var workbookData = loadJsonContent('../global/workbooks/applications.json')
 
 // === RESOURCES ===
 
 resource workbook 'Microsoft.Insights/workbooks@2022-04-01' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.monitorWorkbook}-general-monitoring'
+  name: guid('${conventions.naming.prefix}${conventions.naming.suffixes.monitorWorkbook}-apps')
   location: location
   tags: referential
   kind: 'shared'
   properties: {
-    displayName: 'General Monitoring'
+    displayName: 'Applications Monitoring'
     category: 'workbook'
     sourceId: workspaceId
     serializedData: string(workbookData)
