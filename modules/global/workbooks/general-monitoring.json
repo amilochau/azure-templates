@@ -61,7 +61,7 @@
             "label": "Log Analytics workspace",
             "type": 5,
             "isRequired": true,
-            "query": "where type == 'microsoft.operationalinsights/workspaces'\r\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "query": "where type == 'microsoft.operationalinsights/workspaces'\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -80,7 +80,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type == 'microsoft.documentdb/databaseaccounts'\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "query": "where type == 'microsoft.documentdb/databaseaccounts'\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -104,7 +104,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type == 'microsoft.servicebus/namespaces'\r\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "query": "where type == 'microsoft.servicebus/namespaces'\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -128,7 +128,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type == 'microsoft.storage/storageaccounts'\r\n| project value = id, label = name, selected = true, group = resourceGroup",
+            "query": "where type == 'microsoft.storage/storageaccounts'\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -329,7 +329,7 @@
         ],
         "timeContextFromParameter": "TimeRange",
         "timeContext": {
-          "durationMs": 0
+          "durationMs": 2592000000
         },
         "metrics": [
           {
@@ -627,7 +627,7 @@
         ],
         "timeContextFromParameter": "TimeRange",
         "timeContext": {
-          "durationMs": 0
+          "durationMs": 2592000000
         },
         "metrics": [
           {
@@ -694,6 +694,8 @@
             },
             {
               "columnMatch": "DL Messages",
+              "formatter": 8,
+              "formatOptions": {
                 "min": 0,
                 "palette": "orange"
               },
