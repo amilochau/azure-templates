@@ -49,6 +49,7 @@
     "suffixes": {
       "appConfiguration": "cfg",
       "logAnalyticsWorkspace": "ws",
+      "monitorWorkbook": "wb",
       "apiManagement": "apim",
       "apiManagementApi": "apimapi",
       "apiManagementApiVersionSet": "apimversionset",
