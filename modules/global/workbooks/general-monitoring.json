@@ -2,6 +2,14 @@
   "version": "Notebook/1.0",
   "items": [
     {
+      "type": 1,
+      "content": {
+        "json": "**Welcome!** This workbook presents metrics and logs from our applications. Use the filters below to be more precise.",
+        "style": "upsell"
+      },
+      "name": "text - 6"
+    },
+    {
       "type": 9,
       "content": {
         "version": "KqlParameterItem/1.0",
@@ -55,20 +63,52 @@
             }
           },
           {
-            "id": "53c944ef-80d7-4c86-916b-650daaa95bfc",
+            "id": "9529838a-7d4a-4a56-a200-6c61778c26f6",
             "version": "KqlParameterItem/1.0",
-            "name": "LogAnalyticsWorkspace",
-            "label": "Log Analytics workspace",
-            "type": 5,
+            "name": "Environments",
+            "type": 2,
             "isRequired": true,
-            "query": "where type == 'microsoft.operationalinsights/workspaces'\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "distinct tostring(tags['environment'])\r\n| where tags_environment != ''",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "value": [
+              "Production",
+              "Shared"
+            ],
             "typeSettings": {
-              "additionalResourceOptions": [],
+              "additionalResourceOptions": [
+                "value::all"
+              ],
               "showDefault": false
             },
+            "defaultValue": "value::all",
             "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources",
-            "value": "%WORKSPACE_ID%"
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "53c944ef-80d7-4c86-916b-650daaa95bfc",
+            "version": "KqlParameterItem/1.0",
+            "name": "LogAnalyticsWorkspaces",
+            "label": "Log Analytics workspaces",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
           },
           {
             "id": "7edc39f5-78ff-4fbe-8845-e42934e02f4c",
@@ -80,7 +120,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type == 'microsoft.documentdb/databaseaccounts'\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'microsoft.documentdb/databaseaccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -104,7 +144,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type == 'microsoft.servicebus/namespaces'\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'microsoft.servicebus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -128,7 +168,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type == 'microsoft.storage/storageaccounts'\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'microsoft.storage/storageaccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -161,7 +201,7 @@
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
         "crossComponentResources": [
-          "{LogAnalyticsWorkspace}"
+          "{LogAnalyticsWorkspaces}"
         ],
         "visualization": "table",
         "showExpandCollapseGrid": true,
@@ -786,7 +826,7 @@
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
         "crossComponentResources": [
-          "{LogAnalyticsWorkspace}"
+          "{LogAnalyticsWorkspaces}"
         ],
         "gridSettings": {
           "formatters": [
@@ -897,7 +937,7 @@
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
         "crossComponentResources": [
-          "{LogAnalyticsWorkspace}"
+          "{LogAnalyticsWorkspaces}"
         ],
         "visualization": "piechart",
         "chartSettings": {
