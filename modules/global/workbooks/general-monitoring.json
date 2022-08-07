@@ -360,6 +360,161 @@
     {
       "type": 10,
       "content": {
+        "chartId": "workbook98e8090c-1fd0-4325-a7ce-82d5ccba9cd9",
+        "version": "MetricsItem/2.0",
+        "size": 1,
+        "chartType": 0,
+        "resourceType": "microsoft.storage/storageaccounts",
+        "metricScope": 0,
+        "resourceParameter": "StorageAccounts",
+        "resourceIds": [
+          "{StorageAccounts}"
+        ],
+        "timeContextFromParameter": "TimeRange",
+        "timeContext": {
+          "durationMs": 2592000000
+        },
+        "metrics": [
+          {
+            "namespace": "microsoft.storage/storageaccounts/blobservices",
+            "metric": "microsoft.storage/storageaccounts/blobservices-Capacity-BlobCount",
+            "aggregation": 4,
+            "columnName": "Blob Count"
+          },
+          {
+            "namespace": "microsoft.storage/storageaccounts",
+            "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+            "aggregation": 4,
+            "columnName": "Used Capacity"
+          }
+        ],
+        "title": "Storage metrics",
+        "showRefreshButton": true,
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "Subscription",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Name",
+              "formatter": 13,
+              "formatOptions": {
+                "linkTarget": "Resource",
+                "showIcon": true,
+                "customColumnWidthSetting": "250px"
+              }
+            },
+            {
+              "columnMatch": "Used Capacity",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "orange"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Used Capacity"
+              }
+            },
+            {
+              "columnMatch": "Used Capacity Timeline",
+              "formatter": 21,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange"
+              },
+              "tooltipFormat": {
+                "tooltip": "Used Capacity Timeline"
+              }
+            },
+            {
+              "columnMatch": "Blob Count",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Blob Count"
+              }
+            },
+            {
+              "columnMatch": "Blob Count Timeline",
+              "formatter": 9,
+              "formatOptions": {
+                "min": 1,
+                "palette": "blue"
+              },
+              "tooltipFormat": {
+                "tooltip": "Blob Count Timeline"
+              }
+            },
+            {
+              "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+              "formatter": 1,
+              "numberFormat": {
+                "unit": 2,
+                "options": null
+              }
+            },
+            {
+              "columnMatch": "microsoft.storage/storageaccounts/blobservices-Capacity-BlobCount",
+              "formatter": 1,
+              "numberFormat": {
+                "unit": 0,
+                "options": null
+              }
+            }
+          ],
+          "rowLimit": 10000,
+          "labelSettings": [
+            {
+              "columnId": "Name",
+              "label": "Storage account"
+            },
+            {
+              "columnId": "Blob Count",
+              "label": "Blob Count"
+            },
+            {
+              "columnId": "Blob Count Timeline",
+              "label": "Blob Count Timeline"
+            },
+            {
+              "columnId": "Used Capacity",
+              "label": "Used Capacity"
+            },
+            {
+              "columnId": "Used Capacity Timeline",
+              "label": "Used Capacity Timeline"
+            }
+          ]
+        },
+        "sortBy": [],
+        "showExportToExcel": true
+      },
+      "showPin": true,
+      "name": "metric - 7",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 10,
+      "content": {
         "chartId": "workbooke3352d3d-fcd8-4b25-9749-67d7ecd63006",
         "version": "MetricsItem/2.0",
         "size": 1,
