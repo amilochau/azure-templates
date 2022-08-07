@@ -18,7 +18,7 @@ param location string
 
 // === VARIABLES ===
 
-var workbookData = loadJsonContent('../global/workbooks/general-monitoring.json')
+var workbookData = replace(string(loadJsonContent('../global/workbooks/general-monitoring.json')), '%WORKSPACE_ID%', workspaceId)
 
 // === RESOURCES ===
 
@@ -31,7 +31,7 @@ resource workbook 'Microsoft.Insights/workbooks@2022-04-01' = {
     displayName: 'General Monitoring'
     category: 'workbook'
     sourceId: workspaceId
-    serializedData: string(workbookData)
+    serializedData: workbookData
   }
 }
 

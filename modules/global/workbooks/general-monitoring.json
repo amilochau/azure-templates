@@ -16,7 +16,7 @@
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
         "crossComponentResources": [
-          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-monitoring-prd-rg/providers/Microsoft.OperationalInsights/workspaces/mil-monitoring-prd-ws"
+          "%WORKSPACE_ID%"
         ],
         "visualization": "table",
         "showExpandCollapseGrid": true,
@@ -473,7 +473,7 @@
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
         "crossComponentResources": [
-          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-monitoring-prd-rg/providers/Microsoft.OperationalInsights/workspaces/mil-monitoring-prd-ws"
+          "%WORKSPACE_ID%"
         ],
         "gridSettings": {
           "formatters": [
@@ -580,7 +580,7 @@
         "queryType": 0,
         "resourceType": "microsoft.operationalinsights/workspaces",
         "crossComponentResources": [
-          "/subscriptions/192f77e1-2331-424c-959f-9a7d69d2742e/resourceGroups/mil-monitoring-prd-rg/providers/Microsoft.OperationalInsights/workspaces/mil-monitoring-prd-ws"
+          "%WORKSPACE_ID%"
         ],
         "visualization": "piechart",
         "chartSettings": {
