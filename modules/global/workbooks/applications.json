@@ -172,6 +172,9 @@
             "quote": "'",
             "delimiter": ",",
             "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
