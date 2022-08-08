@@ -714,7 +714,7 @@
         "showExportToExcel": true
       },
       "showPin": true,
-      "name": "metric - 7",
+      "name": "Storage metrics",
       "styleSettings": {
         "showBorder": true
       }
@@ -1012,7 +1012,7 @@
         "showExportToExcel": true
       },
       "showPin": true,
-      "name": "Cosmos DB accounts",
+      "name": "Cosmos DB metrics",
       "styleSettings": {
         "showBorder": true
       }
@@ -1174,7 +1174,7 @@
         "showExportToExcel": true
       },
       "showPin": true,
-      "name": "metric - 5",
+      "name": "Service Bus metrics",
       "styleSettings": {
         "showBorder": true
       }
