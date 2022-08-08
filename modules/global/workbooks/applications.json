@@ -7,7 +7,7 @@
         "json": "**Welcome!** This workbook presents metrics and logs from our applications. Use the filters below to be more precise.",
         "style": "upsell"
       },
-      "name": "text - 6"
+      "name": "Workbook Message"
     },
     {
       "type": 9,
@@ -99,7 +99,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -123,7 +123,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'microsoft.documentdb/databaseaccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -147,7 +147,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'microsoft.servicebus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.ServiceBus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -171,7 +171,97 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'microsoft.storage/storageaccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "082197cf-af49-452d-835d-810556cb2d63",
+            "version": "KqlParameterItem/1.0",
+            "name": "KeyVaults",
+            "label": "Key Vaults",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.KeyVault/vaults'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "971cd5f7-743b-4ade-ba4b-9c94e8b53d33",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppConfigurations",
+            "label": "App Configurations",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.AppConfiguration/configurationStores'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "98ad3c6c-a10c-432f-b79a-87f344b7a305",
+            "version": "KqlParameterItem/1.0",
+            "name": "FunctionsApps",
+            "label": "Functions apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "cc78abca-2251-4c98-b15a-107b9c495f54",
+            "version": "KqlParameterItem/1.0",
+            "name": "WebApps",
+            "label": "Web apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'app'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
             "crossComponentResources": [
               "value::all"
             ],
@@ -190,15 +280,15 @@
         "queryType": 1,
         "resourceType": "microsoft.resourcegraph/resources"
       },
-      "name": "parameters - 4"
+      "name": "Workbook Parameters"
     },
     {
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\")\n| project _ResourceId\n| summarize ['Requests'] = count() by _ResourceId\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success\n    | make-series ['Requests Timeline'] = count() default = 0, ['Requests Success Rate Timeline'] = toreal(countif(Success))/count() default = 1 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project ['Requests Timeline'], ['Requests Success Rate Timeline'], _ResourceId\n) on _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | where TimeGenerated {TimeRange}\n    | project Success, _ResourceId, DurationMs\n    | summarize ['SLA'] = toreal(countif(Success))/count(), ['Availability Duration'] = avg(DurationMs) by _ResourceId\n) on _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | where TimeGenerated {TimeRange}\n    | project Success, _ResourceId, TimeGenerated, DurationMs\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1, ['Availability Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project ['Availability Timeline'], ['Availability Duration Timeline'],  _ResourceId\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['Requests'], ['Requests Timeline'], ['Requests Success Rate Timeline'], ['SLA'], ['Availability Timeline'], ['Availability Duration'], ['Availability Duration Timeline']\n| order by ['Resource'] asc",
+        "query": "AppAvailabilityResults\n| where TimeGenerated {TimeRange}\n| project Success, _ResourceId, DurationMs\n| summarize ['SLA'] = toreal(countif(Success))/count(), ['Availability Duration'] = avg(DurationMs) by _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | where TimeGenerated {TimeRange}\n    | project Success, _ResourceId, TimeGenerated, DurationMs\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1, ['Availability Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project-away TimeGenerated\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline'], ['Availability Duration'], ['Availability Duration Timeline']\n| order by ['Resource'] asc\n\n",
         "size": 1,
-        "title": "Applications metrics",
+        "title": "Availability metrics",
         "showRefreshButton": true,
         "showExportToExcel": true,
         "queryType": 0,
@@ -224,54 +314,12 @@
               }
             },
             {
-              "columnMatch": "Requests",
-              "formatter": 8,
-              "formatOptions": {
-                "min": 0,
-                "palette": "blue",
-                "customColumnWidthSetting": "100px"
-              },
-              "numberFormat": {
-                "unit": 17,
-                "options": {
-                  "style": "decimal",
-                  "maximumFractionDigits": 1
-                }
-              },
-              "tooltipFormat": {
-                "tooltip": "Requests"
-              }
-            },
-            {
-              "columnMatch": "Requests Timeline",
-              "formatter": 10,
-              "formatOptions": {
-                "min": 0,
-                "palette": "blue"
-              },
-              "tooltipFormat": {
-                "tooltip": "Requests Timeline"
-              }
-            },
-            {
-              "columnMatch": "Requests Success Rate Timeline",
-              "formatter": 10,
-              "formatOptions": {
-                "min": 0.8,
-                "palette": "redGreen"
-              },
-              "tooltipFormat": {
-                "tooltip": "Requests Success Rate Timeline (>80%)"
-              }
-            },
-            {
               "columnMatch": "SLA",
               "formatter": 8,
               "formatOptions": {
                 "min": 0.95,
                 "max": 1,
-                "palette": "redGreen",
-                "customColumnWidthSetting": "100px"
+                "palette": "redGreen"
               },
               "numberFormat": {
                 "unit": 0,
@@ -302,9 +350,8 @@
               "formatter": 8,
               "formatOptions": {
                 "min": 0,
-                "max": 250,
-                "palette": "greenRed",
-                "customColumnWidthSetting": "100px"
+                "max": 500,
+                "palette": "greenRed"
               },
               "numberFormat": {
                 "unit": 23,
@@ -322,7 +369,7 @@
               "formatter": 10,
               "formatOptions": {
                 "min": 0,
-                "max": 250,
+                "max": 500,
                 "palette": "greenRed"
               },
               "tooltipFormat": {
@@ -332,12 +379,8 @@
           ],
           "labelSettings": [
             {
-              "columnId": "Requests Timeline",
-              "label": "Requests"
-            },
-            {
-              "columnId": "Requests Success Rate Timeline",
-              "label": "Requests Success Rate"
+              "columnId": "Resource",
+              "label": "Availability tests"
             },
             {
               "columnId": "Availability Timeline",
@@ -352,7 +395,165 @@
         "sortBy": []
       },
       "showPin": true,
-      "name": "Applications",
+      "name": "Availability metrics",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\")\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Name']",
+        "size": 1,
+        "title": "Requests metrics",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces",
+        "crossComponentResources": [
+          "{LogAnalyticsWorkspaces}"
+        ],
+        "visualization": "table",
+        "showExpandCollapseGrid": true,
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "$gen_group",
+              "formatter": 13,
+              "formatOptions": {
+                "linkTarget": "CellDetails",
+                "linkIsContextBlade": true,
+                "showIcon": true,
+                "customColumnWidthSetting": "250px"
+              },
+              "tooltipFormat": {
+                "tooltip": "Request Name"
+              }
+            },
+            {
+              "columnMatch": "Resource",
+              "formatter": 5,
+              "formatOptions": {
+                "linkTarget": "CellDetails",
+                "linkIsContextBlade": true,
+                "customColumnWidthSetting": "250px"
+              },
+              "tooltipFormat": {
+                "tooltip": "Request Name"
+              }
+            },
+            {
+              "columnMatch": "Name",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Requests",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "aggregation": "Sum",
+                "customColumnWidthSetting": "100px"
+              },
+              "numberFormat": {
+                "unit": 17,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests"
+              }
+            },
+            {
+              "columnMatch": "Requests Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "palette": "blue",
+                "aggregation": "Sum"
+              },
+              "tooltipFormat": {
+                "tooltip": "Requests Timeline"
+              }
+            },
+            {
+              "columnMatch": "Success Rate Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0.8,
+                "palette": "redGreen",
+                "aggregation": "Average"
+              },
+              "tooltipFormat": {
+                "tooltip": "Success Rate Timeline (>80%)"
+              }
+            },
+            {
+              "columnMatch": "Duration",
+              "formatter": 8,
+              "formatOptions": {
+                "min": 0,
+                "max": 500,
+                "palette": "greenRed",
+                "aggregation": "Average"
+              },
+              "numberFormat": {
+                "unit": 23,
+                "options": {
+                  "style": "decimal"
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Duration"
+              }
+            },
+            {
+              "columnMatch": "Duration Timeline",
+              "formatter": 10,
+              "formatOptions": {
+                "min": 0,
+                "max": 500,
+                "palette": "greenRed",
+                "aggregation": "Average"
+              },
+              "tooltipFormat": {
+                "tooltip": "Duration Timeline"
+              }
+            }
+          ],
+          "hierarchySettings": {
+            "treeType": 1,
+            "groupBy": [
+              "Resource"
+            ],
+            "finalBy": "Name"
+          },
+          "labelSettings": [
+            {
+              "columnId": "Resource",
+              "label": "Request Name"
+            },
+            {
+              "columnId": "Requests Timeline",
+              "label": "Requests"
+            },
+            {
+              "columnId": "Success Rate Timeline",
+              "label": "Success Rate"
+            },
+            {
+              "columnId": "Duration Timeline",
+              "label": "Duration"
+            }
+          ]
+        },
+        "sortBy": []
+      },
+      "showPin": true,
+      "name": "Requests metrics",
       "styleSettings": {
         "showBorder": true
       }
@@ -968,156 +1169,6 @@
       },
       "showPin": true,
       "name": "metric - 5",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "union withsource = tt * \r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, tt, _BilledSize, AppRoleName\r\n| summarize ['Count' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application'] = AppRoleName, ['Table'] = tt\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, tt, _BilledSize, AppRoleName\r\n    | make-series ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application'] = AppRoleName, ['Table'] = tt\r\n    | project ['Billed Size Timeline'], ['Table'], ['Application']\r\n) on ['Application'], ['Table']\r\n| project ['Application'], ['Table'], ['Count'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc, ['Table'] asc\r\n",
-        "size": 1,
-        "title": "Billing metrics",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces",
-        "crossComponentResources": [
-          "{LogAnalyticsWorkspaces}"
-        ],
-        "gridSettings": {
-          "formatters": [
-            {
-              "columnMatch": "$gen_group",
-              "formatter": 0,
-              "formatOptions": {
-                "customColumnWidthSetting": "250px"
-              }
-            },
-            {
-              "columnMatch": "Application",
-              "formatter": 5
-            },
-            {
-              "columnMatch": "Table",
-              "formatter": 5
-            },
-            {
-              "columnMatch": "Count",
-              "formatter": 8,
-              "formatOptions": {
-                "min": 0,
-                "palette": "blue",
-                "aggregation": "Sum"
-              },
-              "numberFormat": {
-                "unit": 17,
-                "options": {
-                  "style": "decimal",
-                  "maximumFractionDigits": 1
-                }
-              },
-              "tooltipFormat": {
-                "tooltip": "Count"
-              }
-            },
-            {
-              "columnMatch": "Billed Size",
-              "formatter": 8,
-              "formatOptions": {
-                "min": 0,
-                "palette": "orange",
-                "aggregation": "Sum"
-              },
-              "numberFormat": {
-                "unit": 2,
-                "options": {
-                  "style": "decimal",
-                  "maximumFractionDigits": 0
-                }
-              },
-              "tooltipFormat": {
-                "tooltip": "Billed Size"
-              }
-            },
-            {
-              "columnMatch": "Billed Size Timeline",
-              "formatter": 10,
-              "formatOptions": {
-                "min": 0,
-                "palette": "orange",
-                "aggregation": "Sum"
-              },
-              "numberFormat": {
-                "unit": 2,
-                "options": {
-                  "style": "decimal",
-                  "maximumFractionDigits": 0
-                }
-              },
-              "tooltipFormat": {
-                "tooltip": "Billed Size Timeline"
-              }
-            }
-          ],
-          "hierarchySettings": {
-            "treeType": 1,
-            "groupBy": [
-              "Application"
-            ],
-            "expandTopLevel": false,
-            "finalBy": "Table"
-          },
-          "labelSettings": [
-            {
-              "columnId": "Billed Size Timeline",
-              "label": "Billed Size"
-            }
-          ]
-        }
-      },
-      "showPin": true,
-      "name": "Monitoring Billing",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "union withsource = tt * \r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project _BilledSize, AppRoleName\r\n| summarize ['Count' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application'] = AppRoleName",
-        "size": 4,
-        "title": "Billing metrics by Application",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces",
-        "crossComponentResources": [
-          "{LogAnalyticsWorkspaces}"
-        ],
-        "visualization": "piechart",
-        "chartSettings": {
-          "yAxis": [
-            "Billed Size"
-          ],
-          "group": "Application",
-          "createOtherGroup": null,
-          "ySettings": {
-            "numberFormatSettings": {
-              "unit": 2,
-              "options": {
-                "style": "decimal",
-                "useGrouping": true,
-                "maximumFractionDigits": 1
-              }
-            }
-          }
-        }
-      },
-      "showPin": true,
-      "name": "Billing by application",
       "styleSettings": {
         "showBorder": true
       }
