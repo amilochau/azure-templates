@@ -739,21 +739,21 @@
         "metrics": [
           {
             "namespace": "microsoft.documentdb/databaseaccounts",
-            "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
-            "aggregation": 1,
-            "splitBy": "CollectionName",
-            "splitBySortOrder": -1,
-            "splitByLimit": 5,
-            "columnName": "Request Units"
-          },
-          {
-            "namespace": "microsoft.documentdb/databaseaccounts",
             "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequests",
             "aggregation": 7,
             "splitBy": "CollectionName",
             "splitBySortOrder": -1,
             "splitByLimit": 5,
             "columnName": "Requests"
+          },
+          {
+            "namespace": "microsoft.documentdb/databaseaccounts",
+            "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+            "aggregation": 1,
+            "splitBy": "CollectionName",
+            "splitBySortOrder": -1,
+            "splitByLimit": 5,
+            "columnName": "Request Units"
           },
           {
             "namespace": "microsoft.documentdb/databaseaccounts",
@@ -976,20 +976,20 @@
               "label": "Cosmos DB account"
             },
             {
-              "columnId": "Request Units",
-              "label": "Request Units"
-            },
-            {
-              "columnId": "Request Units Timeline",
-              "label": "Request Units"
-            },
-            {
               "columnId": "Requests",
               "label": "Requests"
             },
             {
               "columnId": "Requests Timeline",
               "label": "Requests"
+            },
+            {
+              "columnId": "Request Units",
+              "label": "Request Units"
+            },
+            {
+              "columnId": "Request Units Timeline",
+              "label": "Request Units"
             },
             {
               "columnId": "Documents",
