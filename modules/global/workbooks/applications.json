@@ -607,34 +607,6 @@
               }
             },
             {
-              "columnMatch": "Used Capacity",
-              "formatter": 8,
-              "formatOptions": {
-                "palette": "orange"
-              },
-              "numberFormat": {
-                "unit": 2,
-                "options": {
-                  "style": "decimal",
-                  "maximumFractionDigits": 1
-                }
-              },
-              "tooltipFormat": {
-                "tooltip": "Used Capacity"
-              }
-            },
-            {
-              "columnMatch": "Used Capacity Timeline",
-              "formatter": 21,
-              "formatOptions": {
-                "min": 0,
-                "palette": "orange"
-              },
-              "tooltipFormat": {
-                "tooltip": "Used Capacity Timeline"
-              }
-            },
-            {
               "columnMatch": "Blob Count",
               "formatter": 8,
               "formatOptions": {
@@ -661,6 +633,34 @@
               },
               "tooltipFormat": {
                 "tooltip": "Blob Count Timeline"
+              }
+            },
+            {
+              "columnMatch": "Used Capacity",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "orange"
+              },
+              "numberFormat": {
+                "unit": 2,
+                "options": {
+                  "style": "decimal",
+                  "maximumFractionDigits": 1
+                }
+              },
+              "tooltipFormat": {
+                "tooltip": "Used Capacity"
+              }
+            },
+            {
+              "columnMatch": "Used Capacity Timeline",
+              "formatter": 21,
+              "formatOptions": {
+                "min": 0,
+                "palette": "orange"
+              },
+              "tooltipFormat": {
+                "tooltip": "Used Capacity Timeline"
               }
             },
             {
