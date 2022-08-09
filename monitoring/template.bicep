@@ -68,8 +68,19 @@ module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
 }
 
 @description('Monitor Workbook - Applications')
-module workbook '../modules/monitoring/workbooks/applications.bicep' = {
+module workbook_applications '../modules/monitoring/workbooks/applications.bicep' = {
   name: 'Resource-MonitorWorkbook-Applications'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    workspaceId: workspace.outputs.id
+    location: location
+  }
+}
+
+@description('Monitor Workbook - Costs')
+module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = {
+  name: 'Resource-MonitorWorkbook-Costs'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
