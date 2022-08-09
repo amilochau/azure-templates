@@ -382,8 +382,11 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "AppAvailabilityResults\r\n| where TimeGenerated {TimeRange}\r\n| project Success, _ResourceId, DurationMs\r\n| summarize ['SLA'] = toreal(countif(Success))/count() by _ResourceId\r\n| join kind = leftouter (\r\n    AppAvailabilityResults\r\n    | where TimeGenerated {TimeRange}\r\n    | project Success, _ResourceId, TimeGenerated, DurationMs\r\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\r\n    | project-away TimeGenerated\r\n) on _ResourceId\r\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline']\r\n| extend MetricKind = 'SLA'\r\n| order by ['Resource'] asc\r\n\r\n",
+              "query": "AppAvailabilityResults\r\n| where TimeGenerated {TimeRange}\r\n| project Success, _ResourceId, DurationMs\r\n| summarize ['SLA'] = toreal(countif(Success))/count() by _ResourceId\r\n| join kind = leftouter (\r\n    AppAvailabilityResults\r\n    | where TimeGenerated {TimeRange}\r\n    | project Success, _ResourceId, TimeGenerated, DurationMs\r\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\r\n    | project-away TimeGenerated\r\n) on _ResourceId\r\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline']\r\n| order by ['Resource'] asc\r\n\r\n",
               "size": 3,
+              "title": "SLA",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
               "crossComponentResources": [
@@ -395,7 +398,7 @@
                   "columnMatch": "Resource",
                   "formatter": 13,
                   "formatOptions": {
-                    "linkTarget": null,
+                    "linkTarget": "Resource",
                     "showIcon": true
                   },
                   "tooltipFormat": {
@@ -410,7 +413,9 @@
                   "columnMatch": "SLA",
                   "formatter": 12,
                   "formatOptions": {
-                    "palette": "auto"
+                    "min": 0.8,
+                    "max": 1,
+                    "palette": "redGreen"
                   },
                   "numberFormat": {
                     "unit": 0,
@@ -432,13 +437,313 @@
                     "palette": "redGreen"
                   },
                   "tooltipFormat": {
-                    "tooltip": "Availability Timeline"
+                    "tooltip": "SLA Timeline"
                   }
                 },
-                "showBorder": false
+                "showBorder": false,
+                "sortCriteriaField": "SLA",
+                "sortOrderField": 1
               }
             },
-            "name": "query - 0"
+            "showPin": true,
+            "name": "Availability metrics - Overview"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppExceptions\r\n| where TimeGenerated {TimeRange}\r\n| project _ResourceId\r\n| summarize ['Exceptions'] = count() by _ResourceId\r\n| join kind = leftouter (\r\n    AppExceptions\r\n    | where TimeGenerated {TimeRange}\r\n    | project _ResourceId, TimeGenerated\r\n    | make-series ['Exceptions Timeline'] = count() default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\r\n    | project-away TimeGenerated\r\n) on _ResourceId\r\n| project ['Resource'] = _ResourceId, ['Exceptions'], ['Exceptions Timeline']\r\n| order by ['Resource'] asc\r\n",
+              "size": 3,
+              "title": "Exceptions",
+              "noDataMessage": "No exception in the selected applications!",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Resource",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Application Insights"
+                  }
+                },
+                "subtitleContent": {
+                  "columnMatch": "MetricKind",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Exceptions",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "red"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Exceptions"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "Exceptions Timeline",
+                  "formatter": 9,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "red"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Exceptions Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "Exceptions",
+                "sortOrderField": 2
+              }
+            },
+            "showPin": true,
+            "name": "Exceptions metrics - Overview"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookbbd3642a-27b1-49a8-9b58-01802391db8b",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": -1,
+              "resourceType": "microsoft.storage/storageaccounts",
+              "metricScope": 0,
+              "resourceParameter": "StorageAccounts",
+              "resourceIds": [
+                "{StorageAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "aggregation": 4
+                }
+              ],
+              "title": "Storage Used Capacity",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "blue"
+                  },
+                  "numberFormat": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Used Capacity"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity Timeline",
+                  "formatter": 21,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "blue"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Used Capacity Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                "sortOrderField": 2
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Storage metrics - Overview"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookbbd3642a-27b1-49a8-9b58-01802391db8b",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": -1,
+              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "metricScope": 0,
+              "resourceParameter": "CosmosAccounts",
+              "resourceIds": [
+                "{CosmosAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                  "aggregation": 1
+                }
+              ],
+              "title": "Cosmos DB Request Units",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Request Units"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits Timeline",
+                  "formatter": 21,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Request Units Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                "sortOrderField": 2
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Cosmos DB metrics - Overview"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookbbd3642a-27b1-49a8-9b58-01802391db8b",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": -1,
+              "resourceType": "microsoft.servicebus/namespaces",
+              "metricScope": 0,
+              "resourceParameter": "ServiceBusAccounts",
+              "resourceIds": [
+                "{ServiceBusAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.servicebus/namespaces",
+                  "metric": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                  "aggregation": 4
+                }
+              ],
+              "title": "Service Bus dead-lettered messages",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Dead-lettered messages"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages Timeline",
+                  "formatter": 21,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Dead-lettered messages Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                "sortOrderField": 2
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Service Bus metrics - Overview"
           }
         ]
       },
