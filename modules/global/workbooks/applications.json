@@ -1462,6 +1462,7 @@
                   "key": "CollectionName",
                   "operator": 1,
                   "values": [
+                    "__Empty",
                     "<empty>"
                   ]
                 }
