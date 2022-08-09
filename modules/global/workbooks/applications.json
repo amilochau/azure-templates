@@ -373,7 +373,7 @@
             "content": {
               "version": "KqlItem/1.0",
               "query": "AppAvailabilityResults\n| where TimeGenerated {TimeRange}\n| project Success, _ResourceId, DurationMs\n| summarize ['SLA'] = toreal(countif(Success))/count(), ['Availability Duration'] = avg(DurationMs) by _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | where TimeGenerated {TimeRange}\n    | project Success, _ResourceId, TimeGenerated, DurationMs\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1, ['Availability Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project-away TimeGenerated\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline'], ['Availability Duration'], ['Availability Duration Timeline']\n| order by ['Resource'] asc\n\n",
-              "size": 1,
+              "size": 0,
               "title": "Availability metrics",
               "showRefreshButton": true,
               "showExportToExcel": true,
@@ -491,7 +491,7 @@
             "content": {
               "version": "KqlItem/1.0",
               "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\")\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Requests']",
-              "size": 1,
+              "size": 0,
               "title": "Requests metrics",
               "showRefreshButton": true,
               "showExportToExcel": true,
@@ -620,7 +620,7 @@
                 "labelSettings": [
                   {
                     "columnId": "Resource",
-                    "label": "Request Name"
+                    "label": "Request"
                   },
                   {
                     "columnId": "Requests Timeline",
@@ -664,7 +664,7 @@
             "content": {
               "chartId": "workbook98e8090c-1fd0-4325-a7ce-82d5ccba9cd9",
               "version": "MetricsItem/2.0",
-              "size": 1,
+              "size": 0,
               "chartType": 0,
               "resourceType": "microsoft.storage/storageaccounts",
               "metricScope": 0,
@@ -819,7 +819,7 @@
             "content": {
               "chartId": "workbooke3352d3d-fcd8-4b25-9749-67d7ecd63006",
               "version": "MetricsItem/2.0",
-              "size": 1,
+              "size": 0,
               "chartType": 0,
               "resourceType": "microsoft.documentdb/databaseaccounts",
               "metricScope": 0,
@@ -1132,7 +1132,7 @@
             "content": {
               "chartId": "workbookfab9e9d8-98d4-44b7-b704-3a6c35140f28",
               "version": "MetricsItem/2.0",
-              "size": 1,
+              "size": 0,
               "chartType": 0,
               "resourceType": "microsoft.servicebus/namespaces",
               "metricScope": 0,
