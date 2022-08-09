@@ -1039,30 +1039,48 @@
             "namespace": "microsoft.servicebus/namespaces",
             "metric": "microsoft.servicebus/namespaces--IncomingMessages",
             "aggregation": 7,
+            "splitBy": "EntityName",
+            "splitBySortOrder": 1,
+            "splitByLimit": 50,
             "columnName": "Incoming Messages"
           },
           {
             "namespace": "microsoft.servicebus/namespaces",
             "metric": "microsoft.servicebus/namespaces--DeadletteredMessages",
             "aggregation": 4,
+            "splitBy": "EntityName",
+            "splitBySortOrder": 1,
+            "splitByLimit": 50,
             "columnName": "DL Messages"
           }
         ],
         "title": "Service Bus metrics",
+        "gridFormatType": 2,
         "showRefreshButton": true,
         "showExpandCollapseGrid": true,
         "gridSettings": {
           "formatters": [
+            {
+              "columnMatch": "$gen_group",
+              "formatter": 13,
+              "formatOptions": {
+                "linkTarget": "CellDetails",
+                "linkIsContextBlade": true,
+                "showIcon": true
+              },
+              "tooltipFormat": {
+                "tooltip": "Service Bus queue"
+              }
+            },
             {
               "columnMatch": "Subscription",
               "formatter": 5
             },
             {
               "columnMatch": "Name",
-              "formatter": 13,
+              "formatter": 5,
               "formatOptions": {
                 "linkTarget": "Resource",
-                "showIcon": true,
                 "customColumnWidthSetting": "250px"
               },
               "tooltipFormat": {
@@ -1070,11 +1088,16 @@
               }
             },
             {
+              "columnMatch": "Segment",
+              "formatter": 5
+            },
+            {
               "columnMatch": "Incoming Messages",
               "formatter": 8,
               "formatOptions": {
                 "min": 0,
-                "palette": "blue"
+                "palette": "blue",
+                "aggregation": "Sum"
               },
               "numberFormat": {
                 "unit": 17,
@@ -1091,7 +1114,8 @@
               "formatter": 10,
               "formatOptions": {
                 "min": 0,
-                "palette": "blue"
+                "palette": "blue",
+                "aggregation": "Sum"
               },
               "tooltipFormat": {
                 "tooltip": "Incoming Messages Timeline"
@@ -1102,7 +1126,8 @@
               "formatter": 8,
               "formatOptions": {
                 "min": 0,
-                "palette": "orange"
+                "palette": "orange",
+                "aggregation": "Sum"
               },
               "numberFormat": {
                 "unit": 17,
@@ -1119,7 +1144,8 @@
               "formatter": 10,
               "formatOptions": {
                 "min": 0,
-                "palette": "orange"
+                "palette": "orange",
+                "aggregation": "Sum"
               },
               "tooltipFormat": {
                 "tooltip": "Dead-lettered Messages Timeline"
@@ -1147,10 +1173,17 @@
             }
           ],
           "rowLimit": 10000,
+          "hierarchySettings": {
+            "treeType": 1,
+            "groupBy": [
+              "Name"
+            ],
+            "finalBy": "Segment"
+          },
           "labelSettings": [
             {
               "columnId": "Name",
-              "label": "Service Bus namespace"
+              "label": "Service Bus queue"
             },
             {
               "columnId": "Incoming Messages",
