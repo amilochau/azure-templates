@@ -1274,7 +1274,7 @@
                   "namespace": "microsoft.storage/storageaccounts/blobservices",
                   "metric": "microsoft.storage/storageaccounts/blobservices-Capacity-BlobCount",
                   "aggregation": 4,
-                  "columnName": "Blob Count"
+                  "columnName": "Blobs"
                 },
                 {
                   "namespace": "microsoft.storage/storageaccounts",
@@ -1301,7 +1301,7 @@
                     }
                   },
                   {
-                    "columnMatch": "Blob Count",
+                    "columnMatch": "Blobs",
                     "formatter": 8,
                     "formatOptions": {
                       "min": 0,
@@ -1315,18 +1315,18 @@
                       }
                     },
                     "tooltipFormat": {
-                      "tooltip": "Blob Count"
+                      "tooltip": "Blobs"
                     }
                   },
                   {
-                    "columnMatch": "Blob Count Timeline",
+                    "columnMatch": "Blobs Timeline",
                     "formatter": 9,
                     "formatOptions": {
                       "min": 1,
                       "palette": "blue"
                     },
                     "tooltipFormat": {
-                      "tooltip": "Blob Count Timeline"
+                      "tooltip": "Blobs Timeline"
                     }
                   },
                   {
@@ -1381,12 +1381,12 @@
                     "label": "Storage account"
                   },
                   {
-                    "columnId": "Blob Count",
-                    "label": "Blob Count"
+                    "columnId": "Blobs",
+                    "label": "Blobs"
                   },
                   {
-                    "columnId": "Blob Count Timeline",
-                    "label": "Blob Count Timeline"
+                    "columnId": "Blobs Timeline",
+                    "label": "Blobs Timeline"
                   },
                   {
                     "columnId": "Used Capacity",
@@ -1805,7 +1805,8 @@
                     "numberFormat": {
                       "unit": 17,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
@@ -1835,7 +1836,8 @@
                     "numberFormat": {
                       "unit": 17,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
