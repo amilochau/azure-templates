@@ -1,0 +1,3137 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "**Welcome!** This workbook presents metrics and logs from our applications. Use the filters below to be more precise.",
+        "style": "upsell"
+      },
+      "name": "Workbook Message"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "parameters": [
+          {
+            "id": "5b991d2e-d9e2-4324-943f-87d5ca27f3bd",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "label": "Time range",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 2592000000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2592000000
+                }
+              ],
+              "allowCustom": true
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            }
+          },
+          {
+            "id": "9529838a-7d4a-4a56-a200-6c61778c26f6",
+            "version": "KqlParameterItem/1.0",
+            "name": "Environments",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "distinct tostring(tags['environment'])\r\n| where tags_environment != ''",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "value": [
+              "Production",
+              "Shared"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "53c944ef-80d7-4c86-916b-650daaa95bfc",
+            "version": "KqlParameterItem/1.0",
+            "name": "LogAnalyticsWorkspaces",
+            "label": "Log Analytics workspaces",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "7edc39f5-78ff-4fbe-8845-e42934e02f4c",
+            "version": "KqlParameterItem/1.0",
+            "name": "CosmosAccounts",
+            "label": "Cosmos DB accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "e3b447a6-cf88-4c6e-ae76-8c65f17bea0c",
+            "version": "KqlParameterItem/1.0",
+            "name": "ServiceBusAccounts",
+            "label": "Service Bus accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.ServiceBus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "200836ff-b871-4624-b8cb-2ba3116f4cb3",
+            "version": "KqlParameterItem/1.0",
+            "name": "StorageAccounts",
+            "label": "Storage accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "082197cf-af49-452d-835d-810556cb2d63",
+            "version": "KqlParameterItem/1.0",
+            "name": "KeyVaults",
+            "label": "Key Vaults",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.KeyVault/vaults'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "971cd5f7-743b-4ade-ba4b-9c94e8b53d33",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppConfigurations",
+            "label": "App Configurations",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.AppConfiguration/configurationStores'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "98ad3c6c-a10c-432f-b79a-87f344b7a305",
+            "version": "KqlParameterItem/1.0",
+            "name": "FunctionsApps",
+            "label": "Functions apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "cc78abca-2251-4c98-b15a-107b9c495f54",
+            "version": "KqlParameterItem/1.0",
+            "name": "WebApps",
+            "label": "Web apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'app'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "76d9cf52-faa6-411e-a764-28432262ed8f",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppServicePlans",
+            "label": "App Service plans",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind startswith 'functionapp')\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.resourcegraph/resources"
+      },
+      "name": "Workbook Parameters"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "3bee89ff-0e94-4e83-b67b-9a9d5ffec872",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Overview",
+            "subTarget": "overview",
+            "preText": "Overview",
+            "style": "link"
+          },
+          {
+            "id": "5e26fa35-e9c1-4b0d-869b-9cca5ec306bb",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Availability & Requests",
+            "subTarget": "availability",
+            "preText": "Availability & Requests",
+            "style": "link"
+          },
+          {
+            "id": "f137f7a9-3ca0-44b5-a136-feffcbf47c33",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Storage",
+            "subTarget": "storage",
+            "style": "link"
+          },
+          {
+            "id": "48017855-3ba0-4d65-884d-3b39f8da58bd",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Communication",
+            "subTarget": "communication",
+            "style": "link"
+          },
+          {
+            "id": "a6b3125f-5fb7-4554-9d67-76351a6820f6",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Configuration",
+            "subTarget": "configuration",
+            "style": "link"
+          },
+          {
+            "id": "76902e12-819a-4198-a614-5ef6648c194b",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Applications",
+            "subTarget": "applications",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "Workbook Links"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppAvailabilityResults\r\n| where TimeGenerated {TimeRange}\r\n| project Success, _ResourceId, DurationMs\r\n| summarize ['SLA'] = toreal(countif(Success))/count() by _ResourceId\r\n| join kind = leftouter (\r\n    AppAvailabilityResults\r\n    | where TimeGenerated {TimeRange}\r\n    | project Success, _ResourceId, TimeGenerated, DurationMs\r\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\r\n    | project-away TimeGenerated\r\n) on _ResourceId\r\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline']\r\n| where ['SLA'] < 1\r\n| order by ['Resource'] asc\r\n\r\n",
+              "size": 3,
+              "title": "SLA (only < 100%)",
+              "noDataMessage": "100% SLA for the selected applications!",
+              "noDataMessageStyle": 3,
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Resource",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Application Insights"
+                  }
+                },
+                "subtitleContent": {
+                  "columnMatch": "MetricKind",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "SLA",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0.8,
+                    "max": 1,
+                    "palette": "redGreen"
+                  },
+                  "numberFormat": {
+                    "unit": 0,
+                    "options": {
+                      "style": "percent",
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "SLA"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "Availability Timeline",
+                  "formatter": 9,
+                  "formatOptions": {
+                    "min": 0.8,
+                    "max": 1,
+                    "palette": "redGreen"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "SLA Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "SLA",
+                "sortOrderField": 1
+              }
+            },
+            "showPin": true,
+            "name": "Availability metrics - Overview"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppExceptions\r\n| where TimeGenerated {TimeRange}\r\n| project _ResourceId\r\n| summarize ['Exceptions'] = count() by _ResourceId\r\n| join kind = leftouter (\r\n    AppExceptions\r\n    | where TimeGenerated {TimeRange}\r\n    | project _ResourceId, TimeGenerated\r\n    | make-series ['Exceptions Timeline'] = count() default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\r\n    | project-away TimeGenerated\r\n) on _ResourceId\r\n| project ['Resource'] = _ResourceId, ['Exceptions'], ['Exceptions Timeline']\r\n| order by ['Resource'] asc\r\n",
+              "size": 3,
+              "title": "Exceptions",
+              "noDataMessage": "No exception in the selected applications!",
+              "noDataMessageStyle": 3,
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Resource",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Application Insights"
+                  }
+                },
+                "subtitleContent": {
+                  "columnMatch": "MetricKind",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Exceptions",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "red"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Exceptions"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "Exceptions Timeline",
+                  "formatter": 9,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "red"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Exceptions Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "Exceptions",
+                "sortOrderField": 2
+              }
+            },
+            "showPin": true,
+            "name": "Exceptions metrics - Overview"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookbbd3642a-27b1-49a8-9b58-01802391db8b",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": -1,
+              "resourceType": "microsoft.storage/storageaccounts",
+              "metricScope": 0,
+              "resourceParameter": "StorageAccounts",
+              "resourceIds": [
+                "{StorageAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "aggregation": 4
+                }
+              ],
+              "title": "Storage Used Capacity",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "blue"
+                  },
+                  "numberFormat": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Used Capacity"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity Timeline",
+                  "formatter": 21,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "blue"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Used Capacity Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                "sortOrderField": 2
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Storage metrics - Overview"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookbbd3642a-27b1-49a8-9b58-01802391db8b",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": -1,
+              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "metricScope": 0,
+              "resourceParameter": "CosmosAccounts",
+              "resourceIds": [
+                "{CosmosAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                  "aggregation": 1
+                }
+              ],
+              "title": "Cosmos DB Request Units",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Request Units"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits Timeline",
+                  "formatter": 21,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Request Units Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                "sortOrderField": 2
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Cosmos DB metrics - Overview"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookbbd3642a-27b1-49a8-9b58-01802391db8b",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": -1,
+              "resourceType": "microsoft.servicebus/namespaces",
+              "metricScope": 0,
+              "resourceParameter": "ServiceBusAccounts",
+              "resourceIds": [
+                "{ServiceBusAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.servicebus/namespaces",
+                  "metric": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                  "aggregation": 4
+                }
+              ],
+              "title": "Service Bus dead-lettered messages",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "Resource",
+                    "showIcon": true
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Dead-lettered messages"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages Timeline",
+                  "formatter": 21,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Dead-lettered messages Timeline"
+                  }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                "sortOrderField": 2
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Service Bus metrics - Overview"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "overview"
+      },
+      "name": "Workbook Group - Overview"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppAvailabilityResults\n| where TimeGenerated {TimeRange}\n| project Success, _ResourceId, DurationMs\n| summarize ['SLA'] = toreal(countif(Success))/count(), ['Availability Duration'] = avg(DurationMs) by _ResourceId\n| join kind = leftouter (\n    AppAvailabilityResults\n    | where TimeGenerated {TimeRange}\n    | project Success, _ResourceId, TimeGenerated, DurationMs\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1, ['Availability Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project-away TimeGenerated\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline'], ['Availability Duration'], ['Availability Duration Timeline']\n| order by ['Resource'] asc\n\n",
+              "size": 3,
+              "title": "Availability metrics",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Resource",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "SLA",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0.95,
+                      "max": 1,
+                      "palette": "redGreen"
+                    },
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "percent",
+                        "minimumFractionDigits": 2,
+                        "maximumFractionDigits": 2
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "SLA"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0.8,
+                      "max": 1,
+                      "palette": "redGreen"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability Duration",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 23,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability Duration"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability Duration Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability Duration Timeline"
+                    }
+                  }
+                ],
+                "labelSettings": [
+                  {
+                    "columnId": "Resource",
+                    "label": "Availability tests"
+                  },
+                  {
+                    "columnId": "Availability Timeline",
+                    "label": "Availability"
+                  },
+                  {
+                    "columnId": "Availability Duration Timeline",
+                    "label": "Availability Duration"
+                  }
+                ]
+              },
+              "sortBy": []
+            },
+            "showPin": true,
+            "name": "Availability metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\" or Name startswith \"GET /health\" or Name startswith \"GET /api/health\")\n| extend Name = case(isnotempty(Properties['Operation Name']), Properties['Operation Name'], Name startswith \"OPTIONS\", \"OPTIONS\", Name)\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\" or Name startswith \"GET /health\" or Name startswith \"GET /api/health\")\n    | extend Name = case(isnotempty(Properties['Operation Name']), Properties['Operation Name'], Name startswith \"OPTIONS\", \"OPTIONS\", Name)\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Requests'] desc",
+              "size": 3,
+              "title": "Requests metrics",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "350px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Name"
+                    }
+                  },
+                  {
+                    "columnMatch": "Resource",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Name"
+                    }
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum",
+                      "customColumnWidthSetting": "100px"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Success Rate Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0.8,
+                      "palette": "redGreen",
+                      "aggregation": "Average"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Success Rate Timeline (>80%)"
+                    }
+                  },
+                  {
+                    "columnMatch": "Duration",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed",
+                      "aggregation": "Average"
+                    },
+                    "numberFormat": {
+                      "unit": 23,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Duration"
+                    }
+                  },
+                  {
+                    "columnMatch": "Duration Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed",
+                      "aggregation": "Average"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Duration Timeline"
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Resource"
+                  ],
+                  "finalBy": "Name"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Resource",
+                    "label": "Request"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Success Rate Timeline",
+                    "label": "Success Rate"
+                  },
+                  {
+                    "columnId": "Duration Timeline",
+                    "label": "Duration"
+                  }
+                ]
+              },
+              "sortBy": []
+            },
+            "showPin": true,
+            "name": "Requests metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppExceptions\n| where TimeGenerated {TimeRange}\n| project _ResourceId, ExceptionType\n| summarize ['Exceptions'] = count() by _ResourceId, ExceptionType\n| join kind = leftouter (\n    AppExceptions\n    | where TimeGenerated {TimeRange}\n    | project _ResourceId, TimeGenerated, ExceptionType\n    | make-series ['Exceptions Timeline'] = count() default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, ExceptionType\n    | project-away TimeGenerated\n) on _ResourceId, ExceptionType\n| project ['Resource'] = _ResourceId, ['Exception Type'] = ExceptionType, ['Exceptions'], ['Exceptions Timeline']\n| order by ['Resource'] asc, ['Exception Type'] asc",
+              "size": 3,
+              "title": "Exceptions metrics",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "500px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Application Insights"
+                    }
+                  },
+                  {
+                    "columnMatch": "Resource",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Exception Type",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Exceptions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Exceptions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Exceptions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Exceptions Timeline"
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Resource"
+                  ],
+                  "finalBy": "Exception Type"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Resource",
+                    "label": "Exception Type"
+                  }
+                ]
+              },
+              "sortBy": []
+            },
+            "showPin": true,
+            "name": "Exceptions metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppTraces\n| where TimeGenerated {TimeRange}\n| project _ResourceId, SeverityLevel\n| summarize ['Traces'] = count(), ['Traces (>= Warning)'] = countif(SeverityLevel >= 2) by _ResourceId\n| join kind = leftouter (\n    AppTraces\n    | where TimeGenerated {TimeRange}\n    | project _ResourceId, TimeGenerated, SeverityLevel\n    | make-series ['Traces Timeline'] = count() default = 0, ['Traces (>= Warning) Timeline'] = countif(SeverityLevel >= 2) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project-away TimeGenerated\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['Traces'], ['Traces Timeline'], ['Traces (>= Warning)'], ['Traces (>= Warning) Timeline']\n| order by ['Resource'] asc",
+              "size": 3,
+              "title": "Traces metrics",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Resource",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Application Insights"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces (>= Warning)",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces (>= Warning)"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces (>= Warning) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces (>= Warning) Timeline"
+                    }
+                  }
+                ],
+                "labelSettings": [
+                  {
+                    "columnId": "Resource",
+                    "label": "Application Insights"
+                  }
+                ]
+              },
+              "sortBy": []
+            },
+            "showPin": true,
+            "name": "Traces metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "availability"
+      },
+      "name": "Workbook Group - Availability & Requests"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook98e8090c-1fd0-4325-a7ce-82d5ccba9cd9",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.storage/storageaccounts",
+              "metricScope": 0,
+              "resourceParameter": "StorageAccounts",
+              "resourceIds": [
+                "{StorageAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.storage/storageaccounts/blobservices",
+                  "metric": "microsoft.storage/storageaccounts/blobservices-Capacity-BlobCount",
+                  "aggregation": 4,
+                  "columnName": "Blobs"
+                },
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "aggregation": 4,
+                  "columnName": "Used Capacity"
+                }
+              ],
+              "title": "Storage metrics",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    }
+                  },
+                  {
+                    "columnMatch": "Blobs",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Blobs"
+                    }
+                  },
+                  {
+                    "columnMatch": "Blobs Timeline",
+                    "formatter": 9,
+                    "formatOptions": {
+                      "min": 1,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Blobs Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Used Capacity",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Used Capacity"
+                    }
+                  },
+                  {
+                    "columnMatch": "Used Capacity Timeline",
+                    "formatter": 21,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Used Capacity Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.storage/storageaccounts/blobservices-Capacity-BlobCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Storage account"
+                  },
+                  {
+                    "columnId": "Blobs",
+                    "label": "Blobs"
+                  },
+                  {
+                    "columnId": "Blobs Timeline",
+                    "label": "Blobs Timeline"
+                  },
+                  {
+                    "columnId": "Used Capacity",
+                    "label": "Used Capacity"
+                  },
+                  {
+                    "columnId": "Used Capacity Timeline",
+                    "label": "Used Capacity Timeline"
+                  }
+                ]
+              },
+              "sortBy": [],
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Storage metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbooke3352d3d-fcd8-4b25-9749-67d7ecd63006",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "metricScope": 0,
+              "resourceParameter": "CosmosAccounts",
+              "resourceIds": [
+                "{CosmosAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequests",
+                  "aggregation": 7,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": -1,
+                  "splitByLimit": 5,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                  "aggregation": 1,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": -1,
+                  "splitByLimit": 5,
+                  "columnName": "Request Units"
+                },
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-DocumentCount",
+                  "aggregation": 4,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": -1,
+                  "splitByLimit": 5,
+                  "columnName": "Documents"
+                },
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
+                  "aggregation": 4,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": -1,
+                  "splitByLimit": 5,
+                  "columnName": "Data Usage"
+                }
+              ],
+              "title": "Cosmos DB metrics",
+              "gridFormatType": 2,
+              "filters": [
+                {
+                  "id": "1",
+                  "key": "CollectionName",
+                  "operator": 1,
+                  "values": [
+                    "__Empty",
+                    "<empty>"
+                  ]
+                }
+              ],
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "subTarget": "insights",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    }
+                  },
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Segment",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Request Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "yellow",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Request Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Units Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 21,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Documents",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Documents"
+                    }
+                  },
+                  {
+                    "columnMatch": "Documents Timeline",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "aggregation": "Sum"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Usage",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "yellow",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Usage"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Usage Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "palette": "yellow"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                    "formatter": 5,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": ".*\\/Request Units$",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": ".*\\/Total Requests$",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequests",
+                    "formatter": 5,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Name"
+                  ],
+                  "expandTopLevel": false,
+                  "finalBy": "Segment"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Cosmos DB account"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Request Units",
+                    "label": "Request Units"
+                  },
+                  {
+                    "columnId": "Request Units Timeline",
+                    "label": "Request Units"
+                  },
+                  {
+                    "columnId": "Documents",
+                    "label": "Documents"
+                  },
+                  {
+                    "columnId": "Documents Timeline",
+                    "label": "Documents"
+                  },
+                  {
+                    "columnId": "Data Usage",
+                    "label": "Data Usage"
+                  },
+                  {
+                    "columnId": "Data Usage Timeline",
+                    "label": "Data Usage"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Cosmos DB metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "storage"
+      },
+      "name": "Workbook Group - Storage"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookfab9e9d8-98d4-44b7-b704-3a6c35140f28",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.servicebus/namespaces",
+              "metricScope": 0,
+              "resourceParameter": "ServiceBusAccounts",
+              "resourceIds": [
+                "{ServiceBusAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.servicebus/namespaces",
+                  "metric": "microsoft.servicebus/namespaces--IncomingMessages",
+                  "aggregation": 7,
+                  "splitBy": "EntityName",
+                  "splitBySortOrder": 1,
+                  "splitByLimit": 50,
+                  "columnName": "Incoming Messages"
+                },
+                {
+                  "namespace": "microsoft.servicebus/namespaces",
+                  "metric": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                  "aggregation": 4,
+                  "splitBy": "EntityName",
+                  "splitBySortOrder": 1,
+                  "splitByLimit": 50,
+                  "columnName": "DL Messages"
+                }
+              ],
+              "title": "Service Bus metrics",
+              "gridFormatType": 2,
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Service Bus queue"
+                    }
+                  },
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Service Bus namespace"
+                    }
+                  },
+                  {
+                    "columnMatch": "Segment",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Incoming Messages",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Incoming Messages"
+                    }
+                  },
+                  {
+                    "columnMatch": "Incoming Messages Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Incoming Messages Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "DL Messages",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Dead-lettered Messages"
+                    }
+                  },
+                  {
+                    "columnMatch": "DL Messages Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Dead-lettered Messages Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.servicebus/namespaces--IncomingMessages",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.servicebus/namespaces--DeadletteredMessages",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Name"
+                  ],
+                  "finalBy": "Segment"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Service Bus queue"
+                  },
+                  {
+                    "columnId": "Incoming Messages",
+                    "label": "Incoming Messages"
+                  },
+                  {
+                    "columnId": "Incoming Messages Timeline",
+                    "label": "Incoming Messages Timeline"
+                  },
+                  {
+                    "columnId": "DL Messages",
+                    "label": "DL Messages"
+                  },
+                  {
+                    "columnId": "DL Messages Timeline",
+                    "label": "DL Messages Timeline"
+                  }
+                ]
+              },
+              "sortBy": [],
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Service Bus metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "communication"
+      },
+      "name": "Workbook Group - Communication"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook76fcc27f-6d0e-4cad-98a4-67344e09ec31",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.keyvault/vaults",
+              "metricScope": 0,
+              "resourceParameter": "KeyVaults",
+              "resourceIds": [
+                "{KeyVaults}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.keyvault/vaults",
+                  "metric": "microsoft.keyvault/vaults--ServiceApiHit",
+                  "aggregation": 7,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.keyvault/vaults",
+                  "metric": "microsoft.keyvault/vaults--Availability",
+                  "aggregation": 4,
+                  "columnName": "Availability"
+                },
+                {
+                  "namespace": "microsoft.keyvault/vaults",
+                  "metric": "microsoft.keyvault/vaults--ServiceApiLatency",
+                  "aggregation": 4,
+                  "columnName": "Latency"
+                }
+              ],
+              "title": "Key Vaults metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Key Vault"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 95,
+                      "max": 100,
+                      "palette": "redGreen"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 95,
+                      "max": 100,
+                      "palette": "redGreen"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Latency",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 23,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Latency"
+                    }
+                  },
+                  {
+                    "columnMatch": "Latency Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Latency Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.keyvault/vaults--ServiceApiHit",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Key Vault"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Availability",
+                    "label": "Availability"
+                  },
+                  {
+                    "columnId": "Availability Timeline",
+                    "label": "Availability Timeline"
+                  },
+                  {
+                    "columnId": "Latency",
+                    "label": "Latency"
+                  },
+                  {
+                    "columnId": "Latency Timeline",
+                    "label": "Latency Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Key Vaults metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook76fcc27f-6d0e-4cad-98a4-67344e09ec31",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.appconfiguration/configurationstores",
+              "metricScope": 0,
+              "resourceParameter": "AppConfigurations",
+              "resourceIds": [
+                "{AppConfigurations}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.appconfiguration/configurationstores",
+                  "metric": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestCount",
+                  "aggregation": 7,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.appconfiguration/configurationstores",
+                  "metric": "microsoft.appconfiguration/configurationstores--ThrottledHttpRequestCount",
+                  "aggregation": 1,
+                  "columnName": "Throttled Requests"
+                },
+                {
+                  "namespace": "microsoft.appconfiguration/configurationstores",
+                  "metric": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestDuration",
+                  "aggregation": 4,
+                  "columnName": "Latency"
+                }
+              ],
+              "title": "App Configurations metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Key Vault"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Throttled Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Throttled Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Throttled Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Throttled Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Latency",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 23,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Latency"
+                    }
+                  },
+                  {
+                    "columnMatch": "Latency Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Latency Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.appconfiguration/configurationstores--ThrottledHttpRequestCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestDuration",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Configuration"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Throttled Requests",
+                    "label": "Throttled Requests"
+                  },
+                  {
+                    "columnId": "Throttled Requests Timeline",
+                    "label": "Throttled Requests Timeline"
+                  },
+                  {
+                    "columnId": "Latency",
+                    "label": "Latency"
+                  },
+                  {
+                    "columnId": "Latency Timeline",
+                    "label": "Latency Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "App Configurations metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "configuration"
+      },
+      "name": "Workbook Group - Configuration"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "WebApps",
+              "resourceIds": [
+                "{WebApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--Requests",
+                  "aggregation": 1,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--BytesReceived",
+                  "aggregation": 1,
+                  "columnName": "Data In"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--BytesSent",
+                  "aggregation": 1,
+                  "columnName": "Data Out"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--Http5xx",
+                  "aggregation": 1,
+                  "columnName": "Errors"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--HttpResponseTime",
+                  "aggregation": 4,
+                  "columnName": "Response Time"
+                }
+              ],
+              "title": "Web apps metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Web app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data In"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Data Out",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Errors",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Errors"
+                    }
+                  },
+                  {
+                    "columnMatch": "Errors Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Response Time",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time"
+                    }
+                  },
+                  {
+                    "columnMatch": "Response Time Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 0.5,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--Http5xx",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesReceived",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--HttpResponseTime",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesSent",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Web app"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Data In",
+                    "label": "Data In"
+                  },
+                  {
+                    "columnId": "Data In Timeline",
+                    "label": "Data In Timeline"
+                  },
+                  {
+                    "columnId": "Data Out",
+                    "label": "Data Out"
+                  },
+                  {
+                    "columnId": "Data Out Timeline",
+                    "label": "Data Out Timeline"
+                  },
+                  {
+                    "columnId": "Errors",
+                    "label": "Errors"
+                  },
+                  {
+                    "columnId": "Errors Timeline",
+                    "label": "Errors Timeline"
+                  },
+                  {
+                    "columnId": "Response Time",
+                    "label": "Response Time"
+                  },
+                  {
+                    "columnId": "Response Time Timeline",
+                    "label": "Response Time Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Web apps metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "FunctionsApps",
+              "resourceIds": [
+                "{FunctionsApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionCount",
+                  "aggregation": 1,
+                  "columnName": "Executions"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
+                  "aggregation": 1,
+                  "columnName": "Execution Units"
+                }
+              ],
+              "title": "Functions apps metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Executions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Executions Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data In"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Data Out",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Errors",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Errors"
+                    }
+                  },
+                  {
+                    "columnMatch": "Errors Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Response Time",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time"
+                    }
+                  },
+                  {
+                    "columnMatch": "Response Time Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 0.5,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--Http5xx",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesReceived",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--HttpResponseTime",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesSent",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Functions app"
+                  },
+                  {
+                    "columnId": "Executions",
+                    "label": "Executions"
+                  },
+                  {
+                    "columnId": "Executions Timeline",
+                    "label": "Executions Timeline"
+                  },
+                  {
+                    "columnId": "Execution Units",
+                    "label": "Execution Units"
+                  },
+                  {
+                    "columnId": "Execution Units Timeline",
+                    "label": "Execution Units Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Functions apps metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/serverfarms",
+              "metricScope": 0,
+              "resourceParameter": "AppServicePlans",
+              "resourceIds": [
+                "{AppServicePlans}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--CpuPercentage",
+                  "aggregation": 4,
+                  "columnName": "CPU"
+                },
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
+                  "aggregation": 4,
+                  "columnName": "Memory"
+                }
+              ],
+              "title": "App Service plans metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "SPU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPU Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  },
+                  {
+                    "columnId": "CPU",
+                    "label": "CPU"
+                  },
+                  {
+                    "columnId": "CPU Timeline",
+                    "label": "CPU Timeline"
+                  },
+                  {
+                    "columnId": "Memory",
+                    "label": "Memory"
+                  },
+                  {
+                    "columnId": "Memory Timeline",
+                    "label": "Memory Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "App Service plans metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "applications"
+      },
+      "name": "Workbook Group - Applications"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

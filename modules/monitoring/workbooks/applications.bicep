@@ -18,7 +18,9 @@ param location string
 
 // === VARIABLES ===
 
-var workbookData = loadJsonContent('../global/workbooks/applications.json')
+var workbookData = loadJsonContent('./applications.json')
+var workbookDisplayNamePrefix = 'Applications Monitoring'
+var workbookDisplayName = referential.environment == 'Production' ? workbookDisplayNamePrefix : '${workbookDisplayNamePrefix} (${referential.host})'
 
 // === RESOURCES ===
 
@@ -28,7 +30,7 @@ resource workbook 'Microsoft.Insights/workbooks@2022-04-01' = {
   tags: referential
   kind: 'shared'
   properties: {
-    displayName: 'Applications Monitoring'
+    displayName: workbookDisplayName
     category: 'workbook'
     sourceId: workspaceId
     serializedData: string(workbookData)
