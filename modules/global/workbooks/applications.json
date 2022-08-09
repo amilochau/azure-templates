@@ -30,22 +30,13 @@
             "typeSettings": {
               "selectableValues": [
                 {
-                  "durationMs": 1800000
-                },
-                {
                   "durationMs": 3600000
-                },
-                {
-                  "durationMs": 14400000
                 },
                 {
                   "durationMs": 43200000
                 },
                 {
                   "durationMs": 86400000
-                },
-                {
-                  "durationMs": 259200000
                 },
                 {
                   "durationMs": 604800000
@@ -56,7 +47,8 @@
                 {
                   "durationMs": 2592000000
                 }
-              ]
+              ],
+              "allowCustom": true
             },
             "timeContext": {
               "durationMs": 86400000
@@ -282,6 +274,7 @@
             "resourceType": "microsoft.resourcegraph/resources"
           },
           {
+            "id": "76d9cf52-faa6-411e-a764-28432262ed8f",
             "version": "KqlParameterItem/1.0",
             "name": "AppServicePlans",
             "label": "App Service plans",
@@ -302,12 +295,11 @@
             },
             "defaultValue": "value::all",
             "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources",
-            "id": "76d9cf52-faa6-411e-a764-28432262ed8f"
+            "resourceType": "microsoft.resourcegraph/resources"
           }
         ],
         "style": "pills",
-        "queryType": 1,
+        "queryType": 0,
         "resourceType": "microsoft.resourcegraph/resources"
       },
       "name": "Workbook Parameters"
