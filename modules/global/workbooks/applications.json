@@ -1593,7 +1593,410 @@
       "content": {
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
-        "items": []
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook76fcc27f-6d0e-4cad-98a4-67344e09ec31",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.keyvault/vaults",
+              "metricScope": 0,
+              "resourceParameter": "KeyVaults",
+              "resourceIds": [
+                "{KeyVaults}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.keyvault/vaults",
+                  "metric": "microsoft.keyvault/vaults--ServiceApiHit",
+                  "aggregation": 7,
+                  "columnName": "Hits"
+                },
+                {
+                  "namespace": "microsoft.keyvault/vaults",
+                  "metric": "microsoft.keyvault/vaults--Availability",
+                  "aggregation": 4,
+                  "columnName": "Availability"
+                },
+                {
+                  "namespace": "microsoft.keyvault/vaults",
+                  "metric": "microsoft.keyvault/vaults--ServiceApiLatency",
+                  "aggregation": 4,
+                  "columnName": "Latency"
+                }
+              ],
+              "title": "Key Vaults metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Key Vault"
+                    }
+                  },
+                  {
+                    "columnMatch": "Hits",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Hits"
+                    }
+                  },
+                  {
+                    "columnMatch": "Hits Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Hits Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 95,
+                      "max": 100,
+                      "palette": "redGreen"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability"
+                    }
+                  },
+                  {
+                    "columnMatch": "Availability Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 95,
+                      "max": 100,
+                      "palette": "redGreen"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Availability Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Latency",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 23,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Latency"
+                    }
+                  },
+                  {
+                    "columnMatch": "Latency Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Latency Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.keyvault/vaults--ServiceApiHit",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Key Vault"
+                  },
+                  {
+                    "columnId": "Hits",
+                    "label": "Hits"
+                  },
+                  {
+                    "columnId": "Hits Timeline",
+                    "label": "Hits Timeline"
+                  },
+                  {
+                    "columnId": "Availability",
+                    "label": "Availability"
+                  },
+                  {
+                    "columnId": "Availability Timeline",
+                    "label": "Availability Timeline"
+                  },
+                  {
+                    "columnId": "Latency",
+                    "label": "Latency"
+                  },
+                  {
+                    "columnId": "Latency Timeline",
+                    "label": "Latency Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Key Vaults metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook76fcc27f-6d0e-4cad-98a4-67344e09ec31",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.appconfiguration/configurationstores",
+              "metricScope": 0,
+              "resourceParameter": "AppConfigurations",
+              "resourceIds": [
+                "{AppConfigurations}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.appconfiguration/configurationstores",
+                  "metric": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestCount",
+                  "aggregation": 7,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.appconfiguration/configurationstores",
+                  "metric": "microsoft.appconfiguration/configurationstores--ThrottledHttpRequestCount",
+                  "aggregation": 1,
+                  "columnName": "Throttled Requests"
+                },
+                {
+                  "namespace": "microsoft.appconfiguration/configurationstores",
+                  "metric": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestDuration",
+                  "aggregation": 4,
+                  "columnName": "Duration"
+                }
+              ],
+              "title": "App Configurations metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Key Vault"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Throttled Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Throttled Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Duration",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 23,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Duration"
+                    }
+                  },
+                  {
+                    "columnMatch": "Duration Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 250,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Duration Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Throttled Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Throttled Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.appconfiguration/configurationstores--ThrottledHttpRequestCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Configuration"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Throttled Requests",
+                    "label": "Throttled Requests"
+                  },
+                  {
+                    "columnId": "Throttled Requests Timeline",
+                    "label": "Throttled Requests Timeline"
+                  },
+                  {
+                    "columnId": "Duration",
+                    "label": "Duration"
+                  },
+                  {
+                    "columnId": "Duration Timeline",
+                    "label": "Duration Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "App Configurations metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
       },
       "conditionalVisibility": {
         "parameterName": "selectedTab",
