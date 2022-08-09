@@ -549,7 +549,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\")\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Requests']",
+              "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\")\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Requests'] asc",
               "size": 3,
               "title": "Requests metrics",
               "showRefreshButton": true,
@@ -699,6 +699,204 @@
             },
             "showPin": true,
             "name": "Requests metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppExceptions\n| where TimeGenerated {TimeRange}\n| project _ResourceId, ExceptionType\n| summarize ['Exceptions'] = count() by _ResourceId, ExceptionType\n| join kind = leftouter (\n    AppExceptions\n    | where TimeGenerated {TimeRange}\n    | project _ResourceId, TimeGenerated, ExceptionType\n    | make-series ['Exceptions Timeline'] = count() default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, ExceptionType\n    | project-away TimeGenerated\n) on _ResourceId, ExceptionType\n| project ['Resource'] = _ResourceId, ['Exception Type'] = ExceptionType, ['Exceptions'], ['Exceptions Timeline']\n| order by ['Resource'] asc, ['Exception Type'] asc",
+              "size": 3,
+              "title": "Exceptions metrics",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "500px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Application Insights"
+                    }
+                  },
+                  {
+                    "columnMatch": "Resource",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Exception Type",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Exceptions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Exceptions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Exceptions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Exceptions Timeline"
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Resource"
+                  ],
+                  "finalBy": "Exception Type"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Resource",
+                    "label": "Exception Type"
+                  }
+                ]
+              },
+              "sortBy": []
+            },
+            "showPin": true,
+            "name": "Exceptions metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppTraces\n| where TimeGenerated {TimeRange}\n| project _ResourceId, SeverityLevel\n| summarize ['Traces'] = count(), ['Traces (>= Warning)'] = countif(SeverityLevel >= 2) by _ResourceId\n| join kind = leftouter (\n    AppTraces\n    | where TimeGenerated {TimeRange}\n    | project _ResourceId, TimeGenerated, SeverityLevel\n    | make-series ['Traces Timeline'] = count() default = 0, ['Traces (>= Warning) Timeline'] = countif(SeverityLevel >= 2) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\n    | project-away TimeGenerated\n) on _ResourceId\n| project ['Resource'] = _ResourceId, ['Traces'], ['Traces Timeline'], ['Traces (>= Warning)'], ['Traces (>= Warning) Timeline']\n| order by ['Resource'] asc",
+              "size": 3,
+              "title": "Traces metrics",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Resource",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Application Insights"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces (>= Warning)",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces (>= Warning)"
+                    }
+                  },
+                  {
+                    "columnMatch": "Traces (>= Warning) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Traces (>= Warning) Timeline"
+                    }
+                  }
+                ],
+                "labelSettings": [
+                  {
+                    "columnId": "Resource",
+                    "label": "Application Insights"
+                  }
+                ]
+              },
+              "sortBy": []
+            },
+            "showPin": true,
+            "name": "Traces metrics",
             "styleSettings": {
               "showBorder": true
             }
