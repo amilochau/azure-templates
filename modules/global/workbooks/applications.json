@@ -353,7 +353,66 @@
       "content": {
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
-        "items": []
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AppAvailabilityResults\r\n| where TimeGenerated {TimeRange}\r\n| project Success, _ResourceId, DurationMs\r\n| summarize ['SLA'] = toreal(countif(Success))/count() by _ResourceId\r\n| join kind = leftouter (\r\n    AppAvailabilityResults\r\n    | where TimeGenerated {TimeRange}\r\n    | project Success, _ResourceId, TimeGenerated, DurationMs\r\n    | make-series ['Availability Timeline'] = toreal(countif(Success))/count() default = 1 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId\r\n    | project-away TimeGenerated\r\n) on _ResourceId\r\n| project ['Resource'] = _ResourceId, ['SLA'], ['Availability Timeline']\r\n| order by ['Resource'] asc\r\n\r\n",
+              "size": 3,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Resource",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": null,
+                    "showIcon": true
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Application Insights"
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "SLA",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 0,
+                    "options": {
+                      "style": "percent",
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "SLA"
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "Availability Timeline",
+                  "formatter": 9,
+                  "formatOptions": {
+                    "min": 0.8,
+                    "max": 1,
+                    "palette": "redGreen"
+                  },
+                  "tooltipFormat": {
+                    "tooltip": "Availability Timeline"
+                  }
+                },
+                "showBorder": false
+              }
+            },
+            "name": "query - 0"
+          }
+        ]
       },
       "conditionalVisibility": {
         "parameterName": "selectedTab",
