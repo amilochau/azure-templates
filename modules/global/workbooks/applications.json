@@ -877,7 +877,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\")\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\")\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Requests'] desc",
+              "query": "AppRequests\n| where TimeGenerated {TimeRange}\n| where not (Name startswith \"health\" or Name startswith \"GET /health\" or Name startswith \"GET /api/health\")\n| extend Name = case(isnotempty(Properties['Operation Name']), Properties['Operation Name'], Name startswith \"OPTIONS\", \"OPTIONS\", Name)\n| project _ResourceId, DurationMs, Name\n| summarize ['Requests'] = count(), ['Duration'] = avg(DurationMs) by _ResourceId, Name\n| join kind = leftouter (\n    AppRequests\n    | where TimeGenerated {TimeRange}\n    | where not (Name startswith \"health\" or Name startswith \"GET /health\" or Name startswith \"GET /api/health\")\n    | extend Name = case(isnotempty(Properties['Operation Name']), Properties['Operation Name'], Name startswith \"OPTIONS\", \"OPTIONS\", Name)\n    | project _ResourceId, TimeGenerated, Success, DurationMs, Name\n    | make-series ['Requests Timeline'] = count() default = 0, ['Success Rate Timeline'] = toreal(countif(Success))/count() default = 1, ['Duration Timeline'] = avg(DurationMs) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, Name\n    | project-away TimeGenerated\n) on _ResourceId, Name\n| project ['Resource'] = _ResourceId, ['Name'] = Name, ['Requests'], ['Requests Timeline'], ['Success Rate Timeline'], ['Duration'], ['Duration Timeline']\n| order by ['Resource'] asc, ['Requests'] desc",
               "size": 3,
               "title": "Requests metrics",
               "showRefreshButton": true,
@@ -898,7 +898,7 @@
                       "linkTarget": "CellDetails",
                       "linkIsContextBlade": true,
                       "showIcon": true,
-                      "customColumnWidthSetting": "250px"
+                      "customColumnWidthSetting": "350px"
                     },
                     "tooltipFormat": {
                       "tooltip": "Request Name"
