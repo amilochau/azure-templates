@@ -2031,7 +2031,8 @@
                     "numberFormat": {
                       "unit": 1,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 2
                       }
                     },
                     "tooltipFormat": {
@@ -2237,6 +2238,17 @@
                     }
                   },
                   {
+                    "columnMatch": "Throttled Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Throttled Requests Timeline"
+                    }
+                  },
+                  {
                     "columnMatch": "Latency",
                     "formatter": 8,
                     "formatOptions": {
@@ -2247,7 +2259,8 @@
                     "numberFormat": {
                       "unit": 23,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
@@ -2264,17 +2277,6 @@
                     },
                     "tooltipFormat": {
                       "tooltip": "Latency Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "Throttled Requests Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "red"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Throttled Requests Timeline"
                     }
                   },
                   {
@@ -2466,7 +2468,8 @@
                     "numberFormat": {
                       "unit": 2,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
@@ -2509,7 +2512,8 @@
                     "numberFormat": {
                       "unit": 17,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
@@ -2531,7 +2535,8 @@
                     "numberFormat": {
                       "unit": 24,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
@@ -2982,7 +2987,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -3079,6 +3084,14 @@
                     },
                     "tooltipFormat": {
                       "tooltip": "Memory Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": null
                     }
                   }
                 ],
