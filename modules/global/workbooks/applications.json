@@ -289,6 +289,66 @@
       "name": "Workbook Parameters"
     },
     {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "3bee89ff-0e94-4e83-b67b-9a9d5ffec872",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Overview",
+            "subTarget": "overview",
+            "preText": "Overview",
+            "style": "link"
+          },
+          {
+            "id": "5e26fa35-e9c1-4b0d-869b-9cca5ec306bb",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Availability & Requests",
+            "subTarget": "availability",
+            "preText": "Availability & Requests",
+            "style": "link"
+          },
+          {
+            "id": "f137f7a9-3ca0-44b5-a136-feffcbf47c33",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Storage",
+            "subTarget": "storage",
+            "style": "link"
+          },
+          {
+            "id": "48017855-3ba0-4d65-884d-3b39f8da58bd",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Communication",
+            "subTarget": "communication",
+            "style": "link"
+          },
+          {
+            "id": "a6b3125f-5fb7-4554-9d67-76351a6820f6",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Configuration",
+            "subTarget": "configuration",
+            "style": "link"
+          },
+          {
+            "id": "76902e12-819a-4198-a614-5ef6648c194b",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Applications",
+            "subTarget": "applications",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "Workbook Links"
+    },
+    {
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
