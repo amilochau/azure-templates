@@ -280,6 +280,30 @@
             "defaultValue": "value::all",
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "cc78abca-2251-4c98-b15a-107b9c495f54",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppServicePlans",
+            "label": "App Service plans",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind startswith 'functionapp')\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
           }
         ],
         "style": "pills",
@@ -1609,7 +1633,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -1954,6 +1978,14 @@
                       "unit": 0,
                       "options": null
                     }
+                  },
+                  {
+                    "columnMatch": "microsoft.appconfiguration/configurationstores--HttpIncomingRequestDuration",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
                   }
                 ],
                 "rowLimit": 10000,
@@ -2026,7 +2058,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -2310,7 +2342,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -2617,6 +2649,153 @@
             },
             "showPin": true,
             "name": "Functions apps metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/serverfarms",
+              "metricScope": 0,
+              "resourceParameter": "AppServicePlans",
+              "resourceIds": [
+                "{AppServicePlans}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--CpuPercentage",
+                  "aggregation": 4,
+                  "columnName": "CPU"
+                },
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
+                  "aggregation": 4,
+                  "columnName": "Memory"
+                }
+              ],
+              "title": "App Service plans metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "SPU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPU Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory Timeline"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  },
+                  {
+                    "columnId": "CPU",
+                    "label": "CPU"
+                  },
+                  {
+                    "columnId": "CPU Timeline",
+                    "label": "CPU Timeline"
+                  },
+                  {
+                    "columnId": "Memory",
+                    "label": "Memory"
+                  },
+                  {
+                    "columnId": "Memory Timeline",
+                    "label": "Memory Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "App Service plans metrics",
             "styleSettings": {
               "showBorder": true
             }
