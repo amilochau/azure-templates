@@ -1894,7 +1894,13 @@
                   "namespace": "microsoft.web/serverfarms",
                   "metric": "microsoft.web/serverfarms--MemoryPercentage",
                   "aggregation": 4,
-                  "columnName": "Memory"
+                  "columnName": "Memory (Avg)"
+                },
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
+                  "aggregation": 3,
+                  "columnName": "Memory (Max)"
                 }
               ],
               "title": "App Service plans metrics",
@@ -1950,7 +1956,7 @@
                     }
                   },
                   {
-                    "columnMatch": "Memory",
+                    "columnMatch": "Memory (Avg)",
                     "formatter": 8,
                     "formatOptions": {
                       "min": 0,
@@ -1965,11 +1971,11 @@
                       }
                     },
                     "tooltipFormat": {
-                      "tooltip": "Memory"
+                      "tooltip": "Memory (Avg)"
                     }
                   },
                   {
-                    "columnMatch": "Memory Timeline",
+                    "columnMatch": "Memory (Avg) Timeline",
                     "formatter": 10,
                     "formatOptions": {
                       "min": 0,
@@ -1977,11 +1983,50 @@
                       "palette": "greenRed"
                     },
                     "tooltipFormat": {
-                      "tooltip": "Memory Timeline"
+                      "tooltip": "Memory (Avg) Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory (Max)",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory (Max)"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory (Max) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory (Max) Timeline"
                     }
                   },
                   {
                     "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/serverfarms--MemoryPercentage",
                     "formatter": 1,
                     "numberFormat": {
                       "unit": 1,
@@ -2004,12 +2049,20 @@
                     "label": "CPU Timeline"
                   },
                   {
-                    "columnId": "Memory",
-                    "label": "Memory"
+                    "columnId": "Memory (Avg)",
+                    "label": "Memory (Avg)"
                   },
                   {
-                    "columnId": "Memory Timeline",
-                    "label": "Memory Timeline"
+                    "columnId": "Memory (Avg) Timeline",
+                    "label": "Memory (Avg) Timeline"
+                  },
+                  {
+                    "columnId": "Memory (Max)",
+                    "label": "Memory (Max)"
+                  },
+                  {
+                    "columnId": "Memory (Max) Timeline",
+                    "label": "Memory (Max) Timeline"
                   }
                 ]
               },
