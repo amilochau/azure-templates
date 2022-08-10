@@ -869,7 +869,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 1,
-              "resourceType": "{AppServicePlans}",
+              "resourceType": "microsoft.resourcegraph/resources",
               "crossComponentResources": [
                 "value::all"
               ],
@@ -968,7 +968,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -1199,7 +1199,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -2100,7 +2100,7 @@
             "content": {
               "version": "KqlItem/1.0",
               "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n| summarize ['Transactions' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application']\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n    | make-series ['Transactions Timeline'] = count() default = 0, ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n    | project-away TimeGenerated\r\n) on ['Application']\r\n| project ['Application'], ['Transactions'], ['Transactions Timeline'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc\r\n",
-              "size": 3,
+              "size": 2,
               "title": "Log Analytics workspaces Billable metrics",
               "timeContextFromParameter": "TimeRange",
               "showRefreshButton": true,
@@ -2163,7 +2163,7 @@
                       "palette": "orange"
                     },
                     "numberFormat": {
-                      "unit": 17,
+                      "unit": 2,
                       "options": {
                         "style": "decimal",
                         "maximumFractionDigits": 1
