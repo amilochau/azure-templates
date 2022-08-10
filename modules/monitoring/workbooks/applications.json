@@ -1044,7 +1044,7 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "AppExceptions\n| where TimeGenerated {TimeRange}\n| project _ResourceId, ExceptionType\n| summarize ['Exceptions'] = count() by _ResourceId, ExceptionType\n| join kind = leftouter (\n    AppExceptions\n    | where TimeGenerated {TimeRange}\n    | project _ResourceId, TimeGenerated, ExceptionType\n    | make-series ['Exceptions Timeline'] = count() default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, ExceptionType\n    | project-away TimeGenerated\n) on _ResourceId, ExceptionType\n| project ['Resource'] = _ResourceId, ['Exception Type'] = ExceptionType, ['Exceptions'], ['Exceptions Timeline']\n| order by ['Resource'] asc, ['Exception Type'] asc",
+              "query": "AppExceptions\n| where TimeGenerated {TimeRange}\n| project _ResourceId, ExceptionType\n| summarize ['Exceptions'] = count() by _ResourceId, ExceptionType\n| join kind = leftouter (\n    AppExceptions\n    | where TimeGenerated {TimeRange}\n    | project _ResourceId, TimeGenerated, ExceptionType\n    | make-series ['Exceptions Timeline'] = count() default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by _ResourceId, ExceptionType\n    | project-away TimeGenerated\n) on _ResourceId, ExceptionType\n| project ['Resource'] = _ResourceId, ['Exception Type'] = ExceptionType, ['Exceptions'], ['Exceptions Timeline']\n| order by ['Resource'] asc, ['Exceptions'] desc",
               "size": 3,
               "title": "Exceptions metrics",
               "timeContextFromParameter": "TimeRange",
