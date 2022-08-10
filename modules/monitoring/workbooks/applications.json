@@ -2289,36 +2289,6 @@
                     "formatter": 5
                   },
                   {
-                    "columnMatch": "Request Units",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "yellow",
-                      "aggregation": "Sum"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Request Units"
-                    }
-                  },
-                  {
-                    "columnMatch": "Request Units Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "palette": "blue",
-                      "aggregation": "Sum"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Request Units Timeline"
-                    }
-                  },
-                  {
                     "columnMatch": "Requests",
                     "formatter": 8,
                     "formatOptions": {
@@ -2347,6 +2317,36 @@
                     },
                     "tooltipFormat": {
                       "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Request Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Request Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Units Timeline"
                     }
                   },
                   {
