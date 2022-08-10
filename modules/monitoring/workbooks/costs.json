@@ -39,7 +39,7 @@
             "type": 2,
             "isRequired": true,
             "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":null,\"headers\":[],\"method\":\"GET\",\"path\":\"{BillingScopeType}\",\"urlParams\":[],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.value\",\"columns\":[{\"path\":\"id\",\"columnid\":\"value\"},{\"path\":\"properties.displayName\",\"columnid\":\"label\"}]}}]}",
-            "value": "/providers/Microsoft.Management/managementGroups/52afa7a3-ec90-4b81-b532-bcc8290aedd3",
+            "value": null,
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -145,8 +145,7 @@
           }
         ],
         "style": "pills",
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources"
+        "queryType": 12
       },
       "name": "Workbook Parameters"
     },
@@ -156,7 +155,7 @@
         "version": "KqlItem/1.0",
         "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[2]\",\"columnid\":\"Organization\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
         "size": 3,
-        "title": "Organizations Costs metrics",
+        "title": "Costs metrics by Organization",
         "showRefreshButton": true,
         "showExportToExcel": true,
         "queryType": 12,
@@ -212,7 +211,7 @@
         }
       },
       "showPin": true,
-      "name": "Organizations Costs metrics",
+      "name": "Costs metrics by Organization",
       "styleSettings": {
         "showBorder": true
       }
@@ -442,7 +441,7 @@
         "version": "KqlItem/1.0",
         "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceGroupName\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"ResourceGroupName\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
         "size": 3,
-        "title": "Resource Group Costs metrics",
+        "title": "Costs metrics by Resource Group",
         "showRefreshButton": true,
         "showExportToExcel": true,
         "queryType": 12,
@@ -498,7 +497,7 @@
         }
       },
       "showPin": true,
-      "name": "Resource Group Costs metrics",
+      "name": "Costs metrics by Resource Group",
       "styleSettings": {
         "showBorder": true
       }
