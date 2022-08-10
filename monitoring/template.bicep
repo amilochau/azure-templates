@@ -73,7 +73,6 @@ module workbook_applications '../modules/monitoring/workbooks/applications.bicep
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    workspaceId: workspace.outputs.id
     location: location
   }
 }
@@ -84,7 +83,6 @@ module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = {
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    workspaceId: workspace.outputs.id
     location: location
   }
 }

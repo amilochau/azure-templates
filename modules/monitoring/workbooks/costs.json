@@ -386,9 +386,12 @@
                 "showBorder": false
               }
             },
-            "customWidth": "25",
+            "customWidth": "50",
             "showPin": true,
-            "name": "Costs metrics - Overview - All resources"
+            "name": "Costs metrics - Overview - All resources",
+            "styleSettings": {
+              "showBorder": true
+            }
           },
           {
             "type": 3,
@@ -422,9 +425,12 @@
                 "showBorder": false
               }
             },
-            "customWidth": "25",
+            "customWidth": "50",
             "showPin": true,
-            "name": "Costs metrics - Overview - Filtered resources"
+            "name": "Costs metrics - Overview - Filtered resources",
+            "styleSettings": {
+              "showBorder": true
+            }
           }
         ]
       },
@@ -1368,10 +1374,10 @@
           {
             "type": 10,
             "content": {
-              "chartId": "workbook18ce1f39-fd7a-41a4-a17a-cafcb6173c4e",
+              "chartId": "workbook45edeefd-4020-445c-a11b-58e0921ff88d",
               "version": "MetricsItem/2.0",
-              "size": 3,
-              "chartType": 0,
+              "size": 0,
+              "chartType": -1,
               "resourceType": "microsoft.storage/storageaccounts",
               "metricScope": 0,
               "resourceParameter": "StorageAccounts",
@@ -1386,98 +1392,42 @@
                 {
                   "namespace": "microsoft.storage/storageaccounts",
                   "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
-                  "aggregation": 4,
-                  "columnName": "Used Capacity"
+                  "aggregation": 4
                 }
               ],
-              "title": "Storage Billable metrics - Data",
-              "showRefreshButton": true,
-              "gridSettings": {
-                "formatters": [
-                  {
-                    "columnMatch": "Subscription",
-                    "formatter": 5
+              "gridFormatType": 1,
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13
+                },
+                "leftContent": {
+                  "columnMatch": "Value",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
                   },
-                  {
-                    "columnMatch": "Name",
-                    "formatter": 13,
-                    "formatOptions": {
-                      "linkTarget": "Resource",
-                      "showIcon": true,
-                      "customColumnWidthSetting": "200px"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Storage account"
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
                     }
-                  },
-                  {
-                    "columnMatch": "Used Capacity",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "orange"
-                    },
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Used Capacity"
-                    }
-                  },
-                  {
-                    "columnMatch": "Used Capacity Timeline",
-                    "formatter": 21,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "orange"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Used Capacity Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    }
-                  },
-                  {
-                    "columnMatch": ".*\\/Transactions$",
-                    "formatter": 1
                   }
-                ],
+                }
+              },
+              "gridSettings": {
                 "rowLimit": 10000,
                 "labelSettings": [
                   {
                     "columnId": "Name",
-                    "label": "Storage account"
-                  },
-                  {
-                    "columnId": "Used Capacity",
-                    "label": "Used Capacity"
-                  },
-                  {
-                    "columnId": "Used Capacity Timeline",
-                    "label": "Used Capacity Timeline"
+                    "label": "Cosmos DB account"
                   }
                 ]
-              },
-              "showExportToExcel": true
+              }
             },
-            "customWidth": "45",
-            "showPin": true,
-            "name": "Storage Billable metrics - Data",
-            "styleSettings": {
-              "showBorder": true
-            }
+            "name": "metric - 5"
           },
           {
             "type": 10,
@@ -1494,7 +1444,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -1688,79 +1638,54 @@
           {
             "type": 10,
             "content": {
-              "chartId": "workbookc65e232e-07ee-4552-aa0f-5e8e258cde08",
+              "chartId": "workbook18ce1f39-fd7a-41a4-a17a-cafcb6173c4e",
               "version": "MetricsItem/2.0",
               "size": 3,
               "chartType": 0,
-              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "resourceType": "microsoft.storage/storageaccounts",
               "metricScope": 0,
-              "resourceParameter": "CosmosAccounts",
+              "resourceParameter": "StorageAccounts",
               "resourceIds": [
-                "{CosmosAccounts}"
+                "{StorageAccounts}"
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
-                  "namespace": "microsoft.documentdb/databaseaccounts",
-                  "metric": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
                   "aggregation": 4,
-                  "splitBy": "CollectionName",
-                  "splitBySortOrder": 1,
-                  "splitByLimit": null,
-                  "columnName": "Data Usage"
+                  "columnName": "Used Capacity"
                 }
               ],
-              "title": "Cosmos DB Billable metrics - Data",
-              "gridFormatType": 2,
-              "filters": [
-                {
-                  "id": "1",
-                  "key": "CollectionName",
-                  "operator": 1,
-                  "values": [
-                    "<empty>",
-                    "__Empty"
-                  ]
-                }
-              ],
+              "title": "Storage Billable metrics - Data",
               "showRefreshButton": true,
               "gridSettings": {
                 "formatters": [
-                  {
-                    "columnMatch": "$gen_group",
-                    "formatter": 13,
-                    "formatOptions": {
-                      "linkTarget": "CellDetails",
-                      "linkIsContextBlade": true,
-                      "showIcon": true,
-                      "customColumnWidthSetting": "250px"
-                    }
-                  },
                   {
                     "columnMatch": "Subscription",
                     "formatter": 5
                   },
                   {
                     "columnMatch": "Name",
-                    "formatter": 5,
+                    "formatter": 13,
                     "formatOptions": {
-                      "linkTarget": "Resource"
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "200px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Storage account"
                     }
                   },
                   {
-                    "columnMatch": "Segment",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Data Usage",
+                    "columnMatch": "Used Capacity",
                     "formatter": 8,
                     "formatOptions": {
                       "min": 0,
-                      "palette": "orange",
-                      "aggregation": "Sum"
+                      "palette": "orange"
                     },
                     "numberFormat": {
                       "unit": 2,
@@ -1770,51 +1695,56 @@
                       }
                     },
                     "tooltipFormat": {
-                      "tooltip": "Data Usage"
+                      "tooltip": "Used Capacity"
                     }
                   },
                   {
-                    "columnMatch": "Data Usage Timeline",
-                    "formatter": 10,
+                    "columnMatch": "Used Capacity Timeline",
+                    "formatter": 21,
                     "formatOptions": {
                       "min": 0,
-                      "palette": "orange",
-                      "aggregation": "Sum"
+                      "palette": "orange"
                     },
                     "tooltipFormat": {
-                      "tooltip": "Data Usage Timeline"
+                      "tooltip": "Used Capacity Timeline"
                     }
+                  },
+                  {
+                    "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": ".*\\/Transactions$",
+                    "formatter": 1
                   }
                 ],
                 "rowLimit": 10000,
-                "hierarchySettings": {
-                  "treeType": 1,
-                  "groupBy": [
-                    "Name"
-                  ],
-                  "finalBy": "Segment"
-                },
                 "labelSettings": [
                   {
                     "columnId": "Name",
-                    "label": "Cosmos DB account"
+                    "label": "Storage account"
                   },
                   {
-                    "columnId": "Data Usage",
-                    "label": "Data Usage"
+                    "columnId": "Used Capacity",
+                    "label": "Used Capacity"
                   },
                   {
-                    "columnId": "Data Usage Timeline",
-                    "label": "Data Usage Timeline"
+                    "columnId": "Used Capacity Timeline",
+                    "label": "Used Capacity Timeline"
                   }
                 ]
               },
-              "sortBy": [],
               "showExportToExcel": true
             },
-            "customWidth": "50",
+            "customWidth": "45",
             "showPin": true,
-            "name": "Cosmos DB Billable metrics - Data",
+            "name": "Storage Billable metrics - Data",
             "styleSettings": {
               "showBorder": true
             }
@@ -1834,7 +1764,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -1988,6 +1918,140 @@
             "customWidth": "50",
             "showPin": true,
             "name": "Cosmos DB Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookc65e232e-07ee-4552-aa0f-5e8e258cde08",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "metricScope": 0,
+              "resourceParameter": "CosmosAccounts",
+              "resourceIds": [
+                "{CosmosAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
+                  "aggregation": 4,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
+                  "columnName": "Data Usage"
+                }
+              ],
+              "title": "Cosmos DB Billable metrics - Data",
+              "gridFormatType": 2,
+              "filters": [
+                {
+                  "id": "1",
+                  "key": "CollectionName",
+                  "operator": 1,
+                  "values": [
+                    "<empty>",
+                    "__Empty"
+                  ]
+                }
+              ],
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    }
+                  },
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Segment",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Data Usage",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Usage"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Usage Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Usage Timeline"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Name"
+                  ],
+                  "finalBy": "Segment"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Cosmos DB account"
+                  },
+                  {
+                    "columnId": "Data Usage",
+                    "label": "Data Usage"
+                  },
+                  {
+                    "columnId": "Data Usage Timeline",
+                    "label": "Data Usage Timeline"
+                  }
+                ]
+              },
+              "sortBy": [],
+              "showExportToExcel": true
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Cosmos DB Billable metrics - Data",
             "styleSettings": {
               "showBorder": true
             }

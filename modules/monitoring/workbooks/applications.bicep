@@ -10,9 +10,6 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The Log Analytics workspace id')
-param workspaceId string
-
 @description('The deployment location')
 param location string
 
@@ -32,7 +29,6 @@ resource workbook 'Microsoft.Insights/workbooks@2022-04-01' = {
   properties: {
     displayName: workbookDisplayName
     category: 'workbook'
-    sourceId: workspaceId
     serializedData: string(workbookData)
   }
 }
