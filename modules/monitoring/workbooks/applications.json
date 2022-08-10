@@ -1555,7 +1555,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -1881,7 +1881,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -2214,8 +2214,8 @@
                   "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequests",
                   "aggregation": 7,
                   "splitBy": "CollectionName",
-                  "splitBySortOrder": -1,
-                  "splitByLimit": 5,
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
                   "columnName": "Requests"
                 },
                 {
@@ -2223,8 +2223,8 @@
                   "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
                   "aggregation": 1,
                   "splitBy": "CollectionName",
-                  "splitBySortOrder": -1,
-                  "splitByLimit": 5,
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
                   "columnName": "Request Units"
                 },
                 {
@@ -2232,8 +2232,8 @@
                   "metric": "microsoft.documentdb/databaseaccounts-Requests-DocumentCount",
                   "aggregation": 4,
                   "splitBy": "CollectionName",
-                  "splitBySortOrder": -1,
-                  "splitByLimit": 5,
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
                   "columnName": "Documents"
                 },
                 {
@@ -2241,8 +2241,8 @@
                   "metric": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
                   "aggregation": 4,
                   "splitBy": "CollectionName",
-                  "splitBySortOrder": -1,
-                  "splitByLimit": 5,
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
                   "columnName": "Data Usage"
                 }
               ],
@@ -2304,12 +2304,12 @@
                       }
                     },
                     "tooltipFormat": {
-                      "tooltip": "Requests"
+                      "tooltip": "Requests Timeline"
                     }
                   },
                   {
                     "columnMatch": "Requests Timeline",
-                    "formatter": 21,
+                    "formatter": 10,
                     "formatOptions": {
                       "min": 0,
                       "palette": "blue",
@@ -2335,13 +2335,14 @@
                       }
                     },
                     "tooltipFormat": {
-                      "tooltip": "Request Units"
+                      "tooltip": "Request Units Timeline"
                     }
                   },
                   {
                     "columnMatch": "Request Units Timeline",
                     "formatter": 10,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "orange",
                       "aggregation": "Sum"
                     },
@@ -2398,7 +2399,11 @@
                     "columnMatch": "Data Usage Timeline",
                     "formatter": 10,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "yellow"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Usage Timeline"
                     }
                   },
                   {
@@ -2454,7 +2459,7 @@
                   },
                   {
                     "columnId": "Requests Timeline",
-                    "label": "Requests"
+                    "label": "Requests Timeline"
                   },
                   {
                     "columnId": "Request Units",
@@ -2462,7 +2467,7 @@
                   },
                   {
                     "columnId": "Request Units Timeline",
-                    "label": "Request Units"
+                    "label": "Request Units Timeline"
                   },
                   {
                     "columnId": "Documents",
@@ -2470,7 +2475,7 @@
                   },
                   {
                     "columnId": "Documents Timeline",
-                    "label": "Documents"
+                    "label": "Documents Timeline"
                   },
                   {
                     "columnId": "Data Usage",
@@ -2478,7 +2483,7 @@
                   },
                   {
                     "columnId": "Data Usage Timeline",
-                    "label": "Data Usage"
+                    "label": "Data Usage Timeline"
                   }
                 ]
               },
