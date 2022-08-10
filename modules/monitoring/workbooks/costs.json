@@ -178,6 +178,30 @@
             "linkLabel": "Cost Management",
             "subTarget": "costManagement",
             "style": "link"
+          },
+          {
+            "id": "b4d0e196-b219-4d4f-9a82-ea97f0c3b50c",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Operations costs",
+            "subTarget": "operations",
+            "style": "link"
+          },
+          {
+            "id": "469ddb3f-f33a-4ced-91cf-51f8f4b782ca",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Storage costs",
+            "subTarget": "storage",
+            "style": "link"
+          },
+          {
+            "id": "a3a4f2ce-c45d-476d-a5fb-ca0388507144",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Monitoring costs",
+            "subTarget": "monitoring",
+            "style": "link"
           }
         ]
       },
@@ -680,6 +704,125 @@
         "value": "costManagement"
       },
       "name": "Cost Management Group - Overview"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "This section presents main billable metrics for operations. Other operations, not in this section, may be billable!",
+              "style": "warning"
+            },
+            "name": "Partial costs Warning"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n//| where tags['organization'] in ({Organizations:value})\r\n//| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| project ['Id'] = id, ['Kind'] = kind, ['SKU'] = sku['name']",
+              "size": 1,
+              "title": "App Service Plan SKUs",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "graph",
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "Id",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "CellDetails",
+                    "linkIsContextBlade": true,
+                    "showIcon": true
+                  }
+                },
+                "centerContent": {
+                  "columnMatch": "SKU",
+                  "formatter": 1
+                },
+                "bottomContent": {
+                  "columnMatch": "Kind",
+                  "formatter": 1
+                },
+                "nodeIdField": "Id",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "SKU",
+                  "type": 1,
+                  "colorPalette": "default"
+                },
+                "hivesMargin": 5
+              }
+            },
+            "showPin": true,
+            "name": "App Service Plan SKUs"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "operations"
+      },
+      "name": "Workbook Group - Operations costs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "This section presents main billable metrics for operations. Other operations, not in this section, may be billable!",
+              "style": "warning"
+            },
+            "name": "Partial costs Warning - Copy"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "storage"
+      },
+      "name": "Workbook Group - Storage costs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "This section presents main billable metrics for operations. Other operations, not in this section, may be billable!",
+              "style": "warning"
+            },
+            "name": "Partial costs Warning - Copy - Copy"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "monitoring"
+      },
+      "name": "Workbook Group - Monitoring costs"
     }
   ],
   "fallbackResourceIds": [
