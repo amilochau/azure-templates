@@ -2014,6 +2014,110 @@
               "style": "warning"
             },
             "name": "Partial costs Warning"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n| summarize ['Transactions' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application']\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n    | make-series ['Transactions Timeline'] = count() default = 0, ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n    | project-away TimeGenerated\r\n) on ['Application']\r\n| project ['Application'], ['Transactions'], ['Transactions Timeline'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Application",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Monitored Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Transactions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Transactions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Transactions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Transactions Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Billed Size",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Billed Size"
+                    }
+                  },
+                  {
+                    "columnMatch": "Billed Size Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Billed Size Timeline"
+                    }
+                  }
+                ],
+                "labelSettings": [
+                  {
+                    "columnId": "Application",
+                    "label": "Monitored Resource"
+                  }
+                ]
+              }
+            },
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
           }
         ]
       },
