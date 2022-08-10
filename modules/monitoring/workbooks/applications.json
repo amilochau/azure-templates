@@ -95,150 +95,7 @@
             "crossComponentResources": [
               "value::all"
             ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
-            "id": "7edc39f5-78ff-4fbe-8845-e42934e02f4c",
-            "version": "KqlParameterItem/1.0",
-            "name": "CosmosAccounts",
-            "label": "Cosmos DB accounts",
-            "type": 5,
-            "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
-            "crossComponentResources": [
-              "value::all"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
-            "id": "e3b447a6-cf88-4c6e-ae76-8c65f17bea0c",
-            "version": "KqlParameterItem/1.0",
-            "name": "ServiceBusAccounts",
-            "label": "Service Bus accounts",
-            "type": 5,
-            "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "where type =~ 'Microsoft.ServiceBus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
-            "crossComponentResources": [
-              "value::all"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
-            "id": "200836ff-b871-4624-b8cb-2ba3116f4cb3",
-            "version": "KqlParameterItem/1.0",
-            "name": "StorageAccounts",
-            "label": "Storage accounts",
-            "type": 5,
-            "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
-            "crossComponentResources": [
-              "value::all"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
-            "id": "082197cf-af49-452d-835d-810556cb2d63",
-            "version": "KqlParameterItem/1.0",
-            "name": "KeyVaults",
-            "label": "Key Vaults",
-            "type": 5,
-            "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "where type =~ 'Microsoft.KeyVault/vaults'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
-            "crossComponentResources": [
-              "value::all"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
-            "id": "971cd5f7-743b-4ade-ba4b-9c94e8b53d33",
-            "version": "KqlParameterItem/1.0",
-            "name": "AppConfigurations",
-            "label": "App Configurations",
-            "type": 5,
-            "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "where type =~ 'Microsoft.AppConfiguration/configurationStores'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
-            "crossComponentResources": [
-              "value::all"
-            ],
-            "typeSettings": {
-              "additionalResourceOptions": [
-                "value::all"
-              ],
-              "showDefault": false
-            },
-            "defaultValue": "value::all",
-            "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
-          },
-          {
-            "id": "98ad3c6c-a10c-432f-b79a-87f344b7a305",
-            "version": "KqlParameterItem/1.0",
-            "name": "FunctionsApps",
-            "label": "Functions apps",
-            "type": 5,
-            "isRequired": true,
-            "multiSelect": true,
-            "quote": "'",
-            "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
-            "crossComponentResources": [
-              "value::all"
-            ],
+            "isHiddenWhenLocked": true,
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
@@ -263,6 +120,32 @@
             "crossComponentResources": [
               "value::all"
             ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "98ad3c6c-a10c-432f-b79a-87f344b7a305",
+            "version": "KqlParameterItem/1.0",
+            "name": "FunctionsApps",
+            "label": "Functions apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
@@ -287,6 +170,132 @@
             "crossComponentResources": [
               "value::all"
             ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "200836ff-b871-4624-b8cb-2ba3116f4cb3",
+            "version": "KqlParameterItem/1.0",
+            "name": "StorageAccounts",
+            "label": "Storage accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "7edc39f5-78ff-4fbe-8845-e42934e02f4c",
+            "version": "KqlParameterItem/1.0",
+            "name": "CosmosAccounts",
+            "label": "Cosmos DB accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "e3b447a6-cf88-4c6e-ae76-8c65f17bea0c",
+            "version": "KqlParameterItem/1.0",
+            "name": "ServiceBusAccounts",
+            "label": "Service Bus accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.ServiceBus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "082197cf-af49-452d-835d-810556cb2d63",
+            "version": "KqlParameterItem/1.0",
+            "name": "KeyVaults",
+            "label": "Key Vaults",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.KeyVault/vaults'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "971cd5f7-743b-4ade-ba4b-9c94e8b53d33",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppConfigurations",
+            "label": "App Configurations",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.AppConfiguration/configurationStores'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
@@ -299,7 +308,7 @@
           }
         ],
         "style": "pills",
-        "queryType": 0,
+        "queryType": 1,
         "resourceType": "microsoft.resourcegraph/resources"
       },
       "name": "Workbook Parameters"
@@ -329,6 +338,14 @@
             "style": "link"
           },
           {
+            "id": "76902e12-819a-4198-a614-5ef6648c194b",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Applications",
+            "subTarget": "applications",
+            "style": "link"
+          },
+          {
             "id": "f137f7a9-3ca0-44b5-a136-feffcbf47c33",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
@@ -350,14 +367,6 @@
             "linkTarget": "parameter",
             "linkLabel": "Configuration",
             "subTarget": "configuration",
-            "style": "link"
-          },
-          {
-            "id": "76902e12-819a-4198-a614-5ef6648c194b",
-            "cellValue": "selectedTab",
-            "linkTarget": "parameter",
-            "linkLabel": "Applications",
-            "subTarget": "applications",
             "style": "link"
           }
         ]
@@ -1237,6 +1246,789 @@
         "value": "availability"
       },
       "name": "Workbook Group - Availability & Requests"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "WebApps",
+              "resourceIds": [
+                "{WebApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--Requests",
+                  "aggregation": 1,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--BytesReceived",
+                  "aggregation": 1,
+                  "columnName": "Data In"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--BytesSent",
+                  "aggregation": 1,
+                  "columnName": "Data Out"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--Http5xx",
+                  "aggregation": 1,
+                  "columnName": "Errors"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--HttpResponseTime",
+                  "aggregation": 4,
+                  "columnName": "Response Time"
+                }
+              ],
+              "title": "Web apps metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Web app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data In"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Data Out",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Errors",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Errors"
+                    }
+                  },
+                  {
+                    "columnMatch": "Errors Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Response Time",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time"
+                    }
+                  },
+                  {
+                    "columnMatch": "Response Time Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 0.5,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--Http5xx",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesReceived",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--HttpResponseTime",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesSent",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Web app"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Data In",
+                    "label": "Data In"
+                  },
+                  {
+                    "columnId": "Data In Timeline",
+                    "label": "Data In Timeline"
+                  },
+                  {
+                    "columnId": "Data Out",
+                    "label": "Data Out"
+                  },
+                  {
+                    "columnId": "Data Out Timeline",
+                    "label": "Data Out Timeline"
+                  },
+                  {
+                    "columnId": "Errors",
+                    "label": "Errors"
+                  },
+                  {
+                    "columnId": "Errors Timeline",
+                    "label": "Errors Timeline"
+                  },
+                  {
+                    "columnId": "Response Time",
+                    "label": "Response Time"
+                  },
+                  {
+                    "columnId": "Response Time Timeline",
+                    "label": "Response Time Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Web apps metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "FunctionsApps",
+              "resourceIds": [
+                "{FunctionsApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionCount",
+                  "aggregation": 1,
+                  "columnName": "Executions"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
+                  "aggregation": 1,
+                  "columnName": "Execution Units"
+                }
+              ],
+              "title": "Functions apps metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Executions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Executions Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data In"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data In Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Data Out",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Errors",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Errors"
+                    }
+                  },
+                  {
+                    "columnMatch": "Errors Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Response Time",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 500,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time"
+                    }
+                  },
+                  {
+                    "columnMatch": "Response Time Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 0.5,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Response Time Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--Http5xx",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesReceived",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--HttpResponseTime",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 24,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--BytesSent",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Functions app"
+                  },
+                  {
+                    "columnId": "Executions",
+                    "label": "Executions"
+                  },
+                  {
+                    "columnId": "Executions Timeline",
+                    "label": "Executions Timeline"
+                  },
+                  {
+                    "columnId": "Execution Units",
+                    "label": "Execution Units"
+                  },
+                  {
+                    "columnId": "Execution Units Timeline",
+                    "label": "Execution Units Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Functions apps metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/serverfarms",
+              "metricScope": 0,
+              "resourceParameter": "AppServicePlans",
+              "resourceIds": [
+                "{AppServicePlans}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--CpuPercentage",
+                  "aggregation": 4,
+                  "columnName": "CPU"
+                },
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
+                  "aggregation": 4,
+                  "columnName": "Memory"
+                }
+              ],
+              "title": "App Service plans metrics",
+              "showRefreshButton": true,
+              "showExpandCollapseGrid": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "SPU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPU Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  },
+                  {
+                    "columnId": "CPU",
+                    "label": "CPU"
+                  },
+                  {
+                    "columnId": "CPU Timeline",
+                    "label": "CPU Timeline"
+                  },
+                  {
+                    "columnId": "Memory",
+                    "label": "Memory"
+                  },
+                  {
+                    "columnId": "Memory Timeline",
+                    "label": "Memory Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "App Service plans metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "applications"
+      },
+      "name": "Workbook Group - Applications"
     },
     {
       "type": 12,
@@ -2345,789 +3137,6 @@
         "value": "configuration"
       },
       "name": "Workbook Group - Configuration"
-    },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "editable",
-        "items": [
-          {
-            "type": 10,
-            "content": {
-              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
-              "version": "MetricsItem/2.0",
-              "size": 3,
-              "chartType": 0,
-              "resourceType": "microsoft.web/sites",
-              "metricScope": 0,
-              "resourceParameter": "WebApps",
-              "resourceIds": [
-                "{WebApps}"
-              ],
-              "timeContextFromParameter": "TimeRange",
-              "timeContext": {
-                "durationMs": 2592000000
-              },
-              "metrics": [
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--Requests",
-                  "aggregation": 1,
-                  "columnName": "Requests"
-                },
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--BytesReceived",
-                  "aggregation": 1,
-                  "columnName": "Data In"
-                },
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--BytesSent",
-                  "aggregation": 1,
-                  "columnName": "Data Out"
-                },
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--Http5xx",
-                  "aggregation": 1,
-                  "columnName": "Errors"
-                },
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--HttpResponseTime",
-                  "aggregation": 4,
-                  "columnName": "Response Time"
-                }
-              ],
-              "title": "Web apps metrics",
-              "showRefreshButton": true,
-              "showExpandCollapseGrid": true,
-              "gridSettings": {
-                "formatters": [
-                  {
-                    "columnMatch": "Subscription",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Name",
-                    "formatter": 13,
-                    "formatOptions": {
-                      "linkTarget": "Resource",
-                      "showIcon": true,
-                      "customColumnWidthSetting": "250px"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Web app"
-                    }
-                  },
-                  {
-                    "columnMatch": "Requests",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Requests"
-                    }
-                  },
-                  {
-                    "columnMatch": "Requests Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Requests Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "Data In",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Data In"
-                    }
-                  },
-                  {
-                    "columnMatch": "Data In Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Data Out",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Data Out"
-                    }
-                  },
-                  {
-                    "columnMatch": "Data Out Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Errors",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "red"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Errors"
-                    }
-                  },
-                  {
-                    "columnMatch": "Errors Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Response Time",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 500,
-                      "palette": "greenRed"
-                    },
-                    "numberFormat": {
-                      "unit": 24,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Response Time"
-                    }
-                  },
-                  {
-                    "columnMatch": "Response Time Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 0.5,
-                      "palette": "greenRed"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Response Time Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--Http5xx",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 0,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--BytesReceived",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": null
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--HttpResponseTime",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 24,
-                      "options": null
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--BytesSent",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": null
-                    }
-                  }
-                ],
-                "rowLimit": 10000,
-                "labelSettings": [
-                  {
-                    "columnId": "Name",
-                    "label": "Web app"
-                  },
-                  {
-                    "columnId": "Requests",
-                    "label": "Requests"
-                  },
-                  {
-                    "columnId": "Requests Timeline",
-                    "label": "Requests Timeline"
-                  },
-                  {
-                    "columnId": "Data In",
-                    "label": "Data In"
-                  },
-                  {
-                    "columnId": "Data In Timeline",
-                    "label": "Data In Timeline"
-                  },
-                  {
-                    "columnId": "Data Out",
-                    "label": "Data Out"
-                  },
-                  {
-                    "columnId": "Data Out Timeline",
-                    "label": "Data Out Timeline"
-                  },
-                  {
-                    "columnId": "Errors",
-                    "label": "Errors"
-                  },
-                  {
-                    "columnId": "Errors Timeline",
-                    "label": "Errors Timeline"
-                  },
-                  {
-                    "columnId": "Response Time",
-                    "label": "Response Time"
-                  },
-                  {
-                    "columnId": "Response Time Timeline",
-                    "label": "Response Time Timeline"
-                  }
-                ]
-              },
-              "showExportToExcel": true
-            },
-            "showPin": true,
-            "name": "Web apps metrics",
-            "styleSettings": {
-              "showBorder": true
-            }
-          },
-          {
-            "type": 10,
-            "content": {
-              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
-              "version": "MetricsItem/2.0",
-              "size": 3,
-              "chartType": 0,
-              "resourceType": "microsoft.web/sites",
-              "metricScope": 0,
-              "resourceParameter": "FunctionsApps",
-              "resourceIds": [
-                "{FunctionsApps}"
-              ],
-              "timeContextFromParameter": "TimeRange",
-              "timeContext": {
-                "durationMs": 2592000000
-              },
-              "metrics": [
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--FunctionExecutionCount",
-                  "aggregation": 1,
-                  "columnName": "Executions"
-                },
-                {
-                  "namespace": "microsoft.web/sites",
-                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
-                  "aggregation": 1,
-                  "columnName": "Execution Units"
-                }
-              ],
-              "title": "Functions apps metrics",
-              "showRefreshButton": true,
-              "showExpandCollapseGrid": true,
-              "gridSettings": {
-                "formatters": [
-                  {
-                    "columnMatch": "Subscription",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Name",
-                    "formatter": 13,
-                    "formatOptions": {
-                      "linkTarget": "Resource",
-                      "showIcon": true,
-                      "customColumnWidthSetting": "250px"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Functions app"
-                    }
-                  },
-                  {
-                    "columnMatch": "Executions",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Executions"
-                    }
-                  },
-                  {
-                    "columnMatch": "Executions Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Executions Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "Execution Units",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "orange"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Execution Units"
-                    }
-                  },
-                  {
-                    "columnMatch": "Execution Units Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "orange"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Execution Units Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 0,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 0,
-                      "options": null
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Requests",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Requests"
-                    }
-                  },
-                  {
-                    "columnMatch": "Requests Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Requests Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "Data In",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Data In"
-                    }
-                  },
-                  {
-                    "columnMatch": "Data In Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Data Out",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "blue"
-                    },
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Data Out"
-                    }
-                  },
-                  {
-                    "columnMatch": "Data Out Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Errors",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "palette": "red"
-                    },
-                    "numberFormat": {
-                      "unit": 17,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Errors"
-                    }
-                  },
-                  {
-                    "columnMatch": "Errors Timeline",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Response Time",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 500,
-                      "palette": "greenRed"
-                    },
-                    "numberFormat": {
-                      "unit": 24,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Response Time"
-                    }
-                  },
-                  {
-                    "columnMatch": "Response Time Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 0.5,
-                      "palette": "greenRed"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Response Time Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--Http5xx",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 0,
-                      "options": {
-                        "style": "decimal"
-                      }
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--BytesReceived",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": null
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--HttpResponseTime",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 24,
-                      "options": null
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/sites--BytesSent",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 2,
-                      "options": null
-                    }
-                  }
-                ],
-                "rowLimit": 10000,
-                "labelSettings": [
-                  {
-                    "columnId": "Name",
-                    "label": "Functions app"
-                  },
-                  {
-                    "columnId": "Executions",
-                    "label": "Executions"
-                  },
-                  {
-                    "columnId": "Executions Timeline",
-                    "label": "Executions Timeline"
-                  },
-                  {
-                    "columnId": "Execution Units",
-                    "label": "Execution Units"
-                  },
-                  {
-                    "columnId": "Execution Units Timeline",
-                    "label": "Execution Units Timeline"
-                  }
-                ]
-              },
-              "showExportToExcel": true
-            },
-            "showPin": true,
-            "name": "Functions apps metrics",
-            "styleSettings": {
-              "showBorder": true
-            }
-          },
-          {
-            "type": 10,
-            "content": {
-              "chartId": "workbook49374a2d-7f25-471c-b557-0e509e4cb670",
-              "version": "MetricsItem/2.0",
-              "size": 3,
-              "chartType": 0,
-              "resourceType": "microsoft.web/serverfarms",
-              "metricScope": 0,
-              "resourceParameter": "AppServicePlans",
-              "resourceIds": [
-                "{AppServicePlans}"
-              ],
-              "timeContextFromParameter": "TimeRange",
-              "timeContext": {
-                "durationMs": 2592000000
-              },
-              "metrics": [
-                {
-                  "namespace": "microsoft.web/serverfarms",
-                  "metric": "microsoft.web/serverfarms--CpuPercentage",
-                  "aggregation": 4,
-                  "columnName": "CPU"
-                },
-                {
-                  "namespace": "microsoft.web/serverfarms",
-                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
-                  "aggregation": 4,
-                  "columnName": "Memory"
-                }
-              ],
-              "title": "App Service plans metrics",
-              "showRefreshButton": true,
-              "showExpandCollapseGrid": true,
-              "gridSettings": {
-                "formatters": [
-                  {
-                    "columnMatch": "Subscription",
-                    "formatter": 5
-                  },
-                  {
-                    "columnMatch": "Name",
-                    "formatter": 13,
-                    "formatOptions": {
-                      "linkTarget": "Resource",
-                      "showIcon": true,
-                      "customColumnWidthSetting": "250px"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Functions app"
-                    }
-                  },
-                  {
-                    "columnMatch": "CPU",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 100,
-                      "palette": "greenRed"
-                    },
-                    "numberFormat": {
-                      "unit": 1,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "SPU"
-                    }
-                  },
-                  {
-                    "columnMatch": "CPU Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 100,
-                      "palette": "greenRed"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "CPU Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "Memory",
-                    "formatter": 8,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 100,
-                      "palette": "greenRed"
-                    },
-                    "numberFormat": {
-                      "unit": 1,
-                      "options": {
-                        "style": "decimal",
-                        "maximumFractionDigits": 1
-                      }
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Memory"
-                    }
-                  },
-                  {
-                    "columnMatch": "Memory Timeline",
-                    "formatter": 10,
-                    "formatOptions": {
-                      "min": 0,
-                      "max": 100,
-                      "palette": "greenRed"
-                    },
-                    "tooltipFormat": {
-                      "tooltip": "Memory Timeline"
-                    }
-                  },
-                  {
-                    "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
-                    "formatter": 1,
-                    "numberFormat": {
-                      "unit": 1,
-                      "options": null
-                    }
-                  }
-                ],
-                "rowLimit": 10000,
-                "labelSettings": [
-                  {
-                    "columnId": "Name",
-                    "label": "App Service plan"
-                  },
-                  {
-                    "columnId": "CPU",
-                    "label": "CPU"
-                  },
-                  {
-                    "columnId": "CPU Timeline",
-                    "label": "CPU Timeline"
-                  },
-                  {
-                    "columnId": "Memory",
-                    "label": "Memory"
-                  },
-                  {
-                    "columnId": "Memory Timeline",
-                    "label": "Memory Timeline"
-                  }
-                ]
-              },
-              "showExportToExcel": true
-            },
-            "showPin": true,
-            "name": "App Service plans metrics",
-            "styleSettings": {
-              "showBorder": true
-            }
-          }
-        ]
-      },
-      "conditionalVisibility": {
-        "parameterName": "selectedTab",
-        "comparison": "isEqualTo",
-        "value": "applications"
-      },
-      "name": "Workbook Group - Applications"
     }
   ],
   "fallbackResourceIds": [
