@@ -214,6 +214,81 @@
             "defaultValue": "value::all",
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "b7f1cc98-76a9-42a5-8cd6-7ca8f2f0e16f",
+            "version": "KqlParameterItem/1.0",
+            "name": "CosmosAccounts",
+            "label": "Cosmos DB accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "1404788e-7b29-4df1-b883-457c5b0edcce",
+            "version": "KqlParameterItem/1.0",
+            "name": "StorageAccounts",
+            "label": "Storage accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "92a467f2-1390-4d94-a97b-6842ff4b665a",
+            "version": "KqlParameterItem/1.0",
+            "name": "LogAnalyticsWorkspaces",
+            "label": "Log Analytics workspaces",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
           }
         ],
         "style": "pills",
@@ -998,7 +1073,7 @@
               "version": "KqlItem/1.0",
               "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\",\"mergeType\":\"innerunique\",\"leftTable\":\"App Service Plan SKUs\",\"rightTable\":\"App Service Plan Metrics\",\"leftColumn\":\"App Service plan\",\"rightColumn\":\"Name\"}],\"projectRename\":[{\"originalName\":\"[App Service Plan SKUs].App Service plan\",\"mergedName\":\"App Service plan\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan SKUs].Kind\",\"mergedName\":\"Kind\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan SKUs].SKU\",\"mergedName\":\"SKU\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].CPU\",\"mergedName\":\"CPU\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].CPU Timeline\",\"mergedName\":\"CPU Timeline\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Memory (Max)\",\"mergedName\":\"Memory (Max)\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Memory (Max) Timeline\",\"mergedName\":\"Memory (Max) Timeline\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Subscription\"},{\"originalName\":\"[App Service Plan Metrics].Name\"}]}",
               "size": 3,
-              "title": "App Service plans Costs",
+              "title": "App Service plans Billable Metrics",
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 7,
@@ -1098,7 +1173,7 @@
               }
             },
             "showPin": false,
-            "name": "App Service plans Costs"
+            "name": "App Service plans Billable Metrics"
           },
           {
             "type": 10,
@@ -1131,7 +1206,7 @@
                   "columnName": "Execution Units"
                 }
               ],
-              "title": "Functions apps Costs",
+              "title": "Functions apps Billable Metrics",
               "showRefreshButton": true,
               "gridSettings": {
                 "formatters": [
@@ -1253,7 +1328,7 @@
               "showExportToExcel": true
             },
             "showPin": true,
-            "name": "Functions apps Costs"
+            "name": "Functions apps Billable Metrics"
           }
         ]
       },
@@ -1273,10 +1348,10 @@
           {
             "type": 1,
             "content": {
-              "json": "This section presents main billable metrics for operations. Other operations, not in this section, may be billable!",
+              "json": "This section presents main billable metrics for storage. Other storage items, not in this section, may be billable!",
               "style": "warning"
             },
-            "name": "Partial costs Warning - Copy"
+            "name": "Partial costs Warning"
           }
         ]
       },
@@ -1296,10 +1371,10 @@
           {
             "type": 1,
             "content": {
-              "json": "This section presents main billable metrics for operations. Other operations, not in this section, may be billable!",
+              "json": "This section presents main billable metrics for monitoring. Other monitoring items, not in this section, may be billable!",
               "style": "warning"
             },
-            "name": "Partial costs Warning - Copy - Copy"
+            "name": "Partial costs Warning"
           }
         ]
       },
