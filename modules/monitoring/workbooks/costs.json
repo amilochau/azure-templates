@@ -164,10 +164,61 @@
               "showDefault": false
             },
             "queryType": 8
+          },
+          {
+            "id": "bc95367f-97bc-46ca-baab-9ec8cc8f3382",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppServicePlans",
+            "label": "App Service plans",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "4e2d5837-8b93-4bb2-8448-21873ca928e2",
+            "version": "KqlParameterItem/1.0",
+            "name": "FunctionsApps",
+            "label": "Functions apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
           }
         ],
         "style": "pills",
-        "queryType": 8
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources"
       },
       "name": "Workbook Parameters"
     },
@@ -734,53 +785,6 @@
             "name": "Partial costs Warning"
           },
           {
-            "type": 9,
-            "content": {
-              "version": "KqlParameterItem/1.0",
-              "crossComponentResources": [
-                "value::all"
-              ],
-              "parameters": [
-                {
-                  "id": "f902bb89-c2c2-4f79-a281-dd0ff7c02ba9",
-                  "version": "KqlParameterItem/1.0",
-                  "name": "AppServicePlans",
-                  "label": "App Service plans",
-                  "type": 5,
-                  "isRequired": true,
-                  "multiSelect": true,
-                  "quote": "'",
-                  "delimiter": ",",
-                  "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
-                  "crossComponentResources": [
-                    "value::all"
-                  ],
-                  "typeSettings": {
-                    "additionalResourceOptions": [
-                      "value::all"
-                    ],
-                    "showDefault": false
-                  },
-                  "timeContext": {
-                    "durationMs": 86400000
-                  },
-                  "defaultValue": "value::all",
-                  "queryType": 1,
-                  "resourceType": "microsoft.resourcegraph/resources"
-                }
-              ],
-              "style": "pills",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources"
-            },
-            "conditionalVisibility": {
-              "parameterName": "Debug",
-              "comparison": "isEqualTo",
-              "value": "true"
-            },
-            "name": "Operations - Parameters"
-          },
-          {
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
@@ -1095,6 +1099,161 @@
             },
             "showPin": false,
             "name": "App Service plans Costs"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook7f6acfb2-8d94-4855-96c5-2071e4cd8089",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "FunctionsApps",
+              "resourceIds": [
+                "{FunctionsApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionCount",
+                  "aggregation": 1,
+                  "columnName": "Executions"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
+                  "aggregation": 1,
+                  "columnName": "Execution Units"
+                }
+              ],
+              "title": "Functions apps Costs",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Executions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Functions app"
+                  },
+                  {
+                    "columnId": "Executions",
+                    "label": "Executions"
+                  },
+                  {
+                    "columnId": "Executions Timeline",
+                    "label": "Executions Timeline"
+                  },
+                  {
+                    "columnId": "Execution Units",
+                    "label": "Execution Units"
+                  },
+                  {
+                    "columnId": "Execution Units Timeline",
+                    "label": "Execution Units Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Functions apps Costs"
           }
         ]
       },
