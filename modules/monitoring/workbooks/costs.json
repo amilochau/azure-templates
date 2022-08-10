@@ -1377,7 +1377,7 @@
               "chartId": "workbook45edeefd-4020-445c-a11b-58e0921ff88d",
               "version": "MetricsItem/2.0",
               "size": 0,
-              "chartType": -1,
+              "chartType": -2,
               "resourceType": "microsoft.storage/storageaccounts",
               "metricScope": 0,
               "resourceParameter": "StorageAccounts",
@@ -1395,6 +1395,7 @@
                   "aggregation": 4
                 }
               ],
+              "title": "Storage Billable metrics - Data by Region",
               "gridFormatType": 1,
               "tileSettings": {
                 "showBorder": false,
@@ -1417,6 +1418,66 @@
                   }
                 }
               },
+              "mapSettings": {
+                "locInfo": "AzureResource",
+                "locInfoColumn": "Name",
+                "sizeSettings": "Value",
+                "sizeAggregation": "Sum",
+                "legendMetric": "Value",
+                "legendAggregation": "Sum",
+                "itemColorSettings": {
+                  "nodeColorField": "Value",
+                  "colorAggregation": "Sum",
+                  "type": "heatmap",
+                  "heatmapPalette": "orange"
+                },
+                "numberFormatSettings": {
+                  "unit": 2,
+                  "options": {
+                    "style": "decimal",
+                    "maximumFractionDigits": 1
+                  }
+                }
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "Subscription",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Value",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "hivesContent": {
+                  "columnMatch": "Name",
+                  "formatter": 1
+                },
+                "nodeIdField": "Name",
+                "sourceIdField": "Name",
+                "targetIdField": "Name",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "Value",
+                  "type": 4,
+                  "heatmapPalette": "Blue",
+                  "heatmapMin": 1,
+                  "heatmapMax": 1000000000
+                },
+                "groupByField": "Name",
+                "hivesMargin": 5
+              },
+              "showRefreshButton": true,
               "gridSettings": {
                 "rowLimit": 10000,
                 "labelSettings": [
@@ -1425,9 +1486,14 @@
                     "label": "Cosmos DB account"
                   }
                 ]
-              }
+              },
+              "showExportToExcel": true
             },
-            "name": "metric - 5"
+            "showPin": true,
+            "name": "Storage Billable metrics - Data by Region",
+            "styleSettings": {
+              "showBorder": true
+            }
           },
           {
             "type": 10,
