@@ -1386,7 +1386,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -2205,6 +2205,86 @@
                   "Billed Size"
                 ],
                 "group": "Application",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project ['Table'] = tt\r\n| summarize ['Transactions' ] = count() by ['Table']\r\n| project ['Table'], ['Transactions']\r\n| order by ['Transactions'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Transactions",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Transactions"
+                ],
+                "group": "Table",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project _BilledSize, ['Table'] = tt\r\n| summarize ['Billed Size' ] = sum(_BilledSize) by ['Table']\r\n| project ['Table'], ['Billed Size']\r\n| order by ['Billed Size'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Billed Size"
+                ],
+                "group": "Table",
                 "createOtherGroup": null,
                 "ySettings": {
                   "numberFormatSettings": {
