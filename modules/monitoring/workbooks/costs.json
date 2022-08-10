@@ -2019,6 +2019,86 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| summarize ['Transactions' ] = count() by ['Application']\r\n| project ['Application'], ['Transactions']\r\n| order by ['Transactions'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Transactions",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Transactions"
+                ],
+                "group": "Application",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project _BilledSize, ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| summarize ['Billed Size' ] = sum(_BilledSize) by ['Application']\r\n| project ['Application'], ['Billed Size']\r\n| order by ['Billed Size'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Billed Size"
+                ],
+                "group": "Application",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
               "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n| summarize ['Transactions' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application']\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n    | make-series ['Transactions Timeline'] = count() default = 0, ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n    | project-away TimeGenerated\r\n) on ['Application']\r\n| project ['Application'], ['Transactions'], ['Transactions Timeline'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc\r\n",
               "size": 3,
               "title": "Log Analytics workspaces Billable metrics",
