@@ -150,10 +150,24 @@
             "defaultValue": "value::all",
             "queryType": 1,
             "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "c27ce103-0d70-47be-ae57-a3d30428dbff",
+            "version": "KqlParameterItem/1.0",
+            "name": "Debug",
+            "type": 2,
+            "isRequired": true,
+            "query": "{\"version\":\"1.0.0\",\"content\":\"[\\r\\n    { \\\"value\\\": true, \\\"label\\\": \\\"Yes\\\" },\\r\\n    { \\\"value\\\": false, \\\"label\\\": \\\"No\\\", \\\"selected\\\": true }\\r\\n]\",\"transformers\":null}",
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "queryType": 8
           }
         ],
         "style": "pills",
-        "queryType": 12
+        "queryType": 8
       },
       "name": "Workbook Parameters"
     },
@@ -720,20 +734,100 @@
             "name": "Partial costs Warning"
           },
           {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "parameters": [
+                {
+                  "id": "f902bb89-c2c2-4f79-a281-dd0ff7c02ba9",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "AppServicePlans",
+                  "label": "App Service plans",
+                  "type": 5,
+                  "isRequired": true,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+                  "crossComponentResources": [
+                    "value::all"
+                  ],
+                  "typeSettings": {
+                    "additionalResourceOptions": [
+                      "value::all"
+                    ],
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "defaultValue": "value::all",
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources"
+                }
+              ],
+              "style": "pills",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            "conditionalVisibility": {
+              "parameterName": "Debug",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "name": "Operations - Parameters"
+          },
+          {
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n//| where tags['organization'] in ({Organizations:value})\r\n//| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| project ['Id'] = id, ['Kind'] = kind, ['SKU'] = sku['name']",
-              "size": 1,
+              "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by name asc\r\n| project ['App Service plan'] = id, ['Kind'] = kind, ['SKU'] = sku['name']",
+              "size": 4,
               "title": "App Service Plan SKUs",
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
+              "resourceType": "{AppServicePlans}",
               "crossComponentResources": [
                 "value::all"
               ],
-              "visualization": "graph",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Kind",
+                    "formatter": 1
+                  },
+                  {
+                    "columnMatch": "SKU",
+                    "formatter": 1
+                  }
+                ]
+              },
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Id",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "CellDetails",
+                    "linkIsContextBlade": true,
+                    "showIcon": true
+                  }
+                },
+                "subtitleContent": {
+                  "columnMatch": "SKU",
+                  "formatter": 1
+                },
+                "secondaryContent": {
+                  "columnMatch": "Kind",
+                  "formatter": 1
+                },
+                "showBorder": false,
+                "sortOrderField": 1
+              },
               "graphSettings": {
                 "type": 2,
                 "topContent": {
@@ -742,7 +836,7 @@
                   "formatOptions": {
                     "linkTarget": "CellDetails",
                     "linkIsContextBlade": true,
-                    "showIcon": true
+                    "showIcon": false
                   }
                 },
                 "centerContent": {
@@ -754,6 +848,8 @@
                   "formatter": 1
                 },
                 "nodeIdField": "Id",
+                "sourceIdField": "Id",
+                "targetIdField": "Id",
                 "graphOrientation": 3,
                 "showOrientationToggles": false,
                 "nodeSize": null,
@@ -766,8 +862,239 @@
                 "hivesMargin": 5
               }
             },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "Debug",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
             "showPin": true,
             "name": "App Service Plan SKUs"
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookf30c1e5c-0fe8-4c1c-b184-bec220045c16",
+              "version": "MetricsItem/2.0",
+              "size": 4,
+              "chartType": 0,
+              "resourceType": "microsoft.web/serverfarms",
+              "metricScope": 0,
+              "resourceParameter": "AppServicePlans",
+              "resourceIds": [
+                "{AppServicePlans}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--CpuPercentage",
+                  "aggregation": 4,
+                  "columnName": "CPU"
+                },
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
+                  "aggregation": 3,
+                  "columnName": "Memory (Max)"
+                }
+              ],
+              "title": "App Service Plan Metrics",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Memory (Max) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  },
+                  {
+                    "columnId": "CPU",
+                    "label": "CPU"
+                  },
+                  {
+                    "columnId": "CPU Timeline",
+                    "label": "CPU Timeline"
+                  },
+                  {
+                    "columnId": "Memory (Max)",
+                    "label": "Memory (Max)"
+                  },
+                  {
+                    "columnId": "Memory (Max) Timeline",
+                    "label": "Memory (Max) Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "Debug",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "App Service Plan Metrics"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\",\"mergeType\":\"innerunique\",\"leftTable\":\"App Service Plan SKUs\",\"rightTable\":\"App Service Plan Metrics\",\"leftColumn\":\"App Service plan\",\"rightColumn\":\"Name\"}],\"projectRename\":[{\"originalName\":\"[App Service Plan SKUs].App Service plan\",\"mergedName\":\"App Service plan\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan SKUs].Kind\",\"mergedName\":\"Kind\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan SKUs].SKU\",\"mergedName\":\"SKU\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].CPU\",\"mergedName\":\"CPU\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].CPU Timeline\",\"mergedName\":\"CPU Timeline\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Memory (Max)\",\"mergedName\":\"Memory (Max)\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Memory (Max) Timeline\",\"mergedName\":\"Memory (Max) Timeline\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Subscription\"},{\"originalName\":\"[App Service Plan Metrics].Name\"}]}",
+              "size": 3,
+              "title": "App Service plans Costs",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 7,
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "App Service plan",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "App Service plan"
+                    }
+                  },
+                  {
+                    "columnMatch": "Kind",
+                    "formatter": 1,
+                    "tooltipFormat": {
+                      "tooltip": "Kind"
+                    }
+                  },
+                  {
+                    "columnMatch": "SKU",
+                    "formatter": 1,
+                    "tooltipFormat": {
+                      "tooltip": "SKU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPI Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory (Max)",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory (Max)"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory (Max) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory (Max) Timeline"
+                    }
+                  }
+                ]
+              }
+            },
+            "showPin": false,
+            "name": "App Service plans Costs"
           }
         ]
       },
