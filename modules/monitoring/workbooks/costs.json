@@ -360,7 +360,7 @@
               "version": "KqlItem/1.0",
               "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
               "size": 3,
-              "title": "Costs metrics - All resources (no tags here)",
+              "title": "Costs metrics - All resources (without filters on tags)",
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 12,
@@ -428,6 +428,172 @@
             "customWidth": "50",
             "showPin": true,
             "name": "Costs metrics - Overview - Filtered resources",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| project ['SKU'] = tostring(sku['name'])\r\n| summarize ['Count'] = count() by ['SKU']",
+              "size": 4,
+              "title": "App Service Plan SKUs",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Count"
+                ],
+                "group": "SKU",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "showPin": true,
+            "name": "App Service Plan SKUs",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook092f9232-f23a-45fb-a89b-49aa7eadb13e",
+              "version": "MetricsItem/2.0",
+              "size": 1,
+              "chartType": 1,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "FunctionsApps",
+              "resourceIds": [
+                "{FunctionsApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
+                  "aggregation": 1,
+                  "splitBy": null,
+                  "columnName": "Execution Units"
+                }
+              ],
+              "title": "Functions apps Request Units",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  }
+                ]
+              }
+            },
+            "showPin": true,
+            "name": "Functions apps Request Units",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"application\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Application\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Application",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Application",
+                "createOtherGroup": null,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| make-series ['Billed Size'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n",
+              "size": 1,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "barchart",
+              "chartSettings": {
+                "yAxis": [
+                  "Billed Size"
+                ],
+                "group": "Application",
+                "createOtherGroup": 8,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
             "styleSettings": {
               "showBorder": true
             }
@@ -840,7 +1006,10 @@
               }
             },
             "showPin": true,
-            "name": "Daily Costs metrics by Application"
+            "name": "Daily Costs metrics by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
           }
         ]
       },
