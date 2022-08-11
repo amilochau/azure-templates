@@ -1630,7 +1630,7 @@
                       "customColumnWidthSetting": "100px"
                     },
                     "numberFormat": {
-                      "unit": 0,
+                      "unit": 17,
                       "options": {
                         "style": "decimal",
                         "maximumFractionDigits": 1

@@ -55,6 +55,29 @@
             }
           },
           {
+            "id": "d236df9f-a8b8-48b3-8779-7ea1423c8870",
+            "version": "KqlParameterItem/1.0",
+            "name": "Organizations",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "distinct tostring(tags['organization'])\r\n| where tags_organization != ''",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
             "id": "9529838a-7d4a-4a56-a200-6c61778c26f6",
             "version": "KqlParameterItem/1.0",
             "name": "Environments",
@@ -91,7 +114,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -116,7 +139,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'app'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'app'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -141,7 +164,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -166,7 +189,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind startswith 'functionapp')\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind startswith 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -191,7 +214,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -216,7 +239,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\n| where tags['environment'] in ({Environments:value})\n| order by id asc\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\n| where tags['organization'] in ({Organizations:value})\n| where tags['environment'] in ({Environments:value})\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\n| order by group asc, name asc\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -241,7 +264,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.ServiceBus/namespaces'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.ServiceBus/namespaces'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -266,7 +289,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.KeyVault/vaults'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.KeyVault/vaults'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -291,7 +314,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.AppConfiguration/configurationStores'\r\n| where tags['environment'] in ({Environments:value})\r\n| order by id asc\r\n| project value = id, label = name, selected = true, group = tags['environment']",
+            "query": "where type =~ 'Microsoft.AppConfiguration/configurationStores'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
