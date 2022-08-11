@@ -1228,6 +1228,55 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Organization\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Organization",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Organization",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByOrganization",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Organization",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
               "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"application\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Application\"}]}}]}",
               "size": 1,
               "title": "Daily Costs metrics by Application",
@@ -1269,6 +1318,202 @@
             },
             "showPin": true,
             "name": "Daily Costs metrics by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Environment\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Environment",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Environment",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByEnvironment",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Environment",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceLocation\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[2]\",\"columnid\":\"Location\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Location",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Location",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByLocation",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Location",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceType\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[2]\",\"columnid\":\"ResourceType\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Resource Type",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "ResourceType",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByResourceType",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Resource Type",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceGroup\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[2]\",\"columnid\":\"ResourceGroup\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Resource Group",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "ResourceGroup",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByResourceType",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Resource Group",
             "styleSettings": {
               "showBorder": true
             }
