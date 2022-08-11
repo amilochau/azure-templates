@@ -88,7 +88,7 @@
             "multiSelect": true,
             "quote": "\"",
             "delimiter": ",",
-            "query": "distinct tostring(tags['organization'])\r\n| project value = tags_organization, label = tags_organization\r\n| extend value = iff(value == '', 'null', value), label = iff(label == '', '(Untagged)', label)",
+            "query": "distinct tostring(tags['organization'])\r\n| where tags_organization != ''\r\n| project value = tags_organization, label = tags_organization\r\n| order by label",
             "crossComponentResources": [
               "value::all"
             ],
@@ -111,7 +111,7 @@
             "multiSelect": true,
             "quote": "\"",
             "delimiter": ",",
-            "query": "distinct tostring(tags['application'])\r\n| project value = tags_application, label = tags_application\r\n| extend value = iff(value == '', 'null', value), label = iff(label == '', '(Untagged)', label)",
+            "query": "distinct tostring(tags['application'])\r\n| where tags_application != ''\r\n| project value = tags_application, label = tags_application\r\n| order by label",
             "crossComponentResources": [
               "value::all"
             ],
@@ -137,7 +137,7 @@
             "multiSelect": true,
             "quote": "\"",
             "delimiter": ",",
-            "query": "distinct tostring(tags['environment'])\r\n| project value = tags_environment, label = tags_environment\r\n| extend value = iff(value == '', 'null', value), label = iff(label == '', '(Untagged)', label)",
+            "query": "distinct tostring(tags['environment'])\r\n| where tags_environment != ''\r\n| project value = tags_environment, label = tags_environment\r\n| order by label",
             "crossComponentResources": [
               "value::all"
             ],
@@ -175,7 +175,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "query": "where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind startswith 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -200,7 +200,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -225,7 +225,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -250,7 +250,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],
@@ -275,7 +275,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by id",
+            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
             "crossComponentResources": [
               "value::all"
             ],

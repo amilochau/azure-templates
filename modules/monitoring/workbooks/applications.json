@@ -63,7 +63,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "distinct tostring(tags['organization'])\r\n| where tags_organization != ''",
+            "query": "distinct tostring(tags['organization'])\r\n| where tags_organization != ''\r\n| project value = tags_organization, label = tags_organization\r\n| order by label",
             "crossComponentResources": [
               "value::all"
             ],
@@ -86,7 +86,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "query": "distinct tostring(tags['environment'])\r\n| where tags_environment != ''",
+            "query": "distinct tostring(tags['environment'])\r\n| where tags_environment != ''\r\n| project value = tags_environment, label = tags_environment\r\n| order by label",
             "crossComponentResources": [
               "value::all"
             ],
