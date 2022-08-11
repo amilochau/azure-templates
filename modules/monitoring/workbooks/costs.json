@@ -1027,14 +1027,6 @@
         "groupType": "editable",
         "items": [
           {
-            "type": 1,
-            "content": {
-              "json": "This section presents main billable metrics for operations. Other operations, not in this section, may be billable!",
-              "style": "warning"
-            },
-            "name": "Partial costs Warning"
-          },
-          {
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
@@ -1532,14 +1524,6 @@
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
         "items": [
-          {
-            "type": 1,
-            "content": {
-              "json": "This section presents main billable metrics for storage. Other storage items, not in this section, may be billable!",
-              "style": "warning"
-            },
-            "name": "Partial costs Warning"
-          },
           {
             "type": 10,
             "content": {
@@ -2306,14 +2290,6 @@
         "version": "NotebookGroup/1.0",
         "groupType": "editable",
         "items": [
-          {
-            "type": 1,
-            "content": {
-              "json": "This section presents main billable metrics for monitoring. Other monitoring items, not in this section, may be billable!",
-              "style": "warning"
-            },
-            "name": "Partial costs Warning"
-          },
           {
             "type": 3,
             "content": {
