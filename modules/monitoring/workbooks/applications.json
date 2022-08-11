@@ -985,7 +985,8 @@
                     "numberFormat": {
                       "unit": 23,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {
@@ -1091,7 +1092,8 @@
                     "numberFormat": {
                       "unit": 17,
                       "options": {
-                        "style": "decimal"
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
                       }
                     },
                     "tooltipFormat": {

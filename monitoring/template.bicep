@@ -31,6 +31,9 @@ param templateVersion string
 ])
 param pricingPlan string = 'Free'
 
+@description('Whether to deploy reporting workbooks')
+param deployWorkbooks bool = false
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -68,7 +71,7 @@ module workspace '../modules/monitoring/log-analytics-workspace.bicep' = {
 }
 
 @description('Monitor Workbook - Applications')
-module workbook_applications '../modules/monitoring/workbooks/applications.bicep' = {
+module workbook_applications '../modules/monitoring/workbooks/applications.bicep' = if (deployWorkbooks) {
   name: 'Resource-MonitorWorkbook-Applications'
   params: {
     referential: tags.outputs.referential
@@ -78,7 +81,7 @@ module workbook_applications '../modules/monitoring/workbooks/applications.bicep
 }
 
 @description('Monitor Workbook - Costs')
-module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = {
+module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = if (deployWorkbooks) {
   name: 'Resource-MonitorWorkbook-Costs'
   params: {
     referential: tags.outputs.referential
