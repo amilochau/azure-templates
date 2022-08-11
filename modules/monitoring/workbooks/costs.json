@@ -615,6 +615,114 @@
         "loadType": "always",
         "items": [
           {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByOrganization",
+                  "label": "By organization",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByApplication",
+                  "label": "By application",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByEnvironment",
+                  "label": "By environment",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByLocation",
+                  "label": "By location",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByResourceType",
+                  "label": "By resource type",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByResourceGroup",
+                  "label": "By resource group",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                }
+              ],
+              "style": "pills",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "name": "Conditional display Parameters"
+          },
+          {
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
@@ -624,7 +732,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 12,
-              "visualization": "tiles",
+              "visualization": "piechart",
               "tileSettings": {
                 "titleContent": {
                   "columnMatch": "Organization",
@@ -649,12 +757,12 @@
                 "showBorder": false
               },
               "chartSettings": {
-                "xAxis": "timestamp",
+                "xAxis": "Organization",
                 "yAxis": [
                   "Cost"
                 ],
                 "group": "Organization",
-                "createOtherGroup": null,
+                "createOtherGroup": 6,
                 "seriesLabelSettings": [
                   {
                     "seriesName": "<empty>",
@@ -675,6 +783,12 @@
                 }
               }
             },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByOrganization",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
             "showPin": true,
             "name": "Costs metrics by Organization",
             "styleSettings": {
@@ -691,7 +805,40 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 12,
-              "visualization": "tiles",
+              "visualization": "piechart",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Application",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Application"
+                    }
+                  },
+                  {
+                    "columnMatch": "Cost",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "currency": "EUR",
+                        "style": "currency",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Cost"
+                    }
+                  }
+                ]
+              },
               "tileSettings": {
                 "titleContent": {
                   "columnMatch": "Application",
@@ -734,12 +881,12 @@
                 }
               },
               "chartSettings": {
-                "xAxis": "timestamp",
+                "xAxis": "Application",
                 "yAxis": [
                   "Cost"
                 ],
                 "group": "Application",
-                "createOtherGroup": null,
+                "createOtherGroup": 6,
                 "seriesLabelSettings": [
                   {
                     "seriesName": "<empty>",
@@ -758,7 +905,26 @@
                   },
                   "min": 0
                 }
+              },
+              "mapSettings": {
+                "locInfo": "LatLong",
+                "sizeSettings": "Cost",
+                "sizeAggregation": "Sum",
+                "legendMetric": "Cost",
+                "legendAggregation": "Sum",
+                "itemColorSettings": {
+                  "type": "heatmap",
+                  "colorAggregation": "Sum",
+                  "nodeColorField": "Cost",
+                  "heatmapPalette": "greenRed"
+                }
               }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByApplication",
+              "comparison": "isEqualTo",
+              "value": "true"
             },
             "showPin": true,
             "name": "Costs metrics by Application",
@@ -776,7 +942,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 12,
-              "visualization": "tiles",
+              "visualization": "piechart",
               "tileSettings": {
                 "titleContent": {
                   "columnMatch": "Environment",
@@ -801,12 +967,12 @@
                 "showBorder": false
               },
               "chartSettings": {
-                "xAxis": "timestamp",
+                "xAxis": "Environment",
                 "yAxis": [
                   "Cost"
                 ],
                 "group": "Environment",
-                "createOtherGroup": null,
+                "createOtherGroup": 6,
                 "seriesLabelSettings": [
                   {
                     "seriesName": "<empty>",
@@ -827,8 +993,87 @@
                 }
               }
             },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByEnvironment",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
             "showPin": true,
             "name": "Costs metrics by Environment",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceLocation\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"Region\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Location",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Environment",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "Environment",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Region",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByLocation",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Location",
             "styleSettings": {
               "showBorder": true
             }
@@ -843,7 +1088,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 12,
-              "visualization": "tiles",
+              "visualization": "piechart",
               "tileSettings": {
                 "titleContent": {
                   "columnMatch": "ResourceType",
@@ -868,12 +1113,12 @@
                 "showBorder": false
               },
               "chartSettings": {
-                "xAxis": "timestamp",
+                "xAxis": "ResourceType",
                 "yAxis": [
                   "Cost"
                 ],
                 "group": "ResourceType",
-                "createOtherGroup": null,
+                "createOtherGroup": 6,
                 "seriesLabelSettings": [
                   {
                     "seriesName": "<empty>",
@@ -894,6 +1139,12 @@
                 }
               }
             },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByResourceType",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
             "showPin": true,
             "name": "Costs metrics by Resource Type",
             "styleSettings": {
@@ -910,7 +1161,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 12,
-              "visualization": "tiles",
+              "visualization": "piechart",
               "tileSettings": {
                 "titleContent": {
                   "columnMatch": "ResourceGroupName",
@@ -935,12 +1186,12 @@
                 "showBorder": false
               },
               "chartSettings": {
-                "xAxis": "timestamp",
+                "xAxis": "ResourceGroupName",
                 "yAxis": [
                   "Cost"
                 ],
                 "group": "ResourceGroupName",
-                "createOtherGroup": null,
+                "createOtherGroup": 6,
                 "seriesLabelSettings": [
                   {
                     "seriesName": "<empty>",
@@ -960,6 +1211,12 @@
                   "min": 0
                 }
               }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByResourceGroup",
+              "comparison": "isEqualTo",
+              "value": "true"
             },
             "showPin": true,
             "name": "Costs metrics by Resource Group",
@@ -984,7 +1241,7 @@
                   "Cost"
                 ],
                 "group": "Application",
-                "createOtherGroup": null,
+                "createOtherGroup": 6,
                 "seriesLabelSettings": [
                   {
                     "seriesName": "<empty>",
@@ -1004,6 +1261,11 @@
                   "min": 0
                 }
               }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByApplication",
+              "comparison": "isEqualTo",
+              "value": "true"
             },
             "showPin": true,
             "name": "Daily Costs metrics by Application",
