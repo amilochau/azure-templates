@@ -1,0 +1,3095 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "**Welcome!** This workbook presents metrics from Cost Management. Use the filters below to be more precise.",
+        "style": "upsell"
+      },
+      "name": "Workbook Message"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "**Warning!** Resources with no tags could not appear in this workbook. Use the `Cost Management + Billing` view to see exhaustive, consolidated costs.",
+        "style": "warning"
+      },
+      "name": "Workbook Warning"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "parameters": [
+          {
+            "id": "13ec694f-ae3c-445e-b327-538f8cec05b5",
+            "version": "KqlParameterItem/1.0",
+            "name": "BillingScopeType",
+            "label": "Billing scope type",
+            "type": 2,
+            "isRequired": true,
+            "value": "/providers/Microsoft.Management/managementGroups?api-version=2020-05-01",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "jsonData": "[\r\n    { \"value\": \"/providers/Microsoft.Billing/billingAccounts?api-version=2019-10-01-preview\", \"label\": \"Billing Account (CSP with MCA)\" },\r\n    { \"value\": \"/providers/Microsoft.Management/managementGroups?api-version=2020-05-01\", \"label\": \"Management Group (Individual)\" }\r\n]"
+          },
+          {
+            "id": "e02bc81b-2fae-4f32-a4e8-499eb7d2071e",
+            "version": "KqlParameterItem/1.0",
+            "name": "BillingScope",
+            "label": "Billing scope",
+            "type": 2,
+            "isRequired": true,
+            "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":null,\"headers\":[],\"method\":\"GET\",\"path\":\"{BillingScopeType}\",\"urlParams\":[],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.value\",\"columns\":[{\"path\":\"id\",\"columnid\":\"value\"},{\"path\":\"properties.displayName\",\"columnid\":\"label\"}]}}]}",
+            "value": null,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "queryType": 12
+          },
+          {
+            "id": "fcf165c2-4526-49a5-9fcc-46fb56c766c9",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "label": "Time range",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 2592000000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ],
+              "allowCustom": true
+            }
+          },
+          {
+            "id": "96d55d4b-6e0a-484a-bde1-e3c8056f37f8",
+            "version": "KqlParameterItem/1.0",
+            "name": "Organizations",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "\"",
+            "delimiter": ",",
+            "query": "distinct tostring(tags['organization'])\r\n| where tags_organization != ''\r\n| project value = tags_organization, label = tags_organization\r\n| order by label",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "940e40c2-e641-4565-9fea-f832ec881830",
+            "version": "KqlParameterItem/1.0",
+            "name": "Applications",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "\"",
+            "delimiter": ",",
+            "query": "distinct tostring(tags['application'])\r\n| where tags_application != ''\r\n| project value = tags_application, label = tags_application\r\n| order by label",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": [
+              "value::all"
+            ]
+          },
+          {
+            "id": "988fd72e-79dc-4fe2-9783-662f880e36ed",
+            "version": "KqlParameterItem/1.0",
+            "name": "Environments",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "\"",
+            "delimiter": ",",
+            "query": "distinct tostring(tags['environment'])\r\n| where tags_environment != ''\r\n| project value = tags_environment, label = tags_environment\r\n| order by label",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": [
+              "value::all"
+            ]
+          },
+          {
+            "id": "e6f8b2dd-766d-4b1d-ba85-1e680a455470",
+            "version": "KqlParameterItem/1.0",
+            "name": "IncludeNoTaggedResources",
+            "label": "Include no tagged resources",
+            "type": 10,
+            "isRequired": true,
+            "value": ", \"\", null",
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "jsonData": "[\r\n    { \"value\": \", \\\"\\\", null\", \"label\": \"Yes\" },\r\n    { \"value\": \", \\\"\\\"\", \"label\": \"No\", \"selected\": true }\r\n]"
+          },
+          {
+            "id": "c27ce103-0d70-47be-ae57-a3d30428dbff",
+            "version": "KqlParameterItem/1.0",
+            "name": "Debug",
+            "type": 2,
+            "isRequired": true,
+            "query": "{\"version\":\"1.0.0\",\"content\":\"[\\r\\n    { \\\"value\\\": true, \\\"label\\\": \\\"Yes\\\" },\\r\\n    { \\\"value\\\": false, \\\"label\\\": \\\"No\\\", \\\"selected\\\": true }\\r\\n]\",\"transformers\":null}",
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [],
+              "showDefault": false
+            },
+            "queryType": 8
+          },
+          {
+            "id": "bc95367f-97bc-46ca-baab-9ec8cc8f3382",
+            "version": "KqlParameterItem/1.0",
+            "name": "AppServicePlans",
+            "label": "App Service plans",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind startswith 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "4e2d5837-8b93-4bb2-8448-21873ca928e2",
+            "version": "KqlParameterItem/1.0",
+            "name": "FunctionsApps",
+            "label": "Functions apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/sites'\r\n| where kind startswith 'functionapp'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "b7f1cc98-76a9-42a5-8cd6-7ca8f2f0e16f",
+            "version": "KqlParameterItem/1.0",
+            "name": "CosmosAccounts",
+            "label": "Cosmos DB accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.DocumentDB/databaseAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "1404788e-7b29-4df1-b883-457c5b0edcce",
+            "version": "KqlParameterItem/1.0",
+            "name": "StorageAccounts",
+            "label": "Storage accounts",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Storage/storageAccounts'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "92a467f2-1390-4d94-a97b-6842ff4b665a",
+            "version": "KqlParameterItem/1.0",
+            "name": "LogAnalyticsWorkspaces",
+            "label": "Log Analytics workspaces",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.OperationalInsights/workspaces'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "Workbook Parameters"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "6cd4b6d2-8c0b-442c-b9ab-c5c40afc903a",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Overview",
+            "subTarget": "overview",
+            "style": "link"
+          },
+          {
+            "id": "70b30ab8-b134-4020-ae8a-a684e65697ce",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Cost Management",
+            "subTarget": "costManagement",
+            "style": "link"
+          },
+          {
+            "id": "b4d0e196-b219-4d4f-9a82-ea97f0c3b50c",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Operations costs",
+            "subTarget": "operations",
+            "style": "link"
+          },
+          {
+            "id": "469ddb3f-f33a-4ced-91cf-51f8f4b782ca",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Storage costs",
+            "subTarget": "storage",
+            "style": "link"
+          },
+          {
+            "id": "a3a4f2ce-c45d-476d-a5fb-ca0388507144",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Monitoring costs",
+            "subTarget": "monitoring",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "Workbook Links"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "loadType": "always",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics - All resources (without filters on tags)",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {},
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 0,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Costs metrics - Overview - All resources",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics - Filtered resources",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {},
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 0,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Costs metrics - Overview - Filtered resources",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| project ['SKU'] = tostring(sku['name'])\r\n| summarize ['Count'] = count() by ['SKU']",
+              "size": 4,
+              "title": "App Service Plan SKUs",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Count"
+                ],
+                "group": "SKU",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "showPin": true,
+            "name": "App Service Plan SKUs",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook092f9232-f23a-45fb-a89b-49aa7eadb13e",
+              "version": "MetricsItem/2.0",
+              "size": 1,
+              "chartType": 1,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "FunctionsApps",
+              "resourceIds": [
+                "{FunctionsApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
+                  "aggregation": 1,
+                  "splitBy": null,
+                  "columnName": "Execution Units"
+                }
+              ],
+              "title": "Functions apps Request Units",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  }
+                ]
+              }
+            },
+            "showPin": true,
+            "name": "Functions apps Request Units",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"application\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Application\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Application",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Application",
+                "createOtherGroup": null,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| make-series ['Billed Size'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n",
+              "size": 1,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "barchart",
+              "chartSettings": {
+                "yAxis": [
+                  "Billed Size"
+                ],
+                "group": "Application",
+                "createOtherGroup": 8,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "overview"
+      },
+      "name": "Workbook Group - Overview"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "loadType": "always",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByOrganization",
+                  "label": "By organization",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByApplication",
+                  "label": "By application",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByEnvironment",
+                  "label": "By environment",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByLocation",
+                  "label": "By location",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByResourceType",
+                  "label": "By resource type",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                },
+                {
+                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "ByResourceGroup",
+                  "label": "By resource group",
+                  "type": 10,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
+                  "timeContext": {
+                    "durationMs": 86400000
+                  }
+                }
+              ],
+              "style": "pills",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "name": "Conditional display Parameters"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[2]\",\"columnid\":\"Organization\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Organization",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Organization",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "Organization",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Organization",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByOrganization",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Organization",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"application\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[2]\",\"columnid\":\"Application\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Application",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Application",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Application"
+                    }
+                  },
+                  {
+                    "columnMatch": "Cost",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "currency": "EUR",
+                        "style": "currency",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Cost"
+                    }
+                  }
+                ]
+              },
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Application",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "Application",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "chartSettings": {
+                "xAxis": "Application",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Application",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              },
+              "mapSettings": {
+                "locInfo": "LatLong",
+                "sizeSettings": "Cost",
+                "sizeAggregation": "Sum",
+                "legendMetric": "Cost",
+                "legendAggregation": "Sum",
+                "itemColorSettings": {
+                  "type": "heatmap",
+                  "colorAggregation": "Sum",
+                  "nodeColorField": "Cost",
+                  "heatmapPalette": "greenRed"
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByApplication",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[2]\",\"columnid\":\"Environment\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Environment",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Environment",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "Environment",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Environment",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByEnvironment",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Environment",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceLocation\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"Region\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Location",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Environment",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "Environment",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Region",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByLocation",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Location",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceType\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"ResourceType\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Resource Type",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "ResourceType",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "ResourceType",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "ResourceType",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByResourceType",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Resource Type",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"None\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceGroupName\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"ResourceGroupName\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"}]}}]}",
+              "size": 3,
+              "title": "Costs metrics by Resource Group",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "piechart",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "ResourceGroupName",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Cost",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "palette": "orange"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "ResourceGroupName",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "ResourceGroupName",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "Untagged"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ByResourceGroup",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Costs metrics by Resource Group",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Organization\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Organization",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Organization",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByOrganization",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Organization",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"application\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Application\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Application",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Application",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByApplication",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"TagKey\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[3]\",\"columnid\":\"Environment\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Environment",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Environment",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByEnvironment",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Environment",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceLocation\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[2]\",\"columnid\":\"Location\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Location",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "Location",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByLocation",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Location",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceType\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[2]\",\"columnid\":\"ResourceType\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Resource Type",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "ResourceType",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByResourceType",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Resource Type",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"ARMEndpoint/1.0\",\"data\":\"{\\r\\n\\t\\\"type\\\": \\\"ActualCost\\\",\\r\\n\\t\\\"timeframe\\\": \\\"Custom\\\",\\r\\n\\t\\\"timePeriod\\\": {\\r\\n\\t\\t\\\"from\\\": \\\"{TimeRange:startISO}\\\",\\r\\n\\t\\t\\\"to\\\": \\\"{TimeRange:endISO}\\\"\\r\\n\\t},\\r\\n\\t\\\"dataset\\\": {\\r\\n\\t\\t\\\"granularity\\\": \\\"Daily\\\",\\r\\n\\t\\t\\\"aggregation\\\": {\\r\\n\\t\\t\\t\\\"totalCost\\\": {\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\",\\r\\n\\t\\t\\t\\t\\\"function\\\": \\\"Sum\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t},\\r\\n\\t\\t\\\"sorting\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"ascending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"UsageDate\\\"\\r\\n\\t\\t\\t},\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"direction\\\": \\\"descending\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"Cost\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"grouping\\\": [\\r\\n\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\\"type\\\": \\\"Dimension\\\",\\r\\n\\t\\t\\t\\t\\\"name\\\": \\\"ResourceGroup\\\"\\r\\n\\t\\t\\t}\\r\\n\\t\\t],\\r\\n\\t\\t\\\"filter\\\": {\\r\\n\\t\\t\\t\\\"and\\\": [\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"organization\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Organizations}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"application\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Applications}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t},\\r\\n\\t\\t\\t\\t{\\r\\n\\t\\t\\t\\t\\t\\\"tags\\\": {\\r\\n\\t\\t\\t\\t\\t\\t\\\"name\\\": \\\"environment\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"operator\\\": \\\"In\\\",\\r\\n\\t\\t\\t\\t\\t\\t\\\"values\\\": [\\r\\n\\t\\t\\t\\t\\t\\t\\t{Environments}{IncludeNoTaggedResources}\\r\\n\\t\\t\\t\\t\\t\\t]\\r\\n\\t\\t\\t\\t\\t}\\r\\n\\t\\t\\t\\t}\\r\\n\\t\\t\\t]\\r\\n\\t\\t}\\r\\n\\t}\\r\\n}\",\"headers\":[],\"method\":\"POST\",\"path\":\"{BillingScope}/providers/Microsoft.CostManagement/query?\",\"urlParams\":[{\"key\":\"api-version\",\"value\":\"2021-10-01\"}],\"batchDisabled\":false,\"transformers\":[{\"type\":\"jsonpath\",\"settings\":{\"tablePath\":\"$.properties.rows\",\"columns\":[{\"path\":\"$[1]\",\"columnid\":\"timestamp\",\"columnType\":\"datetime\",\"substringRegexMatch\":\"^(\\\\d{4})(\\\\d{2})(\\\\d{2})$\",\"substringReplace\":\"$1-$2-$3\"},{\"path\":\"$[0]\",\"columnid\":\"Cost\"},{\"path\":\"$[2]\",\"columnid\":\"ResourceGroup\"}]}}]}",
+              "size": 1,
+              "title": "Daily Costs metrics by Resource Group",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 12,
+              "visualization": "barchart",
+              "chartSettings": {
+                "xAxis": "timestamp",
+                "yAxis": [
+                  "Cost"
+                ],
+                "group": "ResourceGroup",
+                "createOtherGroup": 6,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "<empty>",
+                    "label": "(Untagged)"
+                  }
+                ],
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "currency": "EUR",
+                      "style": "currency",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 2
+                    }
+                  },
+                  "min": 0
+                }
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ByResourceGroup",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "Daily Costs metrics by Resource Group",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "costManagement"
+      },
+      "name": "Cost Management Group - Overview"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| where type =~ 'Microsoft.Web/serverfarms'\r\n| where not(kind =~ 'functionapp')\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['application'] in ({Applications:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| sort by name asc\r\n| project ['App Service plan'] = id, ['Kind'] = kind, ['SKU'] = sku['name']",
+              "size": 4,
+              "title": "App Service Plan SKUs",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Kind",
+                    "formatter": 1
+                  },
+                  {
+                    "columnMatch": "SKU",
+                    "formatter": 1
+                  }
+                ]
+              },
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Id",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "CellDetails",
+                    "linkIsContextBlade": true,
+                    "showIcon": true
+                  }
+                },
+                "subtitleContent": {
+                  "columnMatch": "SKU",
+                  "formatter": 1
+                },
+                "secondaryContent": {
+                  "columnMatch": "Kind",
+                  "formatter": 1
+                },
+                "showBorder": false,
+                "sortOrderField": 1
+              },
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "Id",
+                  "formatter": 13,
+                  "formatOptions": {
+                    "linkTarget": "CellDetails",
+                    "linkIsContextBlade": true,
+                    "showIcon": false
+                  }
+                },
+                "centerContent": {
+                  "columnMatch": "SKU",
+                  "formatter": 1
+                },
+                "bottomContent": {
+                  "columnMatch": "Kind",
+                  "formatter": 1
+                },
+                "nodeIdField": "Id",
+                "sourceIdField": "Id",
+                "targetIdField": "Id",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "SKU",
+                  "type": 1,
+                  "colorPalette": "default"
+                },
+                "hivesMargin": 5
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "Debug",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "App Service Plan SKUs",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookf30c1e5c-0fe8-4c1c-b184-bec220045c16",
+              "version": "MetricsItem/2.0",
+              "size": 4,
+              "chartType": 0,
+              "resourceType": "microsoft.web/serverfarms",
+              "metricScope": 0,
+              "resourceParameter": "AppServicePlans",
+              "resourceIds": [
+                "{AppServicePlans}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--CpuPercentage",
+                  "aggregation": 4,
+                  "columnName": "CPU"
+                },
+                {
+                  "namespace": "microsoft.web/serverfarms",
+                  "metric": "microsoft.web/serverfarms--MemoryPercentage",
+                  "aggregation": 3,
+                  "columnName": "Memory (Max)"
+                }
+              ],
+              "title": "App Service Plan Metrics",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Memory (Max) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/serverfarms--CpuPercentage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "App Service plan"
+                  },
+                  {
+                    "columnId": "CPU",
+                    "label": "CPU"
+                  },
+                  {
+                    "columnId": "CPU Timeline",
+                    "label": "CPU Timeline"
+                  },
+                  {
+                    "columnId": "Memory (Max)",
+                    "label": "Memory (Max)"
+                  },
+                  {
+                    "columnId": "Memory (Max) Timeline",
+                    "label": "Memory (Max) Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "Debug",
+              "comparison": "isEqualTo",
+              "value": "true"
+            },
+            "showPin": true,
+            "name": "App Service Plan Metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\",\"mergeType\":\"innerunique\",\"leftTable\":\"App Service Plan SKUs\",\"rightTable\":\"App Service Plan Metrics\",\"leftColumn\":\"App Service plan\",\"rightColumn\":\"Name\"}],\"projectRename\":[{\"originalName\":\"[App Service Plan SKUs].App Service plan\",\"mergedName\":\"App Service plan\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan SKUs].Kind\",\"mergedName\":\"Kind\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan SKUs].SKU\",\"mergedName\":\"SKU\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].CPU\",\"mergedName\":\"CPU\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].CPU Timeline\",\"mergedName\":\"CPU Timeline\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Memory (Max)\",\"mergedName\":\"Memory (Max)\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Memory (Max) Timeline\",\"mergedName\":\"Memory (Max) Timeline\",\"fromId\":\"db74b73f-da08-4ecc-ba93-eba02c0db4c7\"},{\"originalName\":\"[App Service Plan Metrics].Subscription\"},{\"originalName\":\"[App Service Plan Metrics].Name\"}]}",
+              "size": 3,
+              "title": "App Service plans Billable metrics",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 7,
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "App Service plan",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "App Service plan"
+                    }
+                  },
+                  {
+                    "columnMatch": "Kind",
+                    "formatter": 1,
+                    "tooltipFormat": {
+                      "tooltip": "Kind"
+                    }
+                  },
+                  {
+                    "columnMatch": "SKU",
+                    "formatter": 1,
+                    "tooltipFormat": {
+                      "tooltip": "SKU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPU"
+                    }
+                  },
+                  {
+                    "columnMatch": "CPU Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CPI Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory (Max)",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory (Max)"
+                    }
+                  },
+                  {
+                    "columnMatch": "Memory (Max) Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "greenRed"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Memory (Max) Timeline"
+                    }
+                  }
+                ]
+              }
+            },
+            "showPin": false,
+            "name": "App Service plans Billable metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook7f6acfb2-8d94-4855-96c5-2071e4cd8089",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/sites",
+              "metricScope": 0,
+              "resourceParameter": "FunctionsApps",
+              "resourceIds": [
+                "{FunctionsApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionCount",
+                  "aggregation": 1,
+                  "columnName": "Executions"
+                },
+                {
+                  "namespace": "microsoft.web/sites",
+                  "metric": "microsoft.web/sites--FunctionExecutionUnits",
+                  "aggregation": 1,
+                  "columnName": "Execution Units"
+                }
+              ],
+              "title": "Functions apps Billable metrics",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Functions app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Executions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Executions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Execution Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Execution Units Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/sites--FunctionExecutionUnits",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Functions app"
+                  },
+                  {
+                    "columnId": "Executions",
+                    "label": "Executions"
+                  },
+                  {
+                    "columnId": "Executions Timeline",
+                    "label": "Executions Timeline"
+                  },
+                  {
+                    "columnId": "Execution Units",
+                    "label": "Execution Units"
+                  },
+                  {
+                    "columnId": "Execution Units Timeline",
+                    "label": "Execution Units Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Functions apps Billable metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "operations"
+      },
+      "name": "Workbook Group - Operations costs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook45edeefd-4020-445c-a11b-58e0921ff88d",
+              "version": "MetricsItem/2.0",
+              "size": 0,
+              "chartType": -2,
+              "resourceType": "microsoft.storage/storageaccounts",
+              "metricScope": 0,
+              "resourceParameter": "StorageAccounts",
+              "resourceIds": [
+                "{StorageAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "aggregation": 4
+                }
+              ],
+              "title": "Storage Billable metrics - Data by Region",
+              "gridFormatType": 1,
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "Name",
+                  "formatter": 13
+                },
+                "leftContent": {
+                  "columnMatch": "Value",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "mapSettings": {
+                "locInfo": "AzureResource",
+                "locInfoColumn": "Name",
+                "sizeSettings": "Value",
+                "sizeAggregation": "Sum",
+                "legendMetric": "Value",
+                "legendAggregation": "Sum",
+                "itemColorSettings": {
+                  "nodeColorField": "Value",
+                  "colorAggregation": "Sum",
+                  "type": "heatmap",
+                  "heatmapPalette": "orange"
+                },
+                "numberFormatSettings": {
+                  "unit": 2,
+                  "options": {
+                    "style": "decimal",
+                    "maximumFractionDigits": 1
+                  }
+                }
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "Subscription",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Value",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                },
+                "hivesContent": {
+                  "columnMatch": "Name",
+                  "formatter": 1
+                },
+                "nodeIdField": "Name",
+                "sourceIdField": "Name",
+                "targetIdField": "Name",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "Value",
+                  "type": 4,
+                  "heatmapPalette": "Blue",
+                  "heatmapMin": 1,
+                  "heatmapMax": 1000000000
+                },
+                "groupByField": "Name",
+                "hivesMargin": 5
+              },
+              "showRefreshButton": true,
+              "gridSettings": {
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Cosmos DB account"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Storage Billable metrics - Data by Region",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook18ce1f39-fd7a-41a4-a17a-cafcb6173c4e",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.storage/storageaccounts",
+              "metricScope": 0,
+              "resourceParameter": "StorageAccounts",
+              "resourceIds": [
+                "{StorageAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Transaction-Ingress",
+                  "aggregation": 1,
+                  "columnName": "Ingress"
+                },
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Transaction-Egress",
+                  "aggregation": 1,
+                  "columnName": "Egress"
+                },
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Transaction-Transactions",
+                  "aggregation": 1,
+                  "splitBy": "ApiName",
+                  "splitBySortOrder": -1,
+                  "splitByLimit": 50,
+                  "columnName": "Transactions"
+                }
+              ],
+              "title": "Storage Billable metrics - Transactions",
+              "gridFormatType": 2,
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "200px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Storage account"
+                    }
+                  },
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Storage account"
+                    }
+                  },
+                  {
+                    "columnMatch": "Segment",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Ingress",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum",
+                      "customColumnWidthSetting": "80px"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Ingress"
+                    }
+                  },
+                  {
+                    "columnMatch": "Ingress Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Egress",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum",
+                      "customColumnWidthSetting": "80px"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Egress"
+                    }
+                  },
+                  {
+                    "columnMatch": "Egress Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Transactions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum",
+                      "customColumnWidthSetting": "100px"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Transactions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Transactions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Transactions Timeline"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Name"
+                  ],
+                  "finalBy": "Segment"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Storage account"
+                  },
+                  {
+                    "columnId": "Ingress",
+                    "label": "Ingress"
+                  },
+                  {
+                    "columnId": "Ingress Timeline",
+                    "label": "Ingress Timeline"
+                  },
+                  {
+                    "columnId": "Egress",
+                    "label": "Egress"
+                  },
+                  {
+                    "columnId": "Egress Timeline",
+                    "label": "Egress Timeline"
+                  },
+                  {
+                    "columnId": "Transactions",
+                    "label": "Transactions"
+                  },
+                  {
+                    "columnId": "Transactions Timeline",
+                    "label": "Transactions Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "customWidth": "55",
+            "showPin": true,
+            "name": "Storage Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook18ce1f39-fd7a-41a4-a17a-cafcb6173c4e",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.storage/storageaccounts",
+              "metricScope": 0,
+              "resourceParameter": "StorageAccounts",
+              "resourceIds": [
+                "{StorageAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.storage/storageaccounts",
+                  "metric": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                  "aggregation": 4,
+                  "columnName": "Used Capacity"
+                }
+              ],
+              "title": "Storage Billable metrics - Data",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "showIcon": true,
+                      "customColumnWidthSetting": "200px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Storage account"
+                    }
+                  },
+                  {
+                    "columnMatch": "Used Capacity",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Used Capacity"
+                    }
+                  },
+                  {
+                    "columnMatch": "Used Capacity Timeline",
+                    "formatter": 21,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Used Capacity Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.storage/storageaccounts-Capacity-UsedCapacity",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": ".*\\/Transactions$",
+                    "formatter": 1
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Storage account"
+                  },
+                  {
+                    "columnId": "Used Capacity",
+                    "label": "Used Capacity"
+                  },
+                  {
+                    "columnId": "Used Capacity Timeline",
+                    "label": "Used Capacity Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "customWidth": "45",
+            "showPin": true,
+            "name": "Storage Billable metrics - Data",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookc65e232e-07ee-4552-aa0f-5e8e258cde08",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "metricScope": 0,
+              "resourceParameter": "CosmosAccounts",
+              "resourceIds": [
+                "{CosmosAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnits",
+                  "aggregation": 1,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
+                  "columnName": "Request Units"
+                }
+              ],
+              "title": "Cosmos DB Billable metrics - Transactions",
+              "gridFormatType": 2,
+              "filters": [
+                {
+                  "id": "1",
+                  "key": "CollectionName",
+                  "operator": 1,
+                  "values": [
+                    "<empty>"
+                  ]
+                }
+              ],
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Cosmos DB account"
+                    }
+                  },
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Segment",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Request Units",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Units"
+                    }
+                  },
+                  {
+                    "columnMatch": "Request Units Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Request Units Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnitsPreview",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-TotalRequestUnitsPreview Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    }
+                  },
+                  {
+                    "columnMatch": ".*\\/Total Request Units$",
+                    "formatter": 1
+                  },
+                  {
+                    "columnMatch": ".*\\/Request Units$",
+                    "formatter": 1
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-DataUsage Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Name"
+                  ],
+                  "finalBy": "Segment"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Cosmos DB account"
+                  },
+                  {
+                    "columnId": "Request Units",
+                    "label": "Request Units"
+                  },
+                  {
+                    "columnId": "Request Units Timeline",
+                    "label": "Request Units Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Cosmos DB Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbookc65e232e-07ee-4552-aa0f-5e8e258cde08",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.documentdb/databaseaccounts",
+              "metricScope": 0,
+              "resourceParameter": "CosmosAccounts",
+              "resourceIds": [
+                "{CosmosAccounts}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.documentdb/databaseaccounts",
+                  "metric": "microsoft.documentdb/databaseaccounts-Requests-DataUsage",
+                  "aggregation": 4,
+                  "splitBy": "CollectionName",
+                  "splitBySortOrder": 1,
+                  "splitByLimit": null,
+                  "columnName": "Data Usage"
+                }
+              ],
+              "title": "Cosmos DB Billable metrics - Data",
+              "gridFormatType": 2,
+              "filters": [
+                {
+                  "id": "1",
+                  "key": "CollectionName",
+                  "operator": 1,
+                  "values": [
+                    "<empty>",
+                    "__Empty"
+                  ]
+                }
+              ],
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    }
+                  },
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Segment",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Data Usage",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Usage"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Usage Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Usage Timeline"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Name"
+                  ],
+                  "finalBy": "Segment"
+                },
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Cosmos DB account"
+                  },
+                  {
+                    "columnId": "Data Usage",
+                    "label": "Data Usage"
+                  },
+                  {
+                    "columnId": "Data Usage Timeline",
+                    "label": "Data Usage Timeline"
+                  }
+                ]
+              },
+              "sortBy": [],
+              "showExportToExcel": true
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Cosmos DB Billable metrics - Data",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "storage"
+      },
+      "name": "Workbook Group - Storage costs"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| summarize ['Transactions' ] = count() by ['Application']\r\n| project ['Application'], ['Transactions']\r\n| order by ['Transactions'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Transactions",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Transactions"
+                ],
+                "group": "Application",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project _BilledSize, ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| summarize ['Billed Size' ] = sum(_BilledSize) by ['Application']\r\n| project ['Application'], ['Billed Size']\r\n| order by ['Billed Size'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Billed Size"
+                ],
+                "group": "Application",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project ['Table'] = tt\r\n| summarize ['Transactions' ] = count() by ['Table']\r\n| project ['Table'], ['Transactions']\r\n| order by ['Transactions'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Transactions",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Transactions"
+                ],
+                "group": "Table",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 17,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Transactions",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project _BilledSize, ['Table'] = tt\r\n| summarize ['Billed Size' ] = sum(_BilledSize) by ['Table']\r\n| project ['Table'], ['Billed Size']\r\n| order by ['Billed Size'] desc\r\n",
+              "size": 3,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "piechart",
+              "chartSettings": {
+                "yAxis": [
+                  "Billed Size"
+                ],
+                "group": "Table",
+                "createOtherGroup": null,
+                "ySettings": {
+                  "numberFormatSettings": {
+                    "unit": 2,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": true,
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n| summarize ['Transactions' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application']\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n    | make-series ['Transactions Timeline'] = count() default = 0, ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n    | project-away TimeGenerated\r\n) on ['Application']\r\n| project ['Application'], ['Transactions'], ['Transactions Timeline'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc\r\n",
+              "size": 2,
+              "title": "Log Analytics workspaces Billable metrics",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Application",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Monitored Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Transactions",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Transactions"
+                    }
+                  },
+                  {
+                    "columnMatch": "Transactions Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Transactions Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Billed Size",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Billed Size"
+                    }
+                  },
+                  {
+                    "columnMatch": "Billed Size Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Billed Size Timeline"
+                    }
+                  }
+                ],
+                "labelSettings": [
+                  {
+                    "columnId": "Application",
+                    "label": "Monitored Resource"
+                  }
+                ]
+              }
+            },
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "monitoring"
+      },
+      "name": "Workbook Group - Monitoring costs"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

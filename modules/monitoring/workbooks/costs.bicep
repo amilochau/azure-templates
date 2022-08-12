@@ -15,8 +15,8 @@ param location string
 
 // === VARIABLES ===
 
-var workbookData = loadJsonContent('./applications.json')
-var workbookDisplayNamePrefix = 'Applications Monitoring'
+var workbookData = loadJsonContent('./costs.json')
+var workbookDisplayNamePrefix = 'Costs Monitoring'
 var workbookDisplayName = referential.environment == 'Production' ? workbookDisplayNamePrefix : '${workbookDisplayNamePrefix} (${referential.host})'
 
 // === RESOURCES ===
