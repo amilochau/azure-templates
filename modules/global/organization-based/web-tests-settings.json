@@ -1,6 +1,12 @@
 {
-  "functions": {
+  "api": {
     "urlSuffix": "/api/health/light",
+    "locations": [
+      "emea-fr-pra-edge"
+    ]
+  },
+  "ui": {
+    "urlSuffix": "/",
     "locations": [
       "emea-fr-pra-edge"
     ]

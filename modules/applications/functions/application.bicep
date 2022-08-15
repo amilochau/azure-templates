@@ -228,5 +228,5 @@ output apiVersion string = fn.apiVersion
 @description('The Name of the deployed resource')
 output name string = fn.name
 
-@description('The default host name if the deployed resource')
-output defaultHostName string = fn.properties.defaultHostName
+@description('The default host name of the deployed resource')
+output defaultHostName string = fn.properties.hostNames[0]

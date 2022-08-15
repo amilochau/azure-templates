@@ -45,6 +45,9 @@ var regionName = loadJsonContent('../modules/global/regions.json')[location].nam
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
+@description('Extended monitoring')
+var extendedMonitoring = startsWith(hostName, 'prd')
+
 // === RESOURCES ===
 
 @description('Resource groupe tags')
@@ -59,6 +62,18 @@ module tags '../modules/global/tags.bicep' = {
   }
 }
 
+@description('Application Insights')
+module ai '../modules/monitoring/app-insights.bicep' = {
+  name: 'Resource-ApplicationInsights'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
+    disableLocalAuth: false
+    pricingPlan: pricingPlan
+  }
+}
+
 @description('Static Web Apps application')
 module swa '../modules/applications/static/application.bicep' = {
   name: 'Resource-StaticWebAppsApplication'
@@ -70,6 +85,19 @@ module swa '../modules/applications/static/application.bicep' = {
     staticWebAppOptions: {
       customDomains: customDomains
     }
+  }
+}
+
+@description('Availability tests on Static Web Apps application')
+module webTest_swa '../modules/monitoring/web-tests/ui-availability.bicep' = if (extendedMonitoring) {
+  name: 'Resource-AvailabilityTests-StaticWebApps'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
+    applicationInsightsId: ai.outputs.id
+    applicationHostName: swa.outputs.defaultHostName
+    
   }
 }
 

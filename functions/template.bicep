@@ -119,12 +119,10 @@ var regionName = loadJsonContent('../modules/global/regions.json')[location].nam
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
-@description('Web tests settings')
-var webTestsSettings = loadJsonContent('../modules/global/organization-based/web-tests-settings.json', 'functions')
-
 @description('Extended monitoring')
 var extendedMonitoring = startsWith(hostName, 'prd')
 
+@description('The storage accounts')
 var storageAccounts = storageAccountsOptions.enabled ? storageAccountsOptions.accounts : []
 
 // === RESOURCES ===
@@ -277,18 +275,28 @@ module swa '../modules/applications/static/application.bicep' = if (staticWebApp
   }
 }
 
-@description('Web tests')
-module webTest '../modules/monitoring/web-test-ping.bicep' = if (extendedMonitoring) {
-  name: 'Resource-WebTest'
+@description('Availability tests on Functions application')
+module webTest_functions '../modules/monitoring/web-tests/api-availability.bicep' = if (extendedMonitoring) {
+  name: 'Resource-AvailabilityTests-Functions'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    targetUrl: 'https://${fn.outputs.defaultHostName}${webTestsSettings.urlSuffix}'
     applicationInsightsId: ai.outputs.id
-    comment: 'Performance tests'
-    suffix: 'performance'
-    testLocations: webTestsSettings.locations
+    applicationHostName: fn.outputs.defaultHostName
+  }
+}
+
+@description('Availability tests on Static Web Apps application')
+module webTest_swa '../modules/monitoring/web-tests/ui-availability.bicep' = if (staticWebAppOptions.enabled && extendedMonitoring) {
+  name: 'Resource-AvailabilityTests-StaticWebApps'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
+    applicationInsightsId: ai.outputs.id
+    applicationHostName: swa.outputs.defaultHostName
+    
   }
 }
 
