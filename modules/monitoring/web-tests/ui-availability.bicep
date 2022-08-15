@@ -22,7 +22,7 @@ param location string
 // === VARIABLES ===
 
 @description('Web tests settings')
-var webTestsSettings = loadJsonContent('../../global/organization-based/web-tests-settings.json', 'ui')
+var webTestsSettings = loadJsonContent('../../global/web-tests-settings.json', 'ui')
 
 // === RESOURCES ===
 
