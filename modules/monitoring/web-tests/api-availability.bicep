@@ -22,7 +22,7 @@ param location string
 // === VARIABLES ===
 
 @description('Web tests settings')
-var webTestsSettings = loadJsonContent('../../global/organization-based/web-tests-settings.json', 'api')
+var webTestsSettings = loadJsonContent('../../global/web-tests-settings.json', 'api')
 
 // === RESOURCES ===
 
@@ -38,5 +38,6 @@ module webTest_functions './web-test-ping.bicep' = {
     comment: 'API availability tests'
     suffix: 'api'
     testLocations: webTestsSettings.locations
+    frequency: 600
   }
 }
