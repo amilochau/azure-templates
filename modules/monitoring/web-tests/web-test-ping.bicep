@@ -46,7 +46,7 @@ var specificTags = {
   comment: comment
   'hidden-link:${applicationInsightsId}': 'Resource'
 }
-var webTestConfiguration = replace(replace(replace(loadTextContent('../global/web-test-ping-template.xml'), '%TEST_NAME%', webTestName), '%TEST_URL%', targetUrl), '%TEST_DESCRIPTION%', comment)
+var webTestConfiguration = replace(replace(replace(loadTextContent('../../global/web-test-ping-template.xml'), '%TEST_NAME%', webTestName), '%TEST_URL%', targetUrl), '%TEST_DESCRIPTION%', comment)
 var tags = union(referential, specificTags)
 
 // === RESOURCES ===

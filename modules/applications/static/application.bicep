@@ -31,7 +31,7 @@ var swaSkuTier = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Stan
 // === RESOURCES ===
 
 @description('Static Web Apps application')
-resource swa 'Microsoft.Web/staticSites@2021-02-01' = {
+resource swa 'Microsoft.Web/staticSites@2022-03-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.staticWebApplication}'
   location: location
   tags: referential
@@ -68,3 +68,6 @@ output apiVersion string = swa.apiVersion
 
 @description('The Name of the deployed resource')
 output name string = swa.name
+
+@description('The default host name of the deployed resource')
+output defaultHostName string = !empty(swa.properties.customDomains) ? swa.properties.customDomains[0] : ''
