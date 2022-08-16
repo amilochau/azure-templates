@@ -48,7 +48,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
 // === AUTHORIZATIONS ===
 
 @description('Principal to Storage account')
-resource auth_app_stg 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
+resource auth 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(principalId, stg.id, role.id)
   scope: stg
   properties: {

@@ -47,7 +47,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 // === AUTHORIZATIONS ===
 
 @description('Principal to Key Vault')
-resource auth_app_kv 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
+resource auth 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: guid(principalId, kv.id, role.id)
   scope: kv
   properties: {
