@@ -233,6 +233,31 @@
             "resourceType": "microsoft.resourcegraph/resources"
           },
           {
+            "id": "0b5894a1-860a-47ce-84db-9fba47213659",
+            "version": "KqlParameterItem/1.0",
+            "name": "StaticWebApps",
+            "label": "Static Web apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/staticSites'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
             "id": "b7f1cc98-76a9-42a5-8cd6-7ca8f2f0e16f",
             "version": "KqlParameterItem/1.0",
             "name": "CosmosAccounts",
@@ -309,8 +334,8 @@
           }
         ],
         "style": "pills",
-        "queryType": 0,
-        "resourceType": "microsoft.operationalinsights/workspaces"
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources"
       },
       "name": "Workbook Parameters"
     },
@@ -503,7 +528,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -527,6 +552,78 @@
             },
             "showPin": true,
             "name": "Functions apps Request Units",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook57d1edad-c146-4b04-ae9a-ff477744a779",
+              "version": "MetricsItem/2.0",
+              "size": 1,
+              "chartType": 1,
+              "resourceType": "microsoft.web/staticSites",
+              "metricScope": 0,
+              "resourceParameter": "StaticWebApps",
+              "resourceIds": [
+                "{StaticWebApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--BytesSent",
+                  "aggregation": 1,
+                  "splitBy": null,
+                  "columnName": "Data Out"
+                }
+              ],
+              "title": "Static Web apps Data Out",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.web/staticsites--BytesSent",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Data Out",
+                    "label": "Data Out"
+                  },
+                  {
+                    "columnId": "Data Out Timeline",
+                    "label": "Data Out Timeline"
+                  }
+                ]
+              }
+            },
+            "showPin": true,
+            "name": "Static Web apps Data Out",
             "styleSettings": {
               "showBorder": true
             }
@@ -653,7 +750,6 @@
                   }
                 },
                 {
-                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
                   "version": "KqlParameterItem/1.0",
                   "name": "ByApplication",
                   "label": "By application",
@@ -666,10 +762,10 @@
                   "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
                   "timeContext": {
                     "durationMs": 86400000
-                  }
+                  },
+                  "id": "9a169fb5-14b0-4b2b-9546-6634bc5e424e"
                 },
                 {
-                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
                   "version": "KqlParameterItem/1.0",
                   "name": "ByEnvironment",
                   "label": "By environment",
@@ -682,10 +778,10 @@
                   "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
                   "timeContext": {
                     "durationMs": 86400000
-                  }
+                  },
+                  "id": "7f9aff31-f1c8-4af6-8955-1874923911b8"
                 },
                 {
-                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
                   "version": "KqlParameterItem/1.0",
                   "name": "ByLocation",
                   "label": "By location",
@@ -698,10 +794,10 @@
                   "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
                   "timeContext": {
                     "durationMs": 86400000
-                  }
+                  },
+                  "id": "19c549ae-e955-4820-bf7e-a0c1eba0350b"
                 },
                 {
-                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
                   "version": "KqlParameterItem/1.0",
                   "name": "ByResourceType",
                   "label": "By resource type",
@@ -714,10 +810,10 @@
                   "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
                   "timeContext": {
                     "durationMs": 86400000
-                  }
+                  },
+                  "id": "a309db4c-029a-4aee-a161-efa373126c16"
                 },
                 {
-                  "id": "24650817-c88b-446d-8361-3bf92ee361b3",
                   "version": "KqlParameterItem/1.0",
                   "name": "ByResourceGroup",
                   "label": "By resource group",
@@ -730,7 +826,8 @@
                   "jsonData": "[\r\n    { \"value\": \"true\", \"label\": \"Enabled\", \"selected\": true },\r\n    { \"value\": \"false\", \"label\": \"Disabled\" }\r\n]",
                   "timeContext": {
                     "durationMs": 86400000
-                  }
+                  },
+                  "id": "a3814dc6-643d-4a8c-b810-a45a02dc88cb"
                 }
               ],
               "style": "pills",
@@ -2029,6 +2126,225 @@
             },
             "showPin": true,
             "name": "Functions apps Billable metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook4acaab44-5653-4834-b825-e20636d4d04d",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/staticSites",
+              "metricScope": 0,
+              "resourceParameter": "StaticWebApps",
+              "resourceIds": [
+                "{StaticWebApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--SiteHits",
+                  "aggregation": 1,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--BytesSent",
+                  "aggregation": 1,
+                  "columnName": "Data Out"
+                }
+              ],
+              "title": "Static Web apps metrics",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "linkIsContextBlade": false,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Static Web app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "CDN Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CDN Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "CDN Requests Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "CDN Response Size",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CDN Response Size"
+                    }
+                  },
+                  {
+                    "columnMatch": "CDN Response Size Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "microsoft.web/staticsites--SiteHits",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/staticsites--BytesSent",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/staticsites--CdnRequestCount",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": null
+                    }
+                  },
+                  {
+                    "columnMatch": "microsoft.web/staticsites--CdnResponseSize",
+                    "formatter": 1,
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": null
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Static Web app"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Data Out",
+                    "label": "Data Out"
+                  },
+                  {
+                    "columnId": "Data Out Timeline",
+                    "label": "Data Out Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Static Web apps metrics",
             "styleSettings": {
               "showBorder": true
             }

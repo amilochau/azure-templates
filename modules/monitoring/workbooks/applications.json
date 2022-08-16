@@ -205,6 +205,31 @@
             "resourceType": "microsoft.resourcegraph/resources"
           },
           {
+            "id": "5fd274d1-e1ad-4aa1-a1fc-b499f680d43a",
+            "version": "KqlParameterItem/1.0",
+            "name": "StaticWebApps",
+            "label": "Static Web apps",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'Microsoft.Web/staticSites'\r\n| where tags['organization'] in ({Organizations:value})\r\n| where tags['environment'] in ({Environments:value})\r\n| extend group = strcat(tags['organization'], ' - ', tags['environment'])\r\n| order by group asc, name asc\r\n| project value = id, label = name, group",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "isHiddenWhenLocked": true,
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
             "id": "200836ff-b871-4624-b8cb-2ba3116f4cb3",
             "version": "KqlParameterItem/1.0",
             "name": "StorageAccounts",
@@ -2095,6 +2120,221 @@
             },
             "showPin": true,
             "name": "App Service plans metrics",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 10,
+            "content": {
+              "chartId": "workbook4acaab44-5653-4834-b825-e20636d4d04d",
+              "version": "MetricsItem/2.0",
+              "size": 3,
+              "chartType": 0,
+              "resourceType": "microsoft.web/staticSites",
+              "metricScope": 0,
+              "resourceParameter": "StaticWebApps",
+              "resourceIds": [
+                "{StaticWebApps}"
+              ],
+              "timeContextFromParameter": "TimeRange",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "metrics": [
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--SiteHits",
+                  "aggregation": 1,
+                  "columnName": "Requests"
+                },
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--BytesSent",
+                  "aggregation": 1,
+                  "columnName": "Data Out"
+                },
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--CdnRequestCount",
+                  "aggregation": 1,
+                  "columnName": "CDN Requests"
+                },
+                {
+                  "namespace": "microsoft.web/staticsites",
+                  "metric": "microsoft.web/staticsites--CdnResponseSize",
+                  "aggregation": 1,
+                  "columnName": "CDN Response Size"
+                }
+              ],
+              "title": "Static Web apps metrics",
+              "showRefreshButton": true,
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Subscription",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Name",
+                    "formatter": 13,
+                    "formatOptions": {
+                      "linkTarget": "Resource",
+                      "linkIsContextBlade": false,
+                      "showIcon": true,
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Static Web app"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "Requests Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Requests Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out"
+                    }
+                  },
+                  {
+                    "columnMatch": "Data Out Timeline",
+                    "formatter": 10,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Data Out Timeline"
+                    }
+                  },
+                  {
+                    "columnMatch": "CDN Requests",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 17,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CDN Requests"
+                    }
+                  },
+                  {
+                    "columnMatch": "CDN Requests Timeline",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "CDN Response Size",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    },
+                    "numberFormat": {
+                      "unit": 2,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "CDN Response Size"
+                    }
+                  },
+                  {
+                    "columnMatch": "CDN Response Size Timeline",
+                    "formatter": 5
+                  }
+                ],
+                "rowLimit": 10000,
+                "labelSettings": [
+                  {
+                    "columnId": "Name",
+                    "label": "Static Web app"
+                  },
+                  {
+                    "columnId": "Requests",
+                    "label": "Requests"
+                  },
+                  {
+                    "columnId": "Requests Timeline",
+                    "label": "Requests Timeline"
+                  },
+                  {
+                    "columnId": "Data Out",
+                    "label": "Data Out"
+                  },
+                  {
+                    "columnId": "Data Out Timeline",
+                    "label": "Data Out Timeline"
+                  },
+                  {
+                    "columnId": "CDN Requests",
+                    "label": "CDN Requests"
+                  },
+                  {
+                    "columnId": "CDN Requests Timeline",
+                    "label": "CDN Requests Timeline"
+                  },
+                  {
+                    "columnId": "CDN Response Size",
+                    "label": "CDN Response Size"
+                  },
+                  {
+                    "columnId": "CDN Response Size Timeline",
+                    "label": "CDN Response Size Timeline"
+                  }
+                ]
+              },
+              "showExportToExcel": true
+            },
+            "showPin": true,
+            "name": "Static Web apps metrics",
             "styleSettings": {
               "showBorder": true
             }
