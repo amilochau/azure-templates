@@ -300,18 +300,6 @@ module webTest_swa '../modules/monitoring/web-tests/ui-availability.bicep' = if 
   }
 }
 
-@description('Dashboard')
-module dashboard '../modules/monitoring/web-dashboard.bicep' = {
-  name: 'Resource-Dashboard'
-  params: {
-    referential: tags.outputs.referential
-    conventions: conventions
-    location: location
-    websiteName: fn.outputs.name
-    applicationInsightsName: ai.outputs.name
-  }
-}
-
 // === AUTHORIZATIONS ===
 
 @description('Functions to Key Vault')
