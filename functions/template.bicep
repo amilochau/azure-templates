@@ -51,7 +51,7 @@ The storage accounts options:
   - *daysBeforeDeletion*: int
   - *allowBlobPublicAccess*: bool
   - *authorizeClients*: bool
-  - *readOnly*: bool
+  - *role*: enum { Owner, Contributor, Reader }
 ''')
 param storageAccountsOptions object = {
   enabled: false
@@ -341,7 +341,7 @@ module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-da
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
-    roleType: contains(storageAccountOptions, 'readOnly') && storageAccountOptions.readOnly ? 'Reader' : 'Contributor'
+    roleType: contains(storageAccountOptions, 'role') ? storageAccountOptions.role : 'Contributor'
     roleDescription: 'Functions application should read/write the blobs from Storage Account'
   }
 }]
