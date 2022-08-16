@@ -35,7 +35,7 @@
               "container1",
               "container2"
             ],
-            "readOnly": true,
+            "role": "Reader",
             "daysBeforeDeletion": 365,
             "allowBlobPublicAccess": false,
             "authorizeClients": true
