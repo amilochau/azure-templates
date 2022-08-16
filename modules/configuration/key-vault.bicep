@@ -37,6 +37,14 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   }
 }
 
+@description('Lock')
+module lock '../authorizations/locks/key-vault-delete.bicep' = {
+  name: 'Resource-Lock-Delete'
+  params: {
+    keyVaultName: kv.name
+  }
+}
+
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')

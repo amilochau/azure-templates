@@ -120,6 +120,14 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
   }
 }
 
+@description('Lock')
+module lock '../authorizations/locks/storage-delete.bicep' = {
+  name: 'Resource-Lock-Delete'
+  params: {
+    storageAccountName: storageAccount.name
+  }
+}
+
 @description('CDN')
 module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
   name: 'Resource-CDN-${suffix}'

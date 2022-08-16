@@ -43,6 +43,14 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
   }
 }
 
+@description('Lock')
+module lock '../authorizations/locks/app-config-delete.bicep' = {
+  name: 'Resource-Lock-Delete'
+  params: {
+    appConfigurationName: appConfig.name
+  }
+}
+
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
