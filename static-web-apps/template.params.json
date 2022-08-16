@@ -14,10 +14,12 @@
     "pricingPlan": {
       "value": "Free"
     },
-    "customDomains": {
-      "value": [
-        "subdomain.domain.com"
-      ]
+    "staticWebAppOptions": {
+      "value": {
+        "customDomains": [
+          "subdomain.domain.com"
+        ]
+      }
     }
   }
 }

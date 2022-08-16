@@ -31,8 +31,11 @@ param templateVersion string
 ])
 param pricingPlan string = 'Free'
 
-@description('The application custom domains')
-param customDomains array = []
+@description('''
+The Static Web app options:
+- *customDomains*: string[]
+''')
+param staticWebAppOptions object
 
 @description('The deployment location')
 param location string = resourceGroup().location
@@ -82,9 +85,7 @@ module swa '../modules/applications/static/application.bicep' = {
     conventions: conventions
     location: location
     pricingPlan: pricingPlan
-    staticWebAppOptions: {
-      customDomains: customDomains
-    }
+    staticWebAppOptions: staticWebAppOptions
   }
 }
 
