@@ -16,7 +16,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15-preview
 
 // === AUTHORIZATIONS ===
 
-@description('Lock on Cosmos DB account')
+@description('Lock')
 resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
   name: '${cosmosAccount.name}-lock-delete'
   scope: cosmosAccount
