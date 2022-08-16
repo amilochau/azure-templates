@@ -46,11 +46,20 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: allowBlobPublicAccess
     allowSharedKeyAccess: false // false = Enforcing AAD as the only authentication method
-    allowCrossTenantReplication: true
+    allowCrossTenantReplication: false
+    allowedCopyScope: 'AAD'
     defaultToOAuthAuthentication: true
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Allow'
+    }
+    encryption: {
+      keySource: 'Microsoft.Storage'
+      services: {
+        blob: {
+          enabled: true
+        }
+      }
     }
   }
 
