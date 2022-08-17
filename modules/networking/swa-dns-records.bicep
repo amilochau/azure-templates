@@ -38,7 +38,7 @@ resource aRecordSet 'Microsoft.Network/dnsZones/A@2018-05-01' = if (isRootDomain
 }
 
 @description('The CNAME record')
-resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = if(!isRootDomain) {
+resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = if (!isRootDomain) {
   name: aliasRecordName
   parent: dnsZone
   properties: {

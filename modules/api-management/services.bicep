@@ -49,6 +49,32 @@ var hostNameConfigurations = [for gatewayCustomDomain in gatewayCustomDomains: {
 
 // === RESOURCES ===
 
+/*
+@description('CNAME record for custom domains')
+module dnsRecord './custom-domain.bicep' = [for customDomain in gatewayCustomDomains: {
+  name: 'Resource-CnameRecord-${customDomain}'
+  scope: resourceGroup(conventions.global.dnsZone['milochau.com'])
+  params: {
+    customDomain: customDomain
+    target: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
+    txtRecord: apiManagement.properties.hostnameConfigurations[0].hostName
+  }
+}]
+*/
+
+
+@description('CNAME record for custom domains')
+module dnsRecord '../networking/apim-dns-records.bicep' =  [for customDomain in gatewayCustomDomains: {
+  name: 'Resource-CnameRecord-${customDomain}'
+  scope: resourceGroup(conventions.global.dnsZone['milochau.com'])
+  params: {
+    customDomain: customDomain
+    target: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
+  }
+}]
+
+
+
 @description('API Management services')
 resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}'
