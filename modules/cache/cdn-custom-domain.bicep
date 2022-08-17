@@ -13,7 +13,7 @@ param cdnProfileName string
 @description('The name of the CDN endpoint')
 param cdnEndpointName string
 
-@description('The application custom domain')
+@description('The custom domain')
 param customDomain string
 
 // === VARIABLES ===
@@ -30,7 +30,7 @@ resource cdnEndpoint 'Microsoft.Cdn/profiles/endpoints@2021-06-01' existing = {
 // === RESOURCES ===
 
 @description('CNAME record for custom domains')
-module dnsRecord '../networking/cdn-dns-cname-record.bicep' = {
+module dnsRecord '../networking/cdn-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
   scope: resourceGroup(conventions.global.dnsZone[rootDomain])
   params: {

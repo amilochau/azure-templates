@@ -45,6 +45,9 @@ param apiProducts array = []
 @description('The CORS authorized origins, comma-separated')
 param apiCorsAuthorized string = ''
 
+@description('The custom domains for the gateway')
+param gatewayCustomDomains array = []
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -105,6 +108,7 @@ module apim '../modules/api-management/services.bicep' = {
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
     products: apiProducts
     apiCorsAuthorized: apiCorsAuthorized
+    gatewayCustomDomains: gatewayCustomDomains
   }
 }
 

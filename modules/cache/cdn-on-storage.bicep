@@ -63,7 +63,7 @@ resource endpoint 'Microsoft.Cdn/profiles/endpoints@2021-06-01' = {
     isCompressionEnabled: true
     originHostHeader: storageAccountHostName
     queryStringCachingBehavior: 'IgnoreQueryString'
-    contentTypesToCompress: loadJsonContent('./content-types.json')
+    contentTypesToCompress: loadJsonContent('../global/cdn-content-types.json')
     origins: [
       {
         name: replace(storageAccountHostName, '.', '-')

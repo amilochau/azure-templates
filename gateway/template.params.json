@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "organizationName": {
-      "value": "abc"
+      "value": "mil"
     },
     "applicationName": {
-      "value": "appname"
+      "value": "testapimcd"
     },
     "hostName": {
       "value": "dev"
@@ -16,19 +16,6 @@
     },
     "apiPublisherEmail": {
       "value": "john@example.com"
-    },
-    "apiProducts": {
-      "value": [
-        {
-          "productName": "Product 1",
-          "productDescription": "APIs for Product 1",
-          "subscriptionRequired": true,
-          "approvalRequired": true
-        }
-      ]
-    },
-    "apiCorsAuthorized": {
-      "value": "http://localhost:3000,https://google.com"
     }
   }
 }

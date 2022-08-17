@@ -25,14 +25,14 @@ param credentials object = {}
 // === EXISTING ===
 
 @description('API Management')
-resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
+resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
   name: conventions.global.apiManagement[referential.environment].name
 }
 
 // === RESOURCES ===
 
 @description('API Management backend')
-resource backend 'Microsoft.ApiManagement/service/backends@2021-01-01-preview' = {
+resource backend 'Microsoft.ApiManagement/service/backends@2021-12-01-preview' = {
   name: backendName
   parent: apim
   properties: {
