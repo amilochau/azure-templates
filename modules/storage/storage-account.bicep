@@ -99,15 +99,15 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
     properties: {
       changeFeed: {
         enabled: extendedRecoverability
-        retentionInDays: 7
+        retentionInDays: extendedRecoverability ? 7 : null
       }
       deleteRetentionPolicy: {
         enabled: extendedRecoverability
-        days: 14
+        days: extendedRecoverability ? 14 : null
       }
       containerDeleteRetentionPolicy: {
         enabled: extendedRecoverability
-        days: 14
+        days: extendedRecoverability ? 14 : null
       }
     }
     
