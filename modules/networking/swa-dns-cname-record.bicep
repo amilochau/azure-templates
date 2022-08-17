@@ -25,8 +25,20 @@ resource dnsZone 'Microsoft.Network/dnsZones@2018-05-01' existing = {
 
 // === RESOURCES ===
 
+@description('The A record')
+resource aRecordSet 'Microsoft.Network/dnsZones/A@2018-05-01' = if (isRootDomain) {
+  name: '@'
+  parent: dnsZone
+  properties: {
+    TTL: 3600
+    CNAMERecord: {
+      cname: target
+    }
+  }
+}
+
 @description('The CNAME record')
-resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
+resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = if(!isRootDomain) {
   name: aliasRecordName
   parent: dnsZone
   properties: {
