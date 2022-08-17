@@ -111,7 +111,7 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
       displayName: product.productName
       description: product.productDescription
       subscriptionRequired: product.subscriptionRequired
-      approvalRequired: product.approvalRequired
+      approvalRequired: product.subscriptionRequired ? product.approvalRequired : null
       state: 'published'
     }
   }]
