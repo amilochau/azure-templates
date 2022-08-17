@@ -20,7 +20,7 @@ var rootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? 
 // === EXISTING ===
 
 @description('The API Management')
-resource cdnEndpoint 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
+resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
   name: apiManagementName
 }
 
@@ -32,8 +32,8 @@ module dnsRecord '../networking/cdn-dns-records.bicep' = {
   scope: resourceGroup(conventions.global.dnsZone[rootDomain])
   params: {
     customDomain: customDomain
-    target: 'cdnverify.${cdnEndpoint.properties.hostName}'
-    cdnEndpointId: cdnEndpoint.id
+    target: apiManagement.properties.gatewayUrl
+    txtRecord: apiManagement.properties.hostnameConfigurations[0].hostName
   }
 }
 

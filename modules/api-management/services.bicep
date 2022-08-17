@@ -67,7 +67,12 @@ resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
     customProperties: {
       'Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2': 'true'
     }
-    hostnameConfigurations: hostNameConfigurations
+    hostnameConfigurations: union([{
+      type: 'Proxy'
+      certificateSource: 'BuiltIn'
+      hostName: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
+      defaultSslBinding: false
+    }], hostNameConfigurations)
   }
 
   // Named value to store the Application Insights instrumentation key
@@ -146,4 +151,3 @@ output principalId string = apim.identity.principalId
 output hostnameConfigurations array = apim.properties.hostnameConfigurations
 output gatewayUrl string = apim.properties.gatewayUrl
 output customProperties object = apim.properties.customProperties
-output certificates array = apim.properties.certificates

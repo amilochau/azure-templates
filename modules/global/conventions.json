@@ -53,6 +53,7 @@
       "apiManagement": "apim",
       "apiManagementApi": "apimapi",
       "apiManagementApiVersionSet": "apimversionset",
+      "apiManagementGatewayHost": "apim.azure-api.net",
       "functionsApplication": "fn",
       "applicationInsights": "ai",
       "userAssignedIdentityApplication": "uaiapp",

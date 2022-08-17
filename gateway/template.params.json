@@ -16,6 +16,14 @@
     },
     "apiPublisherEmail": {
       "value": "john@example.com"
+    },
+    "apiCorsAuthorized": {
+      "value": "http://localhost:3000,https://google.com"
+    },
+    "gatewayCustomDomains": {
+      "value": [
+        "todelete-testapimdomain.milochau.com"
+      ]
     }
   }
 }
