@@ -50,6 +50,7 @@ The storage accounts options:
   - **containers**: string[]
   - *daysBeforeDeletion*: int
   - *allowBlobPublicAccess*: bool
+  - *customDomains*: string[]
   - *authorizeClients*: bool
   - *role*: enum { Owner, Contributor, Reader }
 ''')
