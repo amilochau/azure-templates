@@ -17,7 +17,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
 // === AUTHORIZATIONS ===
 
 @description('Lock')
-resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
+resource lock 'Microsoft.Authorization/locks@2017-04-01' = { // @2020-05-01 is not available in westeurope
   name: '${appConfig.name}-lock-delete'
   scope: appConfig
   properties: {

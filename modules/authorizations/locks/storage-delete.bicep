@@ -17,7 +17,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
 // === AUTHORIZATIONS ===
 
 @description('Lock')
-resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
+resource lock 'Microsoft.Authorization/locks@2017-04-01' = { // @2020-05-01 is not available in westeurope
   name: '${stg.name}-lock-delete'
   scope: stg
   properties: {

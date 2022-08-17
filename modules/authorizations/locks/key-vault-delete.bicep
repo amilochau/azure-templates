@@ -17,7 +17,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {
 // === AUTHORIZATIONS ===
 
 @description('Lock')
-resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
+resource lock 'Microsoft.Authorization/locks@2017-04-01' = { // @2020-05-01 is not available in westeurope
   name: '${kv.name}-lock-delete'
   scope: kv
   properties: {
