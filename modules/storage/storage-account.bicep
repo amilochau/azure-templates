@@ -28,6 +28,7 @@ var tags = union(referential, specificTags)
 var suffix = contains(storageAccountOptions, 'suffix') ? storageAccountOptions.suffix : ''
 var daysBeforeDeletion = contains(storageAccountOptions, 'daysBeforeDeletion') ? storageAccountOptions.daysBeforeDeletion : 0
 var allowBlobPublicAccess = contains(storageAccountOptions, 'allowBlobPublicAccess') ? storageAccountOptions.allowBlobPublicAccess : false
+var cdnCustomDomains = contains(storageAccountOptions, 'customDomains') ? storageAccountOptions.customDomains : []
 
 // === RESOURCES ===
 
@@ -139,6 +140,7 @@ module cdn '../cache/cdn-on-storage.bicep' = if (allowBlobPublicAccess) {
     storageAccountComment: storageAccountOptions.comment
     storageAccountSuffix: suffix
     cdnCacheExpirationInDays: 360
+    cdnCustomDomains: cdnCustomDomains
   }
 }
 

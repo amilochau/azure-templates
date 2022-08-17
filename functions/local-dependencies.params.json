@@ -35,7 +35,10 @@
               "container2"
             ],
             "daysBeforeDeletion": 365,
-            "allowBlobPublicAccess": false
+            "allowBlobPublicAccess": false,
+            "customDomains": [
+              "subdomain.domain.com"
+            ]
           }
         ]
       }

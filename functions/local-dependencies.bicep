@@ -49,6 +49,7 @@ The storage accounts options:
   - **containers**: string[]
   - *daysBeforeDeletion*: int
   - *allowBlobPublicAccess*: bool
+  - *customDomains*: string[]
 ''')
 param storageAccountsOptions object = {
   enabled: false

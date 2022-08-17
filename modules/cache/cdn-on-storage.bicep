@@ -24,6 +24,9 @@ param storageAccountSuffix string = ''
 @maxValue(360)
 param cdnCacheExpirationInDays int = 360
 
+@description('The CDN custom domains')
+param cdnCustomDomains array = []
+
 @description('The deployment location')
 param location string
 
@@ -39,56 +42,68 @@ var tags = union(referential, specificTags)
 // === RESOURCES ===
 
 @description('CDN Profile')
-resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
+resource cdn 'Microsoft.Cdn/profiles@2021-06-01' = {
   name: cdnProfileName
   location: location
   tags: tags
   sku: {
     name: 'Standard_Microsoft'
   }
+}
 
-  // CDN Endpoint
-  resource endpoint 'endpoints' = {
-    name: cdnEndpointName
-    location: location
-    tags: referential
-    properties: {
-      isHttpAllowed: false
-      isHttpsAllowed: true
-      isCompressionEnabled: true
-      originHostHeader: storageAccountHostName
-      queryStringCachingBehavior: 'IgnoreQueryString'
-      contentTypesToCompress: loadJsonContent('./content-types.json')
-      origins: [
+@description('CDN Endpoint')
+resource endpoint 'Microsoft.Cdn/profiles/endpoints@2021-06-01' = {
+  name: cdnEndpointName
+  parent: cdn
+  location: location
+  tags: referential
+  properties: {
+    isHttpAllowed: false
+    isHttpsAllowed: true
+    isCompressionEnabled: true
+    originHostHeader: storageAccountHostName
+    queryStringCachingBehavior: 'IgnoreQueryString'
+    contentTypesToCompress: loadJsonContent('./content-types.json')
+    origins: [
+      {
+        name: replace(storageAccountHostName, '.', '-')
+        properties: {
+          hostName: storageAccountHostName
+        }
+      }
+    ]
+    deliveryPolicy: {
+      rules: [
         {
-          name: replace(storageAccountHostName, '.', '-')
-          properties: {
-            hostName: storageAccountHostName
-          }
+          name: 'Global'
+          order: 0
+          actions: [
+            {
+              name: 'CacheExpiration'
+              parameters: {
+                cacheBehavior: 'Override'
+                cacheType: 'All'
+                cacheDuration: '${cdnCacheExpirationInDays}.00:00:00'
+                typeName: 'DeliveryRuleCacheExpirationActionParameters'
+              }
+            }
+          ]
         }
       ]
-      deliveryPolicy: {
-        rules: [
-          {
-            name: 'Global'
-            order: 0
-            actions: [
-              {
-                name: 'CacheExpiration'
-                parameters: {
-                  cacheBehavior: 'Override'
-                  cacheType: 'All'
-                  cacheDuration: '${cdnCacheExpirationInDays}.00:00:00'
-                  '@odata.type': '#Microsoft.Azure.Cdn.Models.DeliveryRuleCacheExpirationActionParameters'
-                }
-              }
-            ]
-          }
-        ]
-      }
     }
   }
 }
+
+@description('Custom domains for CDN endpoint')
+module domains 'cdn-custom-domain.bicep' = [for (customDomain, i) in cdnCustomDomains: if (!empty(cdnCustomDomains)) {
+  name: empty(customDomain) ? 'empty' : 'Resource-CustomDomain-${customDomain}'
+  params: {
+    conventions: conventions
+    customDomain: customDomain
+    cdnProfileName: cdn.name
+    cdnEndpointName: endpoint.name
+  }
+}]
 
 // === OUTPUTS ===
 
