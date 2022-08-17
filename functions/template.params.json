@@ -38,7 +38,10 @@
             "role": "Reader",
             "daysBeforeDeletion": 365,
             "allowBlobPublicAccess": false,
-            "authorizeClients": true
+            "authorizeClients": true,
+            "customDomains": [
+              "subdomain.domain.com"
+            ]
           }
         ]
       }

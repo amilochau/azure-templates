@@ -42,7 +42,7 @@ var tags = union(referential, specificTags)
 // === RESOURCES ===
 
 @description('CDN Profile')
-resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
+resource cdn 'Microsoft.Cdn/profiles@2021-06-01' = {
   name: cdnProfileName
   location: location
   tags: tags
@@ -52,7 +52,7 @@ resource cdn 'Microsoft.Cdn/profiles@2020-09-01' = {
 }
 
 @description('CDN Endpoint')
-resource endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
+resource endpoint 'Microsoft.Cdn/profiles/endpoints@2021-06-01' = {
   name: cdnEndpointName
   parent: cdn
   location: location
@@ -84,7 +84,7 @@ resource endpoint 'Microsoft.Cdn/profiles/endpoints@2020-09-01' = {
                 cacheBehavior: 'Override'
                 cacheType: 'All'
                 cacheDuration: '${cdnCacheExpirationInDays}.00:00:00'
-                '@odata.type': '#Microsoft.Azure.Cdn.Models.DeliveryRuleCacheExpirationActionParameters'
+                typeName: 'DeliveryRuleCacheExpirationActionParameters'
               }
             }
           ]
