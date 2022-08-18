@@ -145,6 +145,15 @@ resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   }]
 }
 
+@description('The API for API Management health')
+module apiHealth 'api-health.bicep' = {
+  name: 'Resource-ApiHealth'
+  params: {
+    referential: referential
+    conventions: conventions
+  }
+}
+
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
