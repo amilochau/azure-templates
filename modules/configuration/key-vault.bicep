@@ -16,12 +16,13 @@ param location string
 // === VARIABLES ===
 
 var tenantId = subscription().tenantId
+var keyVaultName = '${conventions.naming.prefix}${conventions.naming.suffixes.keyVault}'
 
 // === RESOURCES ===
 
 @description('Key Vault')
 resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.keyVault}'
+  name: replace(keyVaultName, '-', '')
   location: location
   tags: referential
   properties: {

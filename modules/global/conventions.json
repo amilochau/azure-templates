@@ -21,22 +21,22 @@
     "apiManagement": {
       "Development": {
         "name": "%ORGANIZATION%-gateway-dev-apim",
-        "keyVaultName": "%ORGANIZATION%-gateway-dev-kv",
+        "keyVaultName": "%ORGANIZATION%gatewaydevkv",
         "resourceGroupName": "%ORGANIZATION%-gateway-dev-rg"
       },
       "Staging": {
         "name": "%ORGANIZATION%-gateway-dev-apim",
-        "keyVaultName": "%ORGANIZATION%-gateway-dev-kv",
+        "keyVaultName": "%ORGANIZATION%gatewaydevkv",
         "resourceGroupName": "%ORGANIZATION%-gateway-dev-rg"
       },
       "Production": {
         "name": "%ORGANIZATION%-gateway-prd-apim",
-        "keyVaultName": "%ORGANIZATION%-gateway-prd-kv",
+        "keyVaultName": "%ORGANIZATION%gatewayprdkv",
         "resourceGroupName": "%ORGANIZATION%-gateway-prd-rg"
       },
       "Shared": {
         "name": "%ORGANIZATION%-gateway-prd-apim",
-        "keyVaultName": "%ORGANIZATION%-gateway-prd-kv",
+        "keyVaultName": "%ORGANIZATION%gatewayprdkv",
         "resourceGroupName": "%ORGANIZATION%-gateway-prd-rg"
       }
     }
