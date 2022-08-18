@@ -98,7 +98,6 @@ resource endpoint 'Microsoft.Cdn/profiles/endpoints@2021-06-01' = {
 module domains 'cdn-custom-domain.bicep' = [for (customDomain, i) in cdnCustomDomains: if (!empty(cdnCustomDomains)) {
   name: empty(customDomain) ? 'empty' : 'Resource-CustomDomain-${customDomain}'
   params: {
-    conventions: conventions
     customDomain: customDomain
     cdnProfileName: cdn.name
     cdnEndpointName: endpoint.name

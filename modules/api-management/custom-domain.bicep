@@ -4,11 +4,8 @@
 
 // === PARAMETERS ===
 
-@description('The naming convention, from the conventions.json file')
-param conventions object
-
-//@description('The name of the API Management')
-param apiManagementName string
+//@description('The URL of the API Management services')
+param apiManagementUrl string
 
 @description('The custom domain')
 param customDomain string
@@ -16,35 +13,17 @@ param customDomain string
 // === VARIABLES ===
 
 var rootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)
-
-// === EXISTING ===
-/*
-@description('The API Management')
-resource apiManagement 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
-  name: apiManagementName
-}*/
+var dnsZone = loadJsonContent('../global/organization-specifics/dns-zones.json')[rootDomain]
 
 // === RESOURCES ===
 
 @description('CNAME record for custom domains')
 module dnsRecord '../networking/apim-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
-  scope: resourceGroup(conventions.global.dnsZone[rootDomain])
+  scope: resourceGroup(dnsZone.resourceGroup)
   params: {
     customDomain: customDomain
-    target: apiManagement.properties.gatewayUrl
+    target: apiManagementUrl
+    domainRegistrationIdentifier: dnsZone.apiManagementOwnershipId
   }
 }
-
-/*@description('Custom domains for CDN endpoint')
-resource cdnEndpointDomain 'Microsoft.Cdn/profiles/endpoints/customDomains@2021-06-01' = {
-  name: replace(customDomain, '.', '-')
-  parent: cdnEndpoint
-  dependsOn: [
-    dnsRecord
-  ]
-  properties: {
-    hostName: customDomain
-  }
-}
-*/

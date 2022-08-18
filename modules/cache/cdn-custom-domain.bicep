@@ -4,9 +4,6 @@
 
 // === PARAMETERS ===
 
-@description('The naming convention, from the conventions.json file')
-param conventions object
-
 @description('The name of the CDN profile')
 param cdnProfileName string
 
@@ -19,6 +16,7 @@ param customDomain string
 // === VARIABLES ===
 
 var rootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)
+var dnsZone = loadJsonContent('../global/organization-specifics/dns-zones.json')[rootDomain]
 
 // === EXISTING ===
 
@@ -32,7 +30,7 @@ resource cdnEndpoint 'Microsoft.Cdn/profiles/endpoints@2021-06-01' existing = {
 @description('CNAME record for custom domains')
 module dnsRecord '../networking/cdn-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
-  scope: resourceGroup(conventions.global.dnsZone[rootDomain])
+  scope: resourceGroup(dnsZone.resourceGroup)
   params: {
     customDomain: customDomain
     target: 'cdnverify.${cdnEndpoint.properties.hostName}'

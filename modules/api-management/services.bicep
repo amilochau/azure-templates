@@ -49,36 +49,22 @@ var hostNameConfigurations = [for gatewayCustomDomain in gatewayCustomDomains: {
 
 // === RESOURCES ===
 
-/*
-@description('CNAME record for custom domains')
-module dnsRecord './custom-domain.bicep' = [for customDomain in gatewayCustomDomains: {
+@description('Custom domains for API Management gateways')
+module domains './custom-domain.bicep' = [for customDomain in gatewayCustomDomains: {
   name: 'Resource-CnameRecord-${customDomain}'
-  scope: resourceGroup(conventions.global.dnsZone['milochau.com'])
   params: {
     customDomain: customDomain
-    target: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
-    txtRecord: apiManagement.properties.hostnameConfigurations[0].hostName
+    apiManagementUrl: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
   }
 }]
-*/
-
-
-@description('CNAME record for custom domains')
-module dnsRecord '../networking/apim-dns-records.bicep' =  [for customDomain in gatewayCustomDomains: {
-  name: 'Resource-CnameRecord-${customDomain}'
-  scope: resourceGroup(conventions.global.dnsZone['milochau.com'])
-  params: {
-    customDomain: customDomain
-    target: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
-  }
-}]
-
-
 
 @description('API Management services')
 resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}'
   location: location
+  dependsOn: [
+    domains
+  ]
   sku: {
     name: 'Consumption'
     capacity: 0 // Needs to be at 0 for Consumption plan

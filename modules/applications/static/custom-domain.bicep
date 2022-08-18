@@ -4,9 +4,6 @@
 
 // === PARAMETERS ===
 
-@description('The naming convention, from the conventions.json file')
-param conventions object
-
 @description('The name of the Static Web Apps')
 param swaName string
 
@@ -16,6 +13,7 @@ param customDomain string
 // === VARIABLES ===
 
 var rootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)
+var dnsZone = loadJsonContent('../../global/organization-specifics/dns-zones.json')[rootDomain]
 
 // === EXISTING ===
 
@@ -29,7 +27,7 @@ resource swa 'Microsoft.Web/staticSites@2022-03-01' existing = {
 @description('CNAME record for custom domains')
 module dnsRecord '../../networking/swa-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
-  scope: resourceGroup(conventions.global.dnsZone[rootDomain])
+  scope: resourceGroup(dnsZone.resourceGroup)
   params: {
     customDomain: customDomain
     target: swa.properties.defaultHostname
