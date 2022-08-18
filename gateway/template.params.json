@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "organizationName": {
-      "value": "mil"
+      "value": "abc"
     },
     "applicationName": {
-      "value": "testapimcd"
+      "value": "appname"
     },
     "hostName": {
       "value": "dev"
@@ -22,7 +22,7 @@
     },
     "gatewayCustomDomains": {
       "value": [
-        "todelete-testapimdomain.milochau.com"
+        "subdomain.domain.com"
       ]
     }
   }
