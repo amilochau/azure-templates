@@ -61,7 +61,7 @@
       "cosmosDatabase": "cosmosdb",
       "servicePlan": "asp",
       "serviceBusNamespace": "sbn",
-      "storageAccount": "sto",
+      "storageAccount": "st",
       "keyVault": "kv",
       "dashboard": "dsh",
       "staticWebApplication": "swa",
