@@ -27,9 +27,6 @@
         }
       ]
     },
-    "apiCorsAuthorized": {
-      "value": "http://localhost:3000,https://google.com"
-    },
     "gatewayCustomDomains": {
       "value": [
         "subdomain.domain.com"

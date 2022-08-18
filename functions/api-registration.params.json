@@ -35,6 +35,9 @@
         "skipAuthentication": false,
         "gatewayAnonymousUrlRegex": "^/anonymous-prefix/"
       }
+    },
+    "apiCorsAuthorized": {
+      "value": "http://localhost:3000,https://google.com"
     }
   }
 }

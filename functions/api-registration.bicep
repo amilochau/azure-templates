@@ -45,6 +45,9 @@ param relativeFunctionsUrl string = '/api'
 @description('The OpenID configuration for authentication')
 param openIdConfiguration object = {}
 
+@description('The CORS authorized origins, comma-separated')
+param apiCorsAuthorized string = ''
+
 @description('The deployment location')
 param location string = resourceGroup().location
 
@@ -91,5 +94,6 @@ module apimBackend '../modules/applications/functions/api-management-backend.bic
     products: apiManagementProducts
     relativeOpenApiUrl: relativeOpenApiUrl
     openIdConfiguration: openIdConfiguration
+    apiCorsAuthorized: apiCorsAuthorized
   }
 }

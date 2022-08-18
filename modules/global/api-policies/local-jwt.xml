@@ -1,6 +1,20 @@
 <policies>
     <inbound>
         <base />
+        <cors allow-credentials="true">
+            <allowed-origins>
+                <origin>%CORS_ORIGINS%</origin>
+            </allowed-origins>
+            <allowed-methods preflight-result-max-age="300">
+                <method>*</method>
+            </allowed-methods>
+            <allowed-headers>
+                <header>*</header>
+            </allowed-headers>
+            <expose-headers>
+                <header>*</header>
+            </expose-headers>
+        </cors>
         <set-backend-service id="bicep-generated-policy" backend-id="%BACKEND_ID%" />
         <choose>
             <when condition="@(!Regex.IsMatch(context.Request.Url.Path, "%ANONYMOUS_URL_REGEX%", RegexOptions.IgnoreCase))">
