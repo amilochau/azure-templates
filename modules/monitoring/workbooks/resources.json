@@ -1,0 +1,235 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "**Welcome!** This workbook presents resources used by our applications.",
+        "style": "upsell"
+      },
+      "name": "Workbook Message"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| project\r\n    ['Resource name'] = name,\r\n    ['Template version'] = tostring(tags['templateVersion']),\r\n    ['Organization'] = tostring(tags['organization']),\r\n    ['Application'] = tostring(tags['application']),\r\n    ['Environment'] = tostring(tags['environment']),\r\n    ['Host'] = tostring(tags['host']),\r\n    ['Region'] = tostring(tags['region']),\r\n    ['Deployment date'] = tostring(tags['deploymentDate'])\r\n| order by ['Template version'] asc, ['Resource name'] asc",
+        "size": 3,
+        "title": "Resources",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "$gen_group",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "250px"
+              },
+              "tooltipFormat": {
+                "tooltip": "Resource name"
+              }
+            },
+            {
+              "columnMatch": "Resource name",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Template version",
+              "formatter": 5
+            },
+            {
+              "columnMatch": "Deployment date",
+              "formatter": 6,
+              "numberFormat": {
+                "unit": 0,
+                "options": {
+                  "style": "decimal"
+                }
+              },
+              "dateFormat": {
+                "showUtcTime": true,
+                "formatName": "shortDateTimePattern"
+              },
+              "tooltipFormat": {
+                "tooltip": "Deployment date"
+              }
+            },
+            {
+              "columnMatch": "$gen_group",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "250px"
+              },
+              "tooltipFormat": {
+                "tooltip": "Resource name"
+              }
+            }
+          ],
+          "rowLimit": 500,
+          "hierarchySettings": {
+            "treeType": 1,
+            "groupBy": [
+              "Template version"
+            ],
+            "expandTopLevel": false,
+            "finalBy": "Resource name"
+          }
+        }
+      },
+      "showPin": true,
+      "name": "Resources",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| summarize ['Count'] = count() by ['Template version'] = tostring(tags['templateVersion'])",
+        "size": 3,
+        "title": "Resources by Template version",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "piechart"
+      },
+      "customWidth": "33",
+      "showPin": true,
+      "name": "Resources by Template version",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| summarize ['Count'] = count() by ['Organization'] = tostring(tags['organization'])",
+        "size": 3,
+        "title": "Resources by Organization",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "piechart"
+      },
+      "customWidth": "33",
+      "showPin": true,
+      "name": "Resources by Organization",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| summarize ['Count'] = count() by ['Application'] = tostring(tags['application'])",
+        "size": 3,
+        "title": "Resources by Application",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "piechart"
+      },
+      "customWidth": "33",
+      "showPin": true,
+      "name": "Resources by Application",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| summarize ['Count'] = count() by ['Environment'] = tostring(tags['environment'])",
+        "size": 3,
+        "title": "Resources by Environment",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "piechart"
+      },
+      "customWidth": "33",
+      "showPin": true,
+      "name": "Resources by Environment",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| summarize ['Count'] = count() by ['Host'] = tostring(tags['host'])",
+        "size": 3,
+        "title": "Resources by Host",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "piechart"
+      },
+      "customWidth": "33",
+      "showPin": true,
+      "name": "Resources by Host",
+      "styleSettings": {
+        "showBorder": true
+      }
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Resources\r\n| summarize ['Count'] = count() by ['Region'] = tostring(tags['region'])",
+        "size": 3,
+        "title": "Resources by Region",
+        "showRefreshButton": true,
+        "showExportToExcel": true,
+        "queryType": 1,
+        "resourceType": "microsoft.resourcegraph/resources",
+        "crossComponentResources": [
+          "value::all"
+        ],
+        "visualization": "piechart"
+      },
+      "customWidth": "33",
+      "showPin": true,
+      "name": "Resources by Region",
+      "styleSettings": {
+        "showBorder": true
+      }
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}

@@ -90,6 +90,16 @@ module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = if (deploy
   }
 }
 
+@description('Monitor Workbook - Resources')
+module workbook_resources '../modules/monitoring/workbooks/resources.bicep' = if (deployWorkbooks) {
+  name: 'Resource-MonitorWorkbook-Resources'
+  params: {
+    referential: tags.outputs.referential
+    conventions: conventions
+    location: location
+  }
+}
+
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
