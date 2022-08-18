@@ -31,6 +31,9 @@ param relativeOpenApiUrl string
 @description('The OpenID configuration for authentication')
 param openIdConfiguration object
 
+@description('The CORS authorized origins, comma-separated')
+param apiCorsAuthorized string
+
 // === VARIABLES ===
 
 var apimFunctionsKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-functionskey'
@@ -101,6 +104,7 @@ module apimApi '../../api-management/api-openapi.bicep' = {
     products: products
     openApiLink: 'https://${fn.properties.defaultHostName}${relativeOpenApiUrl}'
     openIdConfiguration: openIdConfiguration
+    apiCorsAuthorized: apiCorsAuthorized
   }
 }
 

@@ -42,9 +42,6 @@ param apiPublisherEmail string
 @description('The API products')
 param apiProducts array = []
 
-@description('The CORS authorized origins, comma-separated')
-param apiCorsAuthorized string = ''
-
 @description('The custom domains for the gateway')
 param gatewayCustomDomains array = []
 
@@ -107,7 +104,6 @@ module apim '../modules/api-management/services.bicep' = {
     appInsightsId: ai.outputs.id
     appInsightsInstrumentationKey: ai.outputs.instrumentationKey
     products: apiProducts
-    apiCorsAuthorized: apiCorsAuthorized
     gatewayCustomDomains: gatewayCustomDomains
   }
 }

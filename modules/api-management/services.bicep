@@ -25,9 +25,6 @@ param publisherName string
 @description('The API Management products')
 param products array
 
-@description('The CORS authorized origins, comma-separated')
-param apiCorsAuthorized string
-
 @description('The custom domains for the gateway')
 param gatewayCustomDomains array
 
@@ -37,8 +34,7 @@ param location string
 // === VARIABLES ===
 
 var apimLoggerKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-loggerkey'
-var apimOrigins = replace(apiCorsAuthorized, ',', '</origin><origin>')
-var apimPolicy = replace(loadTextContent('../global/api-policies/global.xml'), '%CORS_ORIGINS%', apimOrigins)
+var apimPolicy = loadTextContent('../global/api-policies/global.xml')
 var hostNameConfigurations = [for gatewayCustomDomain in gatewayCustomDomains: {
   type: 'Proxy'
   hostName: gatewayCustomDomain

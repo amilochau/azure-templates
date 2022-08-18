@@ -31,20 +31,26 @@ param openApiLink string
 @description('The OpenID configuration for authentication')
 param openIdConfiguration object
 
+@description('The CORS authorized origins, comma-separated')
+param apiCorsAuthorized string
+
 // === VARIABLES ===
 
 var enableOpenId = contains(openIdConfiguration, 'endpoint') && contains(openIdConfiguration, 'apiClientId') && (!contains(openIdConfiguration, 'skipAuthentication') || !openIdConfiguration.skipAuthentication)
 var apiPath = endsWith(applicationName, 'api') ? substring(applicationName, 0, length(applicationName) - 3) : applicationName
 var anonymousUrlRegex = contains(openIdConfiguration, 'gatewayAnonymousUrlRegex') ? openIdConfiguration.gatewayAnonymousUrlRegex : '^$'
-var apiPolicy = enableOpenId ? replace(replace(replace(replace(
+var apimOrigins = replace(apiCorsAuthorized, ',', '</origin><origin>')
+var apiPolicy = enableOpenId ? replace(replace(replace(replace(replace(
     loadTextContent('../global/api-policies/local-jwt.xml'),
     '%BACKEND_ID%', backendId),
     '%OPENID_CONFIG_ENDPOINT%', openIdConfiguration.endpoint),
     '%API_CLIENT_ID%', openIdConfiguration.apiClientId),
-    '%ANONYMOUS_URL_REGEX%', anonymousUrlRegex
-  ) : replace(
+    '%ANONYMOUS_URL_REGEX%', anonymousUrlRegex),
+    '%CORS_ORIGINS%', apimOrigins
+  ) : replace(replace(
     loadTextContent('../global/api-policies/local-simple.xml'),
-    '%BACKEND_ID%', backendId
+    '%BACKEND_ID%', backendId),
+    '%CORS_ORIGINS%', apimOrigins
   )
 
 // === EXISTING ===
