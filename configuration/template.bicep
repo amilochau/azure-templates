@@ -11,7 +11,7 @@ param organizationName string
 
 @description('The application name')
 @minLength(2)
-@maxLength(11)
+@maxLength(13)
 param applicationName string
 
 @description('The host name of the deployment stage')
