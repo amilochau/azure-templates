@@ -39,9 +39,6 @@
         "keyVaultName": "%ORGANIZATION%-gateway-prd-kv",
         "resourceGroupName": "%ORGANIZATION%-gateway-prd-rg"
       }
-    },
-    "dnsZone": {
-      "milochau.com": "mil-rg-milochau"
     }
   },
   "naming": {
@@ -53,6 +50,7 @@
       "apiManagement": "apim",
       "apiManagementApi": "apimapi",
       "apiManagementApiVersionSet": "apimversionset",
+      "apiManagementGatewayHost": "apim.azure-api.net",
       "functionsApplication": "fn",
       "applicationInsights": "ai",
       "userAssignedIdentityApplication": "uaiapp",

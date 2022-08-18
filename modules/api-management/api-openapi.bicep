@@ -50,12 +50,12 @@ var apiPolicy = enableOpenId ? replace(replace(replace(replace(
 // === EXISTING ===
 
 @description('API Management')
-resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
+resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
   name: conventions.global.apiManagement[referential.environment].name
 }
 
 @description('API Management Products')
-resource apimProducts 'Microsoft.ApiManagement/service/products@2021-01-01-preview' existing = [for (product, i) in products: {
+resource apimProducts 'Microsoft.ApiManagement/service/products@2021-12-01-preview' existing = [for (product, i) in products: {
   name: product
   parent: apim
 }]
@@ -63,7 +63,7 @@ resource apimProducts 'Microsoft.ApiManagement/service/products@2021-01-01-previ
 // === RESOURCES ===
 
 @description('API Managment API version set')
-resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-01-preview' = {
+resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-12-01-preview' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementApiVersionSet}'
   parent: apim
   properties: {
@@ -74,7 +74,7 @@ resource apiVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2021-01-0
 }
 
 @description('API Management API')
-resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
+resource api 'Microsoft.ApiManagement/service/apis@2021-12-01-preview' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementApi}'
   parent: apim
   properties: {
@@ -105,7 +105,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-01-01-preview' = {
 }
 
 @description('API Management Product API')
-resource productApis 'Microsoft.ApiManagement/service/products/apis@2021-01-01-preview' = [for (product, i) in products: {
+resource productApis 'Microsoft.ApiManagement/service/products/apis@2021-12-01-preview' = [for (product, i) in products: {
   name: api.name
   parent: apimProducts[i]
 }]

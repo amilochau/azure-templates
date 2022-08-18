@@ -28,6 +28,9 @@ param products array
 @description('The CORS authorized origins, comma-separated')
 param apiCorsAuthorized string
 
+@description('The custom domains for the gateway')
+param gatewayCustomDomains array
+
 @description('The deployment location')
 param location string
 
@@ -36,13 +39,32 @@ param location string
 var apimLoggerKeyName = '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}-loggerkey'
 var apimOrigins = replace(apiCorsAuthorized, ',', '</origin><origin>')
 var apimPolicy = replace(loadTextContent('../global/api-policies/global.xml'), '%CORS_ORIGINS%', apimOrigins)
+var hostNameConfigurations = [for gatewayCustomDomain in gatewayCustomDomains: {
+  type: 'Proxy'
+  hostName: gatewayCustomDomain
+  certificateSource: 'Managed'
+  negotiateClientCertificate: false
+  defaultSslBinding: true
+}]
 
 // === RESOURCES ===
 
+@description('Custom domains for API Management gateways')
+module domains './custom-domain.bicep' = [for customDomain in gatewayCustomDomains: {
+  name: 'Resource-CnameRecord-${customDomain}'
+  params: {
+    customDomain: customDomain
+    apiManagementUrl: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
+  }
+}]
+
 @description('API Management services')
-resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
+resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagement}'
   location: location
+  dependsOn: [
+    domains
+  ]
   sku: {
     name: 'Consumption'
     capacity: 0 // Needs to be at 0 for Consumption plan
@@ -57,6 +79,12 @@ resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' = {
     customProperties: {
       'Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2': 'true'
     }
+    hostnameConfigurations: union([{
+      type: 'Proxy'
+      certificateSource: 'BuiltIn'
+      hostName: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
+      defaultSslBinding: false
+    }], hostNameConfigurations)
   }
 
   // Named value to store the Application Insights instrumentation key
@@ -130,3 +158,8 @@ output name string = apim.name
 
 @description('The Principal ID of the deployed resource')
 output principalId string = apim.identity.principalId
+
+
+output hostnameConfigurations array = apim.properties.hostnameConfigurations
+output gatewayUrl string = apim.properties.gatewayUrl
+output customProperties object = apim.properties.customProperties

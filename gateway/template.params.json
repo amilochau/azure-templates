@@ -17,18 +17,13 @@
     "apiPublisherEmail": {
       "value": "john@example.com"
     },
-    "apiProducts": {
-      "value": [
-        {
-          "productName": "Product 1",
-          "productDescription": "APIs for Product 1",
-          "subscriptionRequired": true,
-          "approvalRequired": true
-        }
-      ]
-    },
     "apiCorsAuthorized": {
       "value": "http://localhost:3000,https://google.com"
+    },
+    "gatewayCustomDomains": {
+      "value": [
+        "subdomain.domain.com"
+      ]
     }
   }
 }

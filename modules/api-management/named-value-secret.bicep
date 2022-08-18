@@ -19,14 +19,14 @@ param secretUri string
 // === EXISTING ===
 
 @description('API Management')
-resource apim 'Microsoft.ApiManagement/service@2021-01-01-preview' existing = {
+resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
   name: conventions.global.apiManagement[referential.environment].name
 }
 
 // === RESOURCES ===
 
 @description('API Management Named value')
-resource namedValue 'Microsoft.ApiManagement/service/namedValues@2021-01-01-preview' = {
+resource namedValue 'Microsoft.ApiManagement/service/namedValues@2021-12-01-preview' = {
   name: secretKey
   parent: apim
   properties: {

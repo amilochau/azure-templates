@@ -10,15 +10,21 @@ param customDomain string
 @description('The target of the CNAME record')
 param target string
 
-@description('The id of the CDN endpoint')
-param cdnEndpointId string
+@description('The domain registration idenfitier of the TXT record')
+param domainRegistrationIdentifier string
 
 // === VARIABLES ===
 
+@description('Whether the customDomain is a root domain')
 var isRootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') && indexOf(customDomain, '.') != -1
+
+@description('The domain (with its extension)')
 var domain = isRootDomain ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)
-var aliasRecordName = isRootDomain ? 'cdnverify' : 'cdnverify.${substring(customDomain, 0, length(customDomain) - length(domain) - 1)}'
-var aliasRecordSetName = isRootDomain ? 'www' : substring(customDomain, 0, length(customDomain) - length(domain) - 1)
+
+@description('The subdomain')
+var subdomain = isRootDomain ? '' : substring(customDomain, 0, indexOf(customDomain, '.'))
+
+var aliasRecordName = isRootDomain ? 'www' : subdomain
 
 // === EXISTING ===
 
@@ -41,26 +47,18 @@ resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = {
   }
 }
 
-@description('The A record for target resource')
-resource aRecordSet 'Microsoft.Network/dnsZones/A@2018-05-01' = if (isRootDomain) {
-  name: '@'
+@description('The TXT record')
+resource txtRecord 'Microsoft.Network/dnsZones/TXT@2018-05-01' = {
+  name: 'apimuid.${aliasRecordName}'
   parent: dnsZone
   properties: {
     TTL: 3600
-    targetResource: {
-      id: cdnEndpointId
-    }
-  }
-}
-
-@description('The CNAME record for target resource')
-resource cnameRecordSet 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = if (!isRootDomain) {
-  name: aliasRecordSetName
-  parent: dnsZone
-  properties: {
-    TTL: 3600
-    targetResource: {
-      id: cdnEndpointId
-    }
+    TXTRecords: [
+      {
+        value: [
+          domainRegistrationIdentifier
+        ]
+      }
+    ]
   }
 }
