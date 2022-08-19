@@ -10,7 +10,7 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The secret key')
+@description('The secret name')
 param secretName string
 
 @description('The secret URI')
