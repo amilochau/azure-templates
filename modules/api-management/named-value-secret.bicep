@@ -11,7 +11,7 @@ param referential object
 param conventions object
 
 @description('The secret key')
-param secretKey string
+param secretName string
 
 @description('The secret URI')
 param secretUri string
@@ -27,10 +27,10 @@ resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' existing = {
 
 @description('API Management Named value')
 resource namedValue 'Microsoft.ApiManagement/service/namedValues@2021-12-01-preview' = {
-  name: secretKey
+  name: secretName
   parent: apim
   properties: {
-    displayName: secretKey
+    displayName: secretName
     keyVault: {
       secretIdentifier: secretUri
     }

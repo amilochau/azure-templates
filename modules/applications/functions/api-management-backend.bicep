@@ -65,7 +65,7 @@ module fn_key_apim '../../api-management/named-value-secret.bicep' = {
   params: {
     referential: referential
     conventions: conventions
-    secretKey: apimFunctionsKeyName
+    secretName: apimFunctionsKeyName
     secretUri: fn_key_kv.outputs.secretUri
   }
 }

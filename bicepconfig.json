@@ -48,6 +48,18 @@
         },
         "prefer-unquoted-property-names": {
           "level": "error"
+        },
+        "artifacts-parameters": {
+          "level": "error"
+        },
+        "no-unused-existing-resources": {
+          "level": "error"
+        },
+        "secure-secrets-in-params": {
+          "level": "error"
+        },
+        "use-stable-resource-identifiers": {
+          "level": "error"
         }
       }
     }
