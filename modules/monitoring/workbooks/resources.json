@@ -10,222 +10,733 @@
       "name": "Workbook Message"
     },
     {
-      "type": 3,
+      "type": 11,
       "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| project\r\n    ['Resource name'] = name,\r\n    ['Template version'] = tostring(tags['templateVersion']),\r\n    ['Organization'] = tostring(tags['organization']),\r\n    ['Application'] = tostring(tags['application']),\r\n    ['Environment'] = tostring(tags['environment']),\r\n    ['Host'] = tostring(tags['host']),\r\n    ['Region'] = tostring(tags['region']),\r\n    ['Deployment date'] = tostring(tags['deploymentDate'])\r\n| order by ['Template version'] asc, ['Resource name'] asc",
-        "size": 3,
-        "title": "Resources",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "table",
-        "gridSettings": {
-          "formatters": [
-            {
-              "columnMatch": "$gen_group",
-              "formatter": 0,
-              "formatOptions": {
-                "customColumnWidthSetting": "250px"
-              },
-              "tooltipFormat": {
-                "tooltip": "Resource name"
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "70b30ab8-b134-4020-ae8a-a684e65697ce",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Resources details",
+            "subTarget": "details",
+            "style": "link"
+          },
+          {
+            "id": "b4d0e196-b219-4d4f-9a82-ea97f0c3b50c",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Policy compliance",
+            "subTarget": "compliance",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "Workbook Links"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "title": "Resources details",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| project\r\n    ['Resource name'] = name,\r\n    ['Template version'] = tostring(tags['templateVersion']),\r\n    ['Organization'] = tostring(tags['organization']),\r\n    ['Application'] = tostring(tags['application']),\r\n    ['Environment'] = tostring(tags['environment']),\r\n    ['Host'] = tostring(tags['host']),\r\n    ['Region'] = tostring(tags['region']),\r\n    ['Deployment date'] = tostring(tags['deploymentDate'])\r\n| order by ['Template version'] asc, ['Resource name'] asc",
+              "size": 3,
+              "title": "Resources",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource name"
+                    }
+                  },
+                  {
+                    "columnMatch": "Resource name",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Template version",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Deployment date",
+                    "formatter": 6,
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      }
+                    },
+                    "dateFormat": {
+                      "showUtcTime": true,
+                      "formatName": "shortDateTimePattern"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Deployment date"
+                    }
+                  },
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "250px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource name"
+                    }
+                  }
+                ],
+                "rowLimit": 500,
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Template version"
+                  ],
+                  "expandTopLevel": false,
+                  "finalBy": "Resource name"
+                }
               }
             },
-            {
-              "columnMatch": "Resource name",
-              "formatter": 5
+            "showPin": true,
+            "name": "Resources",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| summarize ['Count'] = count() by ['Template version'] = tostring(tags['templateVersion'])",
+              "size": 3,
+              "title": "Resources by Template version",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart"
             },
-            {
-              "columnMatch": "Template version",
-              "formatter": 5
+            "customWidth": "33",
+            "showPin": true,
+            "name": "Resources by Template version",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| summarize ['Count'] = count() by ['Organization'] = tostring(tags['organization'])",
+              "size": 3,
+              "title": "Resources by Organization",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart"
             },
-            {
-              "columnMatch": "Deployment date",
-              "formatter": 6,
-              "numberFormat": {
-                "unit": 0,
-                "options": {
-                  "style": "decimal"
+            "customWidth": "33",
+            "showPin": true,
+            "name": "Resources by Organization",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| summarize ['Count'] = count() by ['Application'] = tostring(tags['application'])",
+              "size": 3,
+              "title": "Resources by Application",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart"
+            },
+            "customWidth": "33",
+            "showPin": true,
+            "name": "Resources by Application",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| summarize ['Count'] = count() by ['Environment'] = tostring(tags['environment'])",
+              "size": 3,
+              "title": "Resources by Environment",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart"
+            },
+            "customWidth": "33",
+            "showPin": true,
+            "name": "Resources by Environment",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| summarize ['Count'] = count() by ['Host'] = tostring(tags['host'])",
+              "size": 3,
+              "title": "Resources by Host",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart"
+            },
+            "customWidth": "33",
+            "showPin": true,
+            "name": "Resources by Host",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "Resources\r\n| summarize ['Count'] = count() by ['Region'] = tostring(tags['region'])",
+              "size": 3,
+              "title": "Resources by Region",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "value::all"
+              ],
+              "visualization": "piechart"
+            },
+            "customWidth": "33",
+            "showPin": true,
+            "name": "Resources by Region",
+            "styleSettings": {
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "details"
+      },
+      "name": "Workbook Group - Resources details"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "title": "Policy compliance",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "PolicyResources\r\n| where type =~ 'Microsoft.PolicyInsights/PolicyStates'\r\n| extend state = tostring(properties.complianceState)\r\n| extend\r\n    resourceId = tostring(properties.resourceId),\r\n    resourceType = tolower(tostring(properties.resourceType)),\r\n    policyAssignmentName = tostring(properties.policyAssignmentName),\r\n    stateWeight = iff(state == 'NonCompliant', int(300), iff(state == 'Compliant', int(200), iff(state == 'Conflict', int(100), iff(state == 'Exempt', int(50), int(0)))))\r\n| summarize max(stateWeight) by policyAssignmentName, resourceId, resourceType\r\n| summarize counts = count() by policyAssignmentName, resourceType, max_stateWeight\r\n| summarize \r\n    nonCompliantCount = sumif(counts, max_stateWeight == 300),\r\n    compliantCount = sumif(counts, max_stateWeight == 200),\r\n    conflictCount = sumif(counts, max_stateWeight == 100),\r\n    exemptCount = sumif(counts, max_stateWeight == 50) by policyAssignmentName\r\n| extend totalResources = nonCompliantCount + compliantCount + conflictCount + exemptCount\r\n| extend compliancePercentage = iff(totalResources == 0, todouble(100), 100 * todouble(compliantCount + exemptCount) / todouble(totalResources))\r\n| project\r\n    ['Policy set'] = policyAssignmentName,\r\n    ['Compliance'] = compliancePercentage,\r\n    ['CompliantOnTotal'] = strcat(compliantCount, ' / ', totalResources, ' resources')\r\n| order by ['Policy set'] asc",
+              "size": 3,
+              "title": "Compliance by Policy set",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.management/managementgroups",
+              "crossComponentResources": [
+                "/providers/Microsoft.Management/managementGroups/mil-mg"
+              ],
+              "visualization": "tiles",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "400px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource type"
+                    }
+                  },
+                  {
+                    "columnMatch": "Policy set",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Resource type",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Compliance state",
+                    "formatter": 0,
+                    "tooltipFormat": {
+                      "tooltip": "Compliance state"
+                    }
+                  },
+                  {
+                    "columnMatch": "Compliance",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "redGreen"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Compliance"
+                    }
+                  },
+                  {
+                    "columnMatch": "Total resources",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Total resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Compliant",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "green",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Compliant resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Non compliant",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Non compliant resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Conflict",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Conflict resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Exempt",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blueDark",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Exempt resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "400px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource type"
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Policy set"
+                  ],
+                  "expandTopLevel": true,
+                  "finalBy": "Resource type"
                 }
               },
-              "dateFormat": {
-                "showUtcTime": true,
-                "formatName": "shortDateTimePattern"
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Policy set",
+                  "formatter": 1,
+                  "formatOptions": {
+                    "armActionContext": {
+                      "headers": [],
+                      "params": [],
+                      "httpMethod": "POST",
+                      "description": "# ARM actions can potentially modify resources.\n## Please use caution and include a confirmation message in this description when authoring this command."
+                    }
+                  }
+                },
+                "leftContent": {
+                  "columnMatch": "Compliance",
+                  "formatter": 18,
+                  "formatOptions": {
+                    "thresholdsOptions": "icons",
+                    "thresholdsGrid": [
+                      {
+                        "operator": "<",
+                        "thresholdValue": "99.9",
+                        "representation": "4",
+                        "text": "{0}{1}"
+                      },
+                      {
+                        "operator": "Default",
+                        "thresholdValue": null,
+                        "representation": "success",
+                        "text": "{0}{1}"
+                      }
+                    ]
+                  },
+                  "numberFormat": {
+                    "unit": 1,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "CompliantOnTotal",
+                  "formatter": 1
+                },
+                "showBorder": false,
+                "sortCriteriaField": "Policy set",
+                "sortOrderField": 1
               },
-              "tooltipFormat": {
-                "tooltip": "Deployment date"
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "resourceType",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "compliancePercentage",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 1,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                },
+                "bottomContent": {
+                  "columnMatch": "overAllComplianceState",
+                  "formatter": 1
+                },
+                "nodeIdField": "resourceType",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "compliancePercentage",
+                  "type": 4,
+                  "heatmapPalette": "redGreen",
+                  "heatmapMin": 0,
+                  "heatmapMax": 100
+                },
+                "hivesMargin": 5
+              },
+              "chartSettings": {
+                "xAxis": "Policy set",
+                "yAxis": [
+                  "Compliant",
+                  "Conflict",
+                  "Exempt",
+                  "Non compliant"
+                ]
               }
             },
-            {
-              "columnMatch": "$gen_group",
-              "formatter": 0,
-              "formatOptions": {
-                "customColumnWidthSetting": "250px"
-              },
-              "tooltipFormat": {
-                "tooltip": "Resource name"
-              }
+            "showPin": true,
+            "name": "Compliance by Policy set",
+            "styleSettings": {
+              "showBorder": true
             }
-          ],
-          "rowLimit": 500,
-          "hierarchySettings": {
-            "treeType": 1,
-            "groupBy": [
-              "Template version"
-            ],
-            "expandTopLevel": false,
-            "finalBy": "Resource name"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "PolicyResources\r\n| where type =~ 'Microsoft.PolicyInsights/policyStates'\r\n| extend state = tostring(properties.complianceState)\r\n| extend\r\n    resourceId = tostring(properties.resourceId),\r\n    resourceType = tolower(tostring(properties.resourceType)),\r\n    policyAssignmentName = tostring(properties.policyAssignmentName),\r\n    stateWeight = iff(state == 'NonCompliant', int(300), iff(state == 'Compliant', int(200), iff(state == 'Conflict', int(100), iff(state == 'Exempt', int(50), int(0)))))\r\n| summarize max(stateWeight) by policyAssignmentName, resourceId, resourceType\r\n| summarize counts = count() by policyAssignmentName, resourceType, max_stateWeight\r\n| summarize overallStateWeight = max(max_stateWeight),\r\n    nonCompliantCount = sumif(counts, max_stateWeight == 300),\r\n    compliantCount = sumif(counts, max_stateWeight == 200),\r\n    conflictCount = sumif(counts, max_stateWeight == 100),\r\n    exemptCount = sumif(counts, max_stateWeight == 50) by policyAssignmentName, resourceType\r\n| extend totalResources = todouble(nonCompliantCount + compliantCount + conflictCount + exemptCount)\r\n| extend compliancePercentage = iff(totalResources == 0, todouble(100), 100 * todouble(compliantCount + exemptCount) / totalResources)\r\n| project\r\n    ['Policy set'] = policyAssignmentName,\r\n    ['Resource type'] = resourceType,\r\n    ['Compliance state'] = iff(overallStateWeight == 300, 'Non Compliant', iff(overallStateWeight == 200, 'Compliant', iff(overallStateWeight == 100, 'Conflict', iff(overallStateWeight == 50, 'Exempt', 'Not Started')))),\r\n    ['Compliance'] = compliancePercentage,\r\n    ['Total resources'] = totalResources,\r\n    ['Compliant'] = compliantCount,\r\n    ['Non compliant'] = nonCompliantCount,\r\n    ['Conflict'] = conflictCount,\r\n    ['Exempt'] = exemptCount\r\n| order by ['Policy set'] asc, ['Resource type'] asc",
+              "size": 3,
+              "title": "Compliance by Resource type",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.management/managementgroups",
+              "crossComponentResources": [
+                "/providers/Microsoft.Management/managementGroups/mil-mg"
+              ],
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "400px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource type"
+                    }
+                  },
+                  {
+                    "columnMatch": "Policy set",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Resource type",
+                    "formatter": 5
+                  },
+                  {
+                    "columnMatch": "Compliance state",
+                    "formatter": 0,
+                    "tooltipFormat": {
+                      "tooltip": "Compliance state"
+                    }
+                  },
+                  {
+                    "columnMatch": "Compliance",
+                    "formatter": 8,
+                    "formatOptions": {
+                      "min": 0,
+                      "max": 100,
+                      "palette": "redGreen"
+                    },
+                    "numberFormat": {
+                      "unit": 1,
+                      "options": {
+                        "style": "decimal",
+                        "maximumFractionDigits": 1
+                      }
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Compliance"
+                    }
+                  },
+                  {
+                    "columnMatch": "Total resources",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Total resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Compliant",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "green",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Compliant resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Non compliant",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "red",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Non compliant resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Conflict",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "orange",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Conflict resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "Exempt",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blueDark",
+                      "aggregation": "Sum"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Exempt resources"
+                    }
+                  },
+                  {
+                    "columnMatch": "$gen_group",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "400px"
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Resource type"
+                    }
+                  }
+                ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Policy set"
+                  ],
+                  "expandTopLevel": true,
+                  "finalBy": "Resource type"
+                }
+              },
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "resourceType",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "compliancePercentage",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "min": 0,
+                    "max": 100,
+                    "palette": "redGreen"
+                  },
+                  "numberFormat": {
+                    "unit": 1,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                },
+                "secondaryContent": {
+                  "columnMatch": "overAllComplianceState",
+                  "formatter": 1
+                },
+                "showBorder": false,
+                "sortCriteriaField": "compliancePercentage",
+                "sortOrderField": 2
+              },
+              "graphSettings": {
+                "type": 2,
+                "topContent": {
+                  "columnMatch": "resourceType",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "compliancePercentage",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 1,
+                    "options": {
+                      "style": "decimal",
+                      "maximumFractionDigits": 1
+                    }
+                  }
+                },
+                "bottomContent": {
+                  "columnMatch": "overAllComplianceState",
+                  "formatter": 1
+                },
+                "nodeIdField": "resourceType",
+                "graphOrientation": 3,
+                "showOrientationToggles": false,
+                "nodeSize": null,
+                "staticNodeSize": 100,
+                "colorSettings": {
+                  "nodeColorField": "compliancePercentage",
+                  "type": 4,
+                  "heatmapPalette": "redGreen",
+                  "heatmapMin": 0,
+                  "heatmapMax": 100
+                },
+                "hivesMargin": 5
+              }
+            },
+            "showPin": true,
+            "name": "Compliance by Resource type",
+            "styleSettings": {
+              "showBorder": true
+            }
           }
-        }
+        ]
       },
-      "showPin": true,
-      "name": "Resources",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| summarize ['Count'] = count() by ['Template version'] = tostring(tags['templateVersion'])",
-        "size": 3,
-        "title": "Resources by Template version",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "piechart"
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "compliance"
       },
-      "customWidth": "33",
-      "showPin": true,
-      "name": "Resources by Template version",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| summarize ['Count'] = count() by ['Organization'] = tostring(tags['organization'])",
-        "size": 3,
-        "title": "Resources by Organization",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "piechart"
-      },
-      "customWidth": "33",
-      "showPin": true,
-      "name": "Resources by Organization",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| summarize ['Count'] = count() by ['Application'] = tostring(tags['application'])",
-        "size": 3,
-        "title": "Resources by Application",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "piechart"
-      },
-      "customWidth": "33",
-      "showPin": true,
-      "name": "Resources by Application",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| summarize ['Count'] = count() by ['Environment'] = tostring(tags['environment'])",
-        "size": 3,
-        "title": "Resources by Environment",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "piechart"
-      },
-      "customWidth": "33",
-      "showPin": true,
-      "name": "Resources by Environment",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| summarize ['Count'] = count() by ['Host'] = tostring(tags['host'])",
-        "size": 3,
-        "title": "Resources by Host",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "piechart"
-      },
-      "customWidth": "33",
-      "showPin": true,
-      "name": "Resources by Host",
-      "styleSettings": {
-        "showBorder": true
-      }
-    },
-    {
-      "type": 3,
-      "content": {
-        "version": "KqlItem/1.0",
-        "query": "Resources\r\n| summarize ['Count'] = count() by ['Region'] = tostring(tags['region'])",
-        "size": 3,
-        "title": "Resources by Region",
-        "showRefreshButton": true,
-        "showExportToExcel": true,
-        "queryType": 1,
-        "resourceType": "microsoft.resourcegraph/resources",
-        "crossComponentResources": [
-          "value::all"
-        ],
-        "visualization": "piechart"
-      },
-      "customWidth": "33",
-      "showPin": true,
-      "name": "Resources by Region",
-      "styleSettings": {
-        "showBorder": true
-      }
+      "name": "Workbook Group - Policy compliance"
     }
   ],
   "fallbackResourceIds": [

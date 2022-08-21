@@ -17,7 +17,7 @@ var buildInRoles = loadJsonContent('../modules/global/built-in-roles.json')
 // === RESOURCES ===
 
 @description('Policies - Security')
-module policies_security '../modules/authorizations/initiatives/security/security.bicep' = {
+module policies_security '../modules/authorizations/initiatives/security.bicep' = {
   name: 'Resource-Initiative-Security'
 }
 
