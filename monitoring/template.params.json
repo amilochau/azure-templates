@@ -13,6 +13,9 @@
     },
     "pricingPlan": {
       "value": "Free"
+    },
+    "deployWorkbooks": {
+      "value": false
     }
   }
 }

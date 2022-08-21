@@ -83,6 +83,9 @@ module workbook_applications '../modules/monitoring/workbooks/applications.bicep
 @description('Monitor Workbook - Costs')
 module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = if (deployWorkbooks) {
   name: 'Resource-MonitorWorkbook-Costs'
+  dependsOn: [
+    workbook_applications
+  ]
   params: {
     referential: tags.outputs.referential
     conventions: conventions
@@ -93,6 +96,9 @@ module workbook_costs '../modules/monitoring/workbooks/costs.bicep' = if (deploy
 @description('Monitor Workbook - Resources')
 module workbook_resources '../modules/monitoring/workbooks/resources.bicep' = if (deployWorkbooks) {
   name: 'Resource-MonitorWorkbook-Resources'
+  dependsOn: [
+    workbook_costs
+  ]
   params: {
     referential: tags.outputs.referential
     conventions: conventions
