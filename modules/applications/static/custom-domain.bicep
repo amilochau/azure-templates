@@ -18,7 +18,7 @@ var dnsZone = loadJsonContent('../../global/organization-specifics/dns-zones.jso
 // === EXISTING ===
 
 @description('The Static Web Apps')
-resource swa 'Microsoft.Web/staticSites@2022-03-01' existing = {
+resource swa 'Microsoft.Web/staticSites@2021-03-01' existing = {
   name: swaName
 }
 
@@ -35,7 +35,7 @@ module dnsRecord '../../networking/swa-dns-records.bicep' = {
 }
 
 @description('Custom domains for Static Web Apps')
-resource swaDomain 'Microsoft.Web/staticSites/customDomains@2022-03-01' = {
+resource swaDomain 'Microsoft.Web/staticSites/customDomains@2021-03-01' = {
   name: customDomain
   parent: swa
   dependsOn: [
