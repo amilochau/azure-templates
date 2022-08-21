@@ -37,7 +37,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview'
     }
     retentionInDays: 30
     workspaceCapping: {
-      dailyQuotaGb: json(dailyCap)
+      dailyQuotaGb: any(dailyCap)
     }
   }
 }

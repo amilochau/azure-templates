@@ -73,7 +73,7 @@ var siteSettings = {
   serverFarmId: serverFarmId
   reserved: true
   httpsOnly: true
-  dailyMemoryTimeQuota: json(dailyMemoryTimeQuota)
+  dailyMemoryTimeQuota: any(dailyMemoryTimeQuota)
   keyVaultReferenceIdentity: userAssignedIdentityId
 }
 
