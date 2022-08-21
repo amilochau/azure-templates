@@ -6,7 +6,7 @@ targetScope = 'managementGroup'
 
 // === VARIABLES ===
 
-var policysetName = 'custom-policyset-security'
+var policysetName = 'policyset-custom-security'
 var policysetProperties = loadJsonContent('./policyset.json', 'properties')
 
 // === RESOURCES ===
@@ -19,7 +19,7 @@ resource policyset 'Microsoft.Authorization/policySetDefinitions@2021-06-01' = {
 
 @description('The policy set assignment')
 resource assignment 'Microsoft.Authorization/policyAssignments@2021-06-01' = {
-  name: guid(policysetName)
+  name: uniqueString(managementGroup().id, policysetName)
   properties: {
     displayName: policysetProperties.displayName
     description: policysetProperties.description
