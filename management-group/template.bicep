@@ -14,6 +14,13 @@ param groups array = []
 @description('Global & naming conventions')
 var buildInRoles = loadJsonContent('../modules/global/built-in-roles.json')
 
+// === RESOURCES ===
+
+@description('Policies - Security')
+module policies_security '../modules/authorizations/initiatives/security/security.bicep' = {
+  name: 'Resource-Initiative-Security'
+}
+
 // === AUTHORIZATIONS ===
 
 @description('Principal to Resources')
