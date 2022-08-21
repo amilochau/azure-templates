@@ -30,6 +30,7 @@ resource workbook 'Microsoft.Insights/workbooks@2022-04-01' = {
     displayName: workbookDisplayName
     category: 'workbook'
     serializedData: string(workbookData)
+    sourceId: 'Azure Monitor'
   }
 }
 
