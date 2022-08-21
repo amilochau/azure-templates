@@ -28,12 +28,6 @@
         "groupNames": []
       },
       {
-        "policyDefinitionReferenceId": "API Management calls to API backends should be authenticated_1",
-        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/c15dcc82-b93c-4dcb-9332-fbf121685b54",
-        "parameters": {},
-        "groupNames": []
-      },
-      {
         "policyDefinitionReferenceId": "API Management APIs should use encrypted protocols only_1",
         "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ee7495e7-3ba7-40b6-bfee-c29e22cc75d4",
         "parameters": {},

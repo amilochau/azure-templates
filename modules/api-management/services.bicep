@@ -89,7 +89,6 @@ resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
     properties: {
       displayName: apimLoggerKeyName
       value: appInsightsInstrumentationKey
-      secret: true
     }
   }
 
