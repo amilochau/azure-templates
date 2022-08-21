@@ -22,7 +22,7 @@ var workbookDisplayName = referential.environment == 'Production' ? workbookDisp
 // === RESOURCES ===
 
 resource workbook 'Microsoft.Insights/workbooks@2022-04-01' = {
-  name: guid('${conventions.naming.prefix}${conventions.naming.suffixes.monitorWorkbook}-apps')
+  name: guid('${conventions.naming.prefix}${conventions.naming.suffixes.monitorWorkbook}-costs')
   location: location
   tags: referential
   kind: 'shared'
