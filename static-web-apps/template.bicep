@@ -66,7 +66,7 @@ module tags '../modules/global/tags.bicep' = {
 }
 
 @description('Application Insights')
-module ai '../modules/monitoring/app-insights.bicep' = {
+module ai '../modules/monitoring/app-insights.bicep' = if (extendedMonitoring) {
   name: 'Resource-ApplicationInsights'
   params: {
     referential: tags.outputs.referential
@@ -96,7 +96,7 @@ module webTest_swa '../modules/monitoring/web-tests/ui-availability.bicep' = if 
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    applicationInsightsId: ai.outputs.id
+    applicationInsightsId: extendedMonitoring ? ai.outputs.id : ''
     applicationHostName: swa.outputs.defaultHostName
     
   }
