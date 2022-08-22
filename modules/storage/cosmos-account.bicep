@@ -121,7 +121,7 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15-preview
 
 @description('Lock')
 module lock '../authorizations/locks/cosmos-db-delete.bicep' = {
-  name: 'Resource-Lock-Delete'
+  name: '${cosmosAccountName}-Resource-Lock-Delete'
   params: {
     cosmosAccountName: cosmosAccount.name
   }

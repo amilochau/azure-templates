@@ -123,7 +123,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
 
 @description('Lock')
 module lock '../authorizations/locks/storage-delete.bicep' = {
-  name: 'Resource-Lock-Delete'
+  name: '${storageAccountName}-Resource-Lock-Delete'
   params: {
     storageAccountName: storageAccount.name
   }

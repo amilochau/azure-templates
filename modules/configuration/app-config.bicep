@@ -22,13 +22,14 @@ param location string
 
 // === VARIABLES ===
 
+var appConfigurationName = '${conventions.naming.prefix}${conventions.naming.suffixes.appConfiguration}'
 var appConfigurationSku = pricingPlan == 'Free' ? 'free' : pricingPlan == 'Basic' ? 'standard' : 'ERROR'
 
 // === RESOURCES ===
 
 @description('App Configuration')
 resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-preview' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.appConfiguration}'
+  name: appConfigurationName
   location: location
   sku: {
     name: appConfigurationSku
@@ -45,7 +46,7 @@ resource appConfig 'Microsoft.AppConfiguration/configurationStores@2021-03-01-pr
 
 @description('Lock')
 module lock '../authorizations/locks/app-config-delete.bicep' = {
-  name: 'Resource-Lock-Delete'
+  name: '${appConfigurationName}-Resource-Lock-Delete'
   params: {
     appConfigurationName: appConfig.name
   }

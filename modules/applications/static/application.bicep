@@ -31,7 +31,7 @@ var swaSkuTier = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Stan
 // === RESOURCES ===
 
 @description('Static Web Apps application')
-resource swa 'Microsoft.Web/staticSites@2022-03-01' = {
+resource swa 'Microsoft.Web/staticSites@2021-03-01' = { // @2022-03-01 does not work
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.staticWebApplication}'
   location: location
   tags: referential
