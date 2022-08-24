@@ -26,6 +26,8 @@ param location string
 // === VARIABLES ===
 
 var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 'ERROR' // in GB/d
+var aiName = conventions.global.logAnalyticsWorkspace[referential.environment].name
+var buildInRoles = loadJsonContent('../global/built-in-roles.json')
 
 // === RESOURCES ===
 
@@ -37,7 +39,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview'
 
 @description('Application Insights')
 resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.applicationInsights}'
+  name: aiName
   location: location
   kind: 'web'
   tags: referential
@@ -55,6 +57,52 @@ resource ai 'Microsoft.Insights/components@2020-02-02-preview' = {
     properties: {
       cap: any(dailyCap)
       planType: 'Basic'
+    }
+  }
+}
+
+@description('The action group for smart detection')
+resource actionGroup 'Microsoft.Insights/actionGroups@2022-06-01' = {
+  name: 'Application Insights Smart Detection'
+  location: 'Global'
+  tags: referential
+  properties: {
+    groupShortName: 'SmartDetect'
+    enabled: true
+    armRoleReceivers: [
+      {
+        name: 'Monitor Contributor'
+        roleId: buildInRoles['Monitoring Contributor']
+        useCommonAlertSchema: true
+      }
+      {
+        name: 'Monitor Reader'
+        roleId: buildInRoles['Monitoring Reader']
+        useCommonAlertSchema: true
+      }
+    ]
+  }
+}
+
+@description('The alert rule for failure anomalies')
+resource smartDetectorAlertRule 'microsoft.alertsManagement/smartDetectorAlertRules@2021-04-01' = {
+  name: 'Failure Anomalies - ${aiName}'
+  location: 'Global'
+  tags: referential
+  properties: {
+    state: 'Enabled'
+    frequency: 'PT1M'
+    severity: 'Sev2'
+    scope: [
+      ai.id
+    ]
+    actionGroups: {
+      groupIds: [
+        actionGroup.id
+      ]
+    }
+    detector: {
+      id: 'FailureAnomaliesDetector'
     }
   }
 }
