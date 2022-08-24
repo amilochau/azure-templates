@@ -49,6 +49,7 @@ var hostNameConfigurations = [for gatewayCustomDomain in gatewayCustomDomains: {
 module domains './custom-domain.bicep' = [for customDomain in gatewayCustomDomains: {
   name: 'Resource-CnameRecord-${customDomain}'
   params: {
+    referential: referential
     customDomain: customDomain
     apiManagementUrl: '${conventions.naming.prefix}${conventions.naming.suffixes.apiManagementGatewayHost}'
   }

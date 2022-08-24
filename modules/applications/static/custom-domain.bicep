@@ -4,6 +4,9 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('The name of the Static Web Apps')
 param swaName string
 
@@ -30,6 +33,7 @@ module dnsRecord '../../networking/swa-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
   scope: resourceGroup(dnsZone.resourceGroup)
   params: {
+    referential: referential
     customDomain: customDomain
     target: swa.properties.defaultHostname
     swaId: swa.id
