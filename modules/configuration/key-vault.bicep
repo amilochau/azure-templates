@@ -17,7 +17,11 @@ param location string
 
 var tenantId = subscription().tenantId
 var keyVaultName = '${conventions.naming.prefix}${conventions.naming.suffixes.keyVault}'
-
+var knownIpAddresses = loadJsonContent('../global/ip-addresses.json')
+var authorizedIpAddresses = union(knownIpAddresses.azurePortal, knownIpAddresses.azureServices)
+var ipRules = [ for ipAddress in items(authorizedIpAddresses) : {
+  value: ipAddress.value
+}]
 // === RESOURCES ===
 
 @description('Key Vault')
@@ -38,6 +42,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
     networkAcls: {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
+      ipRules: ipRules
     }
   }
 }
