@@ -14,6 +14,7 @@ param customDomain string
 
 var rootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') ? customDomain : substring(customDomain, indexOf(customDomain, '.') + 1)
 var dnsZone = loadJsonContent('../../global/organization-specifics/dns-zones.json')[rootDomain]
+var isRootDomain = indexOf(customDomain, '.') == lastIndexOf(customDomain, '.') && indexOf(customDomain, '.') != -1
 
 // === EXISTING ===
 
@@ -31,6 +32,7 @@ module dnsRecord '../../networking/swa-dns-records.bicep' = {
   params: {
     customDomain: customDomain
     target: swa.properties.defaultHostname
+    swaId: swa.id
   }
 }
 
@@ -42,6 +44,7 @@ resource swaDomain 'Microsoft.Web/staticSites/customDomains@2021-03-01' = {
     dnsRecord
   ]
   properties: {
+    validationMethod: isRootDomain ? 'dns-txt-token' : 'cname-delegation'
     // isDefault: isDefault // Not documented from API but useful - it does not work on first deployment...
   }
 }
