@@ -10,6 +10,9 @@ param customDomain string
 @description('The target of the CNAME record')
 param target string
 
+@description('The id of the Static Web App')
+param swaId string
+
 // === VARIABLES ===
 
 @description('Whether the customDomain is a root domain')
@@ -38,8 +41,8 @@ resource aRecordSet 'Microsoft.Network/dnsZones/A@2018-05-01' = if (isRootDomain
   parent: dnsZone
   properties: {
     TTL: 3600
-    CNAMERecord: {
-      cname: target
+    targetResource: {
+      id: swaId
     }
   }
 }
