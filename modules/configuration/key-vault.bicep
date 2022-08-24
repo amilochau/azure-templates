@@ -35,6 +35,10 @@ resource kv 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
     softDeleteRetentionInDays: 90
     enablePurgeProtection: true
     enableRbacAuthorization: true // true = Enforcing AAD as the only authentication method
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Deny'
+    }
   }
 }
 
