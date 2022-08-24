@@ -7,6 +7,9 @@
         <set-header name="server" exists-action="delete" />
         <set-header name="x-powered-by" exists-action="delete" />
         <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
+        <set-header name="Strict-Transport-Security" exists-action="skip">
+            <value>max-age=31536000; includeSubDomains</value>
+        </set-header>
     </outbound>
     <on-error />
 </policies>
