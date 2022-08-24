@@ -192,7 +192,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 1,
-              "resourceType": "{ManagementGroups}",
+              "resourceType": "microsoft.management/managementgroups",
               "crossComponentResources": [
                 "{ManagementGroups}"
               ],
@@ -215,7 +215,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 1,
-              "resourceType": "{ManagementGroups}",
+              "resourceType": "microsoft.management/managementgroups",
               "crossComponentResources": [
                 "{ManagementGroups}"
               ],
@@ -261,7 +261,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 1,
-              "resourceType": "{ManagementGroups}",
+              "resourceType": "microsoft.management/managementgroups",
               "crossComponentResources": [
                 "{ManagementGroups}"
               ],
@@ -284,7 +284,7 @@
               "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 1,
-              "resourceType": "{ManagementGroups}",
+              "resourceType": "microsoft.management/managementgroups",
               "crossComponentResources": [
                 "{ManagementGroups}"
               ],
