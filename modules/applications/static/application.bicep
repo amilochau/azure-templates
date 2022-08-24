@@ -52,6 +52,7 @@ resource swa 'Microsoft.Web/staticSites@2021-03-01' = { // @2022-03-01 does not 
 module domains 'custom-domain.bicep' = [for (customDomain, i) in staticWebAppOptions.customDomains: if (contains(staticWebAppOptions, 'customDomains')) {
   name: 'Resource-CustomDomain-${customDomain}'
   params: {
+    referential: referential
     customDomain: customDomain
     swaName: swa.name
   }

@@ -4,7 +4,10 @@
 
 // === PARAMETERS ===
 
-//@description('The URL of the API Management services')
+@description('The referential, from the tags.bicep module')
+param referential object
+
+@description('The URL of the API Management services')
 param apiManagementUrl string
 
 @description('The custom domain')
@@ -22,6 +25,7 @@ module dnsRecord '../networking/apim-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
   scope: resourceGroup(dnsZone.resourceGroup)
   params: {
+    referential: referential
     customDomain: customDomain
     target: apiManagementUrl
     domainRegistrationIdentifier: dnsZone.apiManagementOwnershipId

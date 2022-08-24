@@ -4,6 +4,9 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('The name of the CDN profile')
 param cdnProfileName string
 
@@ -32,6 +35,7 @@ module dnsRecord '../networking/cdn-dns-records.bicep' = {
   name: 'Resource-CnameRecord-${customDomain}'
   scope: resourceGroup(dnsZone.resourceGroup)
   params: {
+    referential: referential
     customDomain: customDomain
     target: 'cdnverify.${cdnEndpoint.properties.hostName}'
     cdnEndpointId: cdnEndpoint.id

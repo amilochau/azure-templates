@@ -4,6 +4,9 @@
 
 // === PARAMETERS ===
 
+@description('The referential, from the tags.bicep module')
+param referential object
+
 @description('The custom domain')
 param customDomain string
 
@@ -40,6 +43,7 @@ resource aRecordSet 'Microsoft.Network/dnsZones/A@2018-05-01' = if (isRootDomain
   name: '@'
   parent: dnsZone
   properties: {
+    metadata: referential
     TTL: 3600
     targetResource: {
       id: swaId
@@ -52,6 +56,7 @@ resource cnameRecord 'Microsoft.Network/dnsZones/CNAME@2018-05-01' = if (!isRoot
   name: aliasRecordName
   parent: dnsZone
   properties: {
+    metadata: referential
     TTL: 3600
     CNAMERecord: {
       cname: target
