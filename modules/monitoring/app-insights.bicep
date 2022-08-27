@@ -26,7 +26,7 @@ param location string
 // === VARIABLES ===
 
 var dailyCap = pricingPlan == 'Free' ? '0.1' : pricingPlan == 'Basic' ? '100' : 'ERROR' // in GB/d
-var aiName = conventions.global.logAnalyticsWorkspace[referential.environment].name
+var aiName = '${conventions.naming.prefix}${conventions.naming.suffixes.applicationInsights}'
 var buildInRoles = loadJsonContent('../global/built-in-roles.json')
 
 // === RESOURCES ===
