@@ -52,7 +52,7 @@ var tags = union(referential, specificTags)
 // === RESOURCES ===
 
 @description('Ping test')
-resource webTest 'Microsoft.Insights/webtests@2018-05-01-preview' = { // @2020-10-05-preview is not available in westeurope
+resource webTest 'Microsoft.Insights/webtests@2022-06-15' = {
   name: webTestName
   location: location
   tags: tags
