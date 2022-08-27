@@ -58,12 +58,6 @@
         "groupNames": []
       },
       {
-        "policyDefinitionReferenceId": "Azure Key Vault should have firewall enabled_1",
-        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/55615ac9-af46-4a59-874e-391cc3dfb490",
-        "parameters": {},
-        "groupNames": []
-      },
-      {
         "policyDefinitionReferenceId": "Azure Cosmos DB key based metadata write access should be disabled_1",
         "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4750c32b-89c0-46af-bfcb-2e4541a818d5",
         "parameters": {},
