@@ -11,6 +11,10 @@
       Url="%TEST_URL%"
       ThinkTime="0"
       Timeout="300"
+      ParseDependentRequests="False"
+      FollowRedirects="False"
+      RecordResult="True"
+      Cache="True"
       ExpectedHttpStatusCode="200" />
   </Items>
 </WebTest>
