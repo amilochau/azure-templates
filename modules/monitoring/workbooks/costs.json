@@ -100,7 +100,10 @@
             },
             "defaultValue": "value::all",
             "queryType": 1,
-            "resourceType": "microsoft.resourcegraph/resources"
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": [
+              "value::all"
+            ]
           },
           {
             "id": "940e40c2-e641-4565-9fea-f832ec881830",
@@ -571,7 +574,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -3214,6 +3217,29 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = tostring(split(_ResourceId, \"/\")[8])\r\n| make-series ['Billed Size' ] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n",
+              "size": 1,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "barchart"
+            },
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
               "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project ['Table'] = tt\r\n| summarize ['Transactions' ] = count() by ['Table']\r\n| project ['Table'], ['Transactions']\r\n| order by ['Transactions'] desc\r\n",
               "size": 3,
               "title": "Log Analytics workspaces Billable metrics - Transactions",
@@ -3284,6 +3310,29 @@
               }
             },
             "customWidth": "50",
+            "showPin": true,
+            "name": "Log Analytics workspaces Billable metrics - Billed Size",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Table'] = tt\r\n| make-series ['Billed Size' ] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Table']\r\n",
+              "size": 1,
+              "title": "Log Analytics workspaces Billable metrics - Billed Size",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspaces}"
+              ],
+              "visualization": "barchart"
+            },
             "showPin": true,
             "name": "Log Analytics workspaces Billable metrics - Billed Size",
             "styleSettings": {
