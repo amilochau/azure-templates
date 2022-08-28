@@ -67,6 +67,21 @@
             "typeSettings": {
               "selectableValues": [
                 {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
                   "durationMs": 2592000000
                 },
                 {
