@@ -2148,7 +2148,7 @@
               ],
               "timeContextFromParameter": "TimeRange",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2592000000
               },
               "metrics": [
                 {
@@ -3343,8 +3343,8 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n| summarize ['Transactions' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application']\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, _BilledSize, ['Application'] = _ResourceId\r\n    | make-series ['Transactions Timeline'] = count() default = 0, ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application']\r\n    | project-away TimeGenerated\r\n) on ['Application']\r\n| project ['Application'], ['Transactions'], ['Transactions Timeline'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc\r\n",
-              "size": 2,
+              "query": "union withsource = tt *\r\n| where TimeGenerated {TimeRange}\r\n| where _IsBillable == 'True'\r\n| project TimeGenerated, _BilledSize, ['Application'] = _ResourceId, ['Table'] = tt\r\n| summarize ['Transactions' ] = count(), ['Billed Size'] = sum(_BilledSize) by ['Application'], ['Table']\r\n| join kind = leftouter (\r\n    union withsource = tt * \r\n    | where TimeGenerated {TimeRange}\r\n    | where _IsBillable == 'True'\r\n    | project TimeGenerated, _BilledSize, ['Application'] = _ResourceId, ['Table'] = tt\r\n    | make-series ['Transactions Timeline'] = count() default = 0, ['Billed Size Timeline'] = sum(_BilledSize) default = 0 on TimeGenerated in range({TimeRange:start}, now(), {TimeRange:grain}) by ['Application'], ['Table']\r\n    | project-away TimeGenerated\r\n) on ['Application'], ['Table']\r\n| project ['Application'], ['Table'], ['Transactions'], ['Transactions Timeline'], ['Billed Size'], ['Billed Size Timeline']\r\n| order by ['Application'] asc, ['Table'] asc\r\n",
+              "size": 3,
               "title": "Log Analytics workspaces Billable metrics",
               "timeContextFromParameter": "TimeRange",
               "showRefreshButton": true,
@@ -3358,12 +3358,23 @@
               "gridSettings": {
                 "formatters": [
                   {
-                    "columnMatch": "Application",
+                    "columnMatch": "$gen_group",
                     "formatter": 13,
                     "formatOptions": {
                       "linkTarget": "CellDetails",
                       "linkIsContextBlade": true,
-                      "showIcon": true,
+                      "showIcon": true
+                    },
+                    "tooltipFormat": {
+                      "tooltip": "Monitored Resource"
+                    }
+                  },
+                  {
+                    "columnMatch": "Application",
+                    "formatter": 5,
+                    "formatOptions": {
+                      "linkTarget": "CellDetails",
+                      "linkIsContextBlade": true,
                       "customColumnWidthSetting": "250px"
                     },
                     "tooltipFormat": {
@@ -3371,11 +3382,16 @@
                     }
                   },
                   {
+                    "columnMatch": "Table",
+                    "formatter": 5
+                  },
+                  {
                     "columnMatch": "Transactions",
                     "formatter": 8,
                     "formatOptions": {
                       "min": 0,
-                      "palette": "blue"
+                      "palette": "blue",
+                      "aggregation": "Sum"
                     },
                     "numberFormat": {
                       "unit": 17,
@@ -3393,7 +3409,8 @@
                     "formatter": 10,
                     "formatOptions": {
                       "min": 0,
-                      "palette": "blue"
+                      "palette": "blue",
+                      "aggregation": "Sum"
                     },
                     "tooltipFormat": {
                       "tooltip": "Transactions Timeline"
@@ -3404,7 +3421,8 @@
                     "formatter": 8,
                     "formatOptions": {
                       "min": 0,
-                      "palette": "orange"
+                      "palette": "orange",
+                      "aggregation": "Sum"
                     },
                     "numberFormat": {
                       "unit": 2,
@@ -3422,13 +3440,22 @@
                     "formatter": 10,
                     "formatOptions": {
                       "min": 0,
-                      "palette": "orange"
+                      "palette": "orange",
+                      "aggregation": "Sum"
                     },
                     "tooltipFormat": {
                       "tooltip": "Billed Size Timeline"
                     }
                   }
                 ],
+                "hierarchySettings": {
+                  "treeType": 1,
+                  "groupBy": [
+                    "Application"
+                  ],
+                  "expandTopLevel": false,
+                  "finalBy": "Table"
+                },
                 "labelSettings": [
                   {
                     "columnId": "Application",
