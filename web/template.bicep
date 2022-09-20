@@ -108,7 +108,7 @@ The Web app options:
 param webAppOptions object
 
 @description('The application Docker image reference')
-param applicationImageReference string = 'mcr.microsoft.com/appsvc/staticsite:latest'
+param applicationImageReference string = 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
 
 @description('The contribution groups')
 param contributionGroups array = []

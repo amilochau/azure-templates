@@ -37,7 +37,6 @@ param location string
 // === VARIABLES ===
 
 // General settings
-var linuxFxVersion = 'DOCKER|${applicationImageReference}'
 var extraSlots = contains(webAppOptions, 'extraSlots') ? webAppOptions.extraSlots : []
 var alwaysOn = startsWith(referential.host, 'prd')
 
@@ -65,7 +64,7 @@ var siteSettings = {
 
 // Web settings
 var webSettings = {
-  linuxFxVersion: linuxFxVersion
+  linuxFxVersion: applicationImageReference
   localMySqlEnabled: false
   http20Enabled: true
   minTlsVersion: '1.2'
@@ -146,7 +145,7 @@ var authSettings = enableOpenId ? {
 resource app 'Microsoft.Web/sites@2021-03-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.webApplication}'
   location: location
-  kind: 'functionapp,linux'
+  kind: 'app,linux,container'
   identity: identitySettings
   tags: referential
   properties: siteSettings
