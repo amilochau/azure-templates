@@ -103,6 +103,7 @@ The Web app options:
   - **apiClientId**: string
   - *skipAuthentication*: bool
   - *anonymousEndpoints*: array
+- *existingAppServicePlanId*: string
 ''')
 param webAppOptions object
 
@@ -222,7 +223,7 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccoun
 }
 
 @description('Service Plan')
-module asp '../modules/applications/web/service-plan.bicep' = {
+module asp '../modules/applications/web/service-plan.bicep' = if (!contains(webAppOptions, 'existingAppServicePlanId')) {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
@@ -241,7 +242,7 @@ module web '../modules/applications/web/application.bicep' = {
     location: location
     userAssignedIdentityId: userAssignedIdentity_application.outputs.id
     userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
-    serverFarmId: asp.outputs.id
+    serverFarmId: contains(webAppOptions, 'existingAppServicePlanId') ? webAppOptions.existingAppServicePlanId : asp.outputs.id
     aiConnectionString: ai.outputs.connectionString
     kvVaultUri: kv.outputs.vaultUri
     webAppOptions: webAppOptions

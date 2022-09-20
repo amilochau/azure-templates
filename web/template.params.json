@@ -114,7 +114,8 @@
             "anonymousEndpoints": [
               "/api/anonymous-route"
             ]
-          }
+          },
+          "existingAppServicePlanId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/XXXX/providers/Microsoft.Web/serverfarms/XXXX"
         }
       },
       "contributionGroups": {
