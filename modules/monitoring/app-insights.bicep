@@ -72,11 +72,13 @@ resource actionGroup 'Microsoft.Insights/actionGroups@2022-06-01' = {
     armRoleReceivers: [
       {
         name: 'Monitor Contributor'
+        #disable-next-line use-resource-id-functions
         roleId: buildInRoles['Monitoring Contributor']
         useCommonAlertSchema: true
       }
       {
         name: 'Monitor Reader'
+        #disable-next-line use-resource-id-functions
         roleId: buildInRoles['Monitoring Reader']
         useCommonAlertSchema: true
       }
