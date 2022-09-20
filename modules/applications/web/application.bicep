@@ -1,5 +1,5 @@
 /*
-  Deploy a Functions application
+  Deploy a Web application
 */
 
 // === PARAMETERS ===
@@ -10,27 +10,17 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The pricing plan')
-@allowed([
-  'Free'    // The cheapest plan, can create some small fees
-  'Basic'   // Basic use with default limitations
-])
-param pricingPlan string
-
 @description('The ID of the User-Assigned Identity to use')
 param userAssignedIdentityId string
 
 @description('The Client ID of the User-Assigned Identity to use')
 param userAssignedIdentityClientId string
 
-@description('The Functions app options')
-param functionsAppOptions object
+@description('The Web app options')
+param webAppOptions object
 
 @description('The server farm ID')
 param serverFarmId string
-
-@description('The Azure WebJobs Storage Account name')
-param webJobsStorageAccountName string
 
 @description('The Key Vault vault URI')
 param kvVaultUri string
@@ -38,11 +28,8 @@ param kvVaultUri string
 @description('The Application Insights connection string')
 param aiConnectionString string
 
-@description('The Service Bus Namespace name')
-param serviceBusNamespaceName string
-
-@description('The application package URI')
-param applicationPackageUri string
+@description('The application Docker image reference')
+param applicationImageReference string
 
 @description('The deployment location')
 param location string
@@ -50,17 +37,17 @@ param location string
 // === VARIABLES ===
 
 // General settings
-var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
-var linuxFxVersion = functionsAppOptions.stack == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
-var extraSlots = contains(functionsAppOptions, 'extraSlots') ? functionsAppOptions.extraSlots : []
+var linuxFxVersion = 'DOCKER|${applicationImageReference}'
+var extraSlots = contains(webAppOptions, 'extraSlots') ? webAppOptions.extraSlots : []
+var alwaysOn = startsWith(referential.host, 'prd')
 
 // OpenID
-var enableOpenId = contains(functionsAppOptions, 'openId')
-var formattedOpenIdSecret = enableOpenId ? replace(replace(functionsAppOptions.openId.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
+var enableOpenId = contains(webAppOptions, 'openId')
+var formattedOpenIdSecret = enableOpenId ? replace(replace(webAppOptions.openId.clientSecretKey, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
 var defaultAnonymousEndpoints = loadJsonContent('../../global/anonymous-endpoints.json')
 
 // Identity settings
-var extraIdentities = contains(functionsAppOptions, 'extraIdentities') ? functionsAppOptions.extraIdentities : {}
+var extraIdentities = contains(webAppOptions, 'extraIdentities') ? webAppOptions.extraIdentities : {}
 var identitySettings = {
   type: 'UserAssigned'
   userAssignedIdentities: union({
@@ -73,7 +60,6 @@ var siteSettings = {
   serverFarmId: serverFarmId
   reserved: true
   httpsOnly: true
-  dailyMemoryTimeQuota: any(dailyMemoryTimeQuota)
   keyVaultReferenceIdentity: userAssignedIdentityId
 }
 
@@ -85,41 +71,31 @@ var webSettings = {
   minTlsVersion: '1.2'
   scmMinTlsVersion: '1.2'
   ftpsState: 'Disabled'
+  alwaysOn: alwaysOn
 }
 
 // App settings
-var extraAppSettings = contains(functionsAppOptions, 'extraAppSettings') ? functionsAppOptions.extraAppSettings : {}
+var extraAppSettings = contains(webAppOptions, 'extraAppSettings') ? webAppOptions.extraAppSettings : {}
+var dockerRegistryServerUrl = contains(webAppOptions.dockerRegistryServer, 'host') ? 'https://${webAppOptions.dockerRegistryServer.host}' : 'https://mcr.microsoft.com'
+var dockerRegistryServerUsername = contains(webAppOptions.dockerRegistryServer, 'username') ? replace(replace(webAppOptions.dockerRegistryServer.username, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
+var dockerRegistryServerPassword = contains(webAppOptions.dockerRegistryServer, 'password') ? replace(replace(webAppOptions.dockerRegistryServer.password, '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')') : ''
 var formattedExtraAppSettings = json(replace(replace(string(extraAppSettings), '<secret>', '@Microsoft.KeyVault(SecretUri=${kvVaultUri}secrets/'), '</secret>', ')'))
 var appSettings = union(formattedExtraAppSettings, {
   // General hosting information
-  AZURE_FUNCTIONS_ORGANIZATION: referential.organization
-  AZURE_FUNCTIONS_APPLICATION: referential.application
-  AZURE_FUNCTIONS_ENVIRONMENT: referential.environment
-  AZURE_FUNCTIONS_HOST: referential.host
-  AZURE_FUNCTIONS_REGION: referential.region
-  // Functions runtime configuration
-  FUNCTIONS_EXTENSION_VERSION: functionsAppOptions.stack == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  FUNCTIONS_WORKER_RUNTIME: functionsAppOptions.stack == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
-  // Functions misc configuration
-  AzureWebJobsDisableHomepage: 'true'
-  // Connection information for Storage Account (triggers management)
-  AzureWebJobsStorage__accountName: webJobsStorageAccountName
-  AzureWebJobsStorage__credential: 'managedidentity'
-  AzureWebJobsStorage__clientId: userAssignedIdentityClientId
+  ASPNETCORE_ORGANIZATION: referential.organization
+  ASPNETCORE_APPLICATION: referential.application
+  ASPNETCORE_ENVIRONMENT: referential.environment
+  ASPNETCORE_HOST: referential.host
+  ASPNETCORE_REGION: referential.region
   // Application Insights configuration
   APPLICATIONINSIGHTS_CONNECTION_STRING: aiConnectionString
-  // Application deployment package authorization
-  WEBSITE_RUN_FROM_PACKAGE_BLOB_MI_RESOURCE_ID: userAssignedIdentityId
   // Application identity configuration
   AZURE_CLIENT_ID: userAssignedIdentityClientId
-}, empty(serviceBusNamespaceName) ? {} : {
-  // Connection information for Service Bus namespace
-  AzureWebJobsServiceBus__fullyQualifiedNamespace: '${serviceBusNamespaceName}.servicebus.windows.net'
-  AzureWebJobsServiceBus__credential: 'managedidentity'
-  AzureWebJobsServiceBus__clientId: userAssignedIdentityClientId
-}, empty(applicationPackageUri) ? {} : {
-  // Application deployment package URI
-  WEBSITE_RUN_FROM_PACKAGE: applicationPackageUri
+  // Docker application specific configuration
+  DOCKER_REGISTRY_SERVER_URL: dockerRegistryServerUrl
+  DOCKER_REGISTRY_SERVER_USERNAME: dockerRegistryServerUsername
+  DOCKER_REGISTRY_SERVER_PASSWORD: dockerRegistryServerPassword
+  WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
 }, !enableOpenId ? {} : {
   MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: formattedOpenIdSecret
 })
@@ -127,7 +103,7 @@ var appSettings = union(formattedExtraAppSettings, {
 // Slot settings
 var slotSettings = {
   appSettingNames: [
-    'AZURE_FUNCTIONS_HOST'
+    'ASPNETCORE_HOST'
   ]
 }
 
@@ -136,13 +112,13 @@ var authSettings = enableOpenId ? {
   platform: {
     enabled: true
   }
-  globalValidation: contains(functionsAppOptions.openId, 'skipAuthentication') && functionsAppOptions.openId.skipAuthentication ? {
+  globalValidation: contains(webAppOptions.openId, 'skipAuthentication') && webAppOptions.openId.skipAuthentication ? {
     requireAuthentication: false
     unauthenticatedClientAction: 'AllowAnonymous'
   } : {
     requireAuthentication: true
     unauthenticatedClientAction: 'Return401'
-    excludedPaths: contains(functionsAppOptions.openId, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, functionsAppOptions.openId.anonymousEndpoints) : defaultAnonymousEndpoints
+    excludedPaths: contains(webAppOptions.openId, 'anonymousEndpoints') ? union(defaultAnonymousEndpoints, webAppOptions.openId.anonymousEndpoints) : defaultAnonymousEndpoints
   }
   login: {
     tokenStore: {
@@ -156,9 +132,9 @@ var authSettings = enableOpenId ? {
     azureActiveDirectory: {
       enabled: true
       registration: {
-        clientId: functionsAppOptions.openId.apiClientId
+        clientId: webAppOptions.openId.apiClientId
         clientSecretSettingName: 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
-        openIdIssuer: functionsAppOptions.openId.endpoint
+        openIdIssuer: webAppOptions.openId.endpoint
       }
     }
   }
@@ -167,8 +143,8 @@ var authSettings = enableOpenId ? {
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-03-01' = {
-  name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
+resource app 'Microsoft.Web/sites@2021-03-01' = {
+  name: '${conventions.naming.prefix}${conventions.naming.suffixes.webApplication}'
   location: location
   kind: 'functionapp,linux'
   identity: identitySettings
@@ -201,17 +177,17 @@ resource fn 'Microsoft.Web/sites@2021-03-01' = {
 }
 
 @description('The extra deployment slots')
-module slots '../application-slot.bicep' = [for deploymentSlot in extraSlots: if (contains(functionsAppOptions, 'extraSlots')) {
+module slots '../application-slot.bicep' = [for deploymentSlot in extraSlots: if (contains(webAppOptions, 'extraSlots')) {
   name: 'Resource-FunctionsSlot-${deploymentSlot.name}'
   params: {
     referential: referential
-    applicationName: fn.name
+    applicationName: app.name
     slotName: deploymentSlot.name
     identitySettings: identitySettings
     siteSettings: siteSettings
     webSettings: webSettings
     appSettings: union(appSettings, {
-      AZURE_FUNCTIONS_HOST: deploymentSlot.name
+      ASPNETCORE_HOST: deploymentSlot.name
     })
     authSettings: authSettings
     enableOpenId: enableOpenId
@@ -222,13 +198,13 @@ module slots '../application-slot.bicep' = [for deploymentSlot in extraSlots: if
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
-output id string = fn.id
+output id string = app.id
 
 @description('The API Version of the deployed resource')
-output apiVersion string = fn.apiVersion
+output apiVersion string = app.apiVersion
 
 @description('The Name of the deployed resource')
-output name string = fn.name
+output name string = app.name
 
 @description('The default host name of the deployed resource')
-output defaultHostName string = fn.properties.hostNames[0]
+output defaultHostName string = app.properties.hostNames[0]

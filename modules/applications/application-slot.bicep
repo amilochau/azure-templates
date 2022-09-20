@@ -1,5 +1,5 @@
 /*
-  Deploy a Functions application slot
+  Deploy a Web application slot
 */
 
 // === PARAMETERS ===
@@ -8,25 +8,25 @@
 @description('The referential, from the tags.bicep module')
 param referential object
 
-@description('The parent Functions application name')
-param functionsName string
+@description('The parent application name')
+param applicationName string
 
 @description('The slot name')
 param slotName string
 
-@description('The "identity" settings of the parent Functions application')
+@description('The "identity" settings of the parent application')
 param identitySettings object
 
-@description('The "properties" settings of the parent Functions application')
+@description('The "properties" settings of the parent application')
 param siteSettings object
 
-@description('The "web" config settings of the parent Functions application')
+@description('The "web" config settings of the parent application')
 param webSettings object
 
-@description('The "appsettings" config settings of the parent Functions application')
+@description('The "appsettings" config settings of the parent application')
 param appSettings object
 
-@description('The "authsettingsV2" config settings of the parent Functions application')
+@description('The "authsettingsV2" config settings of the parent application')
 param authSettings object
 
 @description('Whether OpenID must be enabled as auth settings')
@@ -38,22 +38,22 @@ param location string
 // === VARIABLES ===
 
 var slotAppSettings = union(appSettings, {
-  AZURE_FUNCTIONS_HOST: slotName
+  ASPNETCORE_HOST: slotName
 })
 
 // === EXISTING ===
 
-@description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-03-01' existing = {
-  name: functionsName
+@description('Application')
+resource site 'Microsoft.Web/sites@2021-03-01' existing = {
+  name: applicationName
 }
 
 // === RESOURCES ===
 
-@description('Functions application')
-resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
+@description('Application slot')
+resource siteSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
   name: slotName
-  parent: fn
+  parent: site
   location: location
   identity: identitySettings
   tags: referential
@@ -81,13 +81,13 @@ resource fnSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
-output id string = fnSlot.id
+output id string = siteSlot.id
 
 @description('The API Version of the deployed resource')
-output apiVersion string = fnSlot.apiVersion
+output apiVersion string = siteSlot.apiVersion
 
 @description('The Name of the deployed resource')
-output name string = fnSlot.name
+output name string = siteSlot.name
 
 @description('The default host name if the deployed resource')
-output defaultHostName string = fnSlot.properties.defaultHostName
+output defaultHostName string = siteSlot.properties.defaultHostName

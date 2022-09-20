@@ -1,0 +1,128 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "organizationName": {
+        "value": "abc"
+      },
+      "applicationName": {
+        "value": "appname"
+      },
+      "hostName": {
+        "value": "dev"
+      },
+      "pricingPlan": {
+        "value": "Free"
+      },
+      "serviceBusOptions": {
+        "value": {
+          "enabled": true,
+          "queues": [
+            "queue1",
+            "queue2"
+          ],
+          "authorizeClients": true
+        }
+      },
+      "storageAccountsOptions": {
+        "value": {
+          "enabled": true,
+          "accounts": [
+            {
+              "suffix": "1",
+              "comment": "Storage for files",
+              "containers": [
+                "container1",
+                "container2"
+              ],
+              "role": "Reader",
+              "daysBeforeDeletion": 365,
+              "allowBlobPublicAccess": false,
+              "authorizeClients": true,
+              "customDomains": [
+                "subdomain.domain.com"
+              ]
+            }
+          ]
+        }
+      },
+      "cosmosAccountOptions": {
+        "value": {
+          "enabled": true,
+          "containers": [
+            {
+              "name": "containerName",
+              "partitionKey": "/partitionKey",
+              "uniqueKeys": [
+                "/uniqueKey"
+              ],
+              "compositeIndexes": [
+                [
+                  {  
+                    "path": "/name",
+                    "order": "ascending"
+                  },
+                  {  
+                    "path": "/creation",
+                    "order": "descending"
+                  }
+                ]
+              ],
+              "includedPaths": [{
+                "path": "/*"
+              }],
+              "excludedPaths": [{
+                "path": "/\"_etag\"/?"
+              }],
+              "defaultTtl": 3600
+            }
+          ]
+        }
+      },
+      "staticWebAppOptions": {
+        "value": {
+          "enabled": true,
+          "customDomains": [
+            "subdomain.domain.com"
+          ]
+        }
+      },
+      "webAppOptions": {
+        "value": {
+          "dockerRegistryServer": {
+            "host": "mcr.microsoft.com",
+            "username": "<secret>Docker--Username</secret>",
+            "password": "<secret>Docker--Password</secret>"
+          },
+          "extraAppSettings": {
+            "key1": "value1",
+            "key2": "<secret>secret_name</secret>"
+          },
+          "extraIdentities": {
+            "/subscriptions/xxx/resourcegroups/xxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxx": {}
+          },
+          "extraSlots": [
+            {
+              "name": "dev-bis"
+            }
+          ],
+          "openId": {
+            "endpoint": "https://B2CTENANT.b2clogin.com/TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_FLOWNAME",
+            "apiClientId": "00000000-0000-0000-0000-000000000000",
+            "clientSecretKey": "<secret>Identity--Secret</secret>",
+            "skipAuthentication": false,
+            "anonymousEndpoints": [
+              "/api/anonymous-route"
+            ]
+          }
+        }
+      },
+      "contributionGroups": {
+        "value": [
+          {
+            "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+          }
+        ]
+      }
+    }
+  }
