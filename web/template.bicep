@@ -1,5 +1,5 @@
 /*
-  Deploy infrastructure for Azure Functions application, with Application Insights, Key Vault, service bus and storage account resources, authorizations
+  Deploy infrastructure for Web application, with Application Insights, Key Vault resources, authorizations
 */
 
 // === PARAMETERS ===
@@ -88,8 +88,14 @@ param staticWebAppOptions object = {
 }
 
 @description('''
-The Functions app options:
-- **stack**: string
+The Web app options:
+- **servicePlan**:
+  - *sku*: string
+  - *existingId*: string
+- **dockerRegistryServer**:
+  - *host*: string
+  - *username*: string
+  - *password*: string
 - *extraAppSettings*: dictionary
 - *extraIdentities*: dictionary
 - *extraSlots*: array
@@ -101,10 +107,10 @@ The Functions app options:
   - *skipAuthentication*: bool
   - *anonymousEndpoints*: array
 ''')
-param functionsAppOptions object
+param webAppOptions object
 
-@description('The application package URI')
-param applicationPackageUri string = ''
+@description('The application Docker image reference')
+param applicationImageReference string = 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
 
 @description('The contribution groups')
 param contributionGroups array = []
@@ -218,49 +224,31 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccoun
   }
 }
 
-@description('Dedicated Storage Account for Functions application')
-module stg '../modules/storage/storage-account.bicep' = {
-  name: 'Resource-StorageAccount'
-  params: {
-    referential: tags.outputs.referential
-    conventions: conventions
-    location: location
-    storageAccountOptions: {
-      comment: 'Technical storage for Functions application'
-      containers: [
-        'deployment-packages'
-      ]
-    }
-  }
-}
-
 @description('Service Plan')
-module asp '../modules/applications/functions/service-plan.bicep' = {
+module asp '../modules/applications/web/service-plan.bicep' = if (!contains(webAppOptions.servicePlan, 'existingId')) {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
+    sku: contains(webAppOptions.servicePlan, 'sku') ? webAppOptions.servicePlan.sku : 'F1'
     location: location
   }
 }
 
-@description('Functions application')
-module fn '../modules/applications/functions/application.bicep' = {
-  name: 'Resource-FunctionsApplication'
+@description('Web application')
+module web '../modules/applications/web/application.bicep' = {
+  name: 'Resource-WebApplication'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    pricingPlan: pricingPlan
     userAssignedIdentityId: userAssignedIdentity_application.outputs.id
     userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
-    serverFarmId: asp.outputs.id
-    webJobsStorageAccountName: stg.outputs.name
+    serverFarmId: contains(webAppOptions.servicePlan, 'existingId') ? webAppOptions.servicePlan.existingId : asp.outputs.id
     aiConnectionString: ai.outputs.connectionString
-    serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     kvVaultUri: kv.outputs.vaultUri
-    functionsAppOptions: functionsAppOptions
-    applicationPackageUri: applicationPackageUri
+    webAppOptions: webAppOptions
+    applicationImageReference: applicationImageReference
   }
 }
 
@@ -276,15 +264,15 @@ module swa '../modules/applications/static/application.bicep' = if (staticWebApp
   }
 }
 
-@description('Availability tests on Functions application')
-module webTest_functions '../modules/monitoring/web-tests/api-availability.bicep' = if (extendedMonitoring) {
-  name: 'Resource-AvailabilityTests-Functions'
+@description('Availability tests on Web application')
+module webTest_web '../modules/monitoring/web-tests/api-availability.bicep' = if (extendedMonitoring) {
+  name: 'Resource-AvailabilityTests-Web'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
     applicationInsightsId: ai.outputs.id
-    applicationHostName: fn.outputs.defaultHostName
+    applicationHostName: web.outputs.defaultHostName
   }
 }
 
@@ -303,53 +291,53 @@ module webTest_swa '../modules/monitoring/web-tests/ui-availability.bicep' = if 
 
 // === AUTHORIZATIONS ===
 
-@description('Functions to Key Vault')
+@description('Web to Key Vault')
 module auth_fn_kv '../modules/authorizations/subscription/key-vault-secrets-data.bicep' = {
-  name: 'Authorization-Functions-KeyVault'
+  name: 'Authorization-Web-KeyVault'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     keyVaultName: kv.outputs.name
     roleType: 'Reader'
-    roleDescription: 'Functions application should read the secrets from Key Vault'
+    roleDescription: 'Web application should read the secrets from Key Vault'
   }
 }
 
-@description('Functions to Application Insights')
+@description('Web to Application Insights')
 module auth_fn_ai '../modules/authorizations/subscription/monitoring-data.bicep' = {
-  name: 'Authorization-Functions-ApplicationInsights'
+  name: 'Authorization-Web-ApplicationInsights'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     applicationInsightsName: ai.outputs.name
     roleType: 'Metrics Publisher'
-    roleDescription: 'Functions application should send monitoring metrics into Application Insights'
+    roleDescription: 'Web application should send monitoring metrics into Application Insights'
   }
 }
 
-@description('Functions to extra Service Bus')
+@description('Web to extra Service Bus')
 module auth_fn_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (serviceBusOptions.enabled) {
-  name: 'Authorization-Functions-ServiceBus'
+  name: 'Authorization-Web-ServiceBus'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     roleType: 'Owner'
-    roleDescription: 'Functions application should read, write and manage the messages from Service Bus'
+    roleDescription: 'Web application should read, write and manage the messages from Service Bus'
   }
 }
 
-@description('Functions to extra Storage Accounts')
+@description('Web to extra Storage Accounts')
 module auth_fn_extra_stg '../modules/authorizations/subscription/storage-blob-data.bicep' = [for (storageAccountOptions, index) in storageAccounts: if (storageAccountsOptions.enabled) {
-  name: empty(storageAccountOptions) ? 'empty' : 'Authorization-Functions-StorageAccount${storageAccountOptions.suffix}'
+  name: empty(storageAccountOptions) ? 'empty' : 'Authorization-Web-StorageAccount${storageAccountOptions.suffix}'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
     roleType: contains(storageAccountOptions, 'role') ? storageAccountOptions.role : 'Contributor'
-    roleDescription: 'Functions application should read/write the blobs from Storage Account'
+    roleDescription: 'Web application should read/write the blobs from Storage Account'
   }
 }]
 
-@description('Functions to extra Cosmos DB Account')
+@description('Web to extra Cosmos DB Account')
 module auth_fn_extra_cosmos '../modules/authorizations/subscription/cosmos-db-data.bicep' = if (cosmosAccountOptions.enabled) {
-  name: 'Authorization-Functions-CosmosAccount'
+  name: 'Authorization-Web-CosmosAccount'
   params: {
     principalId: userAssignedIdentity_application.outputs.principalId
     cosmosAccountName: cosmosAccountOptions.enabled ? extra_cosmos.outputs.name : ''
@@ -371,17 +359,6 @@ module auth_contributors_cosmos '../modules/authorizations/subscription/cosmos-d
   ]
 }]
 
-@description('Functions to dedicated Storage Account')
-module auth_fn_stg  '../modules/authorizations/subscription/storage-blob-data.bicep' = {
-  name: 'Authorization-Functions-StorageAccount'
-  params: {
-    principalId: userAssignedIdentity_application.outputs.principalId
-    storageAccountName: stg.outputs.name
-    roleType: 'Owner'
-    roleDescription: 'Functions application should manage technical data from Storage Account'
-  }
-}
-
 @description('Clients UAI to extra Service Bus')
 module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bus-data.bicep' = if (serviceBusOptions.enabled && contains(serviceBusOptions, 'authorizeClients') && serviceBusOptions.authorizeClients) {
   name: 'Authorization-Clients-ServiceBus'
@@ -389,7 +366,7 @@ module auth_clients_extra_sbn '../modules/authorizations/subscription/service-bu
     principalId: userAssignedIdentity_clients.outputs.principalId
     serviceBusNamespaceName: serviceBusOptions.enabled ? extra_sbn.outputs.name : ''
     roleType: 'Sender'
-    roleDescription: 'Functions application clients should write messages to Service Bus'
+    roleDescription: 'Web application clients should write messages to Service Bus'
   }
 }
 
@@ -400,14 +377,14 @@ module auth_clients_extra_stg '../modules/authorizations/subscription/storage-bl
     principalId: userAssignedIdentity_clients.outputs.principalId
     storageAccountName: extra_stg[index].outputs.name
     roleType: 'Contributor'
-    roleDescription: 'Functions application clients should read & write the blobs from Storage Account'
+    roleDescription: 'Web application clients should read & write the blobs from Storage Account'
   }
 }]
 
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
-output resourceId string = fn.outputs.id
+output resourceId string = web.outputs.id
 
 @description('The Name of the deployed resource')
-output resourceName string = fn.outputs.name
+output resourceName string = web.outputs.name
