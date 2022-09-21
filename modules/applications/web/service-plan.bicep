@@ -10,20 +10,20 @@ param referential object
 @description('The naming convention, from the conventions.json file')
 param conventions object
 
-@description('The pricing plan')
+@description('The Service Plan SKU')
 @allowed([
-  'Free'    // The cheapest plan, can create some small fees
-  'Basic'   // Basic use with default limitations
+  'F1'
+  'B1'
 ])
-param pricingPlan string
+param sku string
 
 @description('The deployment location')
 param location string
 
 // === VARIABLES ===
 
-var servicePlanSkuName = pricingPlan == 'Free' ? 'F1' : pricingPlan == 'Basic' ? 'B1' : 'ERROR'
-var servicePlanSkuTier = pricingPlan == 'Free' ? 'Free' : pricingPlan == 'Basic' ? 'Basic' : 'ERROR'
+var servicePlanSkuName = sku
+var servicePlanSkuTier = sku == 'F1' ? 'Free' : sku == 'B1' ? 'Basic' : 'ERROR'
 
 // === RESOURCES ===
 

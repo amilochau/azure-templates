@@ -89,6 +89,9 @@ param staticWebAppOptions object = {
 
 @description('''
 The Web app options:
+- **servicePlan**:
+  - *sku*: string
+  - *existingId*: string
 - **dockerRegistryServer**:
   - *host*: string
   - *username*: string
@@ -103,7 +106,6 @@ The Web app options:
   - **apiClientId**: string
   - *skipAuthentication*: bool
   - *anonymousEndpoints*: array
-- *existingAppServicePlanId*: string
 ''')
 param webAppOptions object
 
@@ -223,12 +225,12 @@ module extra_cosmos '../modules/storage/cosmos-account.bicep' = if (cosmosAccoun
 }
 
 @description('Service Plan')
-module asp '../modules/applications/web/service-plan.bicep' = if (!contains(webAppOptions, 'existingAppServicePlanId')) {
+module asp '../modules/applications/web/service-plan.bicep' = if (!contains(webAppOptions.servicePlan, 'existingId')) {
   name: 'Resource-ServerFarm'
   params: {
     referential: tags.outputs.referential
     conventions: conventions
-    pricingPlan: pricingPlan
+    sku: contains(webAppOptions.servicePlan, 'sku') ? webAppOptions.servicePlan.sku : 'F1'
     location: location
   }
 }
@@ -242,7 +244,7 @@ module web '../modules/applications/web/application.bicep' = {
     location: location
     userAssignedIdentityId: userAssignedIdentity_application.outputs.id
     userAssignedIdentityClientId: userAssignedIdentity_application.outputs.clientId
-    serverFarmId: contains(webAppOptions, 'existingAppServicePlanId') ? webAppOptions.existingAppServicePlanId : asp.outputs.id
+    serverFarmId: contains(webAppOptions.servicePlan, 'existingId') ? webAppOptions.servicePlan.existingId : asp.outputs.id
     aiConnectionString: ai.outputs.connectionString
     kvVaultUri: kv.outputs.vaultUri
     webAppOptions: webAppOptions

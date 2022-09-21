@@ -89,6 +89,10 @@
       },
       "webAppOptions": {
         "value": {
+          "servicePlan": {
+            "sku": "B1",
+            "existingId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/XXXX/providers/Microsoft.Web/serverfarms/XXXX"
+          },
           "dockerRegistryServer": {
             "host": "mcr.microsoft.com",
             "username": "<secret>Docker--Username</secret>",
@@ -114,8 +118,7 @@
             "anonymousEndpoints": [
               "/api/anonymous-route"
             ]
-          },
-          "existingAppServicePlanId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/XXXX/providers/Microsoft.Web/serverfarms/XXXX"
+          }
         }
       },
       "contributionGroups": {
