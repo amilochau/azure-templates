@@ -63,6 +63,7 @@ var siteSettings = {
 }
 
 // Web settings
+var enableHealthCheck = contains(webAppOptions, 'healthCheck')
 var webSettings = {
   linuxFxVersion: applicationImageReference
   localMySqlEnabled: false
@@ -70,6 +71,7 @@ var webSettings = {
   minTlsVersion: '1.2'
   scmMinTlsVersion: '1.2'
   ftpsState: 'Disabled'
+  healthCheckPath: enableHealthCheck ? webAppOptions.healthCheck.path : '/api/health'
   alwaysOn: alwaysOn
 }
 
@@ -97,6 +99,8 @@ var appSettings = union(formattedExtraAppSettings, {
   WEBSITES_ENABLE_APP_SERVICE_STORAGE: false
 }, !enableOpenId ? {} : {
   MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: formattedOpenIdSecret
+}, !enableHealthCheck ? {} : {
+  WEBSITE_HEALTHCHECK_MAXPINGFAILURES: 5
 })
 
 // Slot settings

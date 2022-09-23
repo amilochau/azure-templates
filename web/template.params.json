@@ -118,6 +118,9 @@
             "anonymousEndpoints": [
               "/api/anonymous-route"
             ]
+          },
+          "healthCheck": {
+            "path": "/api/health"
           }
         }
       },
