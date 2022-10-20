@@ -60,6 +60,7 @@ var siteSettings = {
   reserved: true
   httpsOnly: true
   keyVaultReferenceIdentity: userAssignedIdentityId
+  clientAffinityEnabled: false
 }
 
 // Web settings
