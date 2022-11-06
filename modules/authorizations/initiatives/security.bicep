@@ -8,7 +8,7 @@ targetScope = 'managementGroup'
 
 var policySetName = 'policyset-custom-security'
 var policyAssignmentName = 'SecurityCustom'
-var policySetProperties = loadJsonContent('./security.json', 'properties')
+var policySetProperties = loadJsonContent('security.json', 'properties')
 
 // === RESOURCES ===
 
