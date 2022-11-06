@@ -51,7 +51,7 @@ param location string
 
 // General settings
 var dailyMemoryTimeQuota = pricingPlan == 'Free' ? '10000' : pricingPlan == 'Basic' ? '1000000' : 'ERROR' // in GB.s/d
-var linuxFxVersion = functionsAppOptions.stack == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : 'ERROR'
+var linuxFxVersion = functionsAppOptions.stack == 'isolatedDotnet6' ? 'DOTNET-ISOLATED|6.0' : functionsAppOptions.stack == 'isolatedDotnet7' ? 'DOTNET-ISOLATED|7.0' : 'ERROR'
 var extraSlots = contains(functionsAppOptions, 'extraSlots') ? functionsAppOptions.extraSlots : []
 
 // OpenID
@@ -98,8 +98,8 @@ var appSettings = union(formattedExtraAppSettings, {
   AZURE_FUNCTIONS_HOST: referential.host
   AZURE_FUNCTIONS_REGION: referential.region
   // Functions runtime configuration
-  FUNCTIONS_EXTENSION_VERSION: functionsAppOptions.stack == 'isolatedDotnet6' ? '~4' : 'ERROR'
-  FUNCTIONS_WORKER_RUNTIME: functionsAppOptions.stack == 'isolatedDotnet6' ? 'dotnet-isolated' : 'ERROR'
+  FUNCTIONS_EXTENSION_VERSION: functionsAppOptions.stack == 'isolatedDotnet6' || functionsAppOptions.stack == 'isolatedDotnet7' ? '~4' : 'ERROR'
+  FUNCTIONS_WORKER_RUNTIME: functionsAppOptions.stack == 'isolatedDotnet6' || functionsAppOptions.stack == 'isolatedDotnet7' ? 'dotnet-isolated' : 'ERROR'
   // Functions misc configuration
   AzureWebJobsDisableHomepage: 'true'
   // Connection information for Storage Account (triggers management)
