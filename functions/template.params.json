@@ -89,7 +89,7 @@
     },
     "functionsAppOptions": {
       "value": {
-        "stack": "isolatedDotnet6",
+        "stack": "isolatedDotnet7",
         "extraAppSettings": {
           "key1": "value1",
           "key2": "<secret>secret_name</secret>"
