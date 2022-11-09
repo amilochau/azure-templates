@@ -167,7 +167,7 @@ var authSettings = enableOpenId ? {
 // === RESOURCES ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-03-01' = {
+resource fn 'Microsoft.Web/sites@2022-03-01' = {
   name: '${conventions.naming.prefix}${conventions.naming.suffixes.functionsApplication}'
   location: location
   kind: 'functionapp,linux'

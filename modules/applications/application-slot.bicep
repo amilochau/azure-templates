@@ -44,14 +44,14 @@ var slotAppSettings = union(appSettings, {
 // === EXISTING ===
 
 @description('Application')
-resource site 'Microsoft.Web/sites@2021-03-01' existing = {
+resource site 'Microsoft.Web/sites@2022-03-01' existing = {
   name: applicationName
 }
 
 // === RESOURCES ===
 
 @description('Application slot')
-resource siteSlot 'Microsoft.Web/sites/slots@2021-03-01' = {
+resource siteSlot 'Microsoft.Web/sites/slots@2022-03-01' = {
   name: slotName
   parent: site
   location: location

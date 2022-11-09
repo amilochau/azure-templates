@@ -22,7 +22,7 @@ param location string
 // === EXISTING ===
 
 @description('Web application')
-resource website 'Microsoft.Web/sites@2021-03-01' existing = {
+resource website 'Microsoft.Web/sites@2022-03-01' existing = {
   name: websiteName
 }
 

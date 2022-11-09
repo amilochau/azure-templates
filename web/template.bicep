@@ -107,7 +107,7 @@ The Web app options:
   - *skipAuthentication*: bool
   - *anonymousEndpoints*: array
 - *healthCheck*:
-  - **path**: string
+  - *path*: string
 ''')
 param webAppOptions object
 

@@ -41,7 +41,7 @@ var apimFunctionsKeyName = '${conventions.naming.prefix}${conventions.naming.suf
 // === EXISTING ===
 
 @description('Functions application')
-resource fn 'Microsoft.Web/sites@2021-03-01' existing = {
+resource fn 'Microsoft.Web/sites@2022-03-01' existing = {
   name: functionsAppName
 }
 
