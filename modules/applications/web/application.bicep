@@ -72,7 +72,7 @@ var webSettings = {
   minTlsVersion: '1.2'
   scmMinTlsVersion: '1.2'
   ftpsState: 'Disabled'
-  healthCheckPath: enableHealthCheck ? webAppOptions.healthCheck.path : '/api/health'
+  healthCheckPath: enableHealthCheck ? webAppOptions.healthCheck.path : null
   alwaysOn: alwaysOn
 }
 
