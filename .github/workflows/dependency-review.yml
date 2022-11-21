@@ -1,0 +1,23 @@
+name: Dependency Review
+run-name: Dependency Review - ${{ github.ref }}
+
+on:
+  pull_request:
+    branches:
+    - main
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v2
+        with:
+          fail-on-severity: moderate
+          fail-on-scopes: runtime, development, unknown
