@@ -179,7 +179,7 @@ module ai '../modules/monitoring/app-insights.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    disableLocalAuth: false
+    disableLocalAuth: true
     pricingPlan: pricingPlan
   }
 }
