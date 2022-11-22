@@ -179,7 +179,7 @@ module ai '../modules/monitoring/app-insights.bicep' = {
     referential: tags.outputs.referential
     conventions: conventions
     location: location
-    disableLocalAuth: true
+    disableLocalAuth: false // See https://github.com/Azure/azure-functions-dotnet-worker/issues/1004
     pricingPlan: pricingPlan
   }
 }
