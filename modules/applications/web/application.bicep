@@ -178,6 +178,30 @@ resource app 'Microsoft.Web/sites@2022-03-01' = {
     name: 'authsettingsV2'
     properties: authSettings
   }
+
+  // Security - disable publishing apps with FTP credentials
+  resource basicPublishingCredentialsPoliciesFtp 'basicPublishingCredentialsPolicies' = {
+    name: 'ftp'
+#disable-next-line BCP187
+    location: location
+#disable-next-line BCP187
+    tags: referential
+    properties: {
+      allow: false
+    }
+  }
+
+  // Security - disable publishing apps with SCM credentials
+  resource basicPublishingCredentialsPoliciesScm 'basicPublishingCredentialsPolicies' = {
+    name: 'scm'
+#disable-next-line BCP187
+    location: location
+#disable-next-line BCP187
+    tags: referential
+    properties: {
+      allow: false
+    }
+  }
 }
 
 @description('The extra deployment slots')

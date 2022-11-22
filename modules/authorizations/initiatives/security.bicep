@@ -8,22 +8,22 @@ targetScope = 'managementGroup'
 
 var policySetName = 'policyset-custom-security'
 var policyAssignmentName = 'SecurityCustom'
-var policySetProperties = loadJsonContent('./security.json').properties
+var policySetProperties = loadJsonContent('./security.json')
 
 // === RESOURCES ===
 
 @description('The policy set definition')
 resource policySet 'Microsoft.Authorization/policySetDefinitions@2021-06-01' = {
   name: policySetName
-  properties: policySetProperties
+  properties: policySetProperties.properties
 }
 
 @description('The policy set assignment')
 resource assignment 'Microsoft.Authorization/policyAssignments@2021-06-01' = {
   name: policyAssignmentName
   properties: {
-    displayName: policySetProperties.displayName
-    description: policySetProperties.description
+    displayName: policySetProperties.properties.displayName
+    description: policySetProperties.properties.description
     enforcementMode: 'Default'
     policyDefinitionId: policySet.id
   }
