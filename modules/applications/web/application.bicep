@@ -178,6 +178,20 @@ resource app 'Microsoft.Web/sites@2022-03-01' = {
     name: 'authsettingsV2'
     properties: authSettings
   }
+
+  resource basicPublishingCredentialsPoliciesFtp 'basicPublishingCredentialsPolicies' = {
+    name: 'ftp'
+    properties: {
+      allow: false
+    }
+  }
+
+  resource basicPublishingCredentialsPoliciesScm 'basicPublishingCredentialsPolicies' = {
+    name: 'scm'
+    properties: {
+      allow: false
+    }
+  }
 }
 
 @description('The extra deployment slots')
