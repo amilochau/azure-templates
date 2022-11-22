@@ -182,7 +182,9 @@ resource app 'Microsoft.Web/sites@2022-03-01' = {
   // Security - disable publishing apps with FTP credentials
   resource basicPublishingCredentialsPoliciesFtp 'basicPublishingCredentialsPolicies' = {
     name: 'ftp'
+#disable-next-line BCP187
     location: location
+#disable-next-line BCP187
     tags: referential
     properties: {
       allow: false
@@ -192,7 +194,9 @@ resource app 'Microsoft.Web/sites@2022-03-01' = {
   // Security - disable publishing apps with SCM credentials
   resource basicPublishingCredentialsPoliciesScm 'basicPublishingCredentialsPolicies' = {
     name: 'scm'
+#disable-next-line BCP187
     location: location
+#disable-next-line BCP187
     tags: referential
     properties: {
       allow: false
