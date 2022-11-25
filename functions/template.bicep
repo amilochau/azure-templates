@@ -297,7 +297,6 @@ module webTest_swa '../modules/monitoring/web-tests/ui-availability.bicep' = if 
     location: location
     applicationInsightsId: ai.outputs.id
     applicationHostName: staticWebAppOptions.enabled ? swa.outputs.defaultHostName : ''
-    
   }
 }
 
