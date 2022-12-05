@@ -25,6 +25,7 @@ param templateVersion string
 
 
 @description('The name of the tenant')
+#disable-next-line no-unused-params
 param tenantName string
 
 @description('The pricing plan')
@@ -42,8 +43,8 @@ param location string = resourceGroup().location
 @description('The region name')
 var regionName = loadJsonContent('../modules/global/regions.json')[location].name
 
-@description('The region name')
-var regionAadB2c = loadJsonContent('../modules/global/regions.json')[location]['aad-b2c']
+//@description('The region name')
+//var regionAadB2c = loadJsonContent('../modules/global/regions.json')[location]['aad-b2c']
 
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
@@ -74,7 +75,8 @@ module ai '../modules/monitoring/app-insights.bicep' = {
   }
 }
 
-@description('Application Insights')
+/* Module disabled as B2C tenant can't be deployed with ARM templates yet
+@description('AAD B2C')
 module b2c '../modules/identity/b2c.bicep' = {
   name: 'Resource-B2CDirectory'
   params: {
@@ -83,11 +85,12 @@ module b2c '../modules/identity/b2c.bicep' = {
     tenantName: tenantName
   }
 }
+*/
 
 // === OUTPUTS ===
 
 @description('The ID of the deployed resource')
-output resourceId string = b2c.outputs.id
+output resourceId string = ai.outputs.id
 
 @description('The Name of the deployed resource')
-output resourceName string = b2c.outputs.name
+output resourceName string = ai.outputs.name
