@@ -42,6 +42,9 @@ param location string = resourceGroup().location
 @description('The region name')
 var regionName = loadJsonContent('../modules/global/regions.json')[location].name
 
+@description('The region name')
+var regionAadB2c = loadJsonContent('../modules/global/regions.json')[location]['aad-b2c']
+
 @description('Global & naming conventions')
 var conventions = json(replace(replace(replace(replace(loadTextContent('../modules/global/conventions.json'), '%ORGANIZATION%', organizationName), '%APPLICATION%', applicationName), '%HOST%', hostName), '%REGION%', regionName))
 
@@ -76,7 +79,7 @@ module b2c '../modules/identity/b2c.bicep' = {
   name: 'Resource-B2CDirectory'
   params: {
     referential: tags.outputs.referential
-    location: location
+    location: regionAadB2c
     tenantName: tenantName
   }
 }
