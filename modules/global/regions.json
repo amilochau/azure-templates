@@ -1,17 +1,22 @@
 {
   "northeurope": {
-    "name": "en1"
+    "name": "en1",
+    "aad-b2c": "europe"
   },
   "westeurope": {
-    "name": "ew1"
+    "name": "ew1",
+    "aad-b2c": "europe"
   },
   "francecentral": {
-    "name": "fc1"
+    "name": "fc1",
+    "aad-b2c": "europe"
   },
   "francesouth": {
-    "name": "fs1"
+    "name": "fs1",
+    "aad-b2c": "europe"
   },
   "global": {
-    "name": "glb"
+    "name": "glb",
+    "aad-b2c": "global"
   }
 }
