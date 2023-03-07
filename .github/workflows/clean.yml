@@ -1,0 +1,22 @@
+name: Clean
+run-name: Clean - ${{ github.event.workflow_run.name }} (#${{ github.event.workflow_run.run_number }})
+
+on:
+  workflow_run:
+    workflows:
+      - Build
+      - Deploy
+    types:
+      - completed
+
+jobs:
+  clean:
+    name: Clean
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Clean artifacts
+        uses: amilochau/github-actions/clean/artifacts@v3
+        with:
+          runId: ${{ github.event.workflow_run.id }}
