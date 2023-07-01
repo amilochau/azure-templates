@@ -1,6 +1,14 @@
-# Readme - azure-templates
-
-## Introduction
+<p align="center">
+  <a href="https://github.com/amilochau/azure-templates/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/amilochau/azure-templates" alt="License">
+  </a>
+  <a href="https://github.com/amilochau/azure-templates/releases">
+    <img src="https://img.shields.io/github/v/release/amilochau/azure-templates" alt="Release">
+  </a>
+</p>
+<h1 align="center">
+  amilochau/azure-templates
+</h1>
 
 `azure-templates` is a set of Bicep templates developed to help creating Azure infrastructure for `amilochau` projects.
 
@@ -37,3 +45,9 @@ These commands can help you run the Bicep templates manually, thanks to `azure c
 - `az group create --name $resourceGroupName --location $location`: creates or updates an Azure resource group
 - `az deployment group create --resource-group $resourceGroupName --template-file $templateFile --parameters $parametersFile --confirm-with-what-if`: creates a new infrastructure deployment into Azure, after an interactive 'what if' check
 - `az deployment group what-if --resource-group $resourceGroupName --template-file $templateFile --parameters $parametersFile`: executes a deployment What-If operation at resource group scope
+
+--- 
+
+## Contribute
+
+Feel free to push your code if you agree with publishing under the [MIT license](./LICENSE).
